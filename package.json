@@ -1,7 +1,7 @@
 {
-  "name": "@skyux/sample",
-  "version": "3.0.0-alpha.x",
-  "description": "SKY UX Sample",
+  "name": "@skyux/lookup",
+  "version": "3.0.0-alpha.0",
+  "description": "SKY UX Lookup",
   "main": "bundles/bundle.umd.js",
   "module": "index.ts",
   "engines": {
@@ -19,13 +19,22 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/blackbaud/skyux-sample.git"
+    "url": "git+https://github.com/blackbaud/skyux-lookup.git"
   },
   "bugs": {
-    "url": "https://github.com/blackbaud/skyux-sample/issues"
+    "url": "https://github.com/blackbaud/skyux-lookup/issues"
   },
-  "homepage": "https://github.com/blackbaud/skyux-sample#readme",
-  "peerDependencies": {},
+  "homepage": "https://github.com/blackbaud/skyux-lookup#readme",
+  "peerDependencies": {
+    "@angular/common": "^4.3.6",
+    "@angular/core": "^4.3.6",
+    "@angular/router": "^4.3.6",
+    "@skyux/core": "^3.1.0",
+    "@skyux/i18n": "^3.0.1",
+    "@skyux/indicators": "^3.0.0-rc.0",
+    "@skyux/popovers": "^3.0.0-alpha.0",
+    "rxjs": "^5.4.3"
+  },
   "dependencies": {},
   "devDependencies": {
     "@angular/animations": "4.3.6",
@@ -40,6 +49,10 @@
     "@angular/router": "4.3.6",
     "@blackbaud/skyux": "2.26.0",
     "@blackbaud/skyux-builder": "1.24.0",
+    "@skyux/core": "3.1.0",
+    "@skyux/i18n": "3.0.1",
+    "@skyux/indicators": "3.0.0-rc.0",
+    "@skyux/popovers": "3.0.0-alpha.0",
     "@skyux-sdk/builder-plugin-skyux": "1.0.0-rc.0",
     "core-js": "2.4.1",
     "rxjs": "5.4.3",
