@@ -590,6 +590,28 @@ describe('Autocomplete component', () => {
         expect(inputElement.value).toEqual('');
       })
     );
+
+    it('should clear the input selected value if the search field is empty',
+      fakeAsync(() => {
+        fixture.detectChanges();
+
+        const selectedValue: { name: string } = undefined;
+        component.model.favoriteColor = selectedValue;
+
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+
+        const inputElement = getInputElement();
+
+        SkyAppTestUtility.fireDomEvent(inputElement, 'blur');
+        tick();
+
+        expect(component.myForm.value.favoriteColor).toBeUndefined();
+        expect(input.value).toBeUndefined();
+        expect(inputElement.value).toEqual('');
+      })
+    );
   });
 
   describe('mouse interactions', () => {
