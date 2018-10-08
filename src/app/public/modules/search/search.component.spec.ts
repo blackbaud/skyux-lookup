@@ -442,6 +442,21 @@ describe('Search component', () => {
       });
     }));
   });
+
+  describe('expandMode responsive', () => {
+    it('should beecome the selected mode when expandMode is cleared', async(() => {
+      component.expandMode = 'fit';
+      fixture.detectChanges();
+
+      component.expandMode = undefined;
+      fixture.detectChanges();
+
+      triggerXsBreakpoint().then(() => {
+        fixture.detectChanges();
+        verifySearchClosed();
+      });
+    }));
+  });
  });
 
  describe('initialize expandMode none', () => {
