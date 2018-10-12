@@ -11,7 +11,8 @@ import {
   OnInit,
   Output,
   TemplateRef,
-  ViewChild
+  ViewChild,
+  AfterViewInit
 } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
@@ -44,7 +45,7 @@ import { skyAutocompleteDefaultSearchFunction } from './autocomplete-default-sea
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SkyAutocompleteComponent
-  implements OnInit, OnDestroy, AfterContentInit {
+  implements OnInit, OnDestroy, AfterContentInit, AfterViewInit {
 
   @Input()
   public set data(value: any[]) {
@@ -206,7 +207,9 @@ export class SkyAutocompleteComponent
           this.closeDropdown();
         }
       });
+  }
 
+  public ngAfterViewInit(): void {
     this.adapter.watchDropdownWidth(this.elementRef);
   }
 

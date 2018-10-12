@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
+import { merge } from 'rxjs/observable/merge';
 import 'rxjs/add/observable/fromEvent';
 
 import {
@@ -23,12 +24,14 @@ export class SkyAutocompleteAdapterService {
     this.renderer = this.rendererFactory.createRenderer(undefined, undefined);
   }
 
+  // Recalculate dropdown width on window resize or on skyAutocomplete focus.
   public watchDropdownWidth(elementRef: ElementRef): void {
-    Observable
-      .fromEvent(this.windowRef.getWindow(), 'resize')
-      .subscribe(() => {
-        this.setDropdownWidth(elementRef);
-      });
+    merge(
+      Observable.fromEvent(this.windowRef.getWindow(), 'resize'),
+      Observable.fromEvent(elementRef.nativeElement.querySelector('input[skyAutocomplete], textarea[skyAutocomplete]'), 'focus')
+    ).subscribe(() => {
+      this.setDropdownWidth(elementRef);
+    });
 
     this.windowRef.getWindow().setTimeout(() => {
       this.setDropdownWidth(elementRef);
