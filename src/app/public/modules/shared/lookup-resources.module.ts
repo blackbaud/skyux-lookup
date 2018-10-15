@@ -3,7 +3,8 @@ import {
 } from '@angular/core';
 
 import {
-  SKY_LIB_RESOURCES_PROVIDERS
+  SKY_LIB_RESOURCES_PROVIDERS,
+  SkyI18nModule
 } from '@skyux/i18n';
 
 import {
@@ -11,6 +12,9 @@ import {
 } from './lookup-resources-provider';
 
 @NgModule({
+  exports: [
+    SkyI18nModule
+  ],
   providers: [{
     provide: SKY_LIB_RESOURCES_PROVIDERS,
     useClass: SkyLookupResourcesProvider,

@@ -16,10 +16,6 @@ import {
 } from '@skyux/core';
 
 import {
-  SkyI18nModule
-} from '@skyux/i18n';
-
-import {
   SkyIconModule
 } from '@skyux/indicators';
 
@@ -38,7 +34,6 @@ import {
   imports: [
     BrowserAnimationsModule,
     CommonModule,
-    SkyI18nModule,
     SkyLookupResourcesModule,
     SkyMediaQueryModule,
     FormsModule,
