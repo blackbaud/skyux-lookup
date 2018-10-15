@@ -53,7 +53,7 @@
     "@skyux/i18n": "3.0.1",
     "@skyux/indicators": "3.0.0-rc.0",
     "@skyux/popovers": "3.0.0-rc.0",
-    "@skyux-sdk/builder-plugin-skyux": "1.0.0-rc.0",
+    "@skyux-sdk/builder-plugin-skyux": "blackbaud/skyux-builder-plugin-skyux#lib-resources",
     "core-js": "2.4.1",
     "rxjs": "5.4.3",
     "ts-node": "3.0.4",

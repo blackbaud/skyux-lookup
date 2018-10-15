@@ -5,6 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { SkyAutocompleteModule } from '../autocomplete';
 import { SkyTokensModule } from '@skyux/indicators';
 
+import {
+  SkyLookupResourcesModule
+} from '../shared';
+
 import { SkyLookupComponent } from './lookup.component';
 
 @NgModule({
@@ -15,6 +19,7 @@ import { SkyLookupComponent } from './lookup.component';
     CommonModule,
     FormsModule,
     SkyAutocompleteModule,
+    SkyLookupResourcesModule,
     SkyTokensModule
   ],
   exports: [

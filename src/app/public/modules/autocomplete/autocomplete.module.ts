@@ -17,6 +17,10 @@ import {
 } from '@skyux/indicators';
 
 import {
+  SkyLookupResourcesModule
+} from '../shared';
+
+import {
   SkyAutocompleteComponent
 } from './autocomplete.component';
 import {
@@ -31,6 +35,7 @@ import {
   imports: [
     CommonModule,
     FormsModule,
+    SkyLookupResourcesModule,
     SkyTextHighlightModule,
     SkyDropdownModule,
     SkyIconModule

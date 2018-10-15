@@ -24,6 +24,10 @@ import {
 } from '@skyux/indicators';
 
 import {
+  SkyLookupResourcesModule
+} from '../shared';
+
+import {
   SkySearchComponent
 } from './search.component';
 
@@ -35,6 +39,7 @@ import {
     BrowserAnimationsModule,
     CommonModule,
     SkyI18nModule,
+    SkyLookupResourcesModule,
     SkyMediaQueryModule,
     FormsModule,
     SkyIconModule
