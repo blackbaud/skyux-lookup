@@ -9,7 +9,7 @@ import {
 
 import {
   SkyLookupResourcesProvider
-} from './lookup-resources-provider';
+} from '../../plugin-resources/lookup-resources-provider';
 
 @NgModule({
   exports: [
