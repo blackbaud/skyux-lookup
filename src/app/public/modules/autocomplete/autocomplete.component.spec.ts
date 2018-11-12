@@ -356,7 +356,7 @@ describe('Autocomplete component', () => {
       }
     }));
 
-    it('should set the width of the dropdown when search is performed', fakeAsync(() => {
+    it('should set the width of the dropdown when a search is performed', fakeAsync(() => {
       const adapterSpy = spyOn(autocomplete['adapter'], 'setDropdownWidth').and.callThrough();
       const rendererSpy = spyOn(autocomplete['adapter']['renderer'], 'setStyle').and.callThrough();
 
