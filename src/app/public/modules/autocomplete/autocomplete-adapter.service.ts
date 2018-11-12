@@ -23,7 +23,6 @@ export class SkyAutocompleteAdapterService {
     this.renderer = this.rendererFactory.createRenderer(undefined, undefined);
   }
 
-  // Recalculate dropdown width on window resize or on skyAutocomplete focus.
   public watchDropdownWidth(elementRef: ElementRef): void {
     Observable
       .fromEvent(this.windowRef.getWindow(), 'resize')
