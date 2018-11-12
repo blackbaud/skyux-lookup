@@ -1,6 +1,6 @@
 # 3.0.0-rc.3 (2018-11-12)
 
-- Fixed autocomplete to properly position dropdown when inside a vertical form. [#2](https://github.com/blackbaud/skyux-lookup/pull/2)
+- Fixed autocomplete to properly position dropdown when inside a vertical tab form. [#2](https://github.com/blackbaud/skyux-lookup/pull/2)
 
 # 3.0.0-rc.2 (2018-11-08)
 
