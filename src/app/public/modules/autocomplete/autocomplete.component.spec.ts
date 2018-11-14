@@ -417,6 +417,17 @@ describe('Autocomplete component', () => {
       // The search method should not execute at this time.
       tick(10);
       fixture.detectChanges();
+
+      inputElement.value = 're';
+      SkyAppTestUtility.fireDomEvent(inputElement, 'keyup');
+      tick(10);
+      fixture.detectChanges();
+
+      inputElement.value = 'red';
+      SkyAppTestUtility.fireDomEvent(inputElement, 'keyup');
+      tick(10);
+      fixture.detectChanges();
+
       expect(spy).not.toHaveBeenCalled();
 
       // Wait for the remaining debounce time.
