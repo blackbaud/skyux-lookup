@@ -55,13 +55,13 @@
 /**
  * Mobile styles
  */
-@include sky-host-media-container-xs-min() {
+@include sky-host-responsive-container-xs-min() {
   .sky-search-input-container {
     min-width: auto;
   }
 }
 
-@include sky-host-media-container-sm-min() {
+@include sky-host-responsive-container-sm-min() {
   .sky-search-input-container {
     min-width: $sky-search-width;
   }
