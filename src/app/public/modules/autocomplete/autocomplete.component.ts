@@ -148,6 +148,7 @@ export class SkyAutocompleteComponent
   private isMouseEnter = false;
   private searchResultsIndex = 0;
   private searchText: string;
+  private previousValue: string;
 
   private _data: any[];
   private _debounceTime: number;
@@ -214,6 +215,16 @@ export class SkyAutocompleteComponent
       .takeUntil(this.ngUnsubscribe)
       .subscribe(() => {
         if (!this.isMouseEnter) {
+
+          const isDifferent = this.previousValue !== this.inputDirective.value;
+          const isEmpty = (!this.inputDirective.value);
+          if (isDifferent && isEmpty) {
+            this.selectionChange.emit({
+              selectedItem: undefined
+            });
+            this.previousValue = undefined;
+          }
+
           this.searchText = '';
           this.closeDropdown();
         }
@@ -324,6 +335,7 @@ export class SkyAutocompleteComponent
 
     this.searchText = result[this.descriptorProperty];
     this.inputDirective.value = result;
+    this.previousValue = result;
     this.selectionChange.emit({
       selectedItem: result
     });
