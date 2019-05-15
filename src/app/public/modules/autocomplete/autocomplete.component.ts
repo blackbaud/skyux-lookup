@@ -207,12 +207,6 @@ export class SkyAutocompleteComponent
       .takeUntil(this.ngUnsubscribe)
       .debounceTime(this.debounceTime)
       .subscribe((change: SkyAutocompleteInputTextChange) => {
-        if (!change.value && this.inputDirective.value) {
-          this.inputDirective.value = undefined;
-          this.selectionChange.emit({
-            selectedItem: undefined
-          });
-        }
         this.searchTextChanged(change.value);
       });
 
@@ -289,6 +283,14 @@ export class SkyAutocompleteComponent
 
   private searchTextChanged(searchText: string): void {
     const isEmpty = (!searchText || searchText.match(/^\s+$/));
+
+    // Emit selectionChange if value has been cleared.
+    if (!searchText && this.inputDirective.value) {
+      this.inputDirective.value = undefined;
+      this.selectionChange.emit({
+        selectedItem: undefined
+      });
+    }
 
     if (isEmpty) {
       this.searchText = '';
