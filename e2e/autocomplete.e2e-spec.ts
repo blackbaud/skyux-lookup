@@ -1,13 +1,13 @@
 import {
+  expect,
+  SkyHostBrowser
+} from '@skyux-sdk/e2e';
+
+import {
   browser,
   by,
   element
 } from 'protractor';
-
-import {
-  expect,
-  SkyHostBrowser
-} from '@skyux-sdk/e2e';
 
 describe('Autocomplete', () => {
   beforeEach(() => {
@@ -16,7 +16,7 @@ describe('Autocomplete', () => {
   });
 
   function activateDropdown(done: DoneFn): void {
-    const input = element(by.css('input'));
+    const input = element(by.css('#autocomplete-reactive'));
     input.value = 'r';
     input.click();
     browser.actions().sendKeys('r').perform();

@@ -41,7 +41,7 @@ export class AutocompleteVisualComponent implements OnInit {
 
   public ngOnInit(): void {
     this.reactiveForm = this.formBuilder.group({
-      favoriteColor: { name: 'White' }
+      favoriteColor: undefined
     });
   }
 
