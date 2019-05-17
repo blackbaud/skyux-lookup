@@ -14,16 +14,29 @@ import {
   SkyDropdownMessageType
 } from '@skyux/popovers';
 
-import { SkyAutocompleteComponent } from './autocomplete.component';
-import { SkyAutocompleteInputDirective } from './autocomplete-input.directive';
+import {
+  SkyAutocompleteComponent
+} from './autocomplete.component';
 
-import { SkyAutocompleteFixturesModule } from './fixtures/autocomplete-fixtures.module';
-import { SkyAutocompleteFixtureComponent } from './fixtures/autocomplete.component.fixture';
+import {
+  SkyAutocompleteInputDirective
+} from './autocomplete-input.directive';
+
+import {
+  SkyAutocompleteFixtureComponent
+} from './fixtures/autocomplete.component.fixture';
+
+import {
+  SkyAutocompleteFixturesModule
+} from './fixtures/autocomplete-fixtures.module';
+
+import {
+  SkyAutocompleteReactiveFixtureComponent
+} from './fixtures/autocomplete-reactive.component.fixture';
 
 import {
   SkyAutocompleteSearchFunction
 } from './types';
-import { SkyAutocompleteReactiveFixtureComponent } from './fixtures/autocomplete-reactive.component.fixture';
 
 describe('Autocomplete component', () => {
   let fixture: ComponentFixture<any>;
@@ -167,7 +180,6 @@ describe('Autocomplete component', () => {
       beforeEach(() => {
         fixture.destroy();
 
-        // Now, setup a filter, removing 'Red' from the results.
         fixture = TestBed.createComponent(SkyAutocompleteReactiveFixtureComponent);
         component = fixture.componentInstance as SkyAutocompleteReactiveFixtureComponent;
         autocomplete = fixture.componentInstance.autocomplete;
