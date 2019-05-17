@@ -16,7 +16,7 @@ describe('Autocomplete', () => {
   });
 
   function activateDropdown(done: DoneFn): void {
-    const input = element(by.css('#autocomplete-reactive'));
+    const input = element(by.css('#favorite-color-reactive'));
     input.value = 'r';
     input.click();
     browser.actions().sendKeys('r').perform();

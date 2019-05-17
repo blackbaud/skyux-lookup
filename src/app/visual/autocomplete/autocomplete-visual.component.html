@@ -13,7 +13,7 @@
       [formGroup]="reactiveForm"
     >
       <label
-        for="favorite-color"
+        for="favorite-color-reactive"
       >
         Favorite color
       </label>
@@ -22,7 +22,7 @@
         (selectionChange)="onSelectionChange($event)"
       >
         <input
-          id="favorite-color"
+          id="favorite-color-reactive"
           formControlName="favoriteColor"
           type="text"
           skyAutocomplete
@@ -59,7 +59,7 @@
   >
 
     <label
-      for="favorite-color"
+      for="favorite-color-template"
     >
       Favorite color
     </label>
@@ -68,7 +68,7 @@
       (selectionChange)="onSelectionChange($event)"
     >
       <input
-        id="favorite-color"
+        id="favorite-color-template"
         type="text"
         skyAutocomplete
         [(ngModel)]="templateDrivenModel"
