@@ -19,6 +19,7 @@
         </label>
         <sky-autocomplete
           [data]="data"
+          (selectionChange)="onSelectionChange($event)"
         >
           <input
             id="favorite-color"

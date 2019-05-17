@@ -7,6 +7,10 @@ import {
   FormGroup
 } from '@angular/forms';
 
+import {
+  SkyAutocompleteSelectionChange
+} from '../../public';
+
 @Component({
   selector: 'autocomplete-visual',
   templateUrl: './autocomplete-visual.component.html'
@@ -40,7 +44,7 @@ export class AutocompleteVisualComponent implements OnInit {
     });
   }
 
-  public onSelectionChange(event: any) {
+  public onSelectionChange(event: SkyAutocompleteSelectionChange) {
     console.log(event);
   }
 
