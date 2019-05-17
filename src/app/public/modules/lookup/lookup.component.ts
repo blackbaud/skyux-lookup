@@ -195,6 +195,7 @@ export class SkyLookupComponent
 
   public clearSearchText() {
     this.autocompleteInputDirective.value = undefined;
+    this.autocompleteInputDirective.inputTextValue = undefined;
   }
 
   private addToSelected(item: any) {
