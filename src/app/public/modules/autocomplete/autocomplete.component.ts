@@ -331,8 +331,7 @@ export class SkyAutocompleteComponent
     const result = this.searchResults[this.searchResultsIndex];
 
     this.searchText = result[this.descriptorProperty];
-    // this.inputDirective.value = result;
-    this.inputDirective.writeValue(result);
+    this.inputDirective.value = result;
     this.selectionChange.emit({
       selectedItem: result
     });
