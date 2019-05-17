@@ -9,18 +9,25 @@ import {
 } from '@angular/core';
 
 import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR,
   AbstractControl,
+  ControlValueAccessor,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
   ValidationErrors,
-  Validator,
-  NG_VALIDATORS
+  Validator
 } from '@angular/forms';
 
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/fromEvent';
-import { Subject } from 'rxjs/Subject';
+
 import 'rxjs/add/operator/takeUntil';
+
+import {
+  Observable
+} from 'rxjs/Observable';
+
+import {
+  Subject
+} from 'rxjs/Subject';
 
 import {
   SkyAutocompleteInputTextChange
@@ -122,7 +129,7 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
       .fromEvent(element, 'blur')
       .takeUntil(this.ngUnsubscribe)
       .subscribe(() => {
-        this.updateTextValue();
+        this.restoreInputTextValueToPreviousState();
         this.onTouched();
       });
 
@@ -178,7 +185,7 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
     this.renderer.addClass(element, 'sky-form-control');
   }
 
-  private updateTextValue(): void {
+  private restoreInputTextValueToPreviousState(): void {
     const modelValue = this.getValueByKey();
 
     // If the search field contains text, make sure that the value
