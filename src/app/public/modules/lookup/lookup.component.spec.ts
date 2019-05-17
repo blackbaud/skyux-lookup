@@ -272,7 +272,7 @@ describe('Lookup component', function () {
       expect(document.activeElement).toEqual(inputElement);
     }));
 
-    fit('should clear the search text if escape key is pressed', fakeAsync(function () {
+    it('should clear the search text if escape key is pressed', fakeAsync(function () {
       const inputElement = getInputElement();
 
       fixture.detectChanges();
