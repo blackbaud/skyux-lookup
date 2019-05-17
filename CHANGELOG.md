@@ -1,3 +1,8 @@
+# 3.0.2 (2019-05-17)
+
+- Fixed autocomplete component to emit a `selectionChange` event when input is cleared. [#22](https://github.com/blackbaud/skyux-lookup/issues/22)
+- Fixed autocomplete component to no longer have improper Angular form control states when initialized with a value. [#20](https://github.com/blackbaud/skyux-lookup/issues/20)
+
 # 3.0.1 (2019-02-11)
 
 - Removed reference to deprecated `AnimationTransitionEvent` in favor of `AnimationEvent`.  This allows the library to compile against later versions of Angular that have removed the deprecated type. [#13](https://github.com/blackbaud/skyux-lookup/pull/13)
