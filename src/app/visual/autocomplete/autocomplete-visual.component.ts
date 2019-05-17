@@ -1,5 +1,6 @@
 import {
-  Component, OnInit
+  Component,
+  OnInit
 } from '@angular/core';
 
 import {
@@ -44,7 +45,7 @@ export class AutocompleteVisualComponent implements OnInit {
     });
   }
 
-  public onSelectionChange(event: SkyAutocompleteSelectionChange) {
+  public onSelectionChange(event: SkyAutocompleteSelectionChange): void {
     console.log(event);
   }
 

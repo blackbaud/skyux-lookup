@@ -70,8 +70,8 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
 
     if (isNewValue) {
       this._value = value;
-      this.onChange(this._value);
       this.inputTextValue = this.getValueByKey();
+      this.onChange(this._value);
 
       // Do not mark the field as "dirty"
       // if the field has been initialized with a value.

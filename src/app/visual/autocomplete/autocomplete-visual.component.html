@@ -12,23 +12,22 @@
       novalidate
       [formGroup]="reactiveForm"
     >
-        <label
-          for="favorite-color"
-        >
-          Favorite color
-        </label>
-        <sky-autocomplete
-          [data]="data"
-          (selectionChange)="onSelectionChange($event)"
-        >
-          <input
-            id="favorite-color"
-            formControlName="favoriteColor"
-            type="text"
-            skyAutocomplete
-          />
-        </sky-autocomplete>
-
+      <label
+        for="favorite-color"
+      >
+        Favorite color
+      </label>
+      <sky-autocomplete
+        [data]="data"
+        (selectionChange)="onSelectionChange($event)"
+      >
+        <input
+          id="favorite-color"
+          formControlName="favoriteColor"
+          type="text"
+          skyAutocomplete
+        />
+      </sky-autocomplete>
 
       <table>
         <tr>
