@@ -625,7 +625,7 @@ describe('Autocomplete component', () => {
     it('should emit an undefined value when text input is cleared',
       fakeAsync(() => {
         fixture.detectChanges();
-        const inputElement = getInputElement();
+        inputElement = getInputElement();
 
         // No changes should have been emitted yet.
         expect(component.selectionFromChangeEvent).toBeUndefined();
@@ -644,7 +644,7 @@ describe('Autocomplete component', () => {
         expect(component.selectionFromChangeEvent).toEqual({ selectedItem: { name: 'Red', objectid: 'abc' } });
 
         // Clear out the input.
-        input.textValue = '';
+        input.inputTextValue = '';
         SkyAppTestUtility.fireDomEvent(inputElement, 'keyup');
         tick();
 
@@ -828,7 +828,7 @@ describe('Autocomplete component', () => {
       expect(spy).not.toHaveBeenCalled();
     }));
 
-    xit('should clear the input selected value if text value empty on blur',
+    it('should clear the input selected value if text value empty on blur',
       fakeAsync(() => {
         fixture.detectChanges();
 
@@ -840,6 +840,7 @@ describe('Autocomplete component', () => {
         fixture.detectChanges();
 
         input.inputTextValue = '';
+        SkyAppTestUtility.fireDomEvent(inputElement, 'keyup');
 
         expect(inputElement.value).toEqual('');
 
