@@ -1,5 +1,6 @@
 import {
-  Component, OnInit
+  Component,
+  OnInit
 } from '@angular/core';
 
 import {
@@ -8,13 +9,11 @@ import {
 } from '@angular/forms';
 
 @Component({
-  selector: 'autocomplete-visual',
-  templateUrl: './autocomplete-visual.component.html'
+  selector: 'sky-autocomplete-reactive-fixture',
+  templateUrl: './autocomplete-reactive.component.fixture.html'
 })
-export class AutocompleteVisualComponent implements OnInit {
+export class SkyAutocompleteReactiveFixtureComponent implements OnInit {
   public reactiveForm: FormGroup;
-
-  public templateDrivenModel: any;
 
   public data: any[] = [
     { name: 'Red' },
@@ -29,19 +28,13 @@ export class AutocompleteVisualComponent implements OnInit {
     { name: 'White' },
     { name: 'Black' }
   ];
-
   constructor(
     private formBuilder: FormBuilder
   ) {}
 
   public ngOnInit(): void {
     this.reactiveForm = this.formBuilder.group({
-      favoriteColor: { name: 'White' }
+      favoriteColor: undefined
     });
   }
-
-  public onSelectionChange(event: any) {
-    console.log(event);
-  }
-
 }

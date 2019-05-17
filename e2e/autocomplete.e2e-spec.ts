@@ -10,11 +10,12 @@ import {
 } from '@skyux-sdk/e2e';
 
 describe('Autocomplete', () => {
-  function validateScreenshot(done: DoneFn) {
-    expect('#autocomplete-visual').toMatchBaselineScreenshot(done);
-  }
+  beforeEach(() => {
+    SkyHostBrowser.get('visual/autocomplete');
+    SkyHostBrowser.setWindowBreakpoint('lg');
+  });
 
-  function validateScreenshotWithMenu(done: DoneFn) {
+  function activateDropdown(done: DoneFn): void {
     const input = element(by.css('input'));
     input.value = 'r';
     input.click();
@@ -25,31 +26,33 @@ describe('Autocomplete', () => {
         element(by.css('.sky-dropdown-item'))
       );
     });
-
-    validateScreenshot(done);
   }
 
-  beforeEach(() => {
-    SkyHostBrowser.get('visual/autocomplete');
-  });
-
-  describe('(lg screens)', () => {
-    beforeEach(() => {
-      SkyHostBrowser.setWindowBreakpoint('lg');
-    });
-
-    it('should match previous autocomplete screenshot', (done) => {
-      validateScreenshotWithMenu(done);
+  it('should match previous screenshot with no dropdown', (done) => {
+    expect('#autocomplete-reactive').toMatchBaselineScreenshot(done, {
+      screenshotName: 'autocomplete-no-dropdown'
     });
   });
 
-  describe('(xs screens)', () => {
-    beforeEach(() => {
-      SkyHostBrowser.setWindowBreakpoint('xs');
+  it('should match previous screenshot with no dropdown (xs screen)', (done) => {
+    SkyHostBrowser.setWindowBreakpoint('xs');
+    expect('#autocomplete-reactive').toMatchBaselineScreenshot(done, {
+      screenshotName: 'autocomplete-no-dropdown-xs'
     });
+  });
 
-    it('should match previous autocomplete screenshot', (done) => {
-      validateScreenshotWithMenu(done);
+  it('should match previous screenshot with dropdown open', (done) => {
+    activateDropdown(done);
+    expect('#autocomplete-reactive').toMatchBaselineScreenshot(done, {
+      screenshotName: 'autocomplete-with-dropdown'
+    });
+  });
+
+  it('should match previous screenshot with dropdown open (xs screen)', (done) => {
+    SkyHostBrowser.setWindowBreakpoint('xs');
+    activateDropdown(done);
+    expect('#autocomplete-reactive').toMatchBaselineScreenshot(done, {
+      screenshotName: 'autocomplete-with-dropdown-xs'
     });
   });
 });
