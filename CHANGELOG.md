@@ -1,7 +1,7 @@
 # 3.0.2 (2019-05-17)
 
-- Fixed autocomplete component to emit a `selectionChange` event when input is cleared. [#22](https://github.com/blackbaud/skyux-lookup/issues/22)
-- Fixed autocomplete component to no longer have improper Angular form control states when initialized with a value. [#20](https://github.com/blackbaud/skyux-lookup/issues/20)
+- Fixed the autocomplete component to emit a `selectionChange` event when the input is cleared. [#22](https://github.com/blackbaud/skyux-lookup/issues/22)
+- Fixed the autocomplete component to properly represent Angular form control statuses (dirty, pristine, etc.). [#20](https://github.com/blackbaud/skyux-lookup/issues/20)
 
 # 3.0.1 (2019-02-11)
 
@@ -17,11 +17,11 @@
 
 # 3.0.0-rc.4 (2018-11-14)
 
-- Added `debounceTime` input to autocomplete component. [#8](https://github.com/blackbaud/skyux-lookup/pull/8)
+- Added `debounceTime` input to the autocomplete component. [#8](https://github.com/blackbaud/skyux-lookup/pull/8)
 
 # 3.0.0-rc.3 (2018-11-12)
 
-- Fixed autocomplete to properly position dropdown when inside a vertical tab form. [#2](https://github.com/blackbaud/skyux-lookup/pull/2)
+- Fixed the autocomplete component to properly position dropdown when inside a vertical tab form. [#2](https://github.com/blackbaud/skyux-lookup/pull/2)
 
 # 3.0.0-rc.2 (2018-11-08)
 
