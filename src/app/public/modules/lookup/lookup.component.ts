@@ -119,8 +119,10 @@ export class SkyLookupComponent
   }
 
   public onAutocompleteSelectionChange(change: SkyAutocompleteSelectionChange) {
-    this.addToSelected(change.selectedItem);
-    this.focusInput();
+    if (change.selectedItem) {
+      this.addToSelected(change.selectedItem);
+      this.focusInput();
+    }
   }
 
   public onTokensChange(change: SkyToken[]) {
@@ -195,6 +197,7 @@ export class SkyLookupComponent
 
   public clearSearchText() {
     this.autocompleteInputDirective.value = undefined;
+    this.autocompleteInputDirective.inputTextValue = undefined;
   }
 
   private addToSelected(item: any) {

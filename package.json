@@ -1,6 +1,6 @@
 {
   "name": "@skyux/lookup",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "SKY UX Lookup",
   "main": "bundles/bundle.umd.js",
   "module": "index.ts",
@@ -33,8 +33,8 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@blackbaud/skyux": "2.49.1",
-    "@blackbaud/skyux-builder": "1.34.1",
+    "@blackbaud/skyux": "2.50.0",
+    "@blackbaud/skyux-builder": "1.35.0",
     "@skyux-sdk/builder-plugin-skyux": "1.0.0"
   }
 }

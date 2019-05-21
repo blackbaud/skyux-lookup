@@ -17,10 +17,10 @@ import {
 } from '../index';
 
 @Component({
-  selector: 'sky-autocomplete-test',
+  selector: 'sky-autocomplete-fixture',
   templateUrl: './autocomplete.component.fixture.html'
 })
-export class SkyAutocompleteTestComponent {
+export class SkyAutocompleteFixtureComponent {
   public data: any[] = [
     { name: 'Red', objectid: 'abc' },
     { name: 'Blue', objectid: 'def' },
@@ -46,6 +46,7 @@ export class SkyAutocompleteTestComponent {
   public searchResultsLimit: number;
   public searchResultTemplate: TemplateRef<any>;
   public searchTextMinimumCharacters: number;
+  public selectionFromChangeEvent: SkyAutocompleteSelectionChange;
 
   @ViewChild(SkyAutocompleteComponent)
   public autocomplete: SkyAutocompleteComponent;
@@ -59,5 +60,7 @@ export class SkyAutocompleteTestComponent {
   @ViewChild('customSearchResultTemplate')
   public customSearchResultTemplate: TemplateRef<any>;
 
-  public onSelectionChange(event: SkyAutocompleteSelectionChange): void { }
+  public onSelectionChange(event: SkyAutocompleteSelectionChange): void {
+    this.selectionFromChangeEvent = event;
+  }
 }
