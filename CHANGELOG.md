@@ -1,3 +1,7 @@
+# 3.0.3 (2019-05-28)
+
+- Fixed the search component to have correct visual styles when focused. [#27](https://github.com/blackbaud/skyux-lookup/pull/27)
+
 # 3.0.2 (2019-05-17)
 
 - Fixed the autocomplete component to emit a `selectionChange` event when the input is cleared. [#22](https://github.com/blackbaud/skyux-lookup/issues/22)
