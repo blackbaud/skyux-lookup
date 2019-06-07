@@ -1,7 +1,7 @@
 # 3.1.0 (2019-06-07)
 
 - Added the ability to trigger responsive styles based on a parent component. [#21](https://github.com/blackbaud/skyux-lookup/pull/21)
-- Fixed the search component to properly trim whitespace when search text is applied. [#31](https://github.com/blackbaud/skyux-lookup/pull/31)
+- ixed the search component to trim whitespace when search text is entered. [#31](https://github.com/blackbaud/skyux-lookup/pull/31) (Thanks @Blackbaud-JackMcElhinney)
 
 # 3.0.3 (2019-05-28)
 
