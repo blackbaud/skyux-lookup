@@ -301,12 +301,7 @@ export class SkyAutocompleteComponent
     const isLongEnough = (searchText.length >= this.searchTextMinimumCharacters);
     const isDifferent = (searchText !== this.searchText);
 
-    this.searchText = searchText;
-
-    // Double check that search text is defined before trying to trim off whitespace
-    if (this.searchText) {
-      this.searchText.trim();
-    }
+    this.searchText = searchText.trim();
 
     if (isLongEnough && isDifferent) {
       this.performSearch().then((results: any[]) => {
