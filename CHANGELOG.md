@@ -1,6 +1,6 @@
-# 3.1.1 (2019-06-25)
+# 3.1.1 (2019-06-26)
 
-- Fixed the search component to not error when the search is applied with no value. [#34](https://github.com/blackbaud/skyux-lookup/pull/34)
+- Fixed the search component to handle searches with no applied value. [#34](https://github.com/blackbaud/skyux-lookup/pull/34)
 
 # 3.1.0 (2019-06-07)
 
