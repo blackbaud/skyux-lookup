@@ -207,7 +207,7 @@ describe('Lookup component', function () {
       const inputElement = getInputElement();
       expect(component.form.touched).toEqual(false);
 
-      inputElement.dispatchEvent(new Event('blur'));
+      SkyAppTestUtility.fireDomEvent(inputElement, 'blur');
       tick();
       fixture.detectChanges();
 
