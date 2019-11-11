@@ -121,6 +121,9 @@ export class SkyAutocompleteComponent
   @Input()
   public searchResultsLimit: number;
 
+  @Input()
+  public noResultsFoundText: string;
+
   @Output()
   public get selectionChange(): EventEmitter<SkyAutocompleteSelectionChange> {
     return this._selectionChange;
@@ -153,6 +156,7 @@ export class SkyAutocompleteComponent
   private _debounceTime: number;
   private _descriptorProperty: string;
   private _dropdownController = new Subject<SkyDropdownMessage>();
+  private _dropdownIsOpen: boolean  = false;
   private _highlightText: string;
   private _propertiesToSearch: string[];
   private _search: SkyAutocompleteSearchFunction;
@@ -305,7 +309,7 @@ export class SkyAutocompleteComponent
 
     if (isLongEnough && isDifferent) {
       this.performSearch().then((results: any[]) => {
-        if (!this.hasSearchResults()) {
+        if (!this._dropdownIsOpen) {
           this.sendDropdownMessage(SkyDropdownMessageType.Open);
         }
 
@@ -347,6 +351,11 @@ export class SkyAutocompleteComponent
   }
 
   private sendDropdownMessage(type: SkyDropdownMessageType): void {
+    if (type === SkyDropdownMessageType.Open) {
+      this._dropdownIsOpen = true;
+    } else if (type === SkyDropdownMessageType.Close) {
+      this._dropdownIsOpen = false;
+    }
     this.dropdownController.next({ type });
   }
 

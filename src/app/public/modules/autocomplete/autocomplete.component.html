@@ -17,7 +17,6 @@
 
         <sky-dropdown-item
           *ngFor="let result of searchResults; let i = index">
-
           <button
             type="button">
             <ng-container
@@ -25,6 +24,11 @@
             </ng-container>
           </button>
 
+        </sky-dropdown-item>
+        <sky-dropdown-item *ngIf="searchResults.length === 0">
+          <div class="sky-autocomplete-no-results-found">
+            {{ noResultsFoundText || ('skyux_autocomplete_no_results' | skyLibResources) }}
+          </div>
         </sky-dropdown-item>
       </sky-dropdown-menu>
     </sky-dropdown>
