@@ -47,6 +47,7 @@ export class SkyAutocompleteFixtureComponent {
   public searchResultTemplate: TemplateRef<any>;
   public searchTextMinimumCharacters: number;
   public selectionFromChangeEvent: SkyAutocompleteSelectionChange;
+  public customNoResultsMessage: string;
 
   @ViewChild(SkyAutocompleteComponent)
   public autocomplete: SkyAutocompleteComponent;
