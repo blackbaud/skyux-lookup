@@ -151,12 +151,12 @@ export class SkyAutocompleteComponent
   private isMouseEnter = false;
   private searchResultsIndex = 0;
   private searchText: string;
+  private isDropdownOpen: boolean  = false;
 
   private _data: any[];
   private _debounceTime: number;
   private _descriptorProperty: string;
   private _dropdownController = new Subject<SkyDropdownMessage>();
-  private _dropdownIsOpen: boolean  = false;
   private _highlightText: string;
   private _propertiesToSearch: string[];
   private _search: SkyAutocompleteSearchFunction;
@@ -309,7 +309,8 @@ export class SkyAutocompleteComponent
 
     if (isLongEnough && isDifferent) {
       this.performSearch().then((results: any[]) => {
-        if (!this._dropdownIsOpen) {
+        if (!this.isDropdownOpen) {
+          this.isDropdownOpen = true;
           this.sendDropdownMessage(SkyDropdownMessageType.Open);
         }
 
@@ -347,15 +348,11 @@ export class SkyAutocompleteComponent
     this._searchResults = [];
     this._highlightText = '';
     this.changeDetector.markForCheck();
+    this.isDropdownOpen = false;
     this.sendDropdownMessage(SkyDropdownMessageType.Close);
   }
 
   private sendDropdownMessage(type: SkyDropdownMessageType): void {
-    if (type === SkyDropdownMessageType.Open) {
-      this._dropdownIsOpen = true;
-    } else if (type === SkyDropdownMessageType.Close) {
-      this._dropdownIsOpen = false;
-    }
     this.dropdownController.next({ type });
   }
 

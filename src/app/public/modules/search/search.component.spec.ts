@@ -12,7 +12,9 @@ import {
   By
 } from '@angular/platform-browser';
 
-import { expect } from '@skyux-sdk/testing';
+import {
+  expect
+} from '@skyux-sdk/testing';
 
 import {
   SkySearchModule

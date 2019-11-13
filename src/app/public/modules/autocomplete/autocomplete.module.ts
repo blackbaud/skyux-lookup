@@ -22,7 +22,9 @@ import {
 import {
   SkyAutocompleteInputDirective
 } from './autocomplete-input.directive';
-import { SkyLookupResourcesModule } from '../shared';
+import {
+  SkyLookupResourcesModule
+} from '../shared';
 
 @NgModule({
   declarations: [
