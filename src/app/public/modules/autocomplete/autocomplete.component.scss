@@ -1,3 +1,6 @@
+@import "~@skyux/theme/scss/mixins";
+@import "~@skyux/theme/scss/_compat/mixins";
+
 .sky-autocomplete {
   position: relative;
 
@@ -10,5 +13,9 @@
     left: 0;
     right: 0;
     bottom: 0;
+  }
+
+  .sky-autocomplete-no-results-found {
+    padding: $sky-space-xxs $sky-space-xl;
   }
 }
