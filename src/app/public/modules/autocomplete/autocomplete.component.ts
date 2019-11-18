@@ -276,6 +276,7 @@ export class SkyAutocompleteComponent
         event.preventDefault();
         event.stopPropagation();
       }
+      this.closeDropdown();
       break;
 
       case 'escape':
@@ -333,14 +334,15 @@ export class SkyAutocompleteComponent
   }
 
   private selectActiveSearchResult(): void {
-    const result = this.searchResults[this.searchResultsIndex];
+    if (this.hasSearchResults()) {
+      const result = this.searchResults[this.searchResultsIndex];
 
-    this.searchText = result[this.descriptorProperty];
-    this.inputDirective.value = result;
-    this.selectionChange.emit({
-      selectedItem: result
-    });
-
+      this.searchText = result[this.descriptorProperty];
+      this.inputDirective.value = result;
+      this.selectionChange.emit({
+        selectedItem: result
+      });
+    }
     this.closeDropdown();
   }
 
