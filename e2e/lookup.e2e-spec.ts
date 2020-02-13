@@ -10,11 +10,13 @@ import {
 } from '@skyux-sdk/e2e';
 
 describe('Lookup component', () => {
-  function validateScreenshot(done: DoneFn) {
-    expect('#lookup-visual').toMatchBaselineScreenshot(done);
+  function validateScreenshot(done: DoneFn, screenshotName: string) {
+    expect('#lookup-visual').toMatchBaselineScreenshot(done, {
+      screenshotName
+    });
   }
 
-  function validateScreenshotWithMenu(done: DoneFn) {
+  function validateScreenshotWithMenu(done: DoneFn, screenshotName: string) {
     const input = element(by.css('textarea'));
     input.value = 'r';
     input.click();
@@ -27,7 +29,7 @@ describe('Lookup component', () => {
       );
     });
 
-    validateScreenshot(done);
+    validateScreenshot(done, screenshotName);
   }
 
   beforeEach(() => {
@@ -40,18 +42,18 @@ describe('Lookup component', () => {
     });
 
     it('should match previous lookup screenshot', (done) => {
-      validateScreenshot(done);
+      validateScreenshot(done, 'lookup');
     });
 
     it('should match previous lookup w/ menu screenshot', (done) => {
-      validateScreenshotWithMenu(done);
+      validateScreenshotWithMenu(done, 'lookup-w-menu');
     });
 
     it('should match previous disabled lookup screenshot', (done) => {
       const btn = element(by.css('#btn-disable-lookup'));
       btn.click();
 
-      validateScreenshot(done);
+      validateScreenshot(done, 'lookup-disabled');
     });
   });
 
@@ -61,11 +63,11 @@ describe('Lookup component', () => {
     });
 
     it('should match previous lookup screenshot', (done) => {
-      validateScreenshot(done);
+      validateScreenshot(done, 'lookup-xs');
     });
 
     it('should match previous lookup w/ menu screenshot', (done) => {
-      validateScreenshotWithMenu(done);
+      validateScreenshotWithMenu(done, 'lookup-w-menu-xs');
     });
   });
 });
