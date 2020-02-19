@@ -9,8 +9,10 @@ import {
 } from '@skyux-sdk/e2e';
 
 describe('search component', () => {
-  function validateScreenshot(done: DoneFn) {
-    expect('#search-visual').toMatchBaselineScreenshot(done);
+  function validateScreenshot(done: DoneFn, screenshotName: string) {
+    expect('#search-visual').toMatchBaselineScreenshot(done, {
+      screenshotName
+    });
   }
 
   beforeEach(() => {
@@ -23,7 +25,7 @@ describe('search component', () => {
     });
 
     it('should match the baseline search screenshot', (done) => {
-      validateScreenshot(done);
+      validateScreenshot(done, 'search');
     });
   });
 
@@ -33,14 +35,14 @@ describe('search component', () => {
     });
 
     it('should match the baseline search screenshot on small screens', (done) => {
-      validateScreenshot(done);
+      validateScreenshot(done, 'search-xs');
     });
 
     it(
-      'should match the baseline search screenshot on small screens when dismissable input is shown',
+      'should match the baseline search screenshot on small screens when dismissible input is shown',
       (done) => {
         element(by.css('.sky-search-btn-open')).click();
-        validateScreenshot(done);
+        validateScreenshot(done, 'search-dismissible-xs');
       }
     );
 
@@ -51,7 +53,7 @@ describe('search component', () => {
         element(by.css('.sky-search-input')).sendKeys('Value');
         element(by.css('.sky-search-btn-apply')).click();
 
-        validateScreenshot(done);
+        validateScreenshot(done, 'search-applied-xs');
       }
     );
 
@@ -62,7 +64,7 @@ describe('search component', () => {
         element(by.css('.sky-search-btn-apply')).click();
         element(by.css('.sky-search-btn-dismiss')).click();
 
-        validateScreenshot(done);
+        validateScreenshot(done, 'search-applied-dismissed-xs');
     });
   });
 });
