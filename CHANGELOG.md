@@ -1,3 +1,14 @@
+# 4.0.0-rc.0 (2020-02-21)
+
+### New features
+
+- Added support for `@angular/core@^9`. [#54](https://github.com/blackbaud/skyux-lookup/pull/54)
+- Updated the pipeline to transpile to the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview). [#54](https://github.com/blackbaud/skyux-lookup/pull/54)
+
+### Breaking changes
+
+- Dropped support for `rxjs@5`. Consumers may install `rxjs-compat@^6` to support older versions of `rxjs`. [#54](https://github.com/blackbaud/skyux-lookup/pull/54)
+
 # 3.2.1 (2020-02-13)
 
 - Fixed the autocomplete component to use the `Renderer2` service instead of the deprecated `Renderer` service. [#50](https://github.com/blackbaud/skyux-lookup/pull/50)
