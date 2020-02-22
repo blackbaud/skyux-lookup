@@ -310,6 +310,7 @@ describe('Lookup component', function () {
     }));
 
     it('should clear the search text if escape key is pressed', fakeAsync(function () {
+      fixture.detectChanges();
       const inputElement = getInputElement();
 
       fixture.detectChanges();

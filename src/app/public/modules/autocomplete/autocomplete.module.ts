@@ -29,7 +29,7 @@ import {
 
 import {
   SkyLookupResourcesModule
-} from '../shared';
+} from '../shared/lookup-resources.module';
 
 @NgModule({
   declarations: [
