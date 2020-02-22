@@ -14,12 +14,6 @@ import {
   ViewChild
 } from '@angular/core';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/fromEvent';
-import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/takeUntil';
-
 import {
   SkyDropdownMenuChange,
   SkyDropdownMessageType,
@@ -27,11 +21,30 @@ import {
 } from '@skyux/popovers';
 
 import {
-  SkyAutocompleteInputTextChange,
-  SkyAutocompleteSearchFunction,
-  SkyAutocompleteSearchFunctionFilter,
+  fromEvent as observableFromEvent,
+  Subject
+} from 'rxjs';
+
+import {
+  debounceTime,
+  takeUntil
+} from 'rxjs/operators';
+
+import {
+  SkyAutocompleteInputTextChange
+} from './types/autocomplete-input-text-change';
+
+import {
+  SkyAutocompleteSearchFunction
+} from './types/autocomplete-search-function';
+
+import {
+  SkyAutocompleteSearchFunctionFilter
+} from './types/autocomplete-search-function-filter';
+
+import {
   SkyAutocompleteSelectionChange
-} from './types';
+} from './types/autocomplete-selection-change';
 
 import { SkyAutocompleteAdapterService } from './autocomplete-adapter.service';
 import { SkyAutocompleteInputDirective } from './autocomplete-input.directive';
@@ -141,7 +154,10 @@ export class SkyAutocompleteComponent
     return this._highlightText || '';
   }
 
-  @ViewChild('defaultSearchResultTemplate')
+  @ViewChild('defaultSearchResultTemplate', {
+    read: TemplateRef,
+    static: false
+  })
   private defaultSearchResultTemplate: TemplateRef<any>;
 
   @ContentChild(SkyAutocompleteInputDirective)
@@ -174,23 +190,20 @@ export class SkyAutocompleteComponent
   public ngOnInit(): void {
     const element = this.elementRef.nativeElement;
 
-    Observable
-      .fromEvent(element, 'keydown')
-      .takeUntil(this.ngUnsubscribe)
+    observableFromEvent(element, 'keydown')
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((event: KeyboardEvent) => {
         this.handleKeyDown(event);
       });
 
-    Observable
-      .fromEvent(element, 'mouseenter')
-      .takeUntil(this.ngUnsubscribe)
+    observableFromEvent(element, 'mouseenter')
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.isMouseEnter = true;
       });
 
-    Observable
-      .fromEvent(element, 'mouseleave')
-      .takeUntil(this.ngUnsubscribe)
+    observableFromEvent(element, 'mouseleave')
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.isMouseEnter = false;
       });
@@ -208,14 +221,16 @@ export class SkyAutocompleteComponent
     this.inputDirective.displayWith = this.descriptorProperty;
 
     this.inputDirective.textChanges
-      .takeUntil(this.ngUnsubscribe)
-      .debounceTime(this.debounceTime)
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        debounceTime(this.debounceTime)
+      )
       .subscribe((change: SkyAutocompleteInputTextChange) => {
         this.searchTextChanged(change.value);
       });
 
     this.inputDirective.blur
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         if (!this.isMouseEnter) {
           this.searchText = '';

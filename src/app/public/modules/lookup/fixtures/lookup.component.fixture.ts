@@ -17,7 +17,11 @@ import { SkyLookupComponent } from '../lookup.component';
   templateUrl: './lookup.component.fixture.html'
 })
 export class SkyLookupTestComponent implements OnInit {
-  @ViewChild(SkyLookupComponent)
+
+  @ViewChild(SkyLookupComponent, {
+    read: SkyLookupComponent,
+    static: true
+  })
   public lookupComponent: SkyLookupComponent;
 
   public ariaLabel: string;

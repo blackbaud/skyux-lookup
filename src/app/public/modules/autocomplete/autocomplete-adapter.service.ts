@@ -5,12 +5,13 @@ import {
   RendererFactory2
 } from '@angular/core';
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/fromEvent';
-
 import {
   SkyAppWindowRef
 } from '@skyux/core';
+
+import {
+  fromEvent as observableFromEvent
+} from 'rxjs';
 
 @Injectable()
 export class SkyAutocompleteAdapterService {
@@ -24,8 +25,7 @@ export class SkyAutocompleteAdapterService {
   }
 
   public watchDropdownWidth(elementRef: ElementRef): void {
-    Observable
-      .fromEvent(this.windowRef.nativeWindow, 'resize')
+    observableFromEvent(this.windowRef.nativeWindow, 'resize')
       .subscribe(() => {
         this.setDropdownWidth(elementRef);
       });

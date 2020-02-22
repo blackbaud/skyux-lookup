@@ -36,7 +36,7 @@ import {
 
 import {
   SkyAutocompleteSearchFunction
-} from './types';
+} from './types/autocomplete-search-function';
 
 describe('Autocomplete component', () => {
 
