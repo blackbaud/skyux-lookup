@@ -29,7 +29,8 @@
     "@skyux/core": "^3.5.1",
     "@skyux/i18n": "^3.5.0",
     "@skyux/indicators": "^3.0.0",
-    "@skyux/popovers": "^3.0.0"
+    "@skyux/popovers": "^3.0.0",
+    "intl-tel-input": "^14.1.0"
   },
   "dependencies": {},
   "devDependencies": {
@@ -65,6 +66,7 @@
     "@types/core-js": "2.5.2",
     "codelyzer": "4.5.0",
     "core-js": "2.6.11",
+    "intl-tel-input": "14.1.0",
     "rxjs": "6.5.4",
     "rxjs-compat": "6.5.4",
     "ts-node": "8.6.2",

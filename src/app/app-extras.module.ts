@@ -8,6 +8,7 @@ import {
 
 import {
   SkyAutocompleteModule,
+  SkyCountryFieldModule,
   SkyLookupModule,
   SkySearchModule
 } from './public';
@@ -15,11 +16,13 @@ import {
 @NgModule({
   imports: [
     SkyAutocompleteModule,
+    SkyCountryFieldModule,
     SkyLookupModule,
     SkySearchModule
   ],
   exports: [
     SkyAutocompleteModule,
+    SkyCountryFieldModule,
     SkyLookupModule,
     SkySearchModule,
     SkyAppLinkModule
