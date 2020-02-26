@@ -1,54 +1,63 @@
-<h2
-  class="sky-section-heading"
+<div
+  style="padding: 10px"
 >
-  Standard country field
-</h2>
+  <h2
+    class="sky-section-heading"
+  >
+    Standard country field
+  </h2>
 
-<form>
+
+  <div
+    id="screenshot-country-field-empty"
+    style="width: 50%; height: 100px; margin: 10px; padding: 10px;"
+  >
+    <form>
+      <sky-country-field
+        [(ngModel)]="countryData"
+        [disabled]="disableFields"
+        required
+        name="countryField"
+      >
+      </sky-country-field>
+    </form>
+  </div>
+
+  <p *ngIf="countryData">
+    Selected Country is {{ countryData.name }}
+  </p>
+</div>
 
 <div
-  id="screenshot-country-field"
-  style="width: 50%; height: 100px; margin: 10px; padding: 10px;"
+  style="padding: 10px"
 >
-  <sky-country-field
-    [(ngModel)]="countryData"
-    [disabled]="disableFields"
-    required
-    name="countryField"
+  <h2
+    class="sky-section-heading"
   >
-  </sky-country-field>
+    Reactive country field with default country
+  </h2>
+
+  <form
+    id="screenshot-country-field-populated"
+    style="width: 50%; height: 100px;  margin: 10px; padding: 10px;"
+    [formGroup]="countryForm"
+  >
+    <sky-country-field
+      [defaultCountry]="'AU'"
+      formControlName="countryControl"
+    >
+    </sky-country-field>
+  </form>
+
+  <p *ngIf="countryControl.value">
+    Selected Country is {{ countryControl.value.name }}
+  </p>
+
+  <button
+    class="sky-btn sky-btn-primary"
+    id="disable-toggle"
+    (click)="toggleDisabledStates()"
+  >
+    Toggle Disabled States
+  </button>
 </div>
-</form>
-
-<p *ngIf="countryData">
-  Selected Country is {{ countryData.name }}
-</p>
-
-<h2
-  class="sky-section-heading"
->
-  Reactive country field with default country
-</h2>
-
-<form
-  id="screenshot-country-field-default"
-  style="width: 50%; height: 100px;  margin: 10px; padding: 10px;"
-  [formGroup]="countryForm"
->
-  <sky-country-field
-    [defaultCountry]="'AU'"
-    formControlName="countryControl"
-  >
-  </sky-country-field>
-</form>
-
-<p *ngIf="countryControl.value">
-  Selected Country is {{ countryControl.value.name }}
-</p>
-
-<button
-  class="sky-btn sky-btn-primary"
-  (click)="toggleDisabledStates()"
->
-  Toggle Disabled States
-</button>

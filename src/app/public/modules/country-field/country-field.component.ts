@@ -13,12 +13,12 @@ import {
 } from '@angular/core';
 
 import {
+  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   FormControl,
   FormGroup,
   NG_VALUE_ACCESSOR,
-  AbstractControl,
   ValidationErrors
 } from '@angular/forms';
 
@@ -76,7 +76,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   public disabled: boolean = false;
 
   @Output()
-  public selectedCountryChange = new EventEmitter<SkyCountryFieldCountry>();
+  public selectedCountryChange: EventEmitter<SkyCountryFieldCountry> = new EventEmitter<SkyCountryFieldCountry>();
 
   public countries: SkyCountryFieldCountry[];
 
@@ -84,7 +84,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
   public isInPhoneField: boolean = false;
 
-  public isInputFocused = false;
+  public isInputFocused: boolean = false;
 
   @ViewChild(SkyAutocompleteInputDirective)
   public countrySearchAutocompleteDirective: SkyAutocompleteInputDirective;
@@ -124,19 +124,19 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
   private defaultCountryData: SkyCountryFieldCountry;
 
-  private idle = new Subject();
+  private idle: Subject<any> = new Subject();
 
-  private isFirstChange = true;
+  private isFirstChange: boolean = true;
 
   private _defaultCountry: string;
 
   private _selectedCountry: SkyCountryFieldCountry;
 
   constructor(
-    private formBuilder: FormBuilder,
-    private windowRef: SkyAppWindowRef,
     private changeDetector: ChangeDetectorRef,
-    private elRef: ElementRef
+    private elRef: ElementRef,
+    private formBuilder: FormBuilder,
+    private windowRef: SkyAppWindowRef
   ) {
     /**
      * The json functions here ensures that we get a copy of the array and not the global original.
@@ -193,20 +193,21 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
   // Angular automatically constructs these methods.
   /* istanbul ignore next */
-  public onChange = (value: SkyCountryFieldCountry) => { };
-  /* istanbul ignore next */
-  public onTouched = () => { };
+  public onChange: Function = (value: SkyCountryFieldCountry) => { };
 
-  public registerOnChange(fn: (value: any) => void) {
+  /* istanbul ignore next */
+  public onTouched: Function = () => { };
+
+  public registerOnChange(fn: (value: any) => void): void {
     this.onChange = fn;
   }
 
-  public registerOnTouched(fn: () => void) {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
   // Allows Angular to disable the input.
-  public setDisabledState(disabled: boolean) {
+  public setDisabledState(disabled: boolean): void {
     this.removeEventListeners();
 
     if (!disabled) {
@@ -224,13 +225,13 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     return;
   }
 
-  public writeValue(value: SkyCountryFieldCountry) {
+  public writeValue(value: SkyCountryFieldCountry): void {
     if (!this.disabled) {
       this.selectedCountry = value;
     }
   }
 
-  private addEventListeners() {
+  private addEventListeners(): void {
     this.idle = new Subject();
 
     const documentObj = this.windowRef.nativeWindow.document;
@@ -248,7 +249,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
       });
   }
 
-  private removeEventListeners() {
+  private removeEventListeners(): void {
     this.idle.next();
     this.idle.complete();
   }

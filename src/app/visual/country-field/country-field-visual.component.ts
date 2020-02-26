@@ -5,7 +5,8 @@ import {
 
 import {
   FormControl,
-  FormGroup
+  FormGroup,
+  Validators
 } from '@angular/forms';
 
 import {
@@ -37,6 +38,8 @@ export class CountryFieldVisualComponent implements OnInit {
     this.countryForm = new FormGroup({
       'countryControl': this.countryControl
     });
+
+    this.countryControl.setValidators([Validators.required]);
   }
 
   public toggleDisabledStates() {

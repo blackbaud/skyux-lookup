@@ -20,12 +20,12 @@ import {
 } from '../autocomplete';
 
 import {
-  SkyLookupResourcesModule
-} from '../shared';
-
-import {
   SkyCountryFieldComponent
 } from './country-field.component';
+
+import {
+  SkyLookupResourcesModule
+} from '../shared';
 
 @NgModule({
   declarations: [
@@ -35,9 +35,9 @@ import {
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    SkyAutocompleteModule,
     SkyI18nModule,
-    SkyLookupResourcesModule,
-    SkyAutocompleteModule
+    SkyLookupResourcesModule
   ],
   exports: [
     SkyCountryFieldComponent
