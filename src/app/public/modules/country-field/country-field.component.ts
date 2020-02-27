@@ -56,6 +56,12 @@ import {
 })
 export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy, OnInit {
 
+  /**
+   * Specifies the [International Organization for Standardization Alpha 2](https://www.nationsonline.org/oneworld/country_code_list.htm)
+   * country code for the default country.
+   * This default country will show up at the top of search results when applicable.
+   * @default us
+   */
   @Input()
   public set defaultCountry(value: string) {
     if (value !== this._defaultCountry) {
@@ -72,9 +78,15 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     return this._defaultCountry;
   }
 
+  /**
+   * Indicates whether to disable the country field.
+   */
   @Input()
   public disabled: boolean = false;
 
+  /**
+   * Emits when the selected country changes.
+   */
   @Output()
   public selectedCountryChange: EventEmitter<SkyCountryFieldCountry> = new EventEmitter<SkyCountryFieldCountry>();
 
