@@ -2,7 +2,7 @@
   <form>
     <sky-country-field
       name="countryField"
-      [disabled]="isDisabled"
+      [disabled]="isDisabled ? true : undefined"
       [defaultCountry]="defaultCountry"
       [attr.required]="isRequired ? true : undefined"
       [(ngModel)]="modelValue"

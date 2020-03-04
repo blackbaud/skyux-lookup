@@ -16,7 +16,7 @@ import {
 
 import {
   SkyCountryFieldCountry
-} from '../types';
+} from '../types/country';
 
 @Component({
   selector: 'sky-test-cmp',

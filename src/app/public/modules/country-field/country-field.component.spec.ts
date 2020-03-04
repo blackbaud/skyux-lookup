@@ -196,6 +196,61 @@ describe('Country Field Component', () => {
         expect(nativeElement.querySelector('.sky-country-field-flag')).toBeNull();
       }));
 
+      it('should disable the field correctly', fakeAsync(() => {
+        component.modelValue = {
+          name: 'United States',
+          iso2: 'us'
+        };
+        component.isDisabled = true;
+        expect(component.countryFieldComponent.isInputFocused).toBeFalsy();
+        fixture.detectChanges();
+        tick();
+
+        const textAreaElement: HTMLElement = nativeElement.querySelector('textarea');
+
+        expect(textAreaElement
+          .attributes.getNamedItem('disabled')).not.toBeNull();
+        SkyAppTestUtility.fireDomEvent(textAreaElement, 'mousedown');
+        SkyAppTestUtility.fireDomEvent(textAreaElement, 'focusin');
+        fixture.detectChanges();
+        tick();
+
+        expect(component.countryFieldComponent.isInputFocused).toBeFalsy();
+      }));
+
+      it('should enable the field correctly', fakeAsync(() => {
+        component.modelValue = {
+          name: 'United States',
+          iso2: 'us'
+        };
+        component.isDisabled = true;
+        fixture.detectChanges();
+        tick();
+
+        const textAreaElement: HTMLElement = nativeElement.querySelector('textarea');
+
+        expect((<HTMLElement>nativeElement.querySelector('textarea'))
+          .attributes.getNamedItem('disabled')).not.toBeNull();
+        component.isDisabled = false;
+        fixture.detectChanges();
+        tick();
+
+        SkyAppTestUtility.fireDomEvent(textAreaElement, 'mousedown');
+        fixture.detectChanges();
+        tick();
+
+        expect((<HTMLElement>nativeElement.querySelector('textarea'))
+          .attributes.getNamedItem('disabled')).toBeNull();
+        expect(component.countryFieldComponent.isInputFocused).toBeTruthy();
+
+        component.countryFieldComponent.isInputFocused = false;
+        expect(component.countryFieldComponent.isInputFocused).toBeFalsy();
+        SkyAppTestUtility.fireDomEvent(textAreaElement, 'focusin');
+        fixture.detectChanges();
+
+        expect(component.countryFieldComponent.isInputFocused).toBeTruthy();
+      }));
+
     });
 
     describe('a11y', () => {
@@ -347,6 +402,62 @@ describe('Country Field Component', () => {
         expect(component.countryControl.value).toBeUndefined();
         expect(nativeElement.querySelector('textarea').value).toBe('');
         expect(nativeElement.querySelector('.sky-country-field-flag')).toBeNull();
+      }));
+
+      it('should disable the field correctly', fakeAsync(() => {
+        component.initialValue = {
+          name: 'United States',
+          iso2: 'us'
+        };
+        fixture.detectChanges();
+        tick();
+        component.isDisabled = true;
+        expect(component.countryFieldComponent.isInputFocused).toBeFalsy();
+        fixture.detectChanges();
+        tick();
+
+        const textAreaElement: HTMLElement = nativeElement.querySelector('textarea');
+
+        expect(component.countryFieldComponent.disabled).toBeTruthy();
+        SkyAppTestUtility.fireDomEvent(textAreaElement, 'mousedown');
+        SkyAppTestUtility.fireDomEvent(textAreaElement, 'focusin');
+        fixture.detectChanges();
+        tick();
+
+        expect(component.countryFieldComponent.isInputFocused).toBeFalsy();
+      }));
+
+      it('should enable the field correctly', fakeAsync(() => {
+        component.initialValue = {
+          name: 'United States',
+          iso2: 'us'
+        };
+        fixture.detectChanges();
+        tick();
+        component.isDisabled = true;
+        fixture.detectChanges();
+        tick();
+
+        const textAreaElement: HTMLElement = nativeElement.querySelector('textarea');
+
+        expect(component.countryFieldComponent.disabled).toBeTruthy();
+        component.isDisabled = false;
+        fixture.detectChanges();
+        tick();
+
+        SkyAppTestUtility.fireDomEvent(textAreaElement, 'mousedown');
+        fixture.detectChanges();
+        tick();
+
+        expect(component.countryFieldComponent.disabled).toBeFalsy();
+        expect(component.countryFieldComponent.isInputFocused).toBeTruthy();
+
+        component.countryFieldComponent.isInputFocused = false;
+        expect(component.countryFieldComponent.isInputFocused).toBeFalsy();
+        SkyAppTestUtility.fireDomEvent(textAreaElement, 'focusin');
+        fixture.detectChanges();
+
+        expect(component.countryFieldComponent.isInputFocused).toBeTruthy();
       }));
 
     });

@@ -17,6 +17,7 @@ import {
   ControlValueAccessor,
   FormControl,
   NG_VALUE_ACCESSOR,
+  NG_VALIDATORS,
   ValidationErrors
 } from '@angular/forms';
 
@@ -46,6 +47,12 @@ import {
   styleUrls: ['./country-field.component.scss'],
   providers: [{
     provide: NG_VALUE_ACCESSOR,
+    /* tslint:disable-next-line:no-forward-ref */
+    useExisting: forwardRef(() => SkyCountryFieldComponent),
+    multi: true
+  },
+  {
+    provide: NG_VALIDATORS,
     /* tslint:disable-next-line:no-forward-ref */
     useExisting: forwardRef(() => SkyCountryFieldComponent),
     multi: true
@@ -163,10 +170,9 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
     this.countrySearchFormControl = new FormControl();
 
-    if ((<HTMLElement>elRef.nativeElement.parentElement)
-      .classList.contains('sky-phone-field-country-search')) {
-      this.isInPhoneField = true;
-    }
+    this.isInPhoneField = (<HTMLElement>elRef.nativeElement.parentElement)
+      .classList
+      .contains('sky-phone-field-country-search');
   }
 
   /**
