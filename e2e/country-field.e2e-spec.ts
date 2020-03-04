@@ -100,7 +100,7 @@ describe('Country field', () => {
     });
   });
 
-  it('should match previous screenshot while selected (xs screen)', (done) => {
+  it('should match previous screenshot while disabled and empty (xs screen)', (done) => {
     element(by.css('#disable-toggle')).click();
     SkyHostBrowser.setWindowBreakpoint('xs');
     expect('#screenshot-country-field-empty').toMatchBaselineScreenshot(done, {
@@ -115,7 +115,7 @@ describe('Country field', () => {
     });
   });
 
-  it('should match previous screenshot while selected (xs screen)', (done) => {
+  it('should match previous screenshot while disabled and populated (xs screen)', (done) => {
     element(by.css('#disable-toggle')).click();
     SkyHostBrowser.setWindowBreakpoint('xs');
     expect('#screenshot-country-field-populated').toMatchBaselineScreenshot(done, {

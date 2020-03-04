@@ -9,7 +9,7 @@ import {
 
 import {
   SkyCountryFieldCountry
-} from '../types';
+} from '../types/country';
 
 @Component({
   selector: 'sky-test-cmp',
@@ -20,12 +20,12 @@ export class CountryFieldTestComponent {
   @ViewChild(SkyCountryFieldComponent)
   public countryFieldComponent: SkyCountryFieldComponent;
 
-  public modelValue: SkyCountryFieldCountry;
+  public defaultCountry: string;
 
   public isDisabled: boolean = false;
 
   public isRequired: boolean = false;
 
-  public defaultCountry: string;
+  public modelValue: SkyCountryFieldCountry;
 
 }

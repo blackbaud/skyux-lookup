@@ -11,7 +11,7 @@ import {
 
 import {
   SkyCountryFieldCountry
-} from '../../public/modules/country-field/types';
+} from '../../public/modules/country-field/types/country';
 
 @Component({
   selector: 'country-field-visual',
@@ -29,7 +29,7 @@ export class CountryFieldVisualComponent implements OnInit {
 
   constructor() { }
 
-  public ngOnInit() {
+  public ngOnInit(): void {
     this.countryControl = new FormControl();
     this.countryControl.setValue({
       name: 'Australia',
@@ -42,7 +42,7 @@ export class CountryFieldVisualComponent implements OnInit {
     this.countryControl.setValidators([Validators.required]);
   }
 
-  public toggleDisabledStates() {
+  public toggleDisabledStates(): void {
     if (this.disableFields) {
       this.countryControl.enable();
       this.disableFields = false;

@@ -15,9 +15,7 @@ import {
 import {
   AbstractControl,
   ControlValueAccessor,
-  FormBuilder,
   FormControl,
-  FormGroup,
   NG_VALUE_ACCESSOR,
   ValidationErrors
 } from '@angular/forms';
@@ -40,7 +38,7 @@ import {
 
 import {
   SkyCountryFieldCountry
-} from './types';
+} from './types/country';
 
 @Component({
   selector: 'sky-country-field',
@@ -85,18 +83,20 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   public disabled: boolean = false;
 
   /**
-   * Emits when the selected country changes.
+   * Fires when the selected country changes.
    */
   @Output()
   public selectedCountryChange: EventEmitter<SkyCountryFieldCountry> = new EventEmitter<SkyCountryFieldCountry>();
 
   public countries: SkyCountryFieldCountry[];
 
-  public countrySearchForm: FormGroup;
+  public countrySearchFormControl: FormControl;
 
   public isInPhoneField: boolean = false;
 
   public isInputFocused: boolean = false;
+
+  public searchTextMinimumCharacters: number = 2;
 
   @ViewChild(SkyAutocompleteInputDirective)
   public countrySearchAutocompleteDirective: SkyAutocompleteInputDirective;
@@ -107,7 +107,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
       this.sortCountriesWithSelectedAndDefault(newCountry);
 
-      this.countrySearchForm.get('countrySearch').setValue(this.selectedCountry);
+      this.countrySearchFormControl.setValue(this.selectedCountry);
 
       if (!this.isFirstChange) {
         this.onChange(newCountry);
@@ -140,6 +140,8 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
   private isFirstChange: boolean = true;
 
+  private ngUnsubscribe = new Subject();
+
   private _defaultCountry: string;
 
   private _selectedCountry: SkyCountryFieldCountry;
@@ -147,7 +149,6 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   constructor(
     private changeDetector: ChangeDetectorRef,
     private elRef: ElementRef,
-    private formBuilder: FormBuilder,
     private windowRef: SkyAppWindowRef
   ) {
     /**
@@ -159,11 +160,8 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
      */
     this.countries = JSON.parse(JSON.stringify((window as any)
       .intlTelInputGlobals.getCountryData()));
-    this.defaultCountryData = this.countries.find(country => country.iso2 === 'us');
 
-    this.countrySearchForm = this.formBuilder.group({
-      countrySearch: new FormControl()
-    });
+    this.countrySearchFormControl = new FormControl();
 
     if ((<HTMLElement>elRef.nativeElement.parentElement)
       .classList.contains('sky-phone-field-country-search')) {
@@ -171,28 +169,41 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     }
   }
 
+  /**
+   * Angular lifecycle hook for when the component is initialized
+   * @internal
+   */
   public ngOnInit(): void {
     if (!this.defaultCountry) {
       this.defaultCountry = 'us';
     }
 
-    this.countrySearchForm.get('countrySearch').valueChanges.subscribe(newValue => {
-      if (newValue) {
-        this.selectedCountry = newValue;
-      }
-    });
+    this.countrySearchFormControl.valueChanges
+      .takeUntil(this.ngUnsubscribe)
+      .subscribe(newValue => {
+        if (newValue) {
+          this.selectedCountry = newValue;
+        }
+      });
     this.addEventListeners();
   }
 
+  /**
+   * Angular lifecycle hook for when the compoennt is destructed.
+   * @internal
+   */
   public ngOnDestroy(): void {
     this.selectedCountryChange.complete();
     this.removeEventListeners();
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   /**
    * Sets the country to validate against based on the county's iso2 code.
-   * @param countryCode The International Organization for Standardization's two-letter code
+   * @param newCountry The International Organization for Standardization's two-letter code
    * for the default country.
+   * @internal
    */
   public onCountrySelected(newCountry: SkyAutocompleteSelectionChange): void {
     if (newCountry.selectedItem) {
@@ -247,7 +258,9 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     this.idle = new Subject();
 
     const documentObj = this.windowRef.nativeWindow.document;
-    fromEvent(documentObj, 'mousedown').takeUntil(this.idle)
+
+    fromEvent(documentObj, 'mousedown')
+      .takeUntil(this.idle)
       .subscribe((event: MouseEvent) => {
         this.isInputFocused = this.elRef.nativeElement.contains(event.target);
         this.changeDetector.markForCheck();
@@ -268,8 +281,11 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
   private sortCountriesWithSelectedAndDefault(selectedCountry: SkyCountryFieldCountry): void {
     let selectedCountryIndex: number;
-    let selectedCountryData;
+    let selectedCountryData: SkyCountryFieldCountry;
+
     if (selectedCountry) {
+      // Note: We are looking up this data here to ensure we are using the offical data from the
+      // library and not the data provided by the user on initialization of the component
       selectedCountryData = this.countries
         .find(country => country.iso2 === selectedCountry.iso2.toLocaleLowerCase());
       selectedCountryIndex = this.countries

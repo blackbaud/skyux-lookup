@@ -20,12 +20,12 @@ import {
 } from '../autocomplete';
 
 import {
-  SkyCountryFieldComponent
-} from './country-field.component';
-
-import {
   SkyLookupResourcesModule
 } from '../shared';
+
+import {
+  SkyCountryFieldComponent
+} from './country-field.component';
 
 @NgModule({
   declarations: [

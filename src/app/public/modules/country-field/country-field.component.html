@@ -1,5 +1,5 @@
 <div
-  class="sky-form-group sky-input-group"
+  class="sky-form-group"
 >
   <span
     class="sky-country-field-container"
@@ -7,38 +7,33 @@
       'sky-country-field-disabled': disabled
     }"
   >
-    <form
-      novalidate
-      class="sky-country-field-country-search"
-      [formGroup]="countrySearchForm"
+    <sky-autocomplete
+      [data]="countries"
+      [propertiesToSearch]="['name', 'iso2']"
+      [searchResultTemplate]="countrySearchResultTemplate"
+      [searchTextMinimumCharacters]="searchTextMinimumCharacters"
+      (selectionChange)="onCountrySelected($event)"
     >
-      <sky-autocomplete
-        [data]="countries"
-        [propertiesToSearch]="['name', 'iso2']"
-        [searchResultTemplate]="countrySearchResultTemplate"
-        [searchTextMinimumCharacters]="2"
-        (selectionChange)="onCountrySelected($event)"
+      <div
+        class="sky-form-control sky-country-field-input"
+        [ngClass]="{
+          'sky-field-status-active': isInputFocused
+        }"
       >
-        <div
-          class="sky-form-control sky-country-field-input"
-          [ngClass]="{
-            'sky-field-status-active': isInputFocused
-          }"
-        >
-          <div *ngIf="selectedCountry && selectedCountry.iso2 && !isInPhoneField"
-            [className]="'sky-country-field-flag iti-flag ' + selectedCountry.iso2.toLowerCase()"
-          ></div>
-          <textarea
-            skyAutocomplete
-            formControlName="countrySearch"
-            name="selectedCountry"
-            [attr.aria-label]="'skyux_country_field_search_placeholder' | skyLibResources"
-            [attr.disabled]="disabled ? true : undefined"
-            [placeholder]="'skyux_country_field_search_placeholder' | skyLibResources" #countrySearchInput
-          ></textarea>
-        </div>
-      </sky-autocomplete>
-    </form>
+        <div *ngIf="selectedCountry && selectedCountry.iso2 && !isInPhoneField"
+          [className]="'sky-country-field-flag iti-flag ' + selectedCountry.iso2.toLowerCase()"
+        ></div>
+        <textarea
+          skyAutocomplete
+          name="selectedCountry"
+          [attr.aria-label]="'skyux_country_field_search_placeholder' | skyLibResources"
+          [attr.disabled]="disabled ? true : undefined"
+          [formControl]="countrySearchFormControl"
+          [placeholder]="'skyux_country_field_search_placeholder' | skyLibResources"
+          #countrySearchInput
+        ></textarea>
+      </div>
+    </sky-autocomplete>
   </span>
 </div>
 
@@ -47,7 +42,7 @@
   #countrySearchResultTemplate
 >
   <div
-    [className]="'iti-flag ' + item.iso2"
+    [className]="'iti-flag ' + item.iso2.toLowerCase()"
   >
   </div>
   {{ item.name }}

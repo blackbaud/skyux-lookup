@@ -14,10 +14,10 @@
   >
     <form>
       <sky-country-field
-        [(ngModel)]="countryData"
-        [disabled]="disableFields"
-        required
         name="countryField"
+        required
+        [disabled]="disableFields"
+        [(ngModel)]="countryData"
       >
       </sky-country-field>
     </form>
@@ -43,8 +43,8 @@
     [formGroup]="countryForm"
   >
     <sky-country-field
-      [defaultCountry]="'AU'"
       formControlName="countryControl"
+      [defaultCountry]="'AU'"
     >
     </sky-country-field>
   </form>
