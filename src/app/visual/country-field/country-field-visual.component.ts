@@ -15,7 +15,8 @@ import {
 
 @Component({
   selector: 'country-field-visual',
-  templateUrl: './country-field-visual.component.html'
+  templateUrl: './country-field-visual.component.html',
+  styleUrls: ['./country-field-visual.component.scss']
 })
 export class CountryFieldVisualComponent implements OnInit {
 
