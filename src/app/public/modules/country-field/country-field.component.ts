@@ -191,6 +191,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
           this.selectedCountry = newValue;
         }
       });
+
     this.addEventListeners();
   }
 
@@ -203,6 +204,14 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     this.removeEventListeners();
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+  }
+
+  /**
+   * Sets the component's touched value when the autocomplete is blurred
+   * @internal
+   */
+  public onAutocompleteBlur(): void {
+    this.onTouched();
   }
 
   /**

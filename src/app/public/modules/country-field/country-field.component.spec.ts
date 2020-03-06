@@ -460,6 +460,18 @@ describe('Country Field Component', () => {
         expect(component.countryFieldComponent.isInputFocused).toBeTruthy();
       }));
 
+      it('should mark the form as touched when the form loses focus', fakeAsync(() => {
+        fixture.detectChanges();
+        const textAreaElement = getInputElement();
+        expect(component.countryForm.touched).toEqual(false);
+
+        SkyAppTestUtility.fireDomEvent(textAreaElement, 'blur');
+        tick();
+        fixture.detectChanges();
+
+        expect(component.countryForm.touched).toEqual(true);
+      }));
+
     });
 
     describe('a11y', () => {
