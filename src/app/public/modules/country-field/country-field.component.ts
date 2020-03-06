@@ -64,7 +64,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   /**
    * Specifies the [International Organization for Standardization Alpha 2](https://www.nationsonline.org/oneworld/country_code_list.htm)
    * country code for the default country.
-   * This default country will show up at the top of search results when applicable.
+   * When search results include the default country, it appears at the top of the list.
    * @default us
    */
   @Input()

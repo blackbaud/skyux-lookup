@@ -1,5 +1,5 @@
 /**
- * Represents the data for a given country
+ * Represents the data for a given country.
  */
 export interface SkyCountryFieldCountry {
 
