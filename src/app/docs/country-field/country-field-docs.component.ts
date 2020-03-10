@@ -1,11 +1,59 @@
 import {
   ChangeDetectionStrategy,
-  Component
+  Component,
+  OnInit
 } from '@angular/core';
+
+import {
+  FormControl,
+  FormGroup
+} from '@angular/forms';
+
+import {
+  SkyCountryFieldCountry
+} from '../../public/modules/country-field/types/country';
 
 @Component({
   selector: 'app-country-field-docs',
   templateUrl: './country-field-docs.component.html',
+  styleUrls: ['./country-field-docs.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CountryFieldDocsComponent {}
+export class CountryFieldDocsComponent implements OnInit {
+
+  public countryData: SkyCountryFieldCountry;
+
+  public countryForm: FormGroup;
+
+  public countryControl: FormControl;
+
+  public disableFields: boolean = false;
+
+  constructor() { }
+
+  public ngOnInit(): void {
+    this.countryControl = new FormControl();
+    this.countryForm = new FormGroup({
+      'countryControl': this.countryControl
+    });
+  }
+
+  public onDemoReset() {
+    this.countryControl.reset();
+  }
+
+  public onDemoSelectionChange(event: any) {
+    this.toggleDisabledStates(event.disableControl);
+  }
+
+  public toggleDisabledStates(disable: boolean): void {
+    if (disable) {
+      this.countryControl.disable();
+      this.disableFields = true;
+    } else {
+      this.countryControl.enable();
+      this.disableFields = false;
+    }
+  }
+
+}
