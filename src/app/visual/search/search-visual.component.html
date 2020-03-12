@@ -24,3 +24,29 @@
   </sky-search>
 
 </div>
+
+
+<sky-fluid-grid>
+  <sky-row>
+    <sky-column screenLarge="6">
+      <div style="background-color: blue; height: 200px">
+        <div style="width: 50%">
+          <sky-search
+            [searchText]="searchText"
+            (searchApply)="applySearchText(searchText)">
+          </sky-search>
+        </div>
+      </div>
+    </sky-column>
+    <sky-column screenLarge="6">
+      <div style="background-color: blue; height: 200px">
+        <div style="width: 50%">
+          <sky-search
+            [searchText]="searchText"
+            (searchApply)="applySearchText(searchText)">
+          </sky-search>
+        </div>
+      </div>
+    </sky-column>
+  </sky-row>
+</sky-fluid-grid>

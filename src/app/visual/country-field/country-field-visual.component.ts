@@ -53,7 +53,4 @@ export class CountryFieldVisualComponent implements OnInit {
     }
   }
 
-  public countryChanged(country: any) {
-    console.log('Change occurred: ' + country);
-  }
 }
