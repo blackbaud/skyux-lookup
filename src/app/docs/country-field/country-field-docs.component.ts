@@ -27,8 +27,6 @@ export class CountryFieldDocsComponent implements OnInit {
 
   public countryControl: FormControl;
 
-  public disableFields: boolean = false;
-
   constructor() { }
 
   public ngOnInit(): void {
@@ -40,20 +38,6 @@ export class CountryFieldDocsComponent implements OnInit {
 
   public onDemoReset() {
     this.countryControl.reset();
-  }
-
-  public onDemoSelectionChange(event: any) {
-    this.toggleDisabledStates(event.disableControl);
-  }
-
-  public toggleDisabledStates(disable: boolean): void {
-    if (disable) {
-      this.countryControl.disable();
-      this.disableFields = true;
-    } else {
-      this.countryControl.enable();
-      this.disableFields = false;
-    }
   }
 
 }

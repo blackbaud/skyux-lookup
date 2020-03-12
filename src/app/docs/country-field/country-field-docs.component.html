@@ -10,16 +10,7 @@
   <sky-docs-demo>
     <sky-docs-demo-control-panel
       (reset)="onDemoReset()"
-      (selectionChange)="onDemoSelectionChange($event)"
     >
-      <sky-docs-demo-control-panel-section>
-        <sky-docs-demo-control-panel-checkbox
-          label="Disable"
-          propertyName="disableControl"
-          [checked]="false"
-        >
-        </sky-docs-demo-control-panel-checkbox>
-      </sky-docs-demo-control-panel-section>
     </sky-docs-demo-control-panel>
     <form
       [formGroup]="countryForm"
