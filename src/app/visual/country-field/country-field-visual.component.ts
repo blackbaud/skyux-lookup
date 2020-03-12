@@ -52,4 +52,8 @@ export class CountryFieldVisualComponent implements OnInit {
       this.disableFields = true;
     }
   }
+
+  public countryChanged(country: any) {
+    console.log('Change occurred: ' + country);
+  }
 }
