@@ -17,7 +17,6 @@
         required
         [disabled]="disableFields"
         [(ngModel)]="countryData"
-        (selectedCountryChange)="countryChanged($event)"
       >
       </sky-country-field>
     </form>
@@ -44,7 +43,6 @@
     <sky-country-field
       formControlName="countryControl"
       [defaultCountry]="'AU'"
-      (selectedCountryChange)="countryChanged($event)"
     >
     </sky-country-field>
   </form>
