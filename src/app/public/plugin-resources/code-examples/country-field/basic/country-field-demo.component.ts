@@ -19,11 +19,11 @@ import {
 })
 export class CountryFieldDemoComponent implements OnInit {
 
+  public countryControl: FormControl;
+
   public countryData: SkyCountryFieldCountry;
 
   public countryForm: FormGroup;
-
-  public countryControl: FormControl;
 
   constructor() { }
 
