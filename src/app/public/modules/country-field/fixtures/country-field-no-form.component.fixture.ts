@@ -26,7 +26,7 @@ export class CountryFieldNoFormTestComponent {
 
   public isRequired: boolean = false;
 
-  public countryChanged(country: SkyCountryFieldCountry) {
+  public countryChanged(country: SkyCountryFieldCountry): void {
     return;
   }
 

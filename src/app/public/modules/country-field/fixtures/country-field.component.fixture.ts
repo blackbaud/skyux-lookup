@@ -28,7 +28,7 @@ export class CountryFieldTestComponent {
 
   public modelValue: SkyCountryFieldCountry;
 
-  public countryChanged(country: SkyCountryFieldCountry) {
+  public countryChanged(country: SkyCountryFieldCountry): void {
     return;
   }
 

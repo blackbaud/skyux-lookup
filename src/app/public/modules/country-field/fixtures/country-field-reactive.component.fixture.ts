@@ -75,7 +75,7 @@ export class CountryFieldReactiveTestComponent implements OnInit {
     });
   }
 
-  public countryChanged(country: SkyCountryFieldCountry) {
+  public countryChanged(country: SkyCountryFieldCountry): void {
     return;
   }
 
