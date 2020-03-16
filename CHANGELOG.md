@@ -3,8 +3,8 @@
 - Fixed the autocomplete component to properly highlight results after removing search text. [#65](https://github.com/blackbaud/skyux-lookup/pull/65)
 - Fixed the autocomplete component to properly highlight results when only one character is supplied. [#65](https://github.com/blackbaud/skyux-lookup/pull/65)
 - Fixed the country field component to properly fire the `selectedCountryChange` event when used outside of a form. [#63](https://github.com/blackbaud/skyux-lookup/pull/63)
-- Fixed the lookup component to interact with template driven forms correctly. [#64](https://github.com/blackbaud/skyux-lookup/pull/64)
-- Fixed the search component to not extend outside its container. [#61](https://github.com/blackbaud/skyux-lookup/pull/61)
+- Fixed the lookup component to validate correctly when a value is required within a template-driven form. [#64](https://github.com/blackbaud/skyux-lookup/pull/64)
+- Fixed the search component to remain inside its container. [#61](https://github.com/blackbaud/skyux-lookup/pull/61)
 
 # 3.3.1 (2020-03-11)
 
