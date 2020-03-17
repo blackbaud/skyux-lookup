@@ -8,6 +8,14 @@
   "plugins": [
     "@skyux-sdk/builder-plugin-skyux"
   ],
+  "omnibar": {
+    "experimental": true
+  },
+  "params": {
+    "svcid": {
+      "value": "skyux"
+    }
+  },
   "app": {
     "styles": [
       "src/app/visual-styles.scss",
