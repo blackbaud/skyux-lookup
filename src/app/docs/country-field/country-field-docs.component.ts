@@ -36,8 +36,4 @@ export class CountryFieldDocsComponent implements OnInit {
     });
   }
 
-  public onDemoReset() {
-    this.countryControl.reset();
-  }
-
 }
