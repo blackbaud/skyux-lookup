@@ -1,6 +1,6 @@
-# 3.3.4 (2020-03-20)
+# 3.3.4 (2020-03-23)
 
-- Fixed the country field component to properly update when not initialized with a value within a reactive form. [#71](https://github.com/blackbaud/skyux-lookup/pull/71)
+- Fixed the country field component to properly handle the first value change on a reactive form when the initial value is undefined. [#71](https://github.com/blackbaud/skyux-lookup/pull/71)
 
 # 3.3.3 (2020-03-18)
 
