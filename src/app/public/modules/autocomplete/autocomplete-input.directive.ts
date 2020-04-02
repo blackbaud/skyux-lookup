@@ -182,6 +182,7 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
     return;
   }
 
+  // See: https://www.w3.org/TR/wai-aria-practices/#kbd_focus_activedescendant
   public setActiveDescendant(descendantId: string | null): void {
     if (descendantId) {
       this.renderer.setAttribute(
