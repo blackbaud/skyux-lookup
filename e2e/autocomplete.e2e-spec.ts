@@ -23,7 +23,7 @@ describe('Autocomplete', () => {
 
     browser.wait(() => {
       return browser.isElementPresent(
-        element(by.css('.sky-dropdown-item'))
+        element(by.css('.sky-autocomplete-results'))
       );
     });
   }
