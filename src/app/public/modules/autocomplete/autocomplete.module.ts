@@ -9,12 +9,10 @@ import {
 } from '@angular/forms';
 
 import {
-  SkyAppWindowRef
+  SkyAffixModule,
+  SkyOverlayModule
 } from '@skyux/core';
 
-import {
-  SkyDropdownModule
-} from '@skyux/popovers';
 import {
   SkyIconModule,
   SkyTextHighlightModule
@@ -30,6 +28,7 @@ import {
 import {
   SkyLookupResourcesModule
 } from '../shared';
+import { SkyAutocompleteAdapterService } from './autocomplete-adapter.service';
 
 @NgModule({
   declarations: [
@@ -39,17 +38,18 @@ import {
   imports: [
     CommonModule,
     FormsModule,
+    SkyAffixModule,
     SkyTextHighlightModule,
-    SkyDropdownModule,
     SkyIconModule,
-    SkyLookupResourcesModule
+    SkyLookupResourcesModule,
+    SkyOverlayModule
   ],
   exports: [
     SkyAutocompleteComponent,
     SkyAutocompleteInputDirective
   ],
   providers: [
-    SkyAppWindowRef
+    SkyAutocompleteAdapterService
   ]
 })
 export class SkyAutocompleteModule { }
