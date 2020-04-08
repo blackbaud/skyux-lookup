@@ -55,6 +55,10 @@ const SKY_AUTOCOMPLETE_VALIDATOR = {
 })
 export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, ControlValueAccessor, Validator {
 
+  public get blur(): Observable<void> {
+    return this._blur.asObservable();
+  }
+
   public get displayWith(): string {
     return this._displayWith;
   }
@@ -62,6 +66,22 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
   public set displayWith(value: string) {
     this._displayWith = value;
     this.inputTextValue = this.getValueByKey();
+  }
+
+  public get inputTextValue(): string {
+    return this.elementRef.nativeElement.value;
+  }
+
+  public set inputTextValue(value: string) {
+    this.elementRef.nativeElement.value = value || '';
+  }
+
+  public get textChanges(): Observable<SkyAutocompleteInputTextChange> {
+    return this._textChanges.asObservable();
+  }
+
+  public get value(): any {
+    return this._value;
   }
 
   public set value(value: any) {
@@ -83,26 +103,6 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
         this.isFirstChange = false;
       }
     }
-  }
-
-  public get value(): any {
-    return this._value;
-  }
-
-  public set inputTextValue(value: string) {
-    this.elementRef.nativeElement.value = value || '';
-  }
-
-  public get inputTextValue(): string {
-    return this.elementRef.nativeElement.value;
-  }
-
-  public get textChanges(): Observable<SkyAutocompleteInputTextChange> {
-    return this._textChanges.asObservable();
-  }
-
-  public get blur(): Observable<void> {
-    return this._blur.asObservable();
   }
 
   private control: AbstractControl;
@@ -155,8 +155,15 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
   }
 
   public ngOnDestroy(): void {
+    this._blur.complete();
+    this._textChanges.complete();
+
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
+
+    this._blur =
+      this._textChanges =
+      this.ngUnsubscribe = undefined;
   }
 
   public writeValue(value: any): void {
