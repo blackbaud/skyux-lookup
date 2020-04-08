@@ -6,7 +6,8 @@ import {
 import {
   browser,
   by,
-  element
+  element,
+  ExpectedConditions
 } from 'protractor';
 
 describe('Autocomplete', () => {
@@ -15,17 +16,17 @@ describe('Autocomplete', () => {
     SkyHostBrowser.setWindowBreakpoint('lg');
   });
 
-  function activateDropdown(done: DoneFn): void {
+  function activateDropdown(): void {
     const input = element(by.css('#favorite-color-reactive'));
     input.value = 'r';
     input.click();
     browser.actions().sendKeys('r').perform();
 
-    browser.wait(() => {
-      return browser.isElementPresent(
-        element(by.css('.sky-dropdown-item'))
-      );
-    });
+    browser.wait(
+      ExpectedConditions.presenceOf(element(by.css('.sky-autocomplete-results'))),
+      1200,
+      'Autocomplete results dropdown took too long to appear.'
+    );
   }
 
   it('should match previous screenshot with no dropdown', (done) => {
@@ -42,7 +43,7 @@ describe('Autocomplete', () => {
   });
 
   it('should match previous screenshot with dropdown open', (done) => {
-    activateDropdown(done);
+    activateDropdown();
     expect('#autocomplete-reactive').toMatchBaselineScreenshot(done, {
       screenshotName: 'autocomplete-with-dropdown'
     });
@@ -50,7 +51,7 @@ describe('Autocomplete', () => {
 
   it('should match previous screenshot with dropdown open (xs screen)', (done) => {
     SkyHostBrowser.setWindowBreakpoint('xs');
-    activateDropdown(done);
+    activateDropdown();
     expect('#autocomplete-reactive').toMatchBaselineScreenshot(done, {
       screenshotName: 'autocomplete-with-dropdown-xs'
     });
