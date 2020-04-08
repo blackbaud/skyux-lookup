@@ -304,7 +304,12 @@ export class SkyAutocompleteComponent
 
         this._highlightText = this.searchText;
 
-        if (!this.isOpen) {
+        if (this.isOpen) {
+          // Let the results populate in the DOM before recalculating placement.
+          setTimeout(() => {
+            this.affixer.reaffix();
+          });
+        } else {
           this.openDropdown();
         }
 
