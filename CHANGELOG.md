@@ -1,6 +1,6 @@
 # 3.4.0 (2020-04-08)
 
-- Updated the colorpicker component to implement the affix and overlay services. [#74](https://github.com/blackbaud/skyux-lookup/pull/74)
+- Updated the autocomplete and lookup components to implement the affix and overlay services. [#74](https://github.com/blackbaud/skyux-lookup/pull/74)
 
 # 3.3.4 (2020-03-23)
 
