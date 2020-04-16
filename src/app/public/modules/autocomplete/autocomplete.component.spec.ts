@@ -503,17 +503,25 @@ describe('Autocomplete component', () => {
     );
 
     it('should be accessible', async(() => {
+      const axeConfig = {
+        rules: {
+          'region': {
+            enabled: false
+          }
+        }
+      };
+
       fixture.detectChanges();
       fixture.whenStable().then(() => {
-        expect(getAutocompleteElement()).toBeAccessible(() => {
+        expect(document.body).toBeAccessible(() => {
           fixture.detectChanges();
           inputElement.value = 'r';
           SkyAppTestUtility.fireDomEvent(inputElement, 'keyup');
           fixture.detectChanges();
           fixture.whenStable().then(() => {
-            expect(getAutocompleteElement()).toBeAccessible();
+            expect(document.body).toBeAccessible(() => {}, axeConfig);
           });
-        });
+        }, axeConfig);
       });
     }));
 

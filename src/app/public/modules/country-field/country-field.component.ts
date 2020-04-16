@@ -32,6 +32,10 @@ import {
 } from 'rxjs';
 
 import {
+  takeUntil
+} from 'rxjs/operators';
+
+import {
   SkyAutocompleteSelectionChange
 } from '../autocomplete/types/autocomplete-selection-change';
 
@@ -42,7 +46,8 @@ import {
 import {
   SkyCountryFieldCountry
 } from './types/country';
-import { takeUntil } from 'rxjs/operators';
+
+let uniqueId: number = 0;
 
 @Component({
   selector: 'sky-country-field',
@@ -153,6 +158,8 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     return this._selectedCountry;
   }
 
+  public inputId: string;
+
   private defaultCountryData: SkyCountryFieldCountry;
 
   private idle: Subject<any> = new Subject();
@@ -173,6 +180,8 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     private windowRef: SkyAppWindowRef,
     @Self() @Optional() private ngControl: NgControl
   ) {
+    this.inputId = `sky-country-field-input-${uniqueId++}`;
+
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     } else {
