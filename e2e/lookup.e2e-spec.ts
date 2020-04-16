@@ -1,7 +1,8 @@
 import {
   browser,
   by,
-  element
+  element,
+  ExpectedConditions
 } from 'protractor';
 
 import {
@@ -23,11 +24,11 @@ describe('Lookup component', () => {
 
     browser.actions().sendKeys('r').perform();
 
-    browser.wait(() => {
-      return browser.isElementPresent(
-        element(by.css('.sky-dropdown-item'))
-      );
-    });
+    browser.wait(
+      ExpectedConditions.presenceOf(element(by.css('.sky-autocomplete-results'))),
+      1200,
+      'Autocomplete results dropdown took too long to appear.'
+    );
 
     validateScreenshot(done, screenshotName);
   }

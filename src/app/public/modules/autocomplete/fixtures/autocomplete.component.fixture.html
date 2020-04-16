@@ -1,7 +1,14 @@
 <form
   #myForm="ngForm"
   novalidate>
+  <label
+    for="my-autocomplete-input"
+    id="my-autocomplete-label"
+  >
+    Favorite color
+  </label>
   <sky-autocomplete
+    [ariaLabelledBy]="'my-autocomplete-label'"
     [data]="data"
     [debounceTime]="debounceTime"
     [descriptorProperty]="descriptorProperty"

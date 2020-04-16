@@ -1,0 +1,13 @@
+<div>
+  <form>
+    <sky-country-field
+      name="countryField"
+      [disabled]="isDisabled ? true : undefined"
+      [defaultCountry]="defaultCountry"
+      [attr.required]="isRequired ? true : undefined"
+      [(ngModel)]="modelValue"
+      (selectedCountryChange)="countryChanged($event)"
+    >
+    </sky-country-field>
+  </form>
+</div>

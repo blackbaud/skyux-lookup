@@ -1,16 +1,27 @@
 {
+  "$schema": "./node_modules/@skyux/config/skyuxconfig-schema.json",
   "name": "skyux-lookup",
   "mode": "easy",
   "compileMode": "aot",
-  "skyuxModules": [
-    "SkyErrorModule"
-  ],
   "plugins": [
     "@skyux-sdk/builder-plugin-skyux"
   ],
+  "omnibar": {},
+  "params": {
+    "svcid": {
+      "value": "skyux"
+    }
+  },
   "app": {
     "styles": [
-      "src/app/visual-styles.scss"
+      "src/app/visual-styles.scss",
+      "@skyux/docs-tools/css/docs-tools.css"
+    ]
+  },
+  "librarySettings": {
+    "whitelistedNonPeerDependencies": [
+      "intl-tel-input",
+      "@types/intl-tel-input"
     ]
   },
   "testSettings": {
