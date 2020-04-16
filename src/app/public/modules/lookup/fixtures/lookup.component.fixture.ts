@@ -7,7 +7,8 @@ import {
 import {
   FormBuilder,
   FormControl,
-  FormGroup
+  FormGroup,
+  Validators
 } from '@angular/forms';
 
 import { SkyLookupComponent } from '../lookup.component';
@@ -26,10 +27,10 @@ export class SkyLookupTestComponent implements OnInit {
 
   public ariaLabel: string;
   public ariaLabelledBy: string;
+  public data: any[];
   public friends: any[];
   public form: FormGroup;
   public placeholderText: string;
-  public data: any[];
 
   constructor(
     private formBuilder: FormBuilder
@@ -65,6 +66,14 @@ export class SkyLookupTestComponent implements OnInit {
 
   public disableLookup() {
     this.form.controls.friends.disable();
+  }
+
+  public setRequired() {
+    this.form.controls.friends.setValidators([Validators.required]);
+  }
+
+  public removeRequired() {
+    this.form.controls.friends.setValidators([]);
   }
 
   private createForm(): void {

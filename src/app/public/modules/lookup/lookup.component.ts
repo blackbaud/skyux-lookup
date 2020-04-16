@@ -4,15 +4,16 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  forwardRef,
   Input,
   OnDestroy,
+  Optional,
+  Self,
   ViewChild
 } from '@angular/core';
 
 import {
   ControlValueAccessor,
-  NG_VALUE_ACCESSOR
+  NgControl
 } from '@angular/forms';
 
 import {
@@ -48,12 +49,6 @@ import { SkyLookupAutocompleteAdapter } from './lookup-autocomplete-adapter';
   selector: 'sky-lookup',
   templateUrl: './lookup.component.html',
   styleUrls: ['./lookup.component.scss'],
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    /* tslint:disable-next-line:no-forward-ref */
-    useExisting: forwardRef(() => SkyLookupComponent),
-    multi: true
-  }],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SkyLookupComponent
@@ -114,9 +109,11 @@ export class SkyLookupComponent
   constructor(
     private changeDetector: ChangeDetectorRef,
     private elementRef: ElementRef,
-    private windowRef: SkyAppWindowRef
+    private windowRef: SkyAppWindowRef,
+    @Self() @Optional() ngControl: NgControl
   ) {
     super();
+    ngControl.valueAccessor = this;
   }
 
   public ngAfterViewInit() {
@@ -133,6 +130,7 @@ export class SkyLookupComponent
   }
 
   public onAutocompleteSelectionChange(change: SkyAutocompleteSelectionChange) {
+    /* istanbul ignore else */
     if (change.selectedItem) {
       this.addToSelected(change.selectedItem);
       this.focusInput();
@@ -301,12 +299,14 @@ export class SkyLookupComponent
       .pipe(takeUntil(this.idle))
       .subscribe((event: MouseEvent) => {
         this.isInputFocused = hostElement.contains(event.target);
+        this.changeDetector.markForCheck();
       });
 
     observableFromEvent(documentObj, 'focusin')
       .pipe(takeUntil(this.idle))
       .subscribe((event: KeyboardEvent) => {
         this.isInputFocused = hostElement.contains(event.target);
+        this.changeDetector.markForCheck();
       });
 
     observableFromEvent(hostElement, 'mouseup')
