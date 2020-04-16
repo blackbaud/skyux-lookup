@@ -1,3 +1,7 @@
+# 4.0.0-rc.1 (2020-04-16)
+
+- Added bug fixes and features from the `master` branch. [#79](https://github.com/blackbaud/skyux-lookup/pull/79)
+
 # 3.4.1 (2020-04-09)
 
 - Fixed the **package.json** `peerDependencies` to require a minimum of `^@skyux/core@3.4.2`. [#76](https://github.com/blackbaud/skyux-lookup/pull/76) (Thanks [@jeffbdye](https://github.com/jeffbdye)!)
