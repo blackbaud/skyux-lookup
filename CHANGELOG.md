@@ -1,3 +1,7 @@
+# 3.5.0 (2020-04-23)
+
+- Added the ability to set the country field component's form value via an `iso2` country code. [#82](https://github.com/blackbaud/skyux-lookup/pull/82)
+
 # 4.0.0-rc.1 (2020-04-16)
 
 - Added bug fixes and features from the `master` branch. [#79](https://github.com/blackbaud/skyux-lookup/pull/79)
