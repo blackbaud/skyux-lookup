@@ -10,7 +10,10 @@ import {
 import {
   SkySearchModule
 } from '@skyux/lookup';
-import { SkySearchFixture } from './search-fixture';
+
+import {
+  SkySearchFixture
+} from './search-fixture';
 
 //#region Test component
 @Component({
