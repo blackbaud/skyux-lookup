@@ -1,3 +1,9 @@
+# 4.0.0-rc.3 (2020-04-30)
+
+### New features
+
+- Added a test fixture for the search component to be used in consumer unit tests. [#86](https://github.com/blackbaud/skyux-lookup/pull/86)
+
 # 4.0.0-rc.2 (2020-04-23)
 
 - Added bug fixes and features from the `master` branch. [#85](https://github.com/blackbaud/skyux-lookup/pull/85)
