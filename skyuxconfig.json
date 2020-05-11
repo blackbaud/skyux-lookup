@@ -14,14 +14,12 @@
   },
   "app": {
     "styles": [
-      "src/app/visual-styles.scss",
       "@skyux/docs-tools/css/docs-tools.css"
     ]
   },
   "librarySettings": {
     "whitelistedNonPeerDependencies": [
-      "intl-tel-input",
-      "@types/intl-tel-input"
+      "intl-tel-input"
     ]
   },
   "testSettings": {
