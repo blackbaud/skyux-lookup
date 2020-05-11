@@ -70,6 +70,16 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     return this._defaultCountry;
   }
 
+  @Input()
+  public set supportedCountries(value: string[]) {
+    this._supportedCountries = value;
+    this.setupCountries();
+  }
+
+  public get supportedCountries(): string[] {
+    return this._supportedCountries;
+  }
+
   /**
    * Indicates whether to disable the country field.
    */
@@ -112,14 +122,19 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   public set selectedCountry(newCountry: SkyCountryFieldCountry) {
     if (this._selectedCountry !== newCountry) {
 
-      if (newCountry && newCountry.iso2 && !newCountry.name) {
-        newCountry = this.countries.find(country => country.iso2 === newCountry.iso2);
+      if (newCountry &&  newCountry.iso2) {
+        let isoCountry = this.countries.find(country => country.iso2 === newCountry.iso2);
+
+        if (isoCountry) {
+          newCountry = isoCountry;
+        }
       }
 
       this._selectedCountry = newCountry;
 
       this.sortCountriesWithSelectedAndDefault(newCountry);
 
+      this.internalFormChange = true;
       this.countrySearchFormControl.setValue(this.selectedCountry);
 
       if (!this.isInitialChange) {
@@ -158,6 +173,8 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
   private idle: Subject<any> = new Subject();
 
+  private internalFormChange: boolean = false;
+
   private isInitialChange: boolean = true;
 
   private ngUnsubscribe = new Subject();
@@ -167,6 +184,8 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   private _disabled: boolean = false;
 
   private _selectedCountry: SkyCountryFieldCountry;
+
+  private _supportedCountries: string[];
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -184,15 +203,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
       this.isInitialChange = false;
     }
 
-    /**
-     * The json functions here ensures that we get a copy of the array and not the global original.
-     * This ensures that multiple instances of the component don't overwrite the original data.
-     *
-     * We must type the window object as any here as the intl-tel-input library adds its object
-     * to the main window object.
-     */
-    this.countries = JSON.parse(JSON.stringify((window as any)
-      .intlTelInputGlobals.getCountryData()));
+    this.setupCountries();
 
     this.countrySearchFormControl = new FormControl();
   }
@@ -209,7 +220,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     this.countrySearchFormControl.valueChanges
       .takeUntil(this.ngUnsubscribe)
       .subscribe(newValue => {
-        if (newValue) {
+        if (newValue && !this.internalFormChange) {
           this.selectedCountry = newValue;
         }
       });
@@ -324,19 +335,29 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     this.idle.complete();
   }
 
+  private setupCountries(): void {
+    /**
+     * The json functions here ensures that we get a copy of the array and not the global original.
+     * This ensures that multiple instances of the component don't overwrite the original data.
+     *
+     * We must type the window object as any here as the intl-tel-input library adds its object
+     * to the main window object.
+     */
+    this.countries = JSON
+      .parse(JSON.stringify((window as any)
+        .intlTelInputGlobals
+        .getCountryData()));
+
+    if (this.supportedCountries && this.supportedCountries.length > 0) {
+      this.countries = this.countries.filter((country: SkyCountryFieldCountry) => {
+        return this.supportedCountries.indexOf(country.iso2) >= 0;
+      });
+    }
+  }
+
   private sortCountriesWithSelectedAndDefault(selectedCountry: SkyCountryFieldCountry): void {
     let selectedCountryIndex: number;
     let selectedCountryData: SkyCountryFieldCountry;
-
-    if (selectedCountry) {
-      // Note: We are looking up this data here to ensure we are using the offical data from the
-      // library and not the data provided by the user on initialization of the component
-      selectedCountryData = this.countries
-        .find(country => country.iso2 === selectedCountry.iso2.toLocaleLowerCase());
-      selectedCountryIndex = this.countries
-        .indexOf(selectedCountryData);
-      this.countries.splice(selectedCountryIndex, 1);
-    }
 
     let sortedNewCountries = this.countries
       .sort((a, b) => {
@@ -348,8 +369,19 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
       });
 
     if (selectedCountry) {
-      sortedNewCountries.splice(0, 0, selectedCountryData);
+      // Note: We are looking up this data here to ensure we are using the offical data from the
+      // library and not the data provided by the user on initialization of the component
+      selectedCountryData = this.countries
+        .find(country => country.iso2 === selectedCountry.iso2.toLocaleLowerCase());
+      selectedCountryIndex = this.countries
+        .indexOf(selectedCountryData);
+
+      if (selectedCountryIndex >= 0) {
+        this.countries.splice(selectedCountryIndex, 1);
+        sortedNewCountries.splice(0, 0, selectedCountryData);
+      }
     }
+
     this.countries = sortedNewCountries;
   }
 

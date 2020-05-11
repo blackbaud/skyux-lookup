@@ -130,6 +130,20 @@ describe('Country Field Component', () => {
         expect(nativeElement.querySelector('.sky-country-field-flag')).toHaveCssClass('us');
       }));
 
+      it('should initialize with a set country and fix an invalid name', fakeAsync(() => {
+        component.modelValue = {
+          iso2: 'us',
+          name: 'Test Name'
+        };
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+
+        expect(nativeElement.querySelector('textarea').value).toBe('United States');
+        expect(nativeElement.querySelector('.sky-country-field-flag')).toHaveCssClass('iti-flag');
+        expect(nativeElement.querySelector('.sky-country-field-flag')).toHaveCssClass('us');
+      }));
+
       it('should initialize without a set country', fakeAsync(() => {
         fixture.detectChanges();
         tick();
@@ -176,6 +190,31 @@ describe('Country Field Component', () => {
 
         component.modelValue = {
           name: 'Australia',
+          iso2: 'au'
+        };
+
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+
+        expect(nativeElement.querySelector('textarea').value).toBe('Australia');
+        expect(nativeElement.querySelector('.sky-country-field-flag')).toHaveCssClass('iti-flag');
+        expect(nativeElement.querySelector('.sky-country-field-flag')).toHaveCssClass('au');
+      }));
+
+      it('should change countries correctly via a model change with an invalid name', fakeAsync(() => {
+        component.modelValue = {
+          name: 'United States',
+          iso2: 'us'
+        };
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+
+        expect(nativeElement.querySelector('textarea').value).toBe('United States');
+
+        component.modelValue = {
+          name: 'Test Name',
           iso2: 'au'
         };
 
@@ -422,6 +461,20 @@ describe('Country Field Component', () => {
         expect(nativeElement.querySelector('.sky-country-field-flag')).toHaveCssClass('us');
       }));
 
+      it('should initialize with a set country and fix an invalid name', fakeAsync(() => {
+        component.initialValue = {
+          iso2: 'us',
+          name: 'Test Name'
+        };
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+
+        expect(nativeElement.querySelector('textarea').value).toBe('United States');
+        expect(nativeElement.querySelector('.sky-country-field-flag')).toHaveCssClass('iti-flag');
+        expect(nativeElement.querySelector('.sky-country-field-flag')).toHaveCssClass('us');
+      }));
+
       it('should initialize without a set country', fakeAsync(() => {
         fixture.detectChanges();
         tick();
@@ -468,6 +521,31 @@ describe('Country Field Component', () => {
 
         component.countryControl.setValue({
           name: 'Australia',
+          iso2: 'au'
+        });
+
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+
+        expect(nativeElement.querySelector('textarea').value).toBe('Australia');
+        expect(nativeElement.querySelector('.sky-country-field-flag')).toHaveCssClass('iti-flag');
+        expect(nativeElement.querySelector('.sky-country-field-flag')).toHaveCssClass('au');
+      }));
+
+      it('should change countries correctly via a model change with an invalid name', fakeAsync(() => {
+        component.initialValue = {
+          name: 'United States',
+          iso2: 'us'
+        };
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+
+        expect(nativeElement.querySelector('textarea').value).toBe('United States');
+
+        component.countryControl.setValue({
+          name: 'Test Name',
           iso2: 'au'
         });
 
