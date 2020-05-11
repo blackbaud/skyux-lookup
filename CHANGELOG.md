@@ -1,3 +1,10 @@
+# 4.0.0-rc.4 (2020-05-11)
+
+### Bug fixes
+
+- Removed the `@types/intl-tel-input` package dependency since it was causing compiler errors. [#88](https://github.com/blackbaud/skyux-lookup/pull/88)
+- Fixed the country selector to properly display country flags. [#88](https://github.com/blackbaud/skyux-lookup/pull/88)
+
 # 4.0.0-rc.3 (2020-04-30)
 
 ### New features
