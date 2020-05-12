@@ -4,20 +4,25 @@ import {
   Component,
   ElementRef,
   EventEmitter,
+  forwardRef,
   Input,
   OnDestroy,
   OnInit,
-  Optional,
   Output,
-  Self,
-  ViewChild
+  ViewChild,
+  Injector,
+  Type
 } from '@angular/core';
 
 import {
+  AbstractControl,
   ControlValueAccessor,
   FormControl,
   NgControl,
-  NgModel
+  NgModel,
+  NG_VALIDATORS,
+  ValidationErrors,
+  Validator
 } from '@angular/forms';
 
 import {
@@ -40,13 +45,24 @@ import {
   SkyCountryFieldCountry
 } from './types/country';
 
+// tslint:disable:no-forward-ref no-use-before-declare
+const SKY_COUNTRY_FIELD_VALIDATOR = {
+  provide: NG_VALIDATORS,
+  useExisting: forwardRef(() => SkyCountryFieldComponent),
+  multi: true
+};
+// tslint:enable
+
 @Component({
   selector: 'sky-country-field',
   templateUrl: './country-field.component.html',
   styleUrls: ['./country-field.component.scss'],
+  providers: [
+    SKY_COUNTRY_FIELD_VALIDATOR
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy, OnInit {
+export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy, OnInit, Validator {
 
   /**
    * Specifies the [International Organization for Standardization Alpha 2](https://www.nationsonline.org/oneworld/country_code_list.htm)
@@ -73,7 +89,10 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   @Input()
   public set supportedCountries(value: string[]) {
     this._supportedCountries = value;
-    this.setupCountries();
+
+    if (value && value.length > 0) {
+      this.setupCountries();
+    }
   }
 
   public get supportedCountries(): string[] {
@@ -122,7 +141,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   public set selectedCountry(newCountry: SkyCountryFieldCountry) {
     if (this._selectedCountry !== newCountry) {
 
-      if (newCountry &&  newCountry.iso2) {
+      if (newCountry && newCountry.iso2) {
         let isoCountry = this.countries.find(country => country.iso2 === newCountry.iso2);
 
         if (isoCountry) {
@@ -177,6 +196,8 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
   private isInitialChange: boolean = true;
 
+  private ngControl: NgControl;
+
   private ngUnsubscribe = new Subject();
 
   private _defaultCountry: string;
@@ -191,18 +212,8 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     private changeDetector: ChangeDetectorRef,
     private elRef: ElementRef,
     private windowRef: SkyAppWindowRef,
-    @Self() @Optional() private ngControl: NgControl
+    private injector: Injector
   ) {
-    if (this.ngControl) {
-      this.ngControl.valueAccessor = this;
-    } else {
-      /**
-       * The initial change boolean is to determine if the form is setting the value. When no form
-       * is present we don't want to ignore the first change.
-       */
-      this.isInitialChange = false;
-    }
-
     this.setupCountries();
 
     this.countrySearchFormControl = new FormControl();
@@ -213,6 +224,20 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
    * @internal
    */
   public ngOnInit(): void {
+
+    // tslint:disable-next-line: no-null-keyword
+    this.ngControl = this.injector.get<NgControl>(NgControl as Type<NgControl>, null);
+
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    } else {
+      /**
+       * The initial change boolean is to determine if the form is setting the value. When no form
+       * is present we don't want to ignore the first change.
+       */
+      this.isInitialChange = false;
+    }
+
     if (!this.defaultCountry) {
       this.defaultCountry = 'us';
     }
@@ -227,23 +252,6 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
     if (!this.disabled) {
       this.addEventListeners();
-    }
-
-    this.isInPhoneField = (<HTMLElement>this.elRef.nativeElement.parentElement)
-      .classList
-      .contains('sky-phone-field-country-search');
-
-    /* istanbul ignore else */
-    if (!this.isInPhoneField) {
-      /**
-       * The library we get the country data from includes extra phone properties.
-       * We want to remove these unless we are in a phone field
-       */
-      this.countries.forEach((country: any) => {
-        delete country.dialCode;
-        delete country.areaCodes;
-        delete country.priority;
-      });
     }
   }
 
@@ -301,6 +309,18 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     this.disabled = disabled;
   }
 
+  public validate(control: AbstractControl): ValidationErrors {
+    if (control.value) {
+      if ((this.supportedCountries &&
+        this.supportedCountries.length > 0 &&
+        this.supportedCountries.indexOf(control.value.iso2) < 0) ||
+        !this.countries.find(country => country.iso2 === control.value.iso2)) {
+        return { unsupportedCountry: true };
+      }
+    }
+    return;
+  }
+
   public writeValue(value: SkyCountryFieldCountry): void {
     if (!this.disabled) {
       this.selectedCountry = value;
@@ -330,6 +350,10 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
       });
   }
 
+  private countriesEqual(a: SkyCountryFieldCountry, b: SkyCountryFieldCountry) {
+    return a.iso2 === b.iso2 && a.name === b.name;
+  }
+
   private removeEventListeners(): void {
     this.idle.next();
     this.idle.complete();
@@ -348,6 +372,25 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
         .intlTelInputGlobals
         .getCountryData()));
 
+    this.isInPhoneField = (<HTMLElement>this.elRef.nativeElement.parentElement)
+      .classList
+      .contains('sky-phone-field-country-search');
+
+    /* istanbul ignore else */
+    if (!this.isInPhoneField) {
+      /**
+       * The library we get the country data from includes extra phone properties.
+       * We want to remove these unless we are in a phone field
+       */
+      this.countries.forEach((country: any) => {
+        delete country.dialCode;
+        delete country.areaCodes;
+        delete country.priority;
+      });
+    }
+
+    this.sortCountriesWithSelectedAndDefault(this.selectedCountry);
+
     if (this.supportedCountries && this.supportedCountries.length > 0) {
       this.countries = this.countries.filter((country: SkyCountryFieldCountry) => {
         return this.supportedCountries.indexOf(country.iso2) >= 0;
@@ -361,7 +404,8 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
     let sortedNewCountries = this.countries
       .sort((a, b) => {
-        if ((a === this.defaultCountryData || a.name < b.name) && b !== this.defaultCountryData) {
+        if (((this.defaultCountryData && this.countriesEqual(a, this.defaultCountryData)) ||
+          a.name < b.name) && (!this.defaultCountryData || !this.countriesEqual(this.defaultCountryData, b))) {
           return -1;
         } else {
           return 1;

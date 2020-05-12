@@ -2,9 +2,11 @@
   <form>
     <sky-country-field
       name="countryField"
+      [attr.required]="isRequired ? true : undefined"
       [disabled]="isDisabled ? true : undefined"
       [defaultCountry]="defaultCountry"
-      [attr.required]="isRequired ? true : undefined"
+      [required]="isRequired"
+      [supportedCountries]="supportedCountries"
       [(ngModel)]="modelValue"
       (selectedCountryChange)="countryChanged($event)"
     >
