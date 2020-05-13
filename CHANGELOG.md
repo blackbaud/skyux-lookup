@@ -1,8 +1,8 @@
-# 4.0.0 (2020-05-12)
+# 4.0.0 (2020-05-13)
 
 ### New features
 
-- Added a test fixture for the search component to be used in consumer unit tests. [#86](https://github.com/blackbaud/skyux-lookup/pull/86)
+- Added a test fixture for the search component to use in consumer unit tests. [#86](https://github.com/blackbaud/skyux-lookup/pull/86)
 - Added support for `@angular/core@^9`. [#54](https://github.com/blackbaud/skyux-lookup/pull/54)
 - Updated the pipeline to transpile to the [Angular Package Format](https://docs.google.com/document/d/1CZC2rcpxffTDfRDs6p1cfbmKNLA6x5O-NtkJglDaBVs/preview). [#54](https://github.com/blackbaud/skyux-lookup/pull/54)
 
