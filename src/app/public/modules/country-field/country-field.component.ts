@@ -87,16 +87,16 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   }
 
   @Input()
-  public set supportedCountries(value: string[]) {
-    this._supportedCountries = value;
+  public set supportedCountryISOs(value: string[]) {
+    this._supportedCountryISOs = value;
 
     if (value && value.length > 0) {
       this.setupCountries();
     }
   }
 
-  public get supportedCountries(): string[] {
-    return this._supportedCountries;
+  public get supportedCountryISOs(): string[] {
+    return this._supportedCountryISOs;
   }
 
   /**
@@ -206,7 +206,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
   private _selectedCountry: SkyCountryFieldCountry;
 
-  private _supportedCountries: string[];
+  private _supportedCountryISOs: string[];
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -311,9 +311,9 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
   public validate(control: AbstractControl): ValidationErrors {
     if (control.value) {
-      if ((this.supportedCountries &&
-        this.supportedCountries.length > 0 &&
-        this.supportedCountries.indexOf(control.value.iso2) < 0) ||
+      if ((this.supportedCountryISOs &&
+        this.supportedCountryISOs.length > 0 &&
+        this.supportedCountryISOs.indexOf(control.value.iso2) < 0) ||
         !this.countries.find(country => country.iso2 === control.value.iso2)) {
         return { unsupportedCountry: true };
       }
@@ -350,7 +350,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
       });
   }
 
-  private countriesEqual(a: SkyCountryFieldCountry, b: SkyCountryFieldCountry) {
+  private countriesEqual(a: SkyCountryFieldCountry, b: SkyCountryFieldCountry): boolean {
     return a.iso2 === b.iso2 && a.name === b.name;
   }
 
@@ -391,9 +391,9 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
     this.sortCountriesWithSelectedAndDefault(this.selectedCountry);
 
-    if (this.supportedCountries && this.supportedCountries.length > 0) {
+    if (this.supportedCountryISOs && this.supportedCountryISOs.length > 0) {
       this.countries = this.countries.filter((country: SkyCountryFieldCountry) => {
-        return this.supportedCountries.indexOf(country.iso2) >= 0;
+        return this.supportedCountryISOs.indexOf(country.iso2) >= 0;
       });
     }
   }
