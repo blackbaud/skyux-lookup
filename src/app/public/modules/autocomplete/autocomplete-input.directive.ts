@@ -214,7 +214,11 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
   public onValidatorChange = () => {};
 
   private setAttributes(element: any): void {
-    this.renderer.setAttribute(element, 'autocomplete', 'off');
+    /**
+     * Need a unique value for autocomplete to disabled with chrome.
+     * https://bugs.chromium.org/p/chromium/issues/detail?id=914451
+     */
+    this.renderer.setAttribute(element, 'autocomplete', 'skyux-autocomplete-off');
     this.renderer.setAttribute(element, 'autocapitalize', 'off');
     this.renderer.setAttribute(element, 'autocorrect', 'off');
     this.renderer.setAttribute(element, 'spellcheck', 'false');
