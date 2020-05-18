@@ -32,6 +32,8 @@ import {
   SkyAutocompleteInputTextChange
 } from './types';
 
+let uniqueId = 0;
+
 // tslint:disable:no-forward-ref no-use-before-declare
 const SKY_AUTOCOMPLETE_VALUE_ACCESSOR = {
   provide: NG_VALUE_ACCESSOR,
@@ -218,7 +220,8 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
      * Need a unique value for autocomplete to disabled with chrome.
      * https://bugs.chromium.org/p/chromium/issues/detail?id=914451
      */
-    this.renderer.setAttribute(element, 'autocomplete', 'skyux-autocomplete-off');
+    const id = ++uniqueId;
+    this.renderer.setAttribute(element, 'autocomplete', `skyux-autocomplete-${id}-off`);
     this.renderer.setAttribute(element, 'autocapitalize', 'off');
     this.renderer.setAttribute(element, 'autocorrect', 'off');
     this.renderer.setAttribute(element, 'spellcheck', 'false');
