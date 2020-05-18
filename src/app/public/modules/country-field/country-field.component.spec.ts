@@ -267,7 +267,7 @@ describe('Country Field Component', () => {
 
       it('should only display supported countries', fakeAsync(() => {
         component.defaultCountry = 'us';
-        component.supportedCountries = ['au', 'us'];
+        component.supportedCountryISOs = ['au', 'us'];
         fixture.detectChanges();
         tick();
         fixture.detectChanges();
@@ -469,7 +469,7 @@ describe('Country Field Component', () => {
           name: 'Australia',
           iso2: 'au'
         };
-        component.supportedCountries = ['au', 'de'];
+        component.supportedCountryISOs = ['au', 'de'];
         fixture.detectChanges();
         component.ngModel.control.updateValueAndValidity();
         fixture.detectChanges();
@@ -484,7 +484,7 @@ describe('Country Field Component', () => {
           name: 'United States',
           iso2: 'us'
         };
-        component.supportedCountries = ['au', 'de'];
+        component.supportedCountryISOs = ['au', 'de'];
         fixture.detectChanges();
         component.ngModel.control.updateValueAndValidity();
         fixture.detectChanges();
@@ -710,7 +710,7 @@ describe('Country Field Component', () => {
 
       it('should only display supported countries', fakeAsync(() => {
         component.defaultCountry = 'us';
-        component.supportedCountries = ['au', 'us'];
+        component.supportedCountryISOs = ['au', 'us'];
         fixture.detectChanges();
         tick();
         fixture.detectChanges();
@@ -975,7 +975,7 @@ describe('Country Field Component', () => {
           name: 'Australia',
           iso2: 'au'
         };
-        component.supportedCountries = ['au', 'de'];
+        component.supportedCountryISOs = ['au', 'de'];
         fixture.detectChanges();
         component.countryControl.updateValueAndValidity();
         fixture.detectChanges();
@@ -990,7 +990,7 @@ describe('Country Field Component', () => {
           name: 'United States',
           iso2: 'us'
         };
-        component.supportedCountries = ['au', 'de'];
+        component.supportedCountryISOs = ['au', 'de'];
         fixture.detectChanges();
         component.countryControl.updateValueAndValidity();
         fixture.detectChanges();
@@ -1081,7 +1081,7 @@ describe('Country Field Component', () => {
 
       it('should only display supported countries', fakeAsync(() => {
         component.defaultCountry = 'us';
-        component.supportedCountries = ['au', 'us'];
+        component.supportedCountryISOs = ['au', 'us'];
         fixture.detectChanges();
         tick();
         fixture.detectChanges();

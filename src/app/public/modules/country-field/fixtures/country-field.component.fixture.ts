@@ -35,7 +35,7 @@ export class CountryFieldTestComponent {
 
   public modelValue: SkyCountryFieldCountry;
 
-  public supportedCountries: string[];
+  public supportedCountryISOs: string[];
 
   public countryChanged(country: SkyCountryFieldCountry): void {
     return;
