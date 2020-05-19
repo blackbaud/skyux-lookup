@@ -217,7 +217,7 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
 
   private setAttributes(element: any): void {
     /**
-     * Need a unique value for autocomplete to disabled with chrome.
+     * Need a unique value for autocomplete to be disabled on Chrome.
      * https://bugs.chromium.org/p/chromium/issues/detail?id=914451
      */
     const id = ++uniqueId;
