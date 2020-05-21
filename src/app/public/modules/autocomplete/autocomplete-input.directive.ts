@@ -32,8 +32,6 @@ import {
   SkyAutocompleteInputTextChange
 } from './types';
 
-let uniqueId = 0;
-
 // tslint:disable:no-forward-ref no-use-before-declare
 const SKY_AUTOCOMPLETE_VALUE_ACCESSOR = {
   provide: NG_VALUE_ACCESSOR,
@@ -217,11 +215,14 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
 
   private setAttributes(element: any): void {
     /**
-     * Need a unique value for autocomplete to disabled with chrome.
-     * https://bugs.chromium.org/p/chromium/issues/detail?id=914451
+     * Modern browsers interpret autocomplete rules differently
+     * and sometimes completely ignore the 'off' value. As a workaround,
+     * 'new-password' will prevent autocomplete in FF 76.0.1, Chrome 81.0, and Edge 81.0.
+     * For preventing autocomplete in Safari, apply directive to a textarea element.
+     * https://developer.mozilla.org/en-US/docs/Web/Security/Securing_your_site/Turning_off_form_autocompletion
      */
-    const id = ++uniqueId;
-    this.renderer.setAttribute(element, 'autocomplete', `skyux-autocomplete-${id}-off`);
+    this.renderer.setAttribute(element, 'autocomplete', 'new-password');
+
     this.renderer.setAttribute(element, 'autocapitalize', 'off');
     this.renderer.setAttribute(element, 'autocorrect', 'off');
     this.renderer.setAttribute(element, 'spellcheck', 'false');
