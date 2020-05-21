@@ -1,3 +1,8 @@
+# 3.6.0 (2020-05-21)
+
+- Added the `supportedCountryISOs` input property to the country field component to limit the countries returned. [#89](https://github.com/blackbaud/skyux-lookup/pull/89)
+- Fixed the autocomplete directive to prevent the browser's autofill from appearing. [#94](https://github.com/blackbaud/skyux-lookup/pull/94)
+
 # 3.5.0 (2020-04-23)
 
 - Added the ability to set the country field component's form value via an `iso2` country code. [#82](https://github.com/blackbaud/skyux-lookup/pull/82)
