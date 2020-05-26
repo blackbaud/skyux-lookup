@@ -237,7 +237,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   public ngOnInit(): void {
 
     // tslint:disable-next-line: no-null-keyword
-    this.ngControl = this.injector.get<NgControl>(NgControl as Type<NgControl>, null);
+    this.ngControl = this.injector.get<NgControl>(NgControl as unknown as Type<NgControl>, null);
 
     this.inputId = `sky-country-field-input-${uniqueId++}`;
 
