@@ -37,9 +37,16 @@ import {
 } from 'rxjs';
 
 import {
-  SkyAutocompleteInputDirective,
+  takeUntil
+} from 'rxjs/operators';
+
+import {
   SkyAutocompleteSelectionChange
-} from '../autocomplete';
+} from '../autocomplete/types/autocomplete-selection-change';
+
+import {
+  SkyAutocompleteInputDirective
+} from '../autocomplete/autocomplete-input.directive';
 
 import {
   SkyCountryFieldCountry
@@ -51,7 +58,9 @@ const SKY_COUNTRY_FIELD_VALIDATOR = {
   useExisting: forwardRef(() => SkyCountryFieldComponent),
   multi: true
 };
+
 // tslint:enable
+let uniqueId: number = 0;
 
 @Component({
   selector: 'sky-country-field',
@@ -188,6 +197,8 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     return this._selectedCountry;
   }
 
+  public inputId: string;
+
   private defaultCountryData: SkyCountryFieldCountry;
 
   private idle: Subject<any> = new Subject();
@@ -228,6 +239,8 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     // tslint:disable-next-line: no-null-keyword
     this.ngControl = this.injector.get<NgControl>(NgControl as Type<NgControl>, null);
 
+    this.inputId = `sky-country-field-input-${uniqueId++}`;
+
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     } else {
@@ -243,7 +256,9 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     }
 
     this.countrySearchFormControl.valueChanges
-      .takeUntil(this.ngUnsubscribe)
+      .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(newValue => {
         if (newValue && !this.internalFormChange) {
           this.selectedCountry = newValue;
@@ -336,14 +351,14 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     const documentObj = this.windowRef.nativeWindow.document;
 
     fromEvent(documentObj, 'mousedown')
-      .takeUntil(this.idle)
+      .pipe(takeUntil(this.idle))
       .subscribe((event: MouseEvent) => {
         this.isInputFocused = this.elRef.nativeElement.contains(event.target);
         this.changeDetector.markForCheck();
       });
 
     fromEvent(documentObj, 'focusin')
-      .takeUntil(this.idle)
+      .pipe(takeUntil(this.idle))
       .subscribe((event: KeyboardEvent) => {
         this.isInputFocused = this.elRef.nativeElement.contains(event.target);
         this.changeDetector.markForCheck();
