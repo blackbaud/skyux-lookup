@@ -68,7 +68,7 @@ describe('Autocomplete', () => {
     SkyHostBrowser.setWindowBreakpoint('xs');
     element(by.css('#autocomplete-reactive-disable-button')).click();
     expect('#autocomplete-reactive').toMatchBaselineScreenshot(done, {
-      screenshotName: 'autocomplete-disabled'
+      screenshotName: 'autocomplete-disabled-xs'
     });
   });
 });

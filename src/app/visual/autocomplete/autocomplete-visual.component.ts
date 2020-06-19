@@ -49,7 +49,7 @@ export class AutocompleteVisualComponent implements OnInit {
     });
   }
 
-  public toggleReactiveDisabled() {
+  public toggleReactiveDisabled(): void {
     if (this.reactiveDisabledState) {
       this.reactiveForm.get('favoriteColor').enable();
     } else {
@@ -59,7 +59,7 @@ export class AutocompleteVisualComponent implements OnInit {
     this.reactiveDisabledState = !this.reactiveDisabledState;
   }
 
-  public toggleTemplateDisabled() {
+  public toggleTemplateDisabled(): void {
     this.templateDisabledState = !this.templateDisabledState;
   }
 

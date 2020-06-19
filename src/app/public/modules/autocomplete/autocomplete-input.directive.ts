@@ -2,10 +2,10 @@ import {
   Directive,
   ElementRef,
   forwardRef,
+  Input,
   OnDestroy,
   OnInit,
-  Renderer2,
-  Input
+  Renderer2
 } from '@angular/core';
 
 import {
