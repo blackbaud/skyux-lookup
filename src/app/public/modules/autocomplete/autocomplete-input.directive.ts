@@ -54,6 +54,10 @@ const SKY_AUTOCOMPLETE_VALIDATOR = {
 })
 export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, ControlValueAccessor, Validator {
 
+  /**
+   * Indicates whether to disable the autocomplete field.
+   * @default "false"
+   */
   @Input()
   public set disabled(value: boolean) {
     this._disabled = value;
