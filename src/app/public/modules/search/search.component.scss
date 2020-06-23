@@ -32,6 +32,8 @@
 .sky-search-btn-apply {
   padding-left: 6px;
   @include sky-border(dark, top, bottom, right);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .sky-search-btn-clear {
