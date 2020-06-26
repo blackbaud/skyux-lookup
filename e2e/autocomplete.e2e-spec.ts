@@ -56,4 +56,19 @@ describe('Autocomplete', () => {
       screenshotName: 'autocomplete-with-dropdown-xs'
     });
   });
+
+  it('should match previous screenshot while disabled', (done) => {
+    element(by.css('#autocomplete-reactive-disable-button')).click();
+    expect('#autocomplete-reactive').toMatchBaselineScreenshot(done, {
+      screenshotName: 'autocomplete-disabled'
+    });
+  });
+
+  it('should match previous screenshot while disabled (xs screen)', (done) => {
+    SkyHostBrowser.setWindowBreakpoint('xs');
+    element(by.css('#autocomplete-reactive-disable-button')).click();
+    expect('#autocomplete-reactive').toMatchBaselineScreenshot(done, {
+      screenshotName: 'autocomplete-disabled-xs'
+    });
+  });
 });
