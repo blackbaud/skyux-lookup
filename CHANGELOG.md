@@ -1,6 +1,6 @@
 # 4.2.0 (2020-07-08)
 
-- Added the ability to disable the autocomplete component. [#101](https://github.com/blackbaud/skyux-lookup/pull/101)
+- Added the `disabled` property to the `skyAutocomplete` directive. [#101](https://github.com/blackbaud/skyux-lookup/pull/101)
 - Fixed the lookup component to properly style its disabled state. [#101](https://github.com/blackbaud/skyux-lookup/pull/101)
 
 
