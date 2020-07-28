@@ -1,3 +1,19 @@
+# 4.2.0 (2020-07-08)
+
+- Added the ability to disable the autocomplete component. [#101](https://github.com/blackbaud/skyux-lookup/pull/101)
+- Fixed the lookup component to properly style its disabled state. [#101](https://github.com/blackbaud/skyux-lookup/pull/101)
+
+
+# 4.1.0 (2020-05-26)
+
+- Added the `supportedCountryISOs` input property to the country field component to limit the countries returned. [#89](https://github.com/blackbaud/skyux-lookup/pull/89)
+- Fixed the autocomplete directive to prevent the browser's autofill from appearing. [#94](https://github.com/blackbaud/skyux-lookup/pull/94)
+
+# 3.6.0 (2020-05-21)
+
+- Added the `supportedCountryISOs` input property to the country field component to limit the countries returned. [#89](https://github.com/blackbaud/skyux-lookup/pull/89)
+- Fixed the autocomplete directive to prevent the browser's autofill from appearing. [#94](https://github.com/blackbaud/skyux-lookup/pull/94)
+
 # 4.0.0 (2020-05-13)
 
 ### New features

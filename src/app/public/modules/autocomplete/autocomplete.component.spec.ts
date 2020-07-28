@@ -116,7 +116,14 @@ describe('Autocomplete component', () => {
 
     it('should set defaults', () => {
       expect(autocomplete.data).toEqual([]);
+
       fixture.detectChanges();
+
+      expect(inputElement.getAttribute('autocomplete')).toEqual('new-password');
+      expect(inputElement.getAttribute('autocapitalize')).toEqual('off');
+      expect(inputElement.getAttribute('autocorrect')).toEqual('off');
+      expect(inputElement.getAttribute('spellcheck')).toEqual('false');
+      expect(inputElement).toHaveCssClass('sky-form-control');
       expect(autocomplete.debounceTime).toEqual(0);
       expect(autocomplete.descriptorProperty).toEqual('name');
       expect(autocomplete.highlightText).toEqual('');
@@ -373,7 +380,7 @@ describe('Autocomplete component', () => {
 
     it('should handle disabled input', fakeAsync(() => {
 
-      inputElement.disabled = true;
+      component.disabled = true;
 
       fixture.detectChanges();
       tick();
@@ -381,9 +388,10 @@ describe('Autocomplete component', () => {
 
       const spy = spyOn(autocomplete, 'search').and.callThrough();
 
-      SkyAppTestUtility.fireDomEvent(inputElement, 'keyup');
-      tick();
+      enterSearch('r', fixture);
+      blurInput(inputElement, fixture);
 
+      expect(inputElement.disabled).toBeTruthy();
       expect(spy).not.toHaveBeenCalled();
     }));
 
@@ -883,7 +891,7 @@ describe('Autocomplete component', () => {
     });
   });
 
-  describe('Angular form statuses (reactive)', () => {
+  describe('Reactive form', () => {
     let fixture: ComponentFixture<SkyAutocompleteReactiveFixtureComponent>;
     let component: SkyAutocompleteReactiveFixtureComponent;
     let inputElement: HTMLInputElement;
@@ -983,6 +991,37 @@ describe('Autocomplete component', () => {
 
       // Expect model to be set.
       expect(component.reactiveForm.value).toEqual({ favoriteColor: { name: 'Red' } });
+    }));
+
+    it('should be able to disable and enable the input through the form', fakeAsync(() => {
+      fixture.detectChanges();
+      tick();
+
+      component.disableForm();
+
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+
+      const spy = spyOn(component.autocomplete, 'search').and.callThrough();
+
+      enterSearch('r', fixture);
+      blurInput(inputElement, fixture);
+
+      expect(inputElement.disabled).toBeTruthy();
+      expect(spy).not.toHaveBeenCalled();
+
+      component.enableForm();
+
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+
+      enterSearch('r', fixture);
+      blurInput(inputElement, fixture);
+
+      expect(inputElement.disabled).toBeFalsy();
+      expect(spy).toHaveBeenCalled();
     }));
   });
 });
