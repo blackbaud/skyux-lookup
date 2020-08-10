@@ -95,6 +95,11 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     return this._defaultCountry;
   }
 
+  /**
+   * Specifies the countries which will be available for selection. Accepts an array of
+   * [International Organization for Standardization Alpha 2](https://www.nationsonline.org/oneworld/country_code_list.htm) country codes.
+   * If not specified, all countries will be available for selection.
+   */
   @Input()
   public set supportedCountryISOs(value: string[]) {
     this._supportedCountryISOs = value;
