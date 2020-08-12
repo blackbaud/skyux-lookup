@@ -135,7 +135,7 @@ describe('Autocomplete component', () => {
       expect(autocomplete.searchTextMinimumCharacters).toEqual(1);
     });
 
-    it('should have the skyautofill attribute', () => {
+    it('should have the skyautofill directive', () => {
       fixture.detectChanges();
 
       expect(inputElement.getAttribute('autocomplete')).not.toBeNull();

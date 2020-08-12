@@ -141,7 +141,7 @@ describe('Lookup component', function () {
         expect(lookupComponent.value).toEqual([]);
       });
 
-      it('should have the skyautofill attribute', () => {
+      it('should have the skyautofill directive', () => {
         fixture.detectChanges();
         const inputElement = getInputElement(lookupComponent);
 

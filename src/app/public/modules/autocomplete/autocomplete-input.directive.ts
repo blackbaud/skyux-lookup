@@ -1,12 +1,12 @@
 import {
+  AfterViewInit,
   Directive,
   ElementRef,
   forwardRef,
   Input,
   OnDestroy,
   OnInit,
-  Renderer2,
-  AfterViewInit
+  Renderer2
 } from '@angular/core';
 
 import {
@@ -17,6 +17,10 @@ import {
   ValidationErrors,
   Validator
 } from '@angular/forms';
+
+import {
+  SkyAutofillDirective
+} from '@skyux/forms';
 
 import {
   fromEvent as observableFromEvent,
@@ -31,7 +35,6 @@ import {
 import {
   SkyAutocompleteInputTextChange
 } from './types/autocomplete-input-text-change';
-import { SkyAutofillDirective } from '@skyux/forms';
 
 // tslint:disable:no-forward-ref no-use-before-declare
 const SKY_AUTOCOMPLETE_VALUE_ACCESSOR = {
