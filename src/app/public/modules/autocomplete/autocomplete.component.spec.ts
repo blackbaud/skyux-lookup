@@ -119,7 +119,6 @@ describe('Autocomplete component', () => {
 
       fixture.detectChanges();
 
-      expect(inputElement.getAttribute('autocomplete')).toEqual('new-password');
       expect(inputElement.getAttribute('autocapitalize')).toEqual('off');
       expect(inputElement.getAttribute('autocorrect')).toEqual('off');
       expect(inputElement.getAttribute('spellcheck')).toEqual('false');
@@ -134,6 +133,12 @@ describe('Autocomplete component', () => {
       expect(autocomplete.searchResultsLimit).toBeUndefined();
       expect(autocomplete.searchResultTemplate).toBeDefined();
       expect(autocomplete.searchTextMinimumCharacters).toEqual(1);
+    });
+
+    it('should have the skyautofill attribute', () => {
+      fixture.detectChanges();
+
+      expect(inputElement.getAttribute('autocomplete')).not.toBeNull();
     });
 
     it('should handle preselected values', fakeAsync(() => {
@@ -513,6 +518,9 @@ describe('Autocomplete component', () => {
     it('should be accessible', async(() => {
       const axeConfig = {
         rules: {
+          'autocomplete-valid': {
+            enabled: false
+          },
           'region': {
             enabled: false
           }

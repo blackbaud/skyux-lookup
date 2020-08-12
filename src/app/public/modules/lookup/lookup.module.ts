@@ -1,15 +1,34 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {
+  CommonModule
+} from '@angular/common';
+
+import {
+  NgModule
+} from '@angular/core';
+
+import {
+  FormsModule
+} from '@angular/forms';
 
 import {
   SkyAppWindowRef
 } from '@skyux/core';
 
-import { SkyAutocompleteModule } from '../autocomplete/autocomplete.module';
-import { SkyTokensModule } from '@skyux/indicators';
+import {
+  SkyAutofillModule
+} from '@skyux/forms';
 
-import { SkyLookupComponent } from './lookup.component';
+import {
+  SkyTokensModule
+} from '@skyux/indicators';
+
+import {
+  SkyAutocompleteModule
+} from '../autocomplete/autocomplete.module';
+
+import {
+  SkyLookupComponent
+} from './lookup.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +38,7 @@ import { SkyLookupComponent } from './lookup.component';
     CommonModule,
     FormsModule,
     SkyAutocompleteModule,
+    SkyAutofillModule,
     SkyTokensModule
   ],
   exports: [

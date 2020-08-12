@@ -141,6 +141,13 @@ describe('Lookup component', function () {
         expect(lookupComponent.value).toEqual([]);
       });
 
+      it('should have the skyautofill attribute', () => {
+        fixture.detectChanges();
+        const inputElement = getInputElement(lookupComponent);
+
+        expect(inputElement.getAttribute('autocomplete')).not.toBeNull();
+      });
+
       it('should share the same inputs as autocomplete', function () {
         fixture.detectChanges();
         expect(typeof lookupComponent.data).not.toBeUndefined();
@@ -455,6 +462,9 @@ describe('Lookup component', function () {
     describe('a11y', function () {
       const axeConfig = {
         rules: {
+          'autocomplete-valid': {
+            enabled: false
+          },
           'region': {
             enabled: false
           }

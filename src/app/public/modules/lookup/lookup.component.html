@@ -36,6 +36,7 @@
 
         <textarea
           class="sky-form-control"
+          [attr.name]="ariaLabel"
           [attr.aria-label]="ariaLabel"
           [attr.aria-labelledby]="ariaLabelledBy"
           [attr.placeholder]="placeholderText"
@@ -45,6 +46,7 @@
           (keydown.enter)="$event.preventDefault();"
           (keyup.delete)="$event.stopPropagation();"
           (keyup.escape)="clearSearchText();$event.preventDefault();"
+          [skyAutofill]="'off'"
           #lookupInput
         >
         </textarea>

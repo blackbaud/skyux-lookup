@@ -11,8 +11,9 @@
         Who are your friends?
       </label>
       <sky-lookup
-        ariaLabelledBy="my-friends-label"
+        [ariaLabel]="'foobar'"
         formControlName="friends"
+        name="favoriteColor"
         placeholderText="Type a person's name..."
         [data]="people"
         [debounceTime]="1000"

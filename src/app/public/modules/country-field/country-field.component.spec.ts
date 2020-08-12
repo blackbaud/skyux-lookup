@@ -500,6 +500,9 @@ describe('Country Field Component', () => {
 
       const axeConfig = {
         rules: {
+          'autocomplete-valid': {
+            enabled: false
+          },
           'region': {
             enabled: false
           }
@@ -1014,6 +1017,9 @@ describe('Country Field Component', () => {
 
       const axeConfig = {
         rules: {
+          'autocomplete-valid': {
+            enabled: false
+          },
           'region': {
             enabled: false
           }
@@ -1230,6 +1236,9 @@ describe('Country Field Component', () => {
 
       const axeConfig = {
         rules: {
+          'autocomplete-valid': {
+            enabled: false
+          },
           'region': {
             enabled: false
           }
