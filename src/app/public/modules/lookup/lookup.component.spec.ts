@@ -133,12 +133,21 @@ describe('Lookup component', function () {
 
     describe('basic setup', function () {
       it('should set defaults', function () {
+        fixture.detectChanges();
         expect(lookupComponent.ariaLabel).toEqual(undefined);
         expect(lookupComponent.ariaLabelledBy).toEqual(undefined);
         expect(lookupComponent.disabled).toEqual(false);
         expect(lookupComponent.placeholderText).toEqual(undefined);
         expect(lookupComponent.tokens).toEqual(undefined);
         expect(lookupComponent.value).toEqual([]);
+      });
+
+      it('should allow consumer to change autocomplete value', function () {
+        component.autocompleteAttribute = 'new-custom-field';
+
+        fixture.detectChanges();
+
+        expect(lookupComponent.autocompleteAttribute).toEqual('new-custom-field');
       });
 
       it('should share the same inputs as autocomplete', function () {

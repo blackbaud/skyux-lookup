@@ -40,11 +40,12 @@
           [attr.aria-labelledby]="ariaLabelledBy"
           [attr.placeholder]="placeholderText"
           [disabled]="disabled"
-          skyAutocomplete
           (blur)="onAutocompleteBlur()"
           (keydown.enter)="$event.preventDefault();"
           (keyup.delete)="$event.stopPropagation();"
           (keyup.escape)="clearSearchText();$event.preventDefault();"
+          skyAutocomplete
+          [autocompleteAttribute]="autocompleteAttribute"
           #lookupInput
         >
         </textarea>
