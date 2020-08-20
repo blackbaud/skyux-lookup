@@ -326,7 +326,7 @@ describe('Country Field Component', () => {
         expect(nativeElement.querySelector('.sky-country-field-flag')).toBeNull();
       }));
 
-      it('should set autocopmlete defaults', () => {
+      it('should set autocomplete defaults', () => {
         fixture.detectChanges();
 
         const textAreaElement = getInputElement();
