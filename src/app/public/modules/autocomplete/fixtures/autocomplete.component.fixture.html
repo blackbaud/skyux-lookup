@@ -25,10 +25,10 @@
       id="my-autocomplete-input"
       name="favoriteColor"
       type="text"
+      [autocompleteAttribute]="autocompleteAttribute"
       [disabled]="disabled"
       [(ngModel)]="model.favoriteColor"
       skyAutocomplete
-      [autocompleteAttribute]="autocompleteAttribute"
     >
   </sky-autocomplete>
 </form>
