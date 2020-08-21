@@ -23,6 +23,7 @@
       ></div>
       <textarea
         name="selectedCountry"
+        skyAutocomplete
         [attr.aria-label]="'skyux_country_field_search_placeholder' | skyLibResources"
         [attr.disabled]="disabled ? true : undefined"
         [attr.id]="inputId"
@@ -30,7 +31,6 @@
         [formControl]="countrySearchFormControl"
         [placeholder]="'skyux_country_field_search_placeholder' | skyLibResources"
         (blur)="onAutocompleteBlur()"
-        skyAutocomplete
         #countrySearchInput
       ></textarea>
     </div>
