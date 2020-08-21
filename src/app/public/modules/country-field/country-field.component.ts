@@ -75,7 +75,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
   /**
    * Specifies the value for the `autocomplete` attribute on the form input.
-   * @default "off"
+   * @default 'off'
    */
   @Input()
   public autocompleteAttribute: string;
