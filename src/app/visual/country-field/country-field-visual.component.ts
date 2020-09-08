@@ -10,6 +10,11 @@ import {
 } from '@angular/forms';
 
 import {
+  SkyThemeService,
+  SkyThemeSettings
+} from '@skyux/theme';
+
+import {
   SkyCountryFieldCountry
 } from '../../public/modules/country-field/types/country';
 
@@ -22,13 +27,17 @@ export class CountryFieldVisualComponent implements OnInit {
 
   public countryData: SkyCountryFieldCountry;
 
+  public countryDataInputBox: SkyCountryFieldCountry;
+
   public countryForm: FormGroup;
 
   public countryControl: FormControl;
 
   public disableFields: boolean = false;
 
-  constructor() { }
+  constructor(
+    private themeSvc: SkyThemeService
+  ) { }
 
   public ngOnInit(): void {
     this.countryControl = new FormControl();
@@ -59,4 +68,7 @@ export class CountryFieldVisualComponent implements OnInit {
     this.countryControl.setValue({ iso2: 'de' });
   }
 
+  public themeSettingsChange(themeSettings: SkyThemeSettings): void {
+    this.themeSvc.setTheme(themeSettings);
+  }
 }

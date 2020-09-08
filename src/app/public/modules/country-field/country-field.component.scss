@@ -1,5 +1,6 @@
 @import "~@skyux/theme/scss/mixins";
 @import "~@skyux/theme/scss/_compat/mixins";
+@import "~@skyux/theme/scss/variables";
 @import "~intl-tel-input/build/css/intlTelInput";
 
 .sky-country-field-country-btn + ::ng-deep .sky-form-control {
@@ -13,6 +14,10 @@
 .sky-country-field-search-result-flag {
   display: inline-block;
   margin-right: $sky-margin-half;
+}
+
+.sky-country-field-flag {
+  display: none;
 }
 
 .sky-country-field-disabled {
@@ -30,29 +35,24 @@
   cursor: text;
   display: flex;
   background-color: $sky-color-white;
-  padding-left: 12px;
+  position: relative;
 
   .sky-country-field-flag {
     margin-bottom: auto;
     margin-top: auto;
-    margin-right: $sky-margin;
+    left: $sky-margin;
+    top: 13px;
+    position: absolute;
+  }
+}
+
+.sky-country-field-input-with-flag {
+  .sky-country-field-flag {
+    display: block;
   }
 
-  textarea {
-    resize: none;
-    border: 0;
-    overflow: hidden;
-    height: #{$sky-line-height-base}em;
-    box-sizing: content-box;
-    padding: 0;
-    display: inline-flex;
-    background-color: transparent;
-
-    &:focus {
-      outline: none;
-      box-shadow: none;
-    }
-
+  .sky-form-control {
+    padding-left: 38px;
   }
 }
 
@@ -62,6 +62,42 @@
 
 :host(.ng-invalid.ng-touched) .sky-country-field-input {
   @include sky-field-status(invalid);
+}
+
+::ng-deep {
+  .sky-theme-modern {
+    .sky-input-box .sky-form-group {
+      .sky-country-field-input {
+        border-radius: $sky-theme-modern-box-border-radius-default;
+      }
+
+      .sky-country-field-input-with-flag {
+        .sky-country-field-flag {
+          top: 7px;
+          left: 15px;
+        }
+
+        .sky-form-control {
+          padding-left: 45px;
+        }
+      }
+    }
+
+    .sky-input-box:not(.sky-input-box-disabled) {
+      .sky-input-box-group-form-control-focus,
+      .sky-input-box-group-form-control:active {
+        .sky-form-group .sky-country-field-input-with-flag {
+          .sky-country-field-flag {
+            left: 14px;
+          }
+
+          .sky-form-control {
+            padding-left: 44px;
+          }
+        }
+      }
+    }
+  }
 }
 
 .iti-flag {

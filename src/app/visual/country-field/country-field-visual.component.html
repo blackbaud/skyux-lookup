@@ -1,3 +1,7 @@
+<sky-docs-demo-control-panel-theme
+  (themeSettingsChange)="themeSettingsChange($event)"
+></sky-docs-demo-control-panel-theme>
+
 <div
   class="sky-country-field-visual"
 >
@@ -65,4 +69,39 @@
   >
     Set Germany
   </button>
+</div>
+
+<div
+  class="sky-country-field-visual"
+>
+  <h2
+    class="sky-section-heading"
+  >
+    Standard country field
+  </h2>
+
+  <div
+    id="screenshot-country-field-empty"
+  >
+    <form>
+      <sky-input-box>
+        <label
+          class="sky-control-label"
+        >
+          Country
+        </label>
+        <sky-country-field
+          name="countryField"
+          required
+          [disabled]="disableFields"
+          [(ngModel)]="countryDataInputBox"
+        >
+        </sky-country-field>
+      </sky-input-box>
+    </form>
+  </div>
+
+  <p *ngIf="countryData">
+    Selected Country is {{ countryData.name }}
+  </p>
 </div>

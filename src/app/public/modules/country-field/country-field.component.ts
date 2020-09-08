@@ -11,7 +11,9 @@ import {
   Output,
   ViewChild,
   Injector,
-  Type
+  Type,
+  Optional,
+  TemplateRef
 } from '@angular/core';
 
 import {
@@ -28,6 +30,10 @@ import {
 import {
   SkyAppWindowRef
 } from '@skyux/core';
+
+import {
+  SkyInputBoxHostService
+} from '@skyux/forms';
 
 import 'intl-tel-input';
 
@@ -206,6 +212,12 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
   public inputId: string;
 
+  @ViewChild('inputTemplateRef', {
+    read: TemplateRef,
+    static: true
+  })
+  private inputTemplateRef: TemplateRef<any>;
+
   private defaultCountryData: SkyCountryFieldCountry;
 
   private idle: Subject<any> = new Subject();
@@ -230,7 +242,8 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     private changeDetector: ChangeDetectorRef,
     private elRef: ElementRef,
     private windowRef: SkyAppWindowRef,
-    private injector: Injector
+    private injector: Injector,
+    @Optional() public inputBoxHostSvc?: SkyInputBoxHostService
   ) {
     this.setupCountries();
 
@@ -242,6 +255,13 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
    * @internal
    */
   public ngOnInit(): void {
+    if (this.inputBoxHostSvc) {
+      this.inputBoxHostSvc.populate(
+        {
+          inputTemplate: this.inputTemplateRef
+        }
+      );
+    }
 
     // tslint:disable-next-line: no-null-keyword
     this.ngControl = this.injector.get<NgControl>(NgControl as unknown as Type<NgControl>, null);
@@ -394,9 +414,9 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
         .intlTelInputGlobals
         .getCountryData()));
 
-    this.isInPhoneField = (<HTMLElement>this.elRef.nativeElement.parentElement)
-      .classList
-      .contains('sky-phone-field-country-search');
+    // this.isInPhoneField = (<HTMLElement>this.elRef.nativeElement.parentElement)
+    //   .classList
+    //   .contains('sky-phone-field-country-search');
 
     /* istanbul ignore else */
     if (!this.isInPhoneField) {
