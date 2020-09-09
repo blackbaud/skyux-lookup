@@ -155,7 +155,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   public countrySearchAutocompleteDirective: SkyAutocompleteInputDirective;
 
   public set selectedCountry(newCountry: SkyCountryFieldCountry) {
-    if (this._selectedCountry !== newCountry) {
+    if (!this.checkNewCountryEquality(newCountry)) {
 
       if (newCountry && newCountry.iso2) {
         let isoCountry = this.countries.find(country => country.iso2 === newCountry.iso2);
@@ -185,17 +185,18 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
         this.ngControl.control.markAsPristine();
       }
 
+      if (this.isInitialChange) {
+        this.isInitialChange = false;
+      }
+
       /**
        * The second portion of this if statement is complex. The control type check ensures that
        * we only watch for the initial time through this function on reactive forms. However,
        * template forms will send through `null` and then `undefined` on empty initialization
        * so we have to check for when the non-null pass through happens.
        */
-      if (this.isInitialChange && (!(this.ngControl instanceof NgModel) || newCountry !== null)) {
-        this.isInitialChange = false;
-      }
-    } else if (newCountry === undefined) {
-      /* Sanity check to ensure we properly handle if a consumer sets the control value to undefined on initialization */
+    } else if (this.isInitialChange &&
+      (!(this.ngControl instanceof NgModel) || newCountry !== null)) {
       this.isInitialChange = false;
     }
   }
@@ -370,6 +371,20 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
         this.isInputFocused = this.elRef.nativeElement.contains(event.target);
         this.changeDetector.markForCheck();
       });
+  }
+
+  private checkNewCountryEquality(newCountry: SkyCountryFieldCountry) {
+    if (this._selectedCountry && newCountry) {
+      if (this.selectedCountry.iso2 === newCountry.iso2) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (!this._selectedCountry && !newCountry) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   private countriesEqual(a: SkyCountryFieldCountry, b: SkyCountryFieldCountry): boolean {

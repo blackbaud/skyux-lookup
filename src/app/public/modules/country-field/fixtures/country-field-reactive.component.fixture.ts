@@ -95,4 +95,8 @@ export class CountryFieldReactiveTestComponent implements OnInit {
     return;
   }
 
+  public setValue(country: SkyCountryFieldCountry) {
+    this.countryControl.setValue(country);
+  }
+
 }
