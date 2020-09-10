@@ -155,7 +155,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   public countrySearchAutocompleteDirective: SkyAutocompleteInputDirective;
 
   public set selectedCountry(newCountry: SkyCountryFieldCountry) {
-    if (!this.checkNewCountryEquality(newCountry)) {
+    if (!this.countriesAreEqual(this.selectedCountry, newCountry)) {
 
       if (newCountry && newCountry.iso2) {
         let isoCountry = this.countries.find(country => country.iso2 === newCountry.iso2);
@@ -185,9 +185,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
         this.ngControl.control.markAsPristine();
       }
 
-      if (this.isInitialChange) {
-        this.isInitialChange = false;
-      }
+      this.isInitialChange = false;
 
       /**
        * The second portion of this if statement is complex. The control type check ensures that
@@ -373,18 +371,15 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
       });
   }
 
-  private checkNewCountryEquality(newCountry: SkyCountryFieldCountry) {
-    if (this._selectedCountry && newCountry) {
-      if (this.selectedCountry.iso2 === newCountry.iso2) {
-        return true;
-      } else {
-        return false;
-      }
-    } else if (!this._selectedCountry && !newCountry) {
-      return true;
-    } else {
-      return false;
+  private countriesAreEqual(country1: SkyCountryFieldCountry, country2: SkyCountryFieldCountry): boolean {
+    if (country1 && country2) {
+      return country1.iso2 === country2.iso2;
     }
+
+    // NOTE: We are doing this in  this way because template forms will send through `null`
+    // and then `undefined` on empty initialization. These are functionally equivalent but will
+    // not pass a standard triple equals check.
+    return !country1 && !country2;
   }
 
   private countriesEqual(a: SkyCountryFieldCountry, b: SkyCountryFieldCountry): boolean {
