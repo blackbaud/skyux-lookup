@@ -124,12 +124,14 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
   /**
    * Indicated whether to hide the flag in the input element.
+   * @default "false"
    */
   @Input()
   public hideSelectedCountryFlag: boolean;
 
   /**
    * Indicated whether to include phone information in the selected country and country dropdown.
+   * @default "false"
    */
   @Input()
   public set includePhoneInfo(includePhoneInfo: boolean) {
