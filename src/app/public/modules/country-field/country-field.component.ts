@@ -102,19 +102,6 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     return this._defaultCountry;
   }
 
-  @Input()
-  public set supportedCountryISOs(value: string[]) {
-    this._supportedCountryISOs = value;
-
-    if (value && value.length > 0) {
-      this.setupCountries();
-    }
-  }
-
-  public get supportedCountryISOs(): string[] {
-    return this._supportedCountryISOs;
-  }
-
   /**
    * Indicates whether to disable the country field.
    */
@@ -136,6 +123,39 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   }
 
   /**
+   * Indicated whether to hide the flag in the input element.
+   */
+  @Input()
+  public hideSelectedCountryFlag: boolean;
+
+  /**
+   * Indicated whether to include phone information in the selected country and country dropdown.
+   */
+  @Input()
+  public set includePhoneInfo(includePhoneInfo: boolean) {
+    this._includePhoneInfo = includePhoneInfo;
+
+    this.setupCountries();
+  }
+
+  public get includePhoneInfo(): boolean {
+    return this._includePhoneInfo;
+  }
+
+  @Input()
+  public set supportedCountryISOs(value: string[]) {
+    this._supportedCountryISOs = value;
+
+    if (value && value.length > 0) {
+      this.setupCountries();
+    }
+  }
+
+  public get supportedCountryISOs(): string[] {
+    return this._supportedCountryISOs;
+  }
+
+  /**
    * Fires when the selected country changes.
    */
   @Output()
@@ -144,8 +164,6 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   public countries: SkyCountryFieldCountry[];
 
   public countrySearchFormControl: FormControl;
-
-  public isInPhoneField: boolean = false;
 
   public isInputFocused: boolean = false;
 
@@ -221,6 +239,8 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   private _defaultCountry: string;
 
   private _disabled: boolean = false;
+
+  private _includePhoneInfo: boolean = false;
 
   private _selectedCountry: SkyCountryFieldCountry;
 
@@ -394,12 +414,19 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
         .intlTelInputGlobals
         .getCountryData()));
 
-    this.isInPhoneField = (<HTMLElement>this.elRef.nativeElement.parentElement)
-      .classList
-      .contains('sky-phone-field-country-search');
+    // Ignoring coverage here as this will be removed in the next release.
+    // istanbul ignore next
+    if (!this.includePhoneInfo && !this.hideSelectedCountryFlag) {
+      if ((<HTMLElement>this.elRef.nativeElement.parentElement)
+        .classList
+        .contains('sky-phone-field-country-search')) {
+        this.includePhoneInfo = true;
+        this.hideSelectedCountryFlag = true;
+      }
+    }
 
     /* istanbul ignore else */
-    if (!this.isInPhoneField) {
+    if (!this.includePhoneInfo) {
       /**
        * The library we get the country data from includes extra phone properties.
        * We want to remove these unless we are in a phone field
