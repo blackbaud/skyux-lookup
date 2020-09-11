@@ -123,15 +123,15 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   }
 
   /**
-   * Indicated whether to hide the flag in the input element.
-   * @default "false"
+   * Indicates whether to hide the flag in the input element.
+   * @default false
    */
   @Input()
   public hideSelectedCountryFlag: boolean;
 
   /**
-   * Indicated whether to include phone information in the selected country and country dropdown.
-   * @default "false"
+   * Indicates whether to include phone information in the selected country and country dropdown.
+   * @default false
    */
   @Input()
   public set includePhoneInfo(includePhoneInfo: boolean) {
@@ -144,6 +144,10 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     return this._includePhoneInfo;
   }
 
+  /**
+   * Specifies the [International Organization for Standardization Alpha 2](https://www.nationsonline.org/oneworld/country_code_list.htm)
+   * country codes for the countries that users can select. By default, all countries are available.
+   */
   @Input()
   public set supportedCountryISOs(value: string[]) {
     this._supportedCountryISOs = value;
