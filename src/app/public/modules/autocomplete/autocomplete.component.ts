@@ -70,7 +70,7 @@ export class SkyAutocompleteComponent
   public ariaLabelledBy: string;
 
 /**
- * Specifies a static data source for the autocomplete component to search 
+ * Specifies a static data source for the autocomplete component to search
  * when users enter text. For a dynamic data source such as an array that
  * changes due to server calls, use the `search` property instead.
  */
@@ -85,7 +85,7 @@ export class SkyAutocompleteComponent
 
 /**
  * Specifies how many milliseconds to wait before searching while users
- * enter text in the autocomplete field. 
+ * enter text in the autocomplete field.
  * @default 0
  */
   @Input()
@@ -178,7 +178,7 @@ export class SkyAutocompleteComponent
  * to filter the search results when using the default search function. When
  * using the `search` property to specify a custom search function, you must
  * manually apply filters inside that function. The function must return `true`
- * or `false` for each result to indicate whether to display it in the dropdown list. 
+ * or `false` for each result to indicate whether to display it in the dropdown list.
  */
   @Input()
   public searchFilters: SkyAutocompleteSearchFunctionFilter[];
