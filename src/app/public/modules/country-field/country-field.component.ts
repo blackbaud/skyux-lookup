@@ -102,19 +102,6 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     return this._defaultCountry;
   }
 
-  @Input()
-  public set supportedCountryISOs(value: string[]) {
-    this._supportedCountryISOs = value;
-
-    if (value && value.length > 0) {
-      this.setupCountries();
-    }
-  }
-
-  public get supportedCountryISOs(): string[] {
-    return this._supportedCountryISOs;
-  }
-
   /**
    * Indicates whether to disable the country field.
    */
@@ -136,6 +123,45 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   }
 
   /**
+   * Indicates whether to hide the flag in the input element.
+   * @default false
+   */
+  @Input()
+  public hideSelectedCountryFlag: boolean;
+
+  /**
+   * Indicates whether to include phone information in the selected country and country dropdown.
+   * @default false
+   */
+  @Input()
+  public set includePhoneInfo(includePhoneInfo: boolean) {
+    this._includePhoneInfo = includePhoneInfo;
+
+    this.setupCountries();
+  }
+
+  public get includePhoneInfo(): boolean {
+    return this._includePhoneInfo;
+  }
+
+  /**
+   * Specifies the [International Organization for Standardization Alpha 2](https://www.nationsonline.org/oneworld/country_code_list.htm)
+   * country codes for the countries that users can select. By default, all countries are available.
+   */
+  @Input()
+  public set supportedCountryISOs(value: string[]) {
+    this._supportedCountryISOs = value;
+
+    if (value && value.length > 0) {
+      this.setupCountries();
+    }
+  }
+
+  public get supportedCountryISOs(): string[] {
+    return this._supportedCountryISOs;
+  }
+
+  /**
    * Fires when the selected country changes.
    */
   @Output()
@@ -145,8 +171,6 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
 
   public countrySearchFormControl: FormControl;
 
-  public isInPhoneField: boolean = false;
-
   public isInputFocused: boolean = false;
 
   public searchTextMinimumCharacters: number = 2;
@@ -155,7 +179,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   public countrySearchAutocompleteDirective: SkyAutocompleteInputDirective;
 
   public set selectedCountry(newCountry: SkyCountryFieldCountry) {
-    if (this._selectedCountry !== newCountry) {
+    if (!this.countriesAreEqual(this.selectedCountry, newCountry)) {
 
       if (newCountry && newCountry.iso2) {
         let isoCountry = this.countries.find(country => country.iso2 === newCountry.iso2);
@@ -185,17 +209,16 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
         this.ngControl.control.markAsPristine();
       }
 
+      this.isInitialChange = false;
+
       /**
        * The second portion of this if statement is complex. The control type check ensures that
        * we only watch for the initial time through this function on reactive forms. However,
        * template forms will send through `null` and then `undefined` on empty initialization
        * so we have to check for when the non-null pass through happens.
        */
-      if (this.isInitialChange && (!(this.ngControl instanceof NgModel) || newCountry !== null)) {
-        this.isInitialChange = false;
-      }
-    } else if (newCountry === undefined) {
-      /* Sanity check to ensure we properly handle if a consumer sets the control value to undefined on initialization */
+    } else if (this.isInitialChange &&
+      (!(this.ngControl instanceof NgModel) || newCountry !== null)) {
       this.isInitialChange = false;
     }
   }
@@ -221,6 +244,8 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
   private _defaultCountry: string;
 
   private _disabled: boolean = false;
+
+  private _includePhoneInfo: boolean = false;
 
   private _selectedCountry: SkyCountryFieldCountry;
 
@@ -372,6 +397,17 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
       });
   }
 
+  private countriesAreEqual(country1: SkyCountryFieldCountry, country2: SkyCountryFieldCountry): boolean {
+    if (country1 && country2) {
+      return country1.iso2 === country2.iso2;
+    }
+
+    // NOTE: We are doing this in  this way because template forms will send through `null`
+    // and then `undefined` on empty initialization. These are functionally equivalent but will
+    // not pass a standard triple equals check.
+    return !country1 && !country2;
+  }
+
   private countriesEqual(a: SkyCountryFieldCountry, b: SkyCountryFieldCountry): boolean {
     return a.iso2 === b.iso2 && a.name === b.name;
   }
@@ -394,12 +430,19 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
         .intlTelInputGlobals
         .getCountryData()));
 
-    this.isInPhoneField = (<HTMLElement>this.elRef.nativeElement.parentElement)
-      .classList
-      .contains('sky-phone-field-country-search');
+    // Ignoring coverage here as this will be removed in the next release.
+    // istanbul ignore next
+    if (!this.includePhoneInfo && !this.hideSelectedCountryFlag) {
+      if ((<HTMLElement>this.elRef.nativeElement.parentElement)
+        .classList
+        .contains('sky-phone-field-country-search')) {
+        this.includePhoneInfo = true;
+        this.hideSelectedCountryFlag = true;
+      }
+    }
 
     /* istanbul ignore else */
-    if (!this.isInPhoneField) {
+    if (!this.includePhoneInfo) {
       /**
        * The library we get the country data from includes extra phone properties.
        * We want to remove these unless we are in a phone field
