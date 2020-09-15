@@ -3,6 +3,12 @@
 @import "~@skyux/theme/scss/variables";
 @import "~intl-tel-input/build/css/intlTelInput";
 
+@mixin sky-country-field-textarea {
+  resize: none;
+  white-space: nowrap;
+  overflow: auto;
+}
+
 .sky-country-field-country-btn + ::ng-deep .sky-form-control {
   border-left: none;
 }
@@ -44,6 +50,10 @@
     top: 13px;
     position: absolute;
   }
+
+  textarea {
+    @include sky-country-field-textarea;
+  }
 }
 
 .sky-country-field-input-with-flag {
@@ -60,7 +70,7 @@
   @include sky-border(light, bottom);
 }
 
-:host(.ng-invalid.ng-touched) .sky-country-field-input {
+:host(.ng-invalid.ng-touched) .sky-country-field-input textarea {
   @include sky-field-status(invalid);
 }
 
@@ -68,7 +78,12 @@
   .sky-theme-modern {
     .sky-input-box .sky-form-group {
       .sky-country-field-input {
+        background-color: transparent;
         border-radius: $sky-theme-modern-box-border-radius-default;
+
+        textarea.sky-form-control {
+          @include sky-country-field-textarea;
+        }
       }
 
       .sky-country-field-input-with-flag {
