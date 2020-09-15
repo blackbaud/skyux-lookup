@@ -68,7 +68,7 @@
   .sky-theme-modern {
     .sky-input-box .sky-form-group {
       .sky-country-field-input {
-        border-radius: $sky-theme-modern-box-border-radius-default;
+        background-color: transparent;
       }
 
       .sky-country-field-input-with-flag {
@@ -79,21 +79,6 @@
 
         .sky-form-control {
           padding-left: 45px;
-        }
-      }
-    }
-
-    .sky-input-box:not(.sky-input-box-disabled) {
-      .sky-input-box-group-form-control-focus,
-      .sky-input-box-group-form-control:active {
-        .sky-form-group .sky-country-field-input-with-flag {
-          .sky-country-field-flag {
-            left: 14px;
-          }
-
-          .sky-form-control {
-            padding-left: 44px;
-          }
         }
       }
     }

@@ -414,9 +414,9 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
         .intlTelInputGlobals
         .getCountryData()));
 
-    // this.isInPhoneField = (<HTMLElement>this.elRef.nativeElement.parentElement)
-    //   .classList
-    //   .contains('sky-phone-field-country-search');
+    this.isInPhoneField = (<HTMLElement>this.elRef.nativeElement.parentElement)
+      ?.classList
+      ?.contains('sky-phone-field-country-search');
 
     /* istanbul ignore else */
     if (!this.isInPhoneField) {
