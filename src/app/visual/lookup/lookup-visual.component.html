@@ -1,3 +1,7 @@
+<sky-docs-demo-control-panel-theme
+  (themeSettingsChange)="themeSettingsChange($event)"
+></sky-docs-demo-control-panel-theme>
+
 <div
   class="app-screenshot"
   id="lookup-visual"
@@ -50,3 +54,37 @@
     <td>{{ form.value.friends?.name }}</td>
   </tr>
 </table>
+
+<div
+  class="app-screenshot"
+  id="lookup-visual-input-box"
+>
+  <form [formGroup]="form" novalidate>
+
+    <sky-input-box>
+      <label
+        id="my-friends-label"
+        class="sky-control-label">
+        Who are your friends?
+      </label>
+      <sky-lookup
+        ariaLabelledBy="my-friends-label"
+        formControlName="friends"
+        placeholderText="Type a person's name..."
+        [data]="people"
+        [debounceTime]="1000"
+      >
+      </sky-lookup>
+    </sky-input-box>
+
+    <p>
+      <button
+        id="btn-disable-lookup-input-box"
+        type="button"
+        class="sky-btn sky-btn-default"
+        (click)="disableLookup()">
+        Disable lookup
+      </button>
+    </p>
+  </form>
+</div>

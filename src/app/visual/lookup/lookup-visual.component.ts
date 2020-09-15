@@ -4,6 +4,11 @@ import {
 } from '@angular/core';
 
 import {
+  SkyThemeService,
+  SkyThemeSettings
+} from '@skyux/theme';
+
+import {
   FormBuilder,
   FormControl,
   FormGroup
@@ -45,7 +50,8 @@ export class LookupVisualComponent implements OnInit {
   ];
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private themeSvc: SkyThemeService
   ) { }
 
   public ngOnInit(): void {
@@ -58,6 +64,10 @@ export class LookupVisualComponent implements OnInit {
 
   public disableLookup() {
     this.form.controls.friends.disable();
+  }
+
+  public themeSettingsChange(themeSettings: SkyThemeSettings): void {
+    this.themeSvc.setTheme(themeSettings);
   }
 
   private createForm(): void {

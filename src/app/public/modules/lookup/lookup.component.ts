@@ -6,8 +6,10 @@ import {
   ElementRef,
   Input,
   OnDestroy,
+  OnInit,
   Optional,
   Self,
+  TemplateRef,
   ViewChild
 } from '@angular/core';
 
@@ -24,6 +26,10 @@ import {
 import {
   takeUntil
 } from 'rxjs/operators';
+
+import {
+  SkyInputBoxHostService
+} from '@skyux/forms';
 
 import {
   SkyAutocompleteSelectionChange
@@ -53,7 +59,7 @@ import { SkyLookupAutocompleteAdapter } from './lookup-autocomplete-adapter';
 })
 export class SkyLookupComponent
   extends SkyLookupAutocompleteAdapter
-  implements AfterViewInit, OnDestroy, ControlValueAccessor {
+  implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor {
 
   @Input()
   public ariaLabel: string;
@@ -107,6 +113,12 @@ export class SkyLookupComponent
   })
   private lookupInput: ElementRef;
 
+  @ViewChild('inputTemplateRef', {
+    read: TemplateRef,
+    static: true
+  })
+  private inputTemplateRef: TemplateRef<any>;
+
   private ngUnsubscribe = new Subject();
   private idle = new Subject();
   private markForTokenFocusOnKeyUp = false;
@@ -117,10 +129,21 @@ export class SkyLookupComponent
     private changeDetector: ChangeDetectorRef,
     private elementRef: ElementRef,
     private windowRef: SkyAppWindowRef,
-    @Self() @Optional() ngControl: NgControl
+    @Self() @Optional() ngControl: NgControl,
+    @Optional() public inputBoxHostSvc?: SkyInputBoxHostService
   ) {
     super();
     ngControl.valueAccessor = this;
+  }
+
+  public ngOnInit(): void {
+    if (this.inputBoxHostSvc) {
+      this.inputBoxHostSvc.populate(
+        {
+          inputTemplate: this.inputTemplateRef
+        }
+      );
+    }
   }
 
   public ngAfterViewInit() {
