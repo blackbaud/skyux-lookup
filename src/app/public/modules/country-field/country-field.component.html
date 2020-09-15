@@ -23,10 +23,10 @@
         class="sky-country-field-input"
         [ngClass]="{
           'sky-country-field-input-with-flag':
-            selectedCountry && selectedCountry.iso2 && !isInPhoneField
+            selectedCountry && selectedCountry.iso2 && !hideSelectedCountryFlag
         }"
       >
-        <div *ngIf="selectedCountry && selectedCountry.iso2 && !isInPhoneField"
+        <div *ngIf="selectedCountry && selectedCountry.iso2 && !hideSelectedCountryFlag"
           class="sky-country-field-flag iti-flag"
           [ngClass]="selectedCountry.iso2.toLowerCase()"
         ></div>
@@ -59,7 +59,7 @@
   >
   </div>
   {{ item.name }}
-  <span *ngIf="isInPhoneField"
+  <span *ngIf="includePhoneInfo"
     class="sky-deemphasized"
   >
     {{ item.dialCode }}
