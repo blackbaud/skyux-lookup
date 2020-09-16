@@ -6,7 +6,7 @@
 @mixin sky-country-field-textarea {
   resize: none;
   white-space: nowrap;
-  overflow: auto;
+  overflow: hidden;
 }
 
 .sky-country-field-country-btn + ::ng-deep .sky-form-control {
@@ -47,7 +47,7 @@
     margin-bottom: auto;
     margin-top: auto;
     left: $sky-margin;
-    top: 13px;
+    bottom: 13px;
     position: absolute;
   }
 
@@ -76,6 +76,12 @@
 
 ::ng-deep {
   .sky-theme-modern {
+    .sky-country-field-disabled {
+      .sky-country-field-flag {
+        filter: grayscale(100%);
+      }
+    }
+
     .sky-input-box .sky-form-group {
       .sky-country-field-input {
         background-color: transparent;
@@ -88,27 +94,13 @@
 
       .sky-country-field-input-with-flag {
         .sky-country-field-flag {
-          top: 7px;
+          bottom: 15px;
           left: 15px;
+          opacity: 1;
         }
 
         .sky-form-control {
           padding-left: 45px;
-        }
-      }
-    }
-
-    .sky-input-box:not(.sky-input-box-disabled) {
-      .sky-input-box-group-form-control-focus,
-      .sky-input-box-group-form-control:active {
-        .sky-form-group .sky-country-field-input-with-flag {
-          .sky-country-field-flag {
-            left: 14px;
-          }
-
-          .sky-form-control {
-            padding-left: 44px;
-          }
         }
       }
     }

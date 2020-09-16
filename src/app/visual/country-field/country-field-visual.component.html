@@ -77,14 +77,16 @@
   <h2
     class="sky-section-heading"
   >
-    Standard country field
+    Input box
   </h2>
 
   <div
-    id="screenshot-country-field-empty"
+    id="screenshot-country-field-empty-input-box"
   >
     <form>
-      <sky-input-box>
+      <sky-input-box
+        [disabled]="disableFields"
+      >
         <label
           class="sky-control-label"
         >
@@ -104,4 +106,61 @@
   <p *ngIf="countryData">
     Selected Country is {{ countryData.name }}
   </p>
+</div>
+
+<div
+  class="sky-country-field-visual"
+>
+  <h2
+    class="sky-section-heading"
+  >
+    Input box with default country
+  </h2>
+
+  <form
+    id="screenshot-country-field-populated-input-box"
+    [formGroup]="countryForm"
+  >
+    <sky-input-box
+      [disabled]="disableFields"
+    >
+      <label
+        class="sky-control-label"
+      >
+        Country
+      </label>
+      <sky-country-field
+        formControlName="countryControl"
+        [defaultCountry]="'AU'"
+        [disabled]="disableFields"
+      >
+      </sky-country-field>
+    </sky-input-box>
+  </form>
+</div>
+
+<div
+  class="sky-country-field-visual"
+>
+  <h2
+    class="sky-section-heading"
+  >
+    Input box with default country and no label
+  </h2>
+
+  <form
+    id="screenshot-country-field-populated-input-box-no-label"
+    [formGroup]="countryForm"
+  >
+    <sky-input-box
+      [disabled]="disableFields"
+    >
+      <sky-country-field
+        formControlName="countryControl"
+        [defaultCountry]="'AU'"
+        [disabled]="disableFields"
+      >
+      </sky-country-field>
+    </sky-input-box>
+  </form>
 </div>

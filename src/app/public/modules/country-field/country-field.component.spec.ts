@@ -12,7 +12,24 @@ import {
 } from '@angular/forms';
 
 import {
-  expect, SkyAppTestUtility
+  BehaviorSubject
+} from 'rxjs';
+
+import {
+  SkyInputBoxModule
+} from '@skyux/forms';
+
+import {
+  SkyTheme,
+  SkyThemeMode,
+  SkyThemeService,
+  SkyThemeSettings,
+  SkyThemeSettingsChange
+} from '@skyux/theme';
+
+import {
+  expect,
+  SkyAppTestUtility
 } from '@skyux-sdk/testing';
 
 import {
@@ -20,8 +37,8 @@ import {
 } from './country-field.module';
 
 import {
-  CountryFieldTestComponent
-} from './fixtures/country-field.component.fixture';
+  CountryFieldInputBoxTestComponent
+} from './fixtures/country-field-input-box.component.fixture';
 
 import {
   CountryFieldNoFormTestComponent
@@ -30,6 +47,10 @@ import {
 import {
   CountryFieldReactiveTestComponent
 } from './fixtures/country-field-reactive.component.fixture';
+
+import {
+  CountryFieldTestComponent
+} from './fixtures/country-field.component.fixture';
 
 describe('Country Field Component', () => {
 
@@ -1541,4 +1562,55 @@ describe('Country Field Component', () => {
 
   });
 
+  describe('inside input box', () => {
+    let fixture: ComponentFixture<CountryFieldInputBoxTestComponent>;
+    let nativeElement: HTMLElement;
+    let mockThemeSvc: any;
+
+    beforeEach(() => {
+      mockThemeSvc = {
+        settingsChange: new BehaviorSubject<SkyThemeSettingsChange>(
+          {
+            currentSettings: new SkyThemeSettings(
+              SkyTheme.presets.default,
+              SkyThemeMode.presets.light
+            ),
+            previousSettings: undefined
+          }
+        )
+      };
+
+      TestBed.configureTestingModule({
+        declarations: [
+          CountryFieldInputBoxTestComponent
+        ],
+        imports: [
+          FormsModule,
+          SkyCountryFieldModule,
+          SkyInputBoxModule
+        ],
+        providers: [
+          {
+            provide: SkyThemeService,
+            useValue: mockThemeSvc
+          }
+        ]
+      });
+
+      fixture = TestBed.createComponent(CountryFieldInputBoxTestComponent);
+      nativeElement = fixture.nativeElement as HTMLElement;
+    });
+
+    it('should render in the expected input box containers', fakeAsync(() => {
+      fixture.detectChanges();
+
+      const inputBoxEl = nativeElement.querySelector('sky-input-box');
+
+      const inputGroupEl = inputBoxEl.querySelector('.sky-form-group > .sky-input-group');
+      const containerEl = inputGroupEl.children.item(0);
+
+      expect(containerEl).toHaveCssClass('sky-country-field-container');
+    }));
+
+  });
 });

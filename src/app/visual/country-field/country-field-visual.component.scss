@@ -5,7 +5,11 @@
   padding: $sky-padding;
 }
 
-#screenshot-country-field-empty, #screenshot-country-field-populated {
+#screenshot-country-field-empty,
+#screenshot-country-field-populated,
+#screenshot-country-field-empty-input-box,
+#screenshot-country-field-populated-input-box,
+#screenshot-country-field-populated-input-box-no-label {
   width: 50%;
   height: 100px;
   margin: $sky-margin;

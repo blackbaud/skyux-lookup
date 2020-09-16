@@ -5,15 +5,15 @@ import {
   ElementRef,
   EventEmitter,
   forwardRef,
+  Injector,
   Input,
   OnDestroy,
   OnInit,
-  Output,
-  ViewChild,
-  Injector,
-  Type,
   Optional,
-  TemplateRef
+  Output,
+  TemplateRef,
+  Type,
+  ViewChild
 } from '@angular/core';
 
 import {
