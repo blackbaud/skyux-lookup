@@ -98,7 +98,7 @@ export class SkySearchComponent implements OnDestroy, OnInit, OnChanges {
  * Specifies the expand mode for the search input. The valid options
  * include `responsive` to collapse the search input into a button on
  * mobile devices, `none` to *not* collapse the search input on mobile
- * devices, and fit to extend the search input to `fit` the width of its container.
+ * devices, and `fit` to extend the search input to fit the width of its container.
  * @default responsive
  */
   @Input()

@@ -48,6 +48,9 @@ import { SkyAutocompleteAdapterService } from './autocomplete-adapter.service';
 import { SkyAutocompleteInputDirective } from './autocomplete-input.directive';
 import { skyAutocompleteDefaultSearchFunction } from './autocomplete-default-search-function';
 
+/**
+ * @internal
+ */
 interface SkyAutocompleteSearchResult {
   elementId: string;
   data: any;
@@ -66,6 +69,9 @@ export class SkyAutocompleteComponent
 
   //#region public_api
 
+/**
+ * Identifies the element that defines a label for the text input.
+ */
   @Input()
   public ariaLabelledBy: string;
 
@@ -190,6 +196,10 @@ export class SkyAutocompleteComponent
   @Input()
   public searchResultsLimit: number;
 
+/**
+ * Specifies the text to play when no search results are found.
+ * @default No matching items found
+ */
   @Input()
   public noResultsFoundText: string;
 
