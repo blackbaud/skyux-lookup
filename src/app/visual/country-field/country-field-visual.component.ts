@@ -49,6 +49,11 @@ export class CountryFieldVisualComponent implements OnInit {
       'countryControl': this.countryControl
     });
 
+    this.countryDataInputBox = {
+      name: 'Australia',
+      iso2: 'AU'
+    };
+
     this.countryControl.setValidators([Validators.required]);
 
     this.countryControl.valueChanges.subscribe(value => console.log(value));
