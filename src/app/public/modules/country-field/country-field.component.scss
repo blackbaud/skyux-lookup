@@ -4,9 +4,9 @@
 @import "~intl-tel-input/build/css/intlTelInput";
 
 @mixin sky-country-field-textarea {
+  overflow: hidden;
   resize: none;
   white-space: nowrap;
-  overflow: hidden;
 }
 
 .sky-country-field-country-btn + ::ng-deep .sky-form-control {

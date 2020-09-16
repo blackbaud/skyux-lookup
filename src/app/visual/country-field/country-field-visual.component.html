@@ -13,6 +13,7 @@
 
 
   <div
+    class="screenshot-country-field"
     id="screenshot-country-field-empty"
   >
     <form>
@@ -41,6 +42,7 @@
   </h2>
 
   <form
+    class="screenshot-country-field"
     id="screenshot-country-field-populated"
     [formGroup]="countryForm"
   >
@@ -81,6 +83,7 @@
   </h2>
 
   <div
+    class="screenshot-country-field"
     id="screenshot-country-field-empty-input-box"
   >
     <form>
@@ -118,8 +121,8 @@
   </h2>
 
   <form
+    class="screenshot-country-field"
     id="screenshot-country-field-populated-input-box"
-    [formGroup]="countryForm"
   >
     <sky-input-box
       [disabled]="disableFields"
@@ -130,9 +133,10 @@
         Country
       </label>
       <sky-country-field
-        formControlName="countryControl"
+        name="countryFieldInputBox"
         [defaultCountry]="'AU'"
         [disabled]="disableFields"
+        [(ngModel)]="countryDataInputBox"
       >
       </sky-country-field>
     </sky-input-box>
@@ -149,16 +153,17 @@
   </h2>
 
   <form
+    class="screenshot-country-field"
     id="screenshot-country-field-populated-input-box-no-label"
-    [formGroup]="countryForm"
   >
     <sky-input-box
       [disabled]="disableFields"
     >
       <sky-country-field
-        formControlName="countryControl"
+        name="countryFieldInputBoxNoLabel"
         [defaultCountry]="'AU'"
         [disabled]="disableFields"
+        [(ngModel)]="countryDataInputBox"
       >
       </sky-country-field>
     </sky-input-box>
