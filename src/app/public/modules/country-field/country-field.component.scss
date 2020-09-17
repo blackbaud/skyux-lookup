@@ -40,15 +40,16 @@
 .sky-country-field-input {
   cursor: text;
   display: flex;
-  background-color: $sky-color-white;
   position: relative;
 
   .sky-country-field-flag {
+    align-items: center;
     margin-bottom: auto;
     margin-top: auto;
-    left: $sky-margin;
-    bottom: 13px;
     position: absolute;
+    left: $sky-margin;
+    height: 35px;
+    bottom: 0;
   }
 
   textarea {
@@ -58,7 +59,7 @@
 
 .sky-country-field-input-with-flag {
   .sky-country-field-flag {
-    display: block;
+    display: flex;
   }
 
   .sky-form-control {
@@ -94,7 +95,7 @@
 
       .sky-country-field-input-with-flag {
         .sky-country-field-flag {
-          bottom: 15px;
+          height: 40px;
           left: 15px;
           opacity: 1;
         }

@@ -27,9 +27,13 @@
         }"
       >
         <div *ngIf="selectedCountry && selectedCountry.iso2 && !hideSelectedCountryFlag"
-          class="sky-country-field-flag iti-flag"
-          [ngClass]="selectedCountry.iso2.toLowerCase()"
-        ></div>
+          class="sky-country-field-flag"
+        >
+          <div
+            class="iti-flag"
+            [ngClass]="selectedCountry.iso2.toLowerCase()"
+          ></div>
+        </div>
         <textarea
           class="sky-form-control"
           name="selectedCountry"
