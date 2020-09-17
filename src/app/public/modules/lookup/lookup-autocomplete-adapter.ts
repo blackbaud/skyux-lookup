@@ -11,6 +11,9 @@ import {
   SkyAutocompleteSearchFunctionFilter
 } from '../autocomplete/types/autocomplete-search-function-filter';
 
+/**
+ * @internal
+ */
 export class SkyLookupAutocompleteAdapter {
 
 /**
