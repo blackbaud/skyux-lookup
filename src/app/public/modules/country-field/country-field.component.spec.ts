@@ -184,7 +184,6 @@ describe('Country Field Component', () => {
         tick();
         fixture.detectChanges();
 
-
         validateSelectedCountry(nativeElement, '');
 
         expect(nativeElement.querySelector('.sky-country-field-flag')).toBeNull();
