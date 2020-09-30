@@ -3,10 +3,10 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'app-search-docs',
-  templateUrl: './search-docs.component.html'
+  selector: 'app-search-demo',
+  templateUrl: './search-demo.component.html'
 })
-export class SearchDocsComponent {
+export class SearchDemoComponent {
 
   public displayedItems: any;
 
