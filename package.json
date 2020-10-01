@@ -31,8 +31,7 @@
     "@skyux/indicators": "^4.0.0"
   },
   "dependencies": {
-    "intl-tel-input": "14.1.0",
-    "lodash.orderby": "4.6.0"
+    "intl-tel-input": "14.1.0"
   },
   "devDependencies": {
     "@angular/animations": "9.1.12",
