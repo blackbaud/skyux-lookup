@@ -17,7 +17,8 @@ import {
   EventEmitter,
   OnChanges,
   SimpleChanges,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ViewEncapsulation
 } from '@angular/core';
 
 import {
@@ -49,6 +50,7 @@ const EXPAND_MODE_NONE: string = 'none';
   selector: 'sky-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
+  encapsulation: ViewEncapsulation.None,
   animations: [
     trigger('inputState', [
       state(INPUT_HIDDEN_STATE,
