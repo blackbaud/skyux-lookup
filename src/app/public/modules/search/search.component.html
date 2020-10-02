@@ -31,8 +31,6 @@
             [attr.placeholder]="placeholderText || ('skyux_search_placeholder' | skyLibResources)"
             [disabled]="disabled"
             [ngModel]="searchText"
-            (blur)="inputFocused(false)"
-            (focus)="inputFocused(true)"
             (keyup)="enterPress($event, searchText)"
             (ngModelChange)="searchTextChanged($event)"
           >

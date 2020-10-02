@@ -138,7 +138,6 @@ export class SkySearchComponent implements OnDestroy, OnInit, OnChanges {
   public mobileSearchShown: boolean = false;
   public dismissButtonShown: boolean = false;
   public clearButtonShown: boolean = false;
-  public searchInputFocused: boolean = false;
 
   private searchUpdated: Subject<string> = new Subject<string>();
 
@@ -195,10 +194,6 @@ export class SkySearchComponent implements OnDestroy, OnInit, OnChanges {
       }
     }
     this.changeRef.detectChanges();
-  }
-
-  public inputFocused(isFocused: boolean) {
-    this.searchInputFocused = isFocused;
   }
 
   public clearSearchText() {
