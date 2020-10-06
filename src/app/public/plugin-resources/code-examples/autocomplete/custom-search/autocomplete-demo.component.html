@@ -37,3 +37,12 @@
   <pre>{{ myForm.value | json }}</pre>
 </form>
 
+<ng-template
+  let-item="item"
+  #oceanSearchResultTemplate
+>
+  <sky-icon
+    icon="long-arrow-right"
+  ></sky-icon>
+  {{ item.title }} &bull; ID {{ item.id }}
+</ng-template>

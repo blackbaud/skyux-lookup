@@ -15,6 +15,10 @@ import {
 } from '@skyux/core';
 
 import {
+  SkyIconModule
+} from '@skyux/indicators';
+
+import {
   SkyAutocompleteModule
 } from '@skyux/lookup';
 
@@ -27,6 +31,7 @@ import {
     CommonModule,
     ReactiveFormsModule,
     SkyAutocompleteModule,
+    SkyIconModule,
     SkyIdModule
   ],
   declarations: [
