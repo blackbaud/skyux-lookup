@@ -8,4 +8,44 @@
   The lookup component creates a typeahead search input. Users enter text, and the component filters a data source based on the user entries.
 </sky-docs-demo-page-summary>
 
+<sky-docs-demo>
+  <form
+    class="lookup-demo-form"
+    novalidate
+    style="width: 50%;"
+    [formGroup]="myForm"
+  >
+    <div
+      class="sky-form-group"
+    >
+      <label
+        id="my-friends-label"
+        class="sky-control-label"
+        skyId
+        #friendsLabel="skyId"
+      >
+        Who are your friends?
+      </label>
+      <sky-lookup
+        formControlName="friends"
+        placeholderText="Enter a name..."
+        [ariaLabelledBy]="friendsLabel.id"
+        [data]="people"
+        [searchFilters]="getSearchFilters()"
+      >
+      </sky-lookup>
+    </div>
+  </form>
+</sky-docs-demo>
+
+<sky-docs-code-examples
+  [packageDependencies]="{
+    '@skyux/lookup': '*'
+  }"
+>
+  <sky-docs-code-example
+    sourceCodePath="src/app/public/plugin-resources/code-examples/lookup/basic"
+  ></sky-docs-code-example>
+</sky-docs-code-examples>
+
 </sky-docs-demo-page>
