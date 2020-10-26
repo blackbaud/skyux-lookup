@@ -473,6 +473,31 @@ describe('Lookup component', function () {
 
         expect(lookupComponent.isInputFocused).toEqual(false);
       }));
+
+      it('should prevent default if Enter is pressed on the input element', fakeAsync(function () {
+        fixture.detectChanges();
+
+        const inputElement = getInputElement(lookupComponent);
+
+        const event = Object.assign(
+          document.createEvent('CustomEvent'),
+          {
+            key: 'Enter'
+          }
+        );
+
+        spyOn(event, 'preventDefault');
+
+        event.initEvent('keydown', true, true);
+        inputElement.dispatchEvent(event);
+
+        tick();
+        fixture.detectChanges();
+        tick();
+
+        expect(event.preventDefault).toHaveBeenCalled();
+      }));
+
     });
 
     describe('mouse interactions', function () {

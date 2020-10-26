@@ -299,10 +299,6 @@ export class SkyLookupComponent
 
   public inputKeyup(event: KeyboardEvent): void {
     switch (event.key) {
-      case 'Del':
-      case 'Delete':
-        event.stopPropagation();
-        break;
       case 'Esc':
       case 'Escape':
         this.clearSearchText();
