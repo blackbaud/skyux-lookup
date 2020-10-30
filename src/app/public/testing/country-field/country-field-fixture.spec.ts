@@ -15,6 +15,10 @@ import {
 } from '@skyux-sdk/testing';
 
 import {
+  SkyCountryFieldCountry
+} from '@skyux/lookup';
+
+import {
   SkyCountryFieldTestingModule
 } from './country-field-testing.module';
 
@@ -23,7 +27,10 @@ import {
 } from './country-field-fixture';
 
 const DATA_SKY_ID = 'test-country-field';
-const COUNTRY_NAME = 'United States';
+const COUNTRY: SkyCountryFieldCountry = {
+  name: 'United States',
+  iso2: 'us'
+};
 
 //#region Test component
 @Component({
@@ -98,10 +105,40 @@ describe('Country field fixture', () => {
     expect(countryFieldFixture.isDisabled).toBe(testComponent.disabled);
   }));
 
+  it('should expose selection properties', fakeAsync(async () => {
+
+    const selectedCountryChangeSpy = spyOn(fixture.componentInstance, 'selectedCountryChange');
+
+    // make a selection
+    await countryFieldFixture.select(COUNTRY.name);
+    detectChangesFakeAsync();
+
+    // verify selection state
+    expect(selectedCountryChangeSpy).toHaveBeenCalledWith(COUNTRY);
+    expect(countryFieldFixture.searchText).toBe(COUNTRY.name);
+    expect(countryFieldFixture.selectedCountryData.name).toBe(COUNTRY.name);
+    expect(countryFieldFixture.selectedCountryData.iso2).toBe(COUNTRY.iso2);
+  }));
+
+  it('should return undefined properties for no selection', fakeAsync(async () => {
+
+    const selectedCountryChangeSpy = spyOn(fixture.componentInstance, 'selectedCountryChange');
+
+    // make a selection
+    const invalidCountryName = 'not-my-country';
+    await countryFieldFixture.search(invalidCountryName);
+    detectChangesFakeAsync();
+
+    // verify selection state
+    expect(selectedCountryChangeSpy).toHaveBeenCalledTimes(0);
+    expect(countryFieldFixture.searchText).toBe(invalidCountryName);
+    expect(countryFieldFixture.selectedCountryData).toBe(undefined);
+  }));
+
   it('should show country flag by default', fakeAsync(async () => {
 
     // make a selection so the flag appears
-    await countryFieldFixture.select(COUNTRY_NAME);
+    await countryFieldFixture.select(COUNTRY.name);
     detectChangesFakeAsync();
 
     // verify country flag state
@@ -114,7 +151,7 @@ describe('Country field fixture', () => {
     fixture.detectChanges();
 
     // make a selection
-    await countryFieldFixture.select(COUNTRY_NAME);
+    await countryFieldFixture.select(COUNTRY.name);
     detectChangesFakeAsync();
 
     // verify country flag state
@@ -134,8 +171,8 @@ describe('Country field fixture', () => {
 
   it('should be able to clear when there is no selection', fakeAsync(async () => {
     // make a selection
-    await countryFieldFixture.select(COUNTRY_NAME);
-    expect(countryFieldFixture.searchText).toBe(COUNTRY_NAME);
+    await countryFieldFixture.select(COUNTRY.name);
+    expect(countryFieldFixture.searchText).toBe(COUNTRY.name);
 
     // clear the selection
     await countryFieldFixture.clear();
@@ -146,8 +183,8 @@ describe('Country field fixture', () => {
 
   it('should be able to clear when results are showing', fakeAsync(async () => {
     // perform a search, displaying results
-    await countryFieldFixture.search(COUNTRY_NAME);
-    expect(countryFieldFixture.searchText).toBe(COUNTRY_NAME);
+    await countryFieldFixture.search(COUNTRY.name);
+    expect(countryFieldFixture.searchText).toBe(COUNTRY.name);
 
     // clear the selection
     await countryFieldFixture.clear();
@@ -158,7 +195,7 @@ describe('Country field fixture', () => {
 
   it('should expose expected search results', fakeAsync(async () => {
     // perform a search, displaying results
-    const results = await countryFieldFixture.search(COUNTRY_NAME);
+    const results = await countryFieldFixture.search(COUNTRY.name);
 
     // verify there are results
     expect(results.length).toBeGreaterThan(0);
@@ -167,6 +204,6 @@ describe('Country field fixture', () => {
     const topResult = results[0];
     const countryNameEl = topResult.querySelector('.sky-highlight-mark');
     const countryName = SkyAppTestUtility.getText(countryNameEl);
-    expect(countryName).toEqual(COUNTRY_NAME);
+    expect(countryName).toEqual(COUNTRY.name);
   }));
 });

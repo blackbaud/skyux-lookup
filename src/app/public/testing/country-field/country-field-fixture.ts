@@ -15,18 +15,29 @@ import {
   SkyAppTestUtility
 } from '@skyux-sdk/testing';
 
+import {
+  SkyCountryFieldCountry
+} from '@skyux/lookup';
+
 /**
  * Allows interaction with a SKY UX country field component.
  */
 export class SkyCountryFieldFixture {
-
   private debugEl: DebugElement;
+  private countries: SkyCountryFieldCountry[];
 
   constructor(
     private fixture: ComponentFixture<any>,
     skyTestId: string
   ) {
     this.debugEl = SkyAppTestUtility.getDebugElementByTestId(fixture, skyTestId, 'sky-country-field');
+
+    this.countries = JSON.parse(
+      JSON.stringify((window as any)
+        .intlTelInputGlobals
+        .getCountryData()
+      )
+    );
   }
 
   /**
@@ -61,6 +72,13 @@ export class SkyCountryFieldFixture {
   public get searchText(): string {
     const inputEl = this.getInput();
     return inputEl.nativeElement.value;
+  }
+
+  /**
+   * The value of the input field.
+   */
+  public get selectedCountryData(): SkyCountryFieldCountry {
+    return this.countries.find((x: any) => x.name === this.searchText);
   }
 
   /**
@@ -135,6 +153,10 @@ export class SkyCountryFieldFixture {
   private searchAndSelect(newValue: string, index: number, fixture: ComponentFixture<any>): void {
     const inputElement = this.getInputElement();
     const searchResults = this.searchAndGetResults(newValue, fixture);
+
+    if (searchResults.length < (index + 1)) {
+      throw new Error('Index out of range for results');
+    }
 
     // Note: the ordering of these events is important!
     SkyAppTestUtility.fireDomEvent(inputElement, 'change');
