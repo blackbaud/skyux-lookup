@@ -45,7 +45,7 @@ export class SkyCountryFieldFixture {
    */
   public get autocomplete(): string {
     const inputEl = this.getInput();
-    return inputEl.nativeElement.autocomplete;
+    return inputEl.nativeElement.getAttribute('autocomplete');
   }
 
   /**
