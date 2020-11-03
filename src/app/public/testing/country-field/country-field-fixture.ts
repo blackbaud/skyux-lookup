@@ -3,8 +3,7 @@ import {
 } from '@angular/core';
 
 import {
-  ComponentFixture,
-  tick
+  ComponentFixture
 } from '@angular/core/testing';
 
 import {
@@ -15,29 +14,17 @@ import {
   SkyAppTestUtility
 } from '@skyux-sdk/testing';
 
-import {
-  SkyCountryFieldCountry
-} from '@skyux/lookup';
-
 /**
  * Allows interaction with a SKY UX country field component.
  */
 export class SkyCountryFieldFixture {
   private debugEl: DebugElement;
-  private countries: SkyCountryFieldCountry[];
 
   constructor(
     private fixture: ComponentFixture<any>,
     skyTestId: string
   ) {
     this.debugEl = SkyAppTestUtility.getDebugElementByTestId(fixture, skyTestId, 'sky-country-field');
-
-    this.countries = JSON.parse(
-      JSON.stringify((window as any)
-        .intlTelInputGlobals
-        .getCountryData()
-      )
-    );
   }
 
   /**
@@ -69,13 +56,6 @@ export class SkyCountryFieldFixture {
    */
   public get searchText(): string {
     return this.getInputElement().value;
-  }
-
-  /**
-   * The country data associated with the selected country.
-   */
-  public get selectedCountry(): SkyCountryFieldCountry {
-    return this.countries.find((x: any) => x.name === this.searchText);
   }
 
   /**

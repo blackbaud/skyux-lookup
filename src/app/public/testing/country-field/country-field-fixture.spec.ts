@@ -106,8 +106,6 @@ describe('Country field fixture', () => {
     // verify selection state
     expect(selectedCountryChangeSpy).toHaveBeenCalledWith(COUNTRY);
     expect(countryFieldFixture.searchText).toBe(COUNTRY.name);
-    expect(countryFieldFixture.selectedCountry.name).toBe(COUNTRY.name);
-    expect(countryFieldFixture.selectedCountry.iso2).toBe(COUNTRY.iso2);
   });
 
   it('should return undefined properties for no selection', async () => {
@@ -123,7 +121,6 @@ describe('Country field fixture', () => {
     // verify selection state
     expect(selectedCountryChangeSpy).toHaveBeenCalledTimes(0);
     expect(countryFieldFixture.searchText).toBe(invalidCountryName);
-    expect(countryFieldFixture.selectedCountry).toBe(undefined);
   });
 
   it('should show country flag by default', async () => {
