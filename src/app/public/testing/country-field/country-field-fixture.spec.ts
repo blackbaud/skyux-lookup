@@ -1,8 +1,6 @@
 import {
-  fakeAsync,
   ComponentFixture,
-  TestBed,
-  tick
+  TestBed
 } from '@angular/core/testing';
 
 import {
@@ -56,19 +54,10 @@ class CountryFieldTestComponent {
 }
 //#endregion Test component
 
-fdescribe('Country field fixture', () => {
+describe('Country field fixture', () => {
   let fixture: ComponentFixture<CountryFieldTestComponent>;
   let testComponent: CountryFieldTestComponent;
   let countryFieldFixture: SkyCountryFieldFixture;
-
-  //#region helpers
-
-  function detectChangesFakeAsync(): void {
-    fixture.detectChanges();
-    tick();
-  }
-
-  //#endregion
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -88,13 +77,13 @@ fdescribe('Country field fixture', () => {
     countryFieldFixture = new SkyCountryFieldFixture(fixture, DATA_SKY_ID);
   });
 
-  it('should expose the expected defaults', fakeAsync(async () => {
+  it('should expose the expected defaults', () => {
     // verify default values
     expect(countryFieldFixture.autocompleteAttribute).toBe('off');
     expect(countryFieldFixture.disabled).toBe(false);
-  }));
+  });
 
-  it('should expose the expected properties', fakeAsync(async () => {
+  it('should expose the expected properties', () => {
     // modify to non-default values
     testComponent.autocompleteAttribute = 'on';
     testComponent.disabled = true;
@@ -103,62 +92,66 @@ fdescribe('Country field fixture', () => {
     // verify updated values
     expect(countryFieldFixture.autocompleteAttribute).toBe(testComponent.autocompleteAttribute);
     expect(countryFieldFixture.disabled).toBe(testComponent.disabled);
-  }));
+  });
 
-  it('should expose selection properties', fakeAsync(async () => {
+  it('should expose selection properties', async () => {
 
     const selectedCountryChangeSpy = spyOn(fixture.componentInstance, 'selectedCountryChange');
 
     // make a selection
     await countryFieldFixture.select(COUNTRY.name);
-    detectChangesFakeAsync();
+    fixture.detectChanges();
+    await fixture.whenStable();
 
     // verify selection state
     expect(selectedCountryChangeSpy).toHaveBeenCalledWith(COUNTRY);
     expect(countryFieldFixture.searchText).toBe(COUNTRY.name);
-    expect(countryFieldFixture.selectedCountryData.name).toBe(COUNTRY.name);
-    expect(countryFieldFixture.selectedCountryData.iso2).toBe(COUNTRY.iso2);
-  }));
+    expect(countryFieldFixture.selectedCountry.name).toBe(COUNTRY.name);
+    expect(countryFieldFixture.selectedCountry.iso2).toBe(COUNTRY.iso2);
+  });
 
-  it('should return undefined properties for no selection', fakeAsync(async () => {
+  it('should return undefined properties for no selection', async () => {
 
     const selectedCountryChangeSpy = spyOn(fixture.componentInstance, 'selectedCountryChange');
 
     // make a selection
     const invalidCountryName = 'not-my-country';
-    countryFieldFixture.search(invalidCountryName);
-    detectChangesFakeAsync();
+    await countryFieldFixture.search(invalidCountryName);
+    fixture.detectChanges();
+    await fixture.whenStable();
 
     // verify selection state
     expect(selectedCountryChangeSpy).toHaveBeenCalledTimes(0);
     expect(countryFieldFixture.searchText).toBe(invalidCountryName);
-    expect(countryFieldFixture.selectedCountryData).toBe(undefined);
-  }));
+    expect(countryFieldFixture.selectedCountry).toBe(undefined);
+  });
 
-  it('should show country flag by default', fakeAsync(async () => {
+  it('should show country flag by default', async () => {
 
     // make a selection so the flag appears
     await countryFieldFixture.select(COUNTRY.name);
-    detectChangesFakeAsync();
+    fixture.detectChanges();
+    await fixture.whenStable();
 
     // verify country flag state
     expect(countryFieldFixture.countryFlagIsVisible).toBe(true);
-  }));
+  });
 
-  it('should hide country flag when requested', fakeAsync(async () => {
+  it('should hide country flag when requested', async () => {
     // modify to non-default values
     testComponent.hideSelectedCountryFlag = true;
     fixture.detectChanges();
 
     // make a selection
     await countryFieldFixture.select(COUNTRY.name);
-    detectChangesFakeAsync();
+    fixture.detectChanges();
+    await fixture.whenStable();
 
     // verify country flag state
     expect(countryFieldFixture.countryFlagIsVisible).toBe(false);
-  }));
+  });
 
-  it('should be able to clear when there is no selection', fakeAsync(async () => {
+  it('should be able to clear when there is no selection', async () => {
     // verify there is no selection
     expect(countryFieldFixture.searchText).toBe('');
 
@@ -167,9 +160,9 @@ fdescribe('Country field fixture', () => {
 
     // verify the selection is cleared
     expect(countryFieldFixture.searchText).toBe('');
-  }));
+  });
 
-  it('should be able to clear when there is no selection', fakeAsync(async () => {
+  it('should be able to clear when there is no selection', async () => {
     // make a selection
     await countryFieldFixture.select(COUNTRY.name);
     expect(countryFieldFixture.searchText).toBe(COUNTRY.name);
@@ -179,11 +172,11 @@ fdescribe('Country field fixture', () => {
 
     // verify the selection is cleared
     expect(countryFieldFixture.searchText).toBe('');
-  }));
+  });
 
-  it('should be able to clear when results are showing', fakeAsync(async () => {
+  it('should be able to clear when results are showing', async () => {
     // perform a search, displaying results
-    countryFieldFixture.search(COUNTRY.name);
+    await countryFieldFixture.search(COUNTRY.name);
     expect(countryFieldFixture.searchText).toBe(COUNTRY.name);
 
     // clear the selection
@@ -191,11 +184,11 @@ fdescribe('Country field fixture', () => {
 
     // verify the selection is cleared
     expect(countryFieldFixture.searchText).toBe('');
-  }));
+  });
 
-  it('should expose expected search results', fakeAsync(async () => {
+  it('should expose expected search results', async () => {
     // perform a search, displaying results
-    const results = countryFieldFixture.search(COUNTRY.name);
+    const results = await countryFieldFixture.search(COUNTRY.name);
 
     // verify there are results
     expect(results.length).toBeGreaterThan(0);
@@ -205,5 +198,5 @@ fdescribe('Country field fixture', () => {
     const countryNameEl = topResult.querySelector('.sky-highlight-mark');
     const countryName = SkyAppTestUtility.getText(countryNameEl);
     expect(countryName).toEqual(COUNTRY.name);
-  }));
+  });
 });

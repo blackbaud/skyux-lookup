@@ -74,7 +74,7 @@ export class SkyCountryFieldFixture {
   /**
    * The country data associated with the selected country.
    */
-  public get selectedCountryData(): SkyCountryFieldCountry {
+  public get selectedCountry(): SkyCountryFieldCountry {
     return this.countries.find((x: any) => x.name === this.searchText);
   }
 
@@ -82,7 +82,7 @@ export class SkyCountryFieldFixture {
    * Enters the search text into the input field displaying search results, but making no selection.
    * @param searchText The name of the country to select.
    */
-  public search(searchText: string): NodeListOf<HTMLElement> {
+  public search(searchText: string): Promise<NodeListOf<HTMLElement>> {
     return this.searchAndGetResults(searchText, this.fixture);
   }
 
@@ -90,7 +90,7 @@ export class SkyCountryFieldFixture {
    * Enters the search text into the input field and selects the first result (if any).
    * @param searchText The name of the country to select.
    */
-  public async select(searchText: string): Promise<any> {
+  public select(searchText: string): Promise<any> {
     this.searchAndSelect(searchText, 0, this.fixture);
 
     this.fixture.detectChanges();
@@ -122,31 +122,39 @@ export class SkyCountryFieldFixture {
     return debugEl.nativeElement as HTMLTextAreaElement;
   }
 
-  private blurInput(fixture: ComponentFixture<any>): void {
+  private blurInput(fixture: ComponentFixture<any>): Promise<any> {
     SkyAppTestUtility.fireDomEvent(this.getInputElement(), 'blur');
     fixture.detectChanges();
-    tick();
+    return fixture.whenStable();
   }
 
-  private enterSearch(newValue: string, fixture: ComponentFixture<any>): void {
+  private enterSearch(
+    newValue: string,
+    fixture: ComponentFixture<any>
+  ): Promise<any> {
     const inputElement = this.getInputElement();
     inputElement.value = newValue;
 
     SkyAppTestUtility.fireDomEvent(inputElement, 'keyup');
     fixture.detectChanges();
-    tick();
-    fixture.detectChanges();
-    tick();
+    return fixture.whenStable();
   }
 
-  private searchAndGetResults(newValue: string, fixture: ComponentFixture<any>): NodeListOf<HTMLElement> {
-    this.enterSearch(newValue, fixture);
+  private async searchAndGetResults(
+    newValue: string,
+    fixture: ComponentFixture<any>
+  ): Promise<NodeListOf<HTMLElement>> {
+    await this.enterSearch(newValue, fixture);
     return this.getAutocompleteElement().querySelectorAll('.sky-autocomplete-result');
   }
 
-  private searchAndSelect(newValue: string, index: number, fixture: ComponentFixture<any>): void {
+  private async searchAndSelect(
+    newValue: string,
+    index: number,
+    fixture: ComponentFixture<any>
+  ): Promise<any> {
     const inputElement = this.getInputElement();
-    const searchResults = this.searchAndGetResults(newValue, fixture);
+    const searchResults = await this.searchAndGetResults(newValue, fixture);
 
     if (searchResults.length < (index + 1)) {
       throw new Error('Index out of range for results');
