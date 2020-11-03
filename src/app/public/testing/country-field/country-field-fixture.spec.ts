@@ -26,11 +26,11 @@ import {
   SkyCountryFieldFixture
 } from './country-field-fixture';
 
-const DATA_SKY_ID = 'test-country-field';
 const COUNTRY: SkyCountryFieldCountry = {
   name: 'United States',
   iso2: 'us'
 };
+const DATA_SKY_ID = 'test-country-field';
 
 //#region Test component
 @Component({
@@ -56,7 +56,7 @@ class CountryFieldTestComponent {
 }
 //#endregion Test component
 
-describe('Country field fixture', () => {
+fdescribe('Country field fixture', () => {
   let fixture: ComponentFixture<CountryFieldTestComponent>;
   let testComponent: CountryFieldTestComponent;
   let countryFieldFixture: SkyCountryFieldFixture;
@@ -90,8 +90,8 @@ describe('Country field fixture', () => {
 
   it('should expose the expected defaults', fakeAsync(async () => {
     // verify default values
-    expect(countryFieldFixture.autocomplete).toBe('off');
-    expect(countryFieldFixture.isDisabled).toBe(false);
+    expect(countryFieldFixture.autocompleteAttribute).toBe('off');
+    expect(countryFieldFixture.disabled).toBe(false);
   }));
 
   it('should expose the expected properties', fakeAsync(async () => {
@@ -101,8 +101,8 @@ describe('Country field fixture', () => {
     fixture.detectChanges();
 
     // verify updated values
-    expect(countryFieldFixture.autocomplete).toBe(testComponent.autocompleteAttribute);
-    expect(countryFieldFixture.isDisabled).toBe(testComponent.disabled);
+    expect(countryFieldFixture.autocompleteAttribute).toBe(testComponent.autocompleteAttribute);
+    expect(countryFieldFixture.disabled).toBe(testComponent.disabled);
   }));
 
   it('should expose selection properties', fakeAsync(async () => {
@@ -126,7 +126,7 @@ describe('Country field fixture', () => {
 
     // make a selection
     const invalidCountryName = 'not-my-country';
-    await countryFieldFixture.search(invalidCountryName);
+    countryFieldFixture.search(invalidCountryName);
     detectChangesFakeAsync();
 
     // verify selection state
@@ -183,7 +183,7 @@ describe('Country field fixture', () => {
 
   it('should be able to clear when results are showing', fakeAsync(async () => {
     // perform a search, displaying results
-    await countryFieldFixture.search(COUNTRY.name);
+    countryFieldFixture.search(COUNTRY.name);
     expect(countryFieldFixture.searchText).toBe(COUNTRY.name);
 
     // clear the selection
@@ -195,7 +195,7 @@ describe('Country field fixture', () => {
 
   it('should expose expected search results', fakeAsync(async () => {
     // perform a search, displaying results
-    const results = await countryFieldFixture.search(COUNTRY.name);
+    const results = countryFieldFixture.search(COUNTRY.name);
 
     // verify there are results
     expect(results.length).toBeGreaterThan(0);

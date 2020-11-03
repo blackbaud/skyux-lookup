@@ -1,11 +1,11 @@
 import {
+  DebugElement
+} from '@angular/core';
+
+import {
   ComponentFixture,
   tick
 } from '@angular/core/testing';
-
-import {
-  DebugElement
-} from '@angular/core';
 
 import {
   By
@@ -43,9 +43,8 @@ export class SkyCountryFieldFixture {
   /**
    * The value of the input field's autocomplete attribute.
    */
-  public get autocomplete(): string {
-    const inputEl = this.getInput();
-    return inputEl.nativeElement.getAttribute('autocomplete');
+  public get autocompleteAttribute(): string {
+    return this.getInputElement().getAttribute('autocomplete');
   }
 
   /**
@@ -61,21 +60,19 @@ export class SkyCountryFieldFixture {
   /**
    * A flag indicating whether or not the input has been disabled.
    */
-  public get isDisabled(): boolean {
-    const inputEl = this.getInput();
-    return inputEl.nativeElement.disabled;
+  public get disabled(): boolean {
+    return this.getInputElement().disabled;
   }
 
   /**
    * The value of the input field.
    */
   public get searchText(): string {
-    const inputEl = this.getInput();
-    return inputEl.nativeElement.value;
+    return this.getInputElement().value;
   }
 
   /**
-   * The value of the input field.
+   * The country data associated with the selected country.
    */
   public get selectedCountryData(): SkyCountryFieldCountry {
     return this.countries.find((x: any) => x.name === this.searchText);
@@ -85,7 +82,7 @@ export class SkyCountryFieldFixture {
    * Enters the search text into the input field displaying search results, but making no selection.
    * @param searchText The name of the country to select.
    */
-  public async search(searchText: string): Promise<NodeListOf<HTMLElement>> {
+  public search(searchText: string): NodeListOf<HTMLElement> {
     return this.searchAndGetResults(searchText, this.fixture);
   }
 
@@ -116,16 +113,13 @@ export class SkyCountryFieldFixture {
     return this.debugEl.query(By.css('.sky-country-field-flag'));
   }
 
-  private getInput(): DebugElement {
-    return this.debugEl.query(By.css('textarea'));
-  }
-
   private getAutocompleteElement(): HTMLElement {
     return document.querySelector('.sky-autocomplete-results') as HTMLElement;
   }
 
   private getInputElement(): HTMLTextAreaElement {
-    return this.getInput().nativeElement as HTMLTextAreaElement;
+    const debugEl = this.debugEl.query(By.css('textarea'));
+    return debugEl.nativeElement as HTMLTextAreaElement;
   }
 
   private blurInput(fixture: ComponentFixture<any>): void {
