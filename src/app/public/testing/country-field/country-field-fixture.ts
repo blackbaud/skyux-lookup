@@ -20,13 +20,6 @@ import {
 export class SkyCountryFieldFixture {
   private debugEl: DebugElement;
 
-  constructor(
-    private fixture: ComponentFixture<any>,
-    skyTestId: string
-  ) {
-    this.debugEl = SkyAppTestUtility.getDebugElementByTestId(fixture, skyTestId, 'sky-country-field');
-  }
-
   /**
    * The value of the input field's autocomplete attribute.
    */
@@ -58,20 +51,32 @@ export class SkyCountryFieldFixture {
     return this.getInputElement().value;
   }
 
+  constructor(
+    private fixture: ComponentFixture<any>,
+    skyTestId: string
+  ) {
+    this.debugEl = SkyAppTestUtility.getDebugElementByTestId(fixture, skyTestId, 'sky-country-field');
+  }
+
   /**
    * Enters the search text into the input field displaying search results, but making no selection.
    * @param searchText The name of the country to select.
    */
-  public search(searchText: string): Promise<NodeListOf<HTMLElement>> {
-    return this.searchAndGetResults(searchText, this.fixture);
+  public async search(searchText: string): Promise<NodeListOf<HTMLElement>> {
+    const results = await this.searchAndGetResults(searchText, this.fixture);
+
+    this.fixture.detectChanges();
+    await this.fixture.whenStable();
+
+    return results;
   }
 
   /**
    * Enters the search text into the input field and selects the first result (if any).
    * @param searchText The name of the country to select.
    */
-  public select(searchText: string): Promise<any> {
-    this.searchAndSelect(searchText, 0, this.fixture);
+  public async searchAndSelectFirstResult(searchText: string): Promise<any> {
+    await this.searchAndSelect(searchText, 0, this.fixture);
 
     this.fixture.detectChanges();
     return this.fixture.whenStable();

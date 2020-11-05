@@ -50,7 +50,7 @@ class CountryFieldTestComponent {
   public disabled: boolean;
   public hideSelectedCountryFlag: boolean;
 
-  public selectedCountryChange(query: string) { }
+  public selectedCountryChange(query: string): void { }
 }
 //#endregion Test component
 
@@ -94,29 +94,34 @@ describe('Country field fixture', () => {
     expect(countryFieldFixture.disabled).toBe(testComponent.disabled);
   });
 
-  it('should expose selection properties', async () => {
-
+  it('should properly select country', async () => {
     const selectedCountryChangeSpy = spyOn(fixture.componentInstance, 'selectedCountryChange');
 
     // make a selection
-    await countryFieldFixture.select(COUNTRY.name);
+    await countryFieldFixture.searchAndSelectFirstResult(COUNTRY.name);
     fixture.detectChanges();
     await fixture.whenStable();
 
     // verify selection state
     expect(selectedCountryChangeSpy).toHaveBeenCalledWith(COUNTRY);
+  });
+
+  it('should expose search text', async () => {
+    // make a selection
+    await countryFieldFixture.searchAndSelectFirstResult(COUNTRY.name);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    // verify selection state
     expect(countryFieldFixture.searchText).toBe(COUNTRY.name);
   });
 
   it('should return undefined properties for no selection', async () => {
-
     const selectedCountryChangeSpy = spyOn(fixture.componentInstance, 'selectedCountryChange');
 
     // make a selection
     const invalidCountryName = 'not-my-country';
     await countryFieldFixture.search(invalidCountryName);
-    fixture.detectChanges();
-    await fixture.whenStable();
 
     // verify selection state
     expect(selectedCountryChangeSpy).toHaveBeenCalledTimes(0);
@@ -124,11 +129,8 @@ describe('Country field fixture', () => {
   });
 
   it('should show country flag by default', async () => {
-
     // make a selection so the flag appears
-    await countryFieldFixture.select(COUNTRY.name);
-    fixture.detectChanges();
-    await fixture.whenStable();
+    await countryFieldFixture.searchAndSelectFirstResult(COUNTRY.name);
 
     // verify country flag state
     expect(countryFieldFixture.countryFlagIsVisible).toBe(true);
@@ -140,9 +142,7 @@ describe('Country field fixture', () => {
     fixture.detectChanges();
 
     // make a selection
-    await countryFieldFixture.select(COUNTRY.name);
-    fixture.detectChanges();
-    await fixture.whenStable();
+    await countryFieldFixture.searchAndSelectFirstResult(COUNTRY.name);
 
     // verify country flag state
     expect(countryFieldFixture.countryFlagIsVisible).toBe(false);
@@ -159,9 +159,9 @@ describe('Country field fixture', () => {
     expect(countryFieldFixture.searchText).toBe('');
   });
 
-  it('should be able to clear when there is no selection', async () => {
+  it('should be able to clear when there is a selection', async () => {
     // make a selection
-    await countryFieldFixture.select(COUNTRY.name);
+    await countryFieldFixture.searchAndSelectFirstResult(COUNTRY.name);
     expect(countryFieldFixture.searchText).toBe(COUNTRY.name);
 
     // clear the selection
