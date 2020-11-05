@@ -1,6 +1,6 @@
 # 4.8.0 (2020-11-05)
 
-- Added country field testing fixture. [#145](https://github.com/blackbaud/skyux-lookup/pull/145)
+- Added a country field testing fixture. [#145](https://github.com/blackbaud/skyux-lookup/pull/145)
 - Added input box to lookup demos. [#144](https://github.com/blackbaud/skyux-lookup/pull/144)
 
 # 4.7.0 (2020-10-26)
