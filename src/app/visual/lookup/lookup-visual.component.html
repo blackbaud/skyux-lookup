@@ -35,22 +35,58 @@
       </button>
     </p>
 
-    <sky-input-box>
+    <sky-input-box
+      class="sky-margin-stacked-lg"
+    >
       <label
         class="sky-control-label"
+        skyId
+        #friendsInputBoxLabel="skyId"
       >
         Who are your friends?
       </label>
       <sky-lookup
-        ariaLabelledBy="my-friends-label"
         formControlName="friends2"
         idProperty="id"
         placeholderText="Type a person's name..."
+        [ariaLabelledBy]="friendsInputBoxLabel.id"
         [data]="people"
         [debounceTime]="1000"
       >
       </sky-lookup>
     </sky-input-box>
+
+    <p>
+      <button
+        id="btn-toggle-select-mode"
+        type="button"
+        class="sky-btn sky-btn-default"
+        (click)="toggleSelectMode()">
+        Toggle select mode
+      </button>
+    </p>
+
+    <sky-input-box
+      class="sky-margin-stacked-lg"
+    >
+      <label
+        class="sky-control-label"
+      >
+        Who is your best friend?
+      </label>
+      <sky-lookup
+        formControlName="bestFriend"
+        idProperty="id"
+        placeholderText="Type a person's name..."
+        [selectMode]="bestFriendSelectMode"
+        [data]="people"
+        [debounceTime]="1000"
+      >
+      </sky-lookup>
+    </sky-input-box>
+    <ng-container *ngFor="let friend of form.value.bestFriend">
+      {{ friend.name }}
+    </ng-container>
   </form>
 </div>
 

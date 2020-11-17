@@ -65,6 +65,12 @@
   }
 }
 
+.sky-lookup-single {
+  sky-tokens.sky-lookup-tokens sky-token {
+    display: none;
+  }
+}
+
 sky-lookup.ng-invalid.ng-touched .sky-lookup-search {
   @include sky-field-status(invalid);
 }
@@ -105,6 +111,14 @@ sky-input-box .sky-lookup {
           &:first-child {
             padding-left: 0;
           }
+        }
+      }
+    }
+
+    &.sky-lookup-single {
+      sky-tokens.sky-lookup-tokens {
+        .sky-tokens-content {
+          padding-left: 0;
         }
       }
     }

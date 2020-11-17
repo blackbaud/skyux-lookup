@@ -16,6 +16,7 @@ import {
 
 import {
   expect,
+  expectAsync,
   SkyAppTestUtility
 } from '@skyux-sdk/testing';
 
@@ -290,6 +291,12 @@ describe('Lookup component', function () {
       }));
     });
 
+    describe('select mode', () => {
+      it('should support selecting a single value', () => {
+
+      });
+    });
+
     describe('validation', () => {
       it('should mark the form as invalid when it is required but is then emptied', fakeAsync(() => {
         component.friends = [{ name: 'Rachel' }];
@@ -541,7 +548,7 @@ describe('Lookup component', function () {
 
         fixture.detectChanges();
         fixture.whenStable().then(() => {
-          expect(document.body).toBeAccessible(() => {
+          expectAsync(document.body).toBeAccessible(axeConfig).then(() => {
             fixture.detectChanges();
 
             const inputElement = getInputElement(fixture.componentInstance.lookupComponent);
@@ -553,9 +560,9 @@ describe('Lookup component', function () {
 
             fixture.detectChanges();
             fixture.whenStable().then(() => {
-              expect(document.body).toBeAccessible(() => {}, axeConfig);
+              expectAsync(document.body).toBeAccessible(axeConfig);
             });
-          }, axeConfig);
+          });
         });
       }));
     });

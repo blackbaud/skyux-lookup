@@ -43,12 +43,20 @@ import {
 } from '@skyux/indicators';
 
 import {
+  SkyThemeService
+} from '@skyux/theme';
+
+import {
   SkyAutocompleteSelectionChange
 } from '../autocomplete/types/autocomplete-selection-change';
 
 import {
   SkyAutocompleteInputDirective
 } from '../autocomplete/autocomplete-input.directive';
+
+import {
+  SkyLookupSelectMode
+} from './types/lookup-select-mode';
 
 import {
   SkyLookupAutocompleteAdapter
@@ -110,6 +118,21 @@ export class SkyLookupComponent
   @Input()
   public idProperty: string;
 
+  /**
+   * Specifies the selection mode that determines whether users can select one item or
+   * multiple items. The valid options are `single` and `multiple`.
+   * @default "mulitple"
+   */
+  @Input()
+  public set selectMode(value: SkyLookupSelectMode) {
+    this._selectMode = value;
+    this.updateForSelectMode();
+  }
+
+  public get selectMode(): SkyLookupSelectMode {
+    return this._selectMode || 'multiple';
+  }
+
   public get tokens(): SkyToken[] {
     return this._tokens;
   }
@@ -135,7 +158,14 @@ export class SkyLookupComponent
     read: SkyAutocompleteInputDirective,
     static: false
   })
-  private autocompleteInputDirective: SkyAutocompleteInputDirective;
+  private set autocompleteInputDirective(value: SkyAutocompleteInputDirective) {
+    this._autocompleteInputDirective = value;
+    this.updateForSelectMode();
+  }
+
+  private get autocompleteInputDirective(): SkyAutocompleteInputDirective {
+    return this._autocompleteInputDirective;
+  }
 
   @ViewChild('inputTemplateRef', {
     read: TemplateRef,
@@ -147,6 +177,8 @@ export class SkyLookupComponent
   private idle = new Subject();
   private markForTokenFocusOnKeyUp = false;
 
+  private _autocompleteInputDirective: SkyAutocompleteInputDirective;
+  private _selectMode: SkyLookupSelectMode;
   private _tokens: SkyToken[];
 
   constructor(
@@ -155,7 +187,8 @@ export class SkyLookupComponent
     private windowRef: SkyAppWindowRef,
     @Self() @Optional() ngControl: NgControl,
     private adapter: SkyLookupAdapterService,
-    @Optional() public inputBoxHostSvc?: SkyInputBoxHostService
+    @Optional() public inputBoxHostSvc?: SkyInputBoxHostService,
+    @Optional() public themeSvc?: SkyThemeService
   ) {
     super();
     ngControl.valueAccessor = this;
@@ -168,6 +201,18 @@ export class SkyLookupComponent
           inputTemplate: this.inputTemplateRef
         }
       );
+    }
+
+    if (this.themeSvc) {
+      // This is required for the autocomplete directive to be set after elements
+      // are rearranged when switching themes.
+      this.themeSvc.settingsChange
+        .pipe(
+          takeUntil(this.ngUnsubscribe)
+        )
+        .subscribe(() => {
+          this.changeDetector.markForCheck();
+        });
     }
   }
 
@@ -217,22 +262,24 @@ export class SkyLookupComponent
   }
 
   public onTokensKeyUp(event: KeyboardEvent) {
-    /* tslint:disable-next-line:switch-default */
-    switch (event.key) {
-      case 'Backspace':
-        this.sendTokensMessage(SkyTokensMessageType.RemoveActiveToken);
-        this.sendTokensMessage(SkyTokensMessageType.FocusPreviousToken);
-        event.preventDefault();
-        break;
+    if (this.selectMode !== 'single') {
+      /* tslint:disable-next-line:switch-default */
+      switch (event.key) {
+        case 'Backspace':
+          this.sendTokensMessage(SkyTokensMessageType.RemoveActiveToken);
+          this.sendTokensMessage(SkyTokensMessageType.FocusPreviousToken);
+          event.preventDefault();
+          break;
 
-      case 'Del':
-      case 'Delete':
-        this.sendTokensMessage(SkyTokensMessageType.RemoveActiveToken);
-        this.windowRef.nativeWindow.setTimeout(() => {
-          this.sendTokensMessage(SkyTokensMessageType.FocusActiveToken);
-        });
-        event.preventDefault();
-        break;
+        case 'Del':
+        case 'Delete':
+          this.sendTokensMessage(SkyTokensMessageType.RemoveActiveToken);
+          this.windowRef.nativeWindow.setTimeout(() => {
+            this.sendTokensMessage(SkyTokensMessageType.FocusActiveToken);
+          });
+          event.preventDefault();
+          break;
+      }
     }
   }
 
@@ -280,62 +327,71 @@ export class SkyLookupComponent
   // If empty on keydown, set a flag so that the appropriate action can be taken on keyup.
 
   public inputKeydown(event: KeyboardEvent, value: string): void {
-    switch (event.key) {
-      case 'Enter':
-        event.preventDefault();
-        break;
-      case 'ArrowLeft':
-      case 'Backspace':
-      case 'Left':
-        if (value) {
-          this.markForTokenFocusOnKeyUp = false;
-        } else {
-          this.markForTokenFocusOnKeyUp = true;
-        }
-        break;
-      default:
+    if (this.selectMode !== 'single') {
+      switch (event.key) {
+        case 'Enter':
+          event.preventDefault();
+          break;
+        case 'ArrowLeft':
+        case 'Backspace':
+        case 'Left':
+          if (value) {
+            this.markForTokenFocusOnKeyUp = false;
+          } else {
+            this.markForTokenFocusOnKeyUp = true;
+          }
+          break;
+        default:
+      }
     }
   }
 
   public inputKeyup(event: KeyboardEvent): void {
-    switch (event.key) {
-      case 'Esc':
-      case 'Escape':
-        this.clearSearchText();
-        event.preventDefault();
-        break;
-      case 'ArrowLeft':
-      case 'Backspace':
-      case 'Left':
-        /* istanbul ignore else */
-        if (this.markForTokenFocusOnKeyUp) {
-          this.sendTokensMessage(SkyTokensMessageType.FocusLastToken);
+    if (this.selectMode !== 'single') {
+      switch (event.key) {
+        case 'Esc':
+        case 'Escape':
+          this.clearSearchText();
           event.preventDefault();
-        }
-        break;
-      default:
-    }
+          break;
+        case 'ArrowLeft':
+        case 'Backspace':
+        case 'Left':
+          /* istanbul ignore else */
+          if (this.markForTokenFocusOnKeyUp) {
+            this.sendTokensMessage(SkyTokensMessageType.FocusLastToken);
+            event.preventDefault();
+          }
+          break;
+        default:
+      }
 
-    event.stopPropagation();
+      event.stopPropagation();
+    }
   }
 
   private addToSelected(item: any) {
-    // If items have a unique identifier, don't allow the same item to be added twice.
-    if (
-      !this.idProperty ||
-        !this.tokens?.some(
-          token => token.value[this.idProperty] === item[this.idProperty]
-        )
-    ) {
-      const selectedItems: any[] = [
-        ...(this.tokens?.map(token => token.value) || []),
-        item
-      ];
+    let selectedItems: any[];
 
-      this.writeValue(selectedItems);
+    if (this.selectMode === 'single') {
+      selectedItems = [item];
+    } else {
+      selectedItems = this.tokens?.map(token => token.value) || [];
+
+      // If items have a unique identifier, don't allow the same item to be added twice.
+      if (
+        !this.idProperty ||
+          !this.tokens?.some(
+            token => token.value[this.idProperty] === item[this.idProperty]
+          )
+      ) {
+        selectedItems.push(item);
+      }
+
+      this.clearSearchText();
     }
 
-    this.clearSearchText();
+    this.writeValue(selectedItems);
   }
 
   private addEventListeners() {
@@ -400,5 +456,17 @@ export class SkyLookupComponent
 
   private sendTokensMessage(type: SkyTokensMessageType) {
     this.tokensController.next({ type });
+  }
+
+  private updateForSelectMode(): void {
+    if (this.autocompleteInputDirective) {
+      if (this.selectMode === 'single') {
+        this.autocompleteInputDirective.value = this.tokens &&
+          this.tokens[0] &&
+          this.tokens[0].value;
+      } else {
+        this.clearSearchText();
+      }
+    }
   }
 }

@@ -54,6 +54,12 @@ export class LookupVisualComponent implements OnInit {
     { id: 21, name: 'Zack' }
   ];
 
+  public bestFriend: any[] = [
+    { id: 16, name: 'Susan' }
+  ];
+
+  public bestFriendSelectMode = 'single';
+
   constructor(
     private formBuilder: FormBuilder,
     private themeSvc: SkyThemeService
@@ -71,6 +77,10 @@ export class LookupVisualComponent implements OnInit {
     this.form.controls.friends.disable();
   }
 
+  public toggleSelectMode() {
+    this.bestFriendSelectMode = this.bestFriendSelectMode === 'single' ? 'multiple' : 'single';
+  }
+
   public themeSettingsChange(themeSettings: SkyThemeSettings): void {
     this.themeSvc.setTheme(themeSettings);
   }
@@ -78,7 +88,8 @@ export class LookupVisualComponent implements OnInit {
   private createForm(): void {
     this.form = this.formBuilder.group({
       friends: new FormControl(this.friends),
-      friends2: new FormControl(this.friends2)
+      friends2: new FormControl(this.friends2),
+      bestFriend: new FormControl(this.bestFriend)
     });
   }
 }

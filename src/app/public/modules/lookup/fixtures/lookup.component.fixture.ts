@@ -11,7 +11,13 @@ import {
   Validators
 } from '@angular/forms';
 
-import { SkyLookupComponent } from '../lookup.component';
+import {
+  SkyLookupComponent
+} from '../lookup.component';
+
+import {
+  SkyLookupSelectMode
+} from '../types/lookup-select-mode';
 
 @Component({
   selector: 'sky-test-cmp',
@@ -33,6 +39,7 @@ export class SkyLookupTestComponent implements OnInit {
   public form: FormGroup;
   public idProperty: string;
   public placeholderText: string;
+  public selectMode: SkyLookupSelectMode;
 
   constructor(
     private formBuilder: FormBuilder
