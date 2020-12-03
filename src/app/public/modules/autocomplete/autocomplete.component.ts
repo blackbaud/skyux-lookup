@@ -71,10 +71,10 @@ export class SkyAutocompleteComponent
 
 /**
  * Specifies the HTML element ID (without the leading `#`) of the element that labels
- * the autocomplete text input. This sets set the input's `aria-labelledby` attribute
+ * the autocomplete text input. This sets the input's `aria-labelledby` attribute
  * [to support accessibility](https://developer.blackbaud.com/skyux/learn/accessibility).
  */
-  @Input()
+@Input()
   public ariaLabelledBy: string;
 
 /**
