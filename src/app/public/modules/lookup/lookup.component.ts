@@ -71,14 +71,17 @@ export class SkyLookupComponent
   implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor {
 
 /**
- * Defines a string value to label the typeahead search input for accessibility.
+ * Defines a string value to label the typeahead search input
+ * [for accessibility](https://developer.blackbaud.com/skyux/learn/accessibility).
  * If a label is visible on the screen, use the `ariaLabelledBy` property instead.
  */
   @Input()
   public ariaLabel: string;
 
 /**
- * Identifies the element that defines a label for the typeahead search input.
+ * Specifies the HTML element ID (without the leading `#`) of the element that labels
+ * the typeahead search input. This sets set the input's `aria-labelledby` attribute
+ * [to support accessibility](https://developer.blackbaud.com/skyux/learn/accessibility).
  * If a label is not visible on the screen, use the `ariaLabel` property instead.
  */
   @Input()
