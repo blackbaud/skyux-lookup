@@ -1,6 +1,6 @@
 {
   "name": "@skyux/lookup",
-  "version": "4.8.1",
+  "version": "4.8.2",
   "description": "SKY UX Lookup",
   "scripts": {
     "build": "skyux build-public-library",
