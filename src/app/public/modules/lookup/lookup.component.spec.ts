@@ -291,12 +291,6 @@ describe('Lookup component', function () {
       }));
     });
 
-    describe('select mode', () => {
-      it('should support selecting a single value', () => {
-
-      });
-    });
-
     describe('validation', () => {
       it('should mark the form as invalid when it is required but is then emptied', fakeAsync(() => {
         component.friends = [{ name: 'Rachel' }];
@@ -603,78 +597,139 @@ describe('Lookup component', function () {
         expect(typeof lookupComponent.searchResultsLimit).not.toBeUndefined();
       });
 
-      it('should allow preselected tokens', fakeAsync(() => {
-        fixture.detectChanges();
-        const friends = [{ name: 'Rachel' }];
-        component.friends = friends;
-        expect(lookupComponent.value).toEqual([]);
-        fixture.detectChanges();
-        tick();
-        fixture.detectChanges();
-        expect(lookupComponent.value).toEqual(friends);
-      }));
+      describe('multi-select', () => {
+        beforeEach(() => {
+          component.setMultiSelect();
+        });
 
-      it('should add new tokens', fakeAsync(function () {
-        fixture.detectChanges();
-        expect(lookupComponent.value).toEqual([]);
+        it('should allow preselected tokens', fakeAsync(() => {
+          fixture.detectChanges();
+          const friends = [{ name: 'Rachel' }];
+          component.selectedFriends = friends;
+          expect(lookupComponent.value).toEqual([]);
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          expect(lookupComponent.value).toEqual(friends);
+        }));
 
-        performSearch('s', fixture);
-        selectSearchResult(0, fixture);
+        it('should add new tokens', fakeAsync(function () {
+          fixture.detectChanges();
+          expect(lookupComponent.value).toEqual([]);
 
-        const selectedItems = lookupComponent.value;
-        expect(selectedItems.length).toEqual(1);
-        expect(selectedItems[0].name).toEqual('Isaac');
-      }));
+          performSearch('s', fixture);
+          selectSearchResult(0, fixture);
 
-      it('should NOT add new tokens if value is empty', fakeAsync(function () {
-        fixture.detectChanges();
-        expect(lookupComponent.value).toEqual([]);
+          const selectedItems = lookupComponent.value;
+          expect(selectedItems.length).toEqual(1);
+          expect(selectedItems[0].name).toEqual('Isaac');
+        }));
 
-        performSearch('s', fixture);
-        selectSearchResult(0, fixture);
+        it('should NOT add new tokens if value is empty', fakeAsync(function () {
+          fixture.detectChanges();
+          expect(lookupComponent.value).toEqual([]);
 
-        performSearch('', fixture);
-        getInputElement(lookupComponent).blur();
+          performSearch('s', fixture);
+          selectSearchResult(0, fixture);
 
-        const selectedItems = lookupComponent.value;
-        expect(selectedItems.length).toEqual(1);
-        expect(selectedItems[0].name).toEqual('Isaac');
-      }));
+          performSearch('', fixture);
+          getInputElement(lookupComponent).blur();
 
-      it('should change the value of the lookup if tokens change', fakeAsync(function () {
-        fixture.detectChanges();
-        expect(lookupComponent.value).toEqual([]);
+          const selectedItems = lookupComponent.value;
+          expect(selectedItems.length).toEqual(1);
+          expect(selectedItems[0].name).toEqual('Isaac');
+        }));
 
-        performSearch('s', fixture);
-        selectSearchResult(0, fixture);
+        it('should change the value of the lookup if tokens change', fakeAsync(function () {
+          fixture.detectChanges();
+          expect(lookupComponent.value).toEqual([]);
 
-        performSearch('s', fixture);
-        selectSearchResult(1, fixture);
+          performSearch('s', fixture);
+          selectSearchResult(0, fixture);
 
-        expect(lookupComponent.value.length).toEqual(2);
+          performSearch('s', fixture);
+          selectSearchResult(1, fixture);
 
-        dismissSelectedItem(0, fixture);
+          expect(lookupComponent.value.length).toEqual(2);
 
-        expect(lookupComponent.value.length).toEqual(1);
-      }));
+          dismissSelectedItem(0, fixture);
 
-      it('should focus the input if all tokens are dismissed', fakeAsync(() => {
-        component.friends = [{ name: 'Rachel' }];
-        fixture.detectChanges();
-        tick();
-        fixture.detectChanges();
+          expect(lookupComponent.value.length).toEqual(1);
+        }));
 
-        dismissSelectedItem(0, fixture);
+        it('should focus the input if all tokens are dismissed', fakeAsync(() => {
+          component.selectedFriends = [{ name: 'Rachel' }];
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
 
-        const inputElement = getInputElement(lookupComponent);
-        expect(lookupComponent.value.length).toEqual(0);
-        expect(document.activeElement).toEqual(inputElement);
-      }));
+          dismissSelectedItem(0, fixture);
+
+          const inputElement = getInputElement(lookupComponent);
+          expect(lookupComponent.value.length).toEqual(0);
+          expect(document.activeElement).toEqual(inputElement);
+        }));
+      });
+
+      describe('single select', () => {
+        beforeEach(() => {
+          component.setSingleSelect();
+        });
+
+        it('should allow a preselected value', fakeAsync(() => {
+          const bestFriend = { name: 'Rachel' };
+
+          fixture.detectChanges();
+          expect(lookupComponent.value).toEqual([]);
+
+          component.selectedFriends = [bestFriend];
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          expect(lookupComponent.value).toEqual([bestFriend]);
+        }));
+
+        it('should select a new value when none is selected', fakeAsync(function () {
+          const bestFriend = { name: 'Rachel' };
+
+          fixture.detectChanges();
+          component.selectedFriends = [bestFriend];
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+          expect(lookupComponent.value).toEqual([bestFriend]);
+
+          performSearch('s', fixture);
+          selectSearchResult(0, fixture);
+
+          expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
+        }));
+
+        it('should select a new value when a different value is selected', fakeAsync(function () {
+          fixture.detectChanges();
+          expect(lookupComponent.value).toEqual([]);
+
+          performSearch('s', fixture);
+          selectSearchResult(0, fixture);
+
+          expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
+        }));
+
+        it('should NOT set a new value when no search options are returned', fakeAsync(function () {
+          fixture.detectChanges();
+          expect(lookupComponent.value).toEqual([]);
+
+          performSearch('no results for this search', fixture);
+          getInputElement(lookupComponent).blur();
+
+          expect(lookupComponent.value).toEqual([]);
+        }));
+      });
     });
 
     describe('validation', () => {
       it('should mark the form as invalid when it is required but is then emptied', fakeAsync(() => {
-        component.friends = [{ name: 'Rachel' }];
+        component.selectedFriends = [{ name: 'Rachel' }];
         fixture.detectChanges();
         tick();
         fixture.detectChanges();
@@ -739,7 +794,7 @@ describe('Lookup component', function () {
 
     describe('keyboard interactions', function () {
       it('should focus the input if arrowright key is pressed on the last token', fakeAsync(function () {
-        component.friends = [{ name: 'Rachel' }];
+        component.selectedFriends = [{ name: 'Rachel' }];
         fixture.detectChanges();
         tick();
         fixture.detectChanges();
@@ -757,7 +812,7 @@ describe('Lookup component', function () {
       }));
 
       it('should focus the last token if arrowleft or backspace pressed', fakeAsync(function () {
-        component.friends = [{ name: 'Rachel' }];
+        component.selectedFriends = [{ name: 'Rachel' }];
         fixture.detectChanges();
         tick();
         fixture.detectChanges();
@@ -784,7 +839,7 @@ describe('Lookup component', function () {
       }));
 
       it('should not focus the last token if search text is present', fakeAsync(function () {
-        component.friends = [{ name: 'Rachel' }];
+        component.selectedFriends = [{ name: 'Rachel' }];
         fixture.detectChanges();
 
         const inputElement = getInputElement(lookupComponent);
@@ -819,7 +874,7 @@ describe('Lookup component', function () {
       }));
 
       it('should remove tokens when backpsace or delete is pressed', fakeAsync(function () {
-        component.friends = [
+        component.selectedFriends = [
           { name: 'John' },
           { name: 'Jane' },
           { name: 'Doe' }

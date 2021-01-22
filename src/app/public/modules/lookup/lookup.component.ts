@@ -203,6 +203,7 @@ export class SkyLookupComponent
       );
     }
 
+    /* istanbul ignore else */
     if (this.themeSvc) {
       // This is required for the autocomplete directive to be set after elements
       // are rearranged when switching themes.
@@ -262,6 +263,7 @@ export class SkyLookupComponent
   }
 
   public onTokensKeyUp(event: KeyboardEvent) {
+    /* istanbul ignore else */
     if (this.selectMode !== 'single') {
       /* tslint:disable-next-line:switch-default */
       switch (event.key) {
@@ -327,6 +329,7 @@ export class SkyLookupComponent
   // If empty on keydown, set a flag so that the appropriate action can be taken on keyup.
 
   public inputKeydown(event: KeyboardEvent, value: string): void {
+    /* istanbul ignore else */
     if (this.selectMode !== 'single') {
       switch (event.key) {
         case 'Enter':
@@ -347,6 +350,7 @@ export class SkyLookupComponent
   }
 
   public inputKeyup(event: KeyboardEvent): void {
+    /* istanbul ignore else */
     if (this.selectMode !== 'single') {
       switch (event.key) {
         case 'Esc':
