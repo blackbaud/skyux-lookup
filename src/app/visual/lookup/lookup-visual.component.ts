@@ -23,7 +23,8 @@ import {
   templateUrl: './lookup-visual.component.html'
 })
 export class LookupVisualComponent implements OnInit {
-  public form: FormGroup;
+  public friendsForm: FormGroup;
+  public bestFriendsForm: FormGroup;
 
   public people: any[] = [
     { id: 1, name: 'Andy' },
@@ -70,15 +71,15 @@ export class LookupVisualComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    this.createForm();
+    this.createForms();
   }
 
   public enableLookup(): void {
-    this.form.controls.friends.enable();
+    this.friendsForm.controls.friends.enable();
   }
 
   public disableLookup(): void {
-    this.form.controls.friends.disable();
+    this.friendsForm.controls.friends.disable();
   }
 
   public toggleSelectMode(): void {
@@ -89,11 +90,14 @@ export class LookupVisualComponent implements OnInit {
     this.themeSvc.setTheme(themeSettings);
   }
 
-  private createForm(): void {
-    this.form = this.formBuilder.group({
-      bestFriend: new FormControl(this.bestFriend),
+  private createForms(): void {
+    this.friendsForm = this.formBuilder.group({
       friends: new FormControl(this.friends),
       friends2: new FormControl(this.friends2)
+    });
+
+    this.bestFriendsForm = this.formBuilder.group({
+      bestFriend: new FormControl(this.bestFriend)
     });
   }
 }
