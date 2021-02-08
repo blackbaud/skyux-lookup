@@ -55,16 +55,16 @@ import {
 } from '../autocomplete/autocomplete-input.directive';
 
 import {
-  SkyLookupSelectMode
-} from './types/lookup-select-mode';
-
-import {
   SkyLookupAutocompleteAdapter
 } from './lookup-autocomplete-adapter';
 
 import {
   SkyLookupAdapterService
 } from './lookup-adapter.service';
+
+import {
+  SkyLookupSelectMode
+} from './types/lookup-select-mode';
 
 @Component({
   selector: 'sky-lookup',
@@ -220,20 +220,20 @@ export class SkyLookupComponent
     }
   }
 
-  public ngAfterViewInit() {
+  public ngAfterViewInit(): void {
     if (!this.disabled) {
       this.addEventListeners();
     }
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     this.removeEventListeners();
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
     this.tokensController.complete();
   }
 
-  public onAutocompleteSelectionChange(change: SkyAutocompleteSelectionChange) {
+  public onAutocompleteSelectionChange(change: SkyAutocompleteSelectionChange): void {
     /* istanbul ignore else */
     if (change.selectedItem) {
       this.addToSelected(change.selectedItem);
@@ -245,7 +245,7 @@ export class SkyLookupComponent
     this.onTouched();
   }
 
-  public onTokensChange(change: SkyToken[]) {
+  public onTokensChange(change: SkyToken[]): void {
     if (!change) {
       return;
     }
@@ -259,13 +259,13 @@ export class SkyLookupComponent
     }
   }
 
-  public onTokensFocusIndexOverRange() {
+  public onTokensFocusIndexOverRange(): void {
     this.windowRef.nativeWindow.setTimeout(() => {
       this.focusInput();
     });
   }
 
-  public onTokensKeyUp(event: KeyboardEvent) {
+  public onTokensKeyUp(event: KeyboardEvent): void {
     /* istanbul ignore else */
     if (this.selectMode !== 'single') {
       /* tslint:disable-next-line:switch-default */
@@ -288,7 +288,7 @@ export class SkyLookupComponent
     }
   }
 
-  public writeValue(value: any[]) {
+  public writeValue(value: any[]): void {
     if (value && !this.disabled) {
       const copy = this.cloneItems(value);
       this.tokens = this.parseTokens(copy);
@@ -305,12 +305,12 @@ export class SkyLookupComponent
     this.onChange = fn;
   }
 
-  public registerOnTouched(fn: () => void) {
+  public registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
 
   // Allows Angular to disable the input.
-  public setDisabledState(disabled: boolean) {
+  public setDisabledState(disabled: boolean): void {
     this.removeEventListeners();
 
     if (!disabled) {
@@ -321,7 +321,7 @@ export class SkyLookupComponent
     this.changeDetector.markForCheck();
   }
 
-  public clearSearchText() {
+  public clearSearchText(): void {
     this.autocompleteInputDirective.value = undefined;
     this.autocompleteInputDirective.inputTextValue = undefined;
   }
@@ -377,7 +377,7 @@ export class SkyLookupComponent
     }
   }
 
-  private addToSelected(item: any) {
+  private addToSelected(item: any): void {
     let selectedItems: any[];
 
     if (this.selectMode === 'single') {
@@ -401,17 +401,17 @@ export class SkyLookupComponent
     this.writeValue(selectedItems);
   }
 
-  private addEventListeners() {
+  private addEventListeners(): void {
     this.idle = new Subject();
     this.focusInputOnHostClick();
   }
 
-  private removeEventListeners() {
+  private removeEventListeners(): void {
     this.idle.next();
     this.idle.complete();
   }
 
-  private focusInputOnHostClick() {
+  private focusInputOnHostClick(): void {
     const hostElement = this.elementRef.nativeElement;
     const documentObj = this.windowRef.nativeWindow.document;
 
@@ -443,7 +443,7 @@ export class SkyLookupComponent
       });
   }
 
-  private focusInput() {
+  private focusInput(): void {
     this.adapter.focusInput(this.elementRef);
   }
 
@@ -461,7 +461,7 @@ export class SkyLookupComponent
     });
   }
 
-  private sendTokensMessage(type: SkyTokensMessageType) {
+  private sendTokensMessage(type: SkyTokensMessageType): void {
     this.tokensController.next({ type });
   }
 

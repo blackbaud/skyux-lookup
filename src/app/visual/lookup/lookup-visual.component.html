@@ -6,12 +6,15 @@
   class="app-screenshot"
   id="lookup-visual"
 >
-  <form [formGroup]="form" novalidate>
-
+  <form
+    novalidate
+    [formGroup]="form"
+  >
     <div class="sky-form-group">
       <label
+        class="sky-control-label"
         id="my-friends-label"
-        class="sky-control-label">
+      >
         Who are your friends?
       </label>
       <sky-lookup
@@ -27,9 +30,9 @@
 
     <p>
       <button
+        class="sky-btn sky-btn-default"
         id="btn-disable-lookup"
         type="button"
-        class="sky-btn sky-btn-default"
         (click)="disableLookup()">
         Disable lookup
       </button>
@@ -58,10 +61,11 @@
 
     <p>
       <button
+        class="sky-btn sky-btn-default"
         id="btn-toggle-select-mode"
         type="button"
-        class="sky-btn sky-btn-default"
-        (click)="toggleSelectMode()">
+        (click)="toggleSelectMode()"
+      >
         Toggle select mode
       </button>
     </p>

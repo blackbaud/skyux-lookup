@@ -14,6 +14,10 @@ import {
   SkyThemeSettings
 } from '@skyux/theme';
 
+import {
+  SkyLookupSelectMode
+} from '../../public/public_api';
+
 @Component({
   selector: 'lookup-visual',
   templateUrl: './lookup-visual.component.html'
@@ -58,7 +62,7 @@ export class LookupVisualComponent implements OnInit {
     { id: 16, name: 'Susan' }
   ];
 
-  public bestFriendSelectMode = 'single';
+  public bestFriendSelectMode: SkyLookupSelectMode = 'single';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -69,15 +73,15 @@ export class LookupVisualComponent implements OnInit {
     this.createForm();
   }
 
-  public enableLookup() {
+  public enableLookup(): void {
     this.form.controls.friends.enable();
   }
 
-  public disableLookup() {
+  public disableLookup(): void {
     this.form.controls.friends.disable();
   }
 
-  public toggleSelectMode() {
+  public toggleSelectMode(): void {
     this.bestFriendSelectMode = this.bestFriendSelectMode === 'single' ? 'multiple' : 'single';
   }
 
@@ -87,9 +91,9 @@ export class LookupVisualComponent implements OnInit {
 
   private createForm(): void {
     this.form = this.formBuilder.group({
+      bestFriend: new FormControl(this.bestFriend),
       friends: new FormControl(this.friends),
-      friends2: new FormControl(this.friends2),
-      bestFriend: new FormControl(this.bestFriend)
+      friends2: new FormControl(this.friends2)
     });
   }
 }
