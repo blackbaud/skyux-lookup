@@ -4,17 +4,19 @@
   pageTitle="Country field"
 >
   <sky-docs-demo-page-summary>
-    The country field module creates a text input for users to enter search criteria and then select a country from search results.
+    The country field lets users enter search criteria and then select a country from search results.
   </sky-docs-demo-page-summary>
 
   <sky-docs-demo>
     <form
       [formGroup]="countryForm"
     >
-      <sky-country-field
-        formControlName="countryControl"
-      >
-      </sky-country-field>
+      <sky-input-box>
+        <sky-country-field
+          formControlName="countryControl"
+        >
+        </sky-country-field>
+      </sky-input-box>
     </form>
   </sky-docs-demo>
 
@@ -64,7 +66,7 @@
     </sky-docs-demo-page-section>
 
     <sky-docs-demo-page-section
-      heading="Behavior & states"
+      heading="Behavior and states"
     >
       <sky-docs-design-guideline
         heading="States"

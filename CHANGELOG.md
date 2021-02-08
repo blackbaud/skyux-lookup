@@ -1,3 +1,19 @@
+# 4.8.2 (2020-12-11)
+
+- Fixed the country field component to handle both uppercase and lowercase values for the `supportedCountryISOs` input. [#154](https://github.com/blackbaud/skyux-lookup/pull/154)
+
+# 4.8.1 (2020-11-10)
+
+- Fixed the country field test fixture to avoid exposing the DOM structure of the underlying component. [#148](https://github.com/blackbaud/skyux-lookup/pull/148)
+
+# 4.8.0 (2020-11-05)
+
+- Added a country field testing fixture. [#145](https://github.com/blackbaud/skyux-lookup/pull/145)
+
+# 4.7.0 (2020-10-26)
+
+- Added input box support to the lookup component. [#142](https://github.com/blackbaud/skyux-lookup/pull/142)
+
 # 4.6.0 (2020-10-05)
 
 - Added modern theme styles to the search component. [#134](https://github.com/blackbaud/skyux-lookup/pull/134)
