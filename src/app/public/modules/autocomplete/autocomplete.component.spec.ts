@@ -488,6 +488,42 @@ describe('Autocomplete component', () => {
       expect(spy.calls.count()).toEqual(1);
     }));
 
+    it('shuould show the dropdown when the form controls value changes', fakeAsync(() => {
+      fixture.detectChanges();
+      inputElement = getInputElement();
+
+      // No changes should have been emitted yet.
+      expect(component.selectionFromChangeEvent).toBeUndefined();
+
+      // Type 'r' to activate the autocomplete dropdown.
+      inputElement.value = 'r';
+      SkyAppTestUtility.fireDomEvent(inputElement, 'keyup');
+      tick();
+
+      const dropdownElement = getSearchResultsContainer();
+
+      expect(dropdownElement).not.toBeNull;
+    }));
+
+    it('shuould not show the dropdown when tab is pressed on the form control', fakeAsync(() => {
+      fixture.detectChanges();
+      inputElement = getInputElement();
+
+      // No changes should have been emitted yet.
+      expect(component.selectionFromChangeEvent).toBeUndefined();
+
+      // Type 'r' to activate the autocomplete dropdown.
+      inputElement.value = 'r';
+      SkyAppTestUtility.fireDomEvent(inputElement, 'keydown', {
+        keyboardEventInit: { key: 'Tab' }
+      });
+      tick();
+
+      const dropdownElement = getSearchResultsContainer();
+
+      expect(dropdownElement).not.toBeNull;
+    }));
+
     it('should emit an undefined value when text input is cleared',
       fakeAsync(() => {
         fixture.detectChanges();
