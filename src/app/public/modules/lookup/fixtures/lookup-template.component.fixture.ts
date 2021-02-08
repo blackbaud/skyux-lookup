@@ -70,11 +70,11 @@ export class SkyLookupTemplateTestComponent implements OnInit {
     this.required = false;
   }
 
-  public setSingleSelect(): void {
-    this.selectMode = 'single';
-  }
-
   public setMultiSelect(): void {
     this.selectMode = 'multiple';
+  }
+
+  public setSingleSelect(): void {
+    this.selectMode = 'single';
   }
 }
