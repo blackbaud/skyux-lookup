@@ -321,7 +321,6 @@ export class SkyAutocompleteComponent
         debounceTime(this.debounceTime)
       )
       .subscribe((change) => {
-        console.log(change);
         this.searchTextChanged(change.value);
       });
 
