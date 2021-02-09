@@ -1,46 +1,119 @@
-<form
-  novalidate
-  [formGroup]="myForm"
+<div
+  class="app-screenshot"
+  id="autocomplete-visual"
 >
-  <p>
-    The following field has a preselected value and utilizes a custom search function, as well as a custom template for the search results.
-  </p>
+  <h2>
+    Autocomplete (reactive)
+  </h2>
   <div
-    class="sky-form-group"
+    id="autocomplete-reactive"
   >
-    <label
-      class="sky-control-label"
-      [for]="largestOceanInput.id"
+    <form
+      novalidate
+      [formGroup]="reactiveForm"
     >
-      Which ocean is the largest?
+      <label
+        for="favorite-color-reactive"
+      >
+        Favorite color
+      </label>
+      <sky-autocomplete
+        [data]="data"
+        (selectionChange)="onSelectionChange($event)"
+      >
+        <input
+          formControlName="favoriteColor"
+          id="favorite-color-reactive"
+          skyAutocomplete
+          type="text"
+        />
+      </sky-autocomplete>
+
+      <table>
+        <tr>
+          <th>Touched</th>
+          <td>{{ reactiveForm.touched }}</td>
+        </tr>
+        <tr>
+          <th>Pristine</th>
+          <td>{{ reactiveForm.pristine }}</td>
+        </tr>
+        <tr>
+          <th>Valid</th>
+          <td>{{ reactiveForm.valid }}</td>
+        </tr>
+        <tr>
+          <th>Value</th>
+          <td>{{ reactiveForm.value.favoriteColor?.name }}</td>
+        </tr>
+      </table>
+
+    </form>
+  </div>
+
+  <button
+    class="sky-btn sky-btn-primary"
+    id="autocomplete-reactive-disable-button"
+    (click)="toggleReactiveDisabled()"
+  >
+    Toggle reactive autocomplete disabled
+  </button>
+
+  <h2>
+    Autocomplete (template-driven)
+  </h2>
+  <div
+    id="autocomplete-template-driven"
+  >
+
+    <label
+      for="favorite-color-template"
+    >
+      Favorite color
     </label>
     <sky-autocomplete
-      descriptorProperty="title"
-      [data]="oceans"
-      [search]="getOceanSearchFunction()"
-      [searchResultTemplate]="oceanSearchResultTemplate"
+      [data]="data"
+      (selectionChange)="onSelectionChange($event)"
     >
       <input
-        formControlName="largestOcean"
-        type="text"
+        id="favorite-color-template"
         skyAutocomplete
-        skyId
-        #largestOceanInput="skyId"
-      >
+        type="text"
+        [disabled]="templateDisabledState"
+        [(ngModel)]="templateDrivenModel"
+        #model="ngModel"
+      />
     </sky-autocomplete>
-  </div>
-  <p
-    class="sky-emphasized"
-  >
-    Form model:
-  </p>
-  <pre>{{ myForm.value | json }}</pre>
-</form>
 
-<ng-template
-  let-item="item"
-  #oceanSearchResultTemplate
->
-  👀
-  {{ item.title }} &bull; ID {{ item.id }}
-</ng-template>
+
+    <table>
+      <tr>
+        <th>Touched</th>
+        <td>{{ model.touched }}</td>
+      </tr>
+      <tr>
+        <th>Pristine</th>
+        <td>{{ model.pristine }}</td>
+      </tr>
+      <tr>
+        <th>Valid</th>
+        <td>{{ model.valid }}</td>
+      </tr>
+      <tr>
+        <th>Dirty</th>
+        <td>{{ model.dirty }}</td>
+      </tr>
+      <tr>
+        <th>Value</th>
+        <td>{{ templateDrivenModel?.name }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <button
+    class="sky-btn sky-btn-primary"
+    (click)="toggleTemplateDisabled()"
+  >
+    Toggle template autocomplete disabled
+  </button>
+</div>
