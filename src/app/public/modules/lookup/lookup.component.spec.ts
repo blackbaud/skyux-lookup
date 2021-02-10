@@ -56,9 +56,7 @@ describe('Lookup component', function () {
     const inputElement = getInputElement(fixture.componentInstance.lookupComponent);
     inputElement.value = searchText;
     inputElement.focus();
-    SkyAppTestUtility.fireDomEvent(inputElement, 'keyup', {
-      keyboardEventInit: { key: '' }
-    });
+    SkyAppTestUtility.fireDomEvent(inputElement, 'input');
     tick();
     fixture.detectChanges();
     tick();
