@@ -48,7 +48,7 @@ describe('Autocomplete component', () => {
   }
 
   function getSearchResultsContainer(): Element {
-    return document.querySelector('.sky-autocomplete-results-container');
+    return document.querySelector('.sky-autocomplete-results');
   }
 
   function getSearchResultItems(): NodeListOf<Element> {

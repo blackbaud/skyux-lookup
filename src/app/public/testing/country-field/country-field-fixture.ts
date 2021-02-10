@@ -106,7 +106,7 @@ export class SkyCountryFieldFixture {
   }
 
   private getAutocompleteElement(): HTMLElement {
-    return document.querySelector('.sky-autocomplete-results-container') as HTMLElement;
+    return document.querySelector('.sky-autocomplete-results') as HTMLElement;
   }
 
   private getInputElement(): HTMLTextAreaElement {
