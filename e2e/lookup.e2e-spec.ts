@@ -48,7 +48,7 @@ describe('Lookup component', () => {
     await browser.actions().sendKeys('r').perform();
 
     await browser.wait(
-      ExpectedConditions.presenceOf(element(by.css('.sky-autocomplete-results'))),
+      ExpectedConditions.presenceOf(element(by.css('.sky-autocomplete-results-container'))),
       1200,
       'Autocomplete results dropdown took too long to appear.'
     );

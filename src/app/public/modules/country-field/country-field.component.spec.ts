@@ -74,7 +74,7 @@ describe('Country Field Component', () => {
   }
 
   function getAutocompleteElement(): HTMLElement {
-    return document.querySelector('.sky-autocomplete-results') as HTMLElement;
+    return document.querySelector('.sky-autocomplete-results-container') as HTMLElement;
   }
 
   function getInputElement(): HTMLTextAreaElement {

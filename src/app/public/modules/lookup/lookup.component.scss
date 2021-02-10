@@ -85,7 +85,7 @@ sky-input-box .sky-lookup {
   }
 }
 
-.sky-theme-modern {
+@include sky-theme-modern {
 
   sky-tokens.sky-lookup-tokens {
     .sky-tokens {
