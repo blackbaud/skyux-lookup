@@ -32,7 +32,7 @@
   }
 }
 
-::ng-deep .sky-theme-modern {
+@include sky-theme-modern {
   .sky-autocomplete-results {
     border-radius: $sky-theme-modern-box-border-radius-default;
     padding: $sky-theme-modern-space-sm 0;
