@@ -28,7 +28,8 @@
       [attr.id]="resultsListId"
       [ngClass]="{
         'sky-shadow' : themeName === 'default',
-        'sky-elevation-4' : themeName === 'modern'
+        'sky-elevation-4' : themeName === 'modern',
+        'sky-autocomplete-results-with-actions': showAddButton
       }"
       #resultsRef
     >
@@ -49,6 +50,17 @@
         class="sky-deemphasized sky-padding-squish-default"
       >
         {{ noResultsFoundText || ('skyux_autocomplete_no_results' | skyLibResources) }}
+      </div>
+      <div *ngIf="showAddButton"
+        class="sky-autocomplete-actions"
+      >
+        <button
+          class="sky-autocomplete-add sky-btn sky-btn-link"
+          type="button"
+          (mousedown)="addButtonClicked()"
+        >
+          <sky-icon icon="add" iconType="skyux"></sky-icon> Add
+        </button>
       </div>
     </div>
   </div>

@@ -212,11 +212,25 @@ export class SkyAutocompleteComponent
   public searchResultsLimit: number;
 
   /**
+   * @internal
+   * Shows the Add button in the actions bar
+   */
+  @Input()
+  public showAddButton: boolean = false;
+
+  /**
    * Specifies the text to play when no search results are found.
    * @default No matching items found
    */
   @Input()
   public noResultsFoundText: string;
+
+  /**
+   * @internal
+   * Fires when users select the "Add" button
+   */
+  @Output()
+  public addClick: EventEmitter<void> = new EventEmitter();
 
   /**
    * Fires when users select items in the dropdown list.
@@ -362,6 +376,11 @@ export class SkyAutocompleteComponent
     this.ngUnsubscribe = undefined;
     this.destroyAffixer();
     this.destroyOverlay();
+  }
+
+  public addButtonClicked(): void {
+    this.addClick.emit();
+    this.closeDropdown();
   }
 
   public onResultMouseDown(index: number): void {

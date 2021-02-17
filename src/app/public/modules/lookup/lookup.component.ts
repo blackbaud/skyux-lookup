@@ -4,10 +4,12 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
   Optional,
+  Output,
   Self,
   TemplateRef,
   ViewChild,
@@ -122,6 +124,12 @@ export class SkyLookupComponent
   public idProperty: string;
 
   /**
+   * Shows a button to add an item in the results dropdown.
+   */
+  @Input()
+  public showAddButton: boolean = false;
+
+  /**
    * Specifies the selection mode that determines whether users can select one item or
    * multiple items. The valid options are `single` and `multiple`.
    * @default "mulitple"
@@ -135,6 +143,9 @@ export class SkyLookupComponent
   public get selectMode(): SkyLookupSelectMode {
     return this._selectMode || 'multiple';
   }
+
+  @Output()
+  public addClick: EventEmitter<void> = new EventEmitter();
 
   public get tokens(): SkyToken[] {
     return this._tokens;
@@ -231,6 +242,10 @@ export class SkyLookupComponent
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
     this.tokensController.complete();
+  }
+
+  public addButtonClicked(): void {
+    this.addClick.emit();
   }
 
   public onAutocompleteSelectionChange(change: SkyAutocompleteSelectionChange): void {

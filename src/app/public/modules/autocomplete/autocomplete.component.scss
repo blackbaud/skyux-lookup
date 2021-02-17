@@ -16,6 +16,10 @@
   max-height:         calc(50vh - 50px);
 }
 
+.sky-autocomplete-results-with-actions {
+  padding-bottom: 0 !important;
+}
+
 .sky-autocomplete-result {
   color: $sky-text-color-default;
   margin-bottom: 4px;
@@ -32,10 +36,26 @@
   }
 }
 
+.sky-autocomplete-actions {
+  @include sky-border(dark, top);
+}
+
+.sky-autocomplete-add {
+  float: right;
+
+  sky-icon {
+    padding-right: $sky-theme-modern-space-xs;
+  }
+}
+
 @include sky-theme-modern {
   .sky-autocomplete-results {
     border-radius: $sky-theme-modern-box-border-radius-default;
     padding: $sky-theme-modern-space-sm 0;
+  }
+
+  .sky-autocomplete-actions {
+    margin-top: $sky-theme-modern-space-sm;
   }
 
   .sky-autocomplete-result {
