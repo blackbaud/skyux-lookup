@@ -305,7 +305,7 @@ export class SkyAutocompleteComponent
     private affixService: SkyAffixService,
     private adapterService: SkyAutocompleteAdapterService,
     private overlayService: SkyOverlayService,
-    @Optional() private themeSvc: SkyThemeService
+    @Optional() private themeSvc?: SkyThemeService
   ) {
     const id = ++uniqueId;
     this.resultsListId = `sky-autocomplete-list-${id}`;

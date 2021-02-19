@@ -63,7 +63,7 @@ export class LookupVisualComponent implements OnInit {
     { id: 16, name: 'Susan' }
   ];
 
-  public bestFriendSelectMode: SkyLookupSelectMode = 'single';
+  public bestFriendSelectMode: SkyLookupSelectMode = SkyLookupSelectMode.single;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -83,7 +83,7 @@ export class LookupVisualComponent implements OnInit {
   }
 
   public toggleSelectMode(): void {
-    this.bestFriendSelectMode = this.bestFriendSelectMode === 'single' ? 'multiple' : 'single';
+    this.bestFriendSelectMode = this.bestFriendSelectMode === SkyLookupSelectMode.single ? SkyLookupSelectMode.multiple : SkyLookupSelectMode.single;
   }
 
   public themeSettingsChange(themeSettings: SkyThemeSettings): void {

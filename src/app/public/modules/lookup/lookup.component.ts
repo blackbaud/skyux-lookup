@@ -133,7 +133,7 @@ export class SkyLookupComponent
   }
 
   public get selectMode(): SkyLookupSelectMode {
-    return this._selectMode || 'multiple';
+    return this._selectMode || SkyLookupSelectMode.multiple;
   }
 
   public get tokens(): SkyToken[] {
