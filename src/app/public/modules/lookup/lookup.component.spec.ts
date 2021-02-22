@@ -314,6 +314,18 @@ describe('Lookup component', function () {
 
         expect(component.form.touched).toEqual(true);
       }));
+
+      it('should remove all but the first value when the mode is changed to single select', fakeAsync(() => {
+        component.friends = [{ name: 'Rachel' }, { name: 'Isaac'}];
+        fixture.detectChanges();
+
+        component.setSingleSelect();
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+
+        expect(lookupComponent.value).toEqual([{ name: 'Rachel'}]);
+      }));
     });
 
     describe('single select', () => {
@@ -354,6 +366,20 @@ describe('Lookup component', function () {
         selectSearchResult(0, fixture);
 
         expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
+      }));
+
+      it('should clear the value when the search text is clared', fakeAsync(function () {
+        fixture.detectChanges();
+        expect(lookupComponent.value).toEqual([]);
+
+        performSearch('s', fixture);
+        selectSearchResult(0, fixture);
+
+        expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
+
+        performSearch('', fixture);
+
+        expect(lookupComponent.value).toEqual([]);
       }));
 
       it('should NOT set a new value when no search options are returned', fakeAsync(function () {
@@ -800,6 +826,20 @@ describe('Lookup component', function () {
           const inputElement = getInputElement(lookupComponent);
           expect(lookupComponent.value.length).toEqual(0);
           expect(document.activeElement).toEqual(inputElement);
+        }));
+
+        it('should remove all but the first value when the mode is changed to single select', fakeAsync(() => {
+          component.selectedFriends = [{ name: 'Rachel' }, { name: 'Isaac'}];
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+
+          component.setSingleSelect();
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+
+          expect(lookupComponent.value).toEqual([{ name: 'Rachel'}]);
         }));
       });
 

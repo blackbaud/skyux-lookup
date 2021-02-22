@@ -128,8 +128,20 @@ export class SkyLookupComponent
    */
   @Input()
   public set selectMode(value: SkyLookupSelectMode) {
+    let multipleToSingle: boolean = value === SkyLookupSelectMode.single && this.selectMode === SkyLookupSelectMode.multiple;
+
     this._selectMode = value;
     this.updateForSelectMode();
+
+    if (multipleToSingle) {
+      if (this.tokens && this.tokens.length > 1) {
+        // The `setTimeout` is needed to avoid a `ExpressionChangedAfterItHasBeenCheckedError` error in template forms.
+        setTimeout(() => {
+          this.writeValue([this.tokens[0].value]);
+          this.changeDetector.detectChanges();
+        });
+      }
+    }
   }
 
   public get selectMode(): SkyLookupSelectMode {
