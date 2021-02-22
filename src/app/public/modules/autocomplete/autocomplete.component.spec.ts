@@ -358,10 +358,10 @@ describe('Autocomplete component', () => {
 
     it('should handle missing skyAutocomplete directive', fakeAsync(() => {
       fixture.detectChanges();
-      component.autocomplete['inputDirective'] = undefined;
-      tick();
 
       try {
+        component.autocomplete['inputDirective'] = undefined;
+        tick();
         autocomplete.ngAfterContentInit();
       } catch (e) {
         expect(e.message.indexOf('The SkyAutocompleteComponent requires a ContentChild input') > -1).toEqual(true);

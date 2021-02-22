@@ -32,7 +32,7 @@
           'sky-field-status-active': isInputFocused
         }"
       >
-        <sky-tokens
+        <sky-tokens *ngIf="selectMode === 'multiple'"
           class="sky-lookup-tokens"
           [disabled]="disabled"
           [displayWith]="descriptorProperty"
@@ -59,6 +59,24 @@
             (keyup)="inputKeyup($event)"
           ></textarea>
         </sky-tokens>
+        <div *ngIf="selectMode === 'single'"
+          class="sky-lookup-single-control"
+        >
+          <textarea
+            class="sky-form-control sky-lookup-input"
+            rows="1"
+            skyAutocomplete
+            wrap="off"
+            [attr.aria-label]="ariaLabel"
+            [attr.aria-labelledby]="ariaLabelledBy"
+            [attr.placeholder]="placeholderText"
+            [autocompleteAttribute]="autocompleteAttribute"
+            [disabled]="disabled"
+            (blur)="onAutocompleteBlur()"
+            (keydown)="inputKeydown($event, $event.target.value)"
+            (keyup)="inputKeyup($event)"
+          ></textarea>
+        </div>
       </div>
     </sky-autocomplete>
   </div>

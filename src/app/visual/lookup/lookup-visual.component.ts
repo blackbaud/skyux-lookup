@@ -83,7 +83,8 @@ export class LookupVisualComponent implements OnInit {
   }
 
   public toggleSelectMode(): void {
-    this.bestFriendSelectMode = this.bestFriendSelectMode === SkyLookupSelectMode.single ? SkyLookupSelectMode.multiple : SkyLookupSelectMode.single;
+    this.bestFriendSelectMode = this.bestFriendSelectMode === SkyLookupSelectMode.single ?
+      SkyLookupSelectMode.multiple : SkyLookupSelectMode.single;
   }
 
   public themeSettingsChange(themeSettings: SkyThemeSettings): void {

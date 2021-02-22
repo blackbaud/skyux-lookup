@@ -847,6 +847,20 @@ describe('Lookup component', function () {
           expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
         }));
 
+        it('should clear the value when the search text is clared', fakeAsync(function () {
+          fixture.detectChanges();
+          expect(lookupComponent.value).toEqual([]);
+
+          performSearch('s', fixture);
+          selectSearchResult(0, fixture);
+
+          expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
+
+          performSearch('', fixture);
+
+          expect(lookupComponent.value).toEqual([]);
+        }));
+
         it('should NOT set a new value when no search options are returned', fakeAsync(function () {
           fixture.detectChanges();
           expect(lookupComponent.value).toEqual([]);

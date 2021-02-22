@@ -238,6 +238,8 @@ export class SkyLookupComponent
     if (change.selectedItem) {
       this.addToSelected(change.selectedItem);
       this.focusInput();
+    } else if (this.selectMode === SkyLookupSelectMode.single) {
+      this.writeValue([]);
     }
   }
 

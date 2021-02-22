@@ -78,7 +78,7 @@ export class SkyLookupTestComponent implements OnInit {
   }
 
   public setMultiSelect(): void {
-    this.selectMode = 'multiple';
+    this.selectMode = SkyLookupSelectMode.multiple;
   }
 
   public setRequired(): void {
@@ -86,7 +86,7 @@ export class SkyLookupTestComponent implements OnInit {
   }
 
   public setSingleSelect(): void {
-    this.selectMode = 'single';
+    this.selectMode = SkyLookupSelectMode.single;
   }
 
   public removeRequired(): void {
