@@ -382,10 +382,8 @@ export class SkyAutocompleteComponent
   public ngOnDestroy(): void {
     this.inputDirectiveUnsubscribe.next();
     this.inputDirectiveUnsubscribe.complete();
-    this.inputDirectiveUnsubscribe = undefined;
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-    this.ngUnsubscribe = undefined;
     this.destroyAffixer();
     this.destroyOverlay();
   }

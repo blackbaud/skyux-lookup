@@ -346,6 +346,7 @@ export class SkyLookupComponent
   // If empty on keydown, set a flag so that the appropriate action can be taken on keyup.
 
   public inputKeydown(event: KeyboardEvent, value: string): void {
+    /* Sanity check as this should only be called when in multiple select mode */
     /* istanbul ignore else */
     if (this.selectMode !== 'single') {
       switch (event.key) {
@@ -367,6 +368,7 @@ export class SkyLookupComponent
   }
 
   public inputKeyup(event: KeyboardEvent): void {
+    /* Sanity check as this should only be called when in multiple select mode */
     /* istanbul ignore else */
     if (this.selectMode !== 'single') {
       switch (event.key) {
