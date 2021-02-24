@@ -48,6 +48,10 @@ describe('Autocomplete component', () => {
   }
 
   function getSearchResultsContainer(): Element {
+    return document.querySelector('.sky-autocomplete-results-container');
+  }
+
+  function getSearchResultsSection(): Element {
     return document.querySelector('.sky-autocomplete-results');
   }
 
@@ -224,7 +228,7 @@ describe('Autocomplete component', () => {
 
       enterSearch('rasdasdlhasdjklh', fixture);
 
-      const container = getSearchResultsContainer();
+      const container = getSearchResultsSection();
       expect(container.textContent.trim()).toBe(expectedMessage);
     }));
 
@@ -235,7 +239,7 @@ describe('Autocomplete component', () => {
 
       enterSearch('rasdasdlhasdjklh', fixture);
 
-      const container = getSearchResultsContainer();
+      const container = getSearchResultsSection();
       expect(container.textContent.trim()).toBe(expectedMessage);
     }));
 

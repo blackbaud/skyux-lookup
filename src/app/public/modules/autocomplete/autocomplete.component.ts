@@ -258,6 +258,8 @@ export class SkyAutocompleteComponent
 
   public resultsWrapperId: string;
 
+  public searchText: string;
+
   public themeName: string;
 
   //#endregion
@@ -304,6 +306,16 @@ export class SkyAutocompleteComponent
           this.searchText = '';
           this.closeDropdown();
         });
+
+        this.inputDirective.focus
+        .pipe(
+          takeUntil(this.ngUnsubscribe)
+        )
+        .subscribe(() => {
+          if (this.showAddButton) {
+            this.openDropdown();
+          }
+        });
     }
   }
 
@@ -340,8 +352,6 @@ export class SkyAutocompleteComponent
   private overlay: SkyOverlayInstance;
 
   private searchResultsIndex = 0;
-
-  private searchText: string;
 
   private _data: any[];
   private _debounceTime: number;

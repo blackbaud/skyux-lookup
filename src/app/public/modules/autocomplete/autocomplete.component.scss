@@ -2,9 +2,12 @@
 @import "~@skyux/theme/scss/variables";
 @import "~@skyux/theme/scss/_compat/mixins";
 
-.sky-autocomplete-results {
+.sky-autocomplete-results-container {
   position: fixed;
   background-color: $sky-color-white;
+}
+
+.sky-autocomplete-results {
   display: flex;
   flex-direction: column;
   padding: 4px;
@@ -14,10 +17,6 @@
   max-height: -webkit-calc(50vh - 50px);
   max-height:    -moz-calc(50vh - 50px);
   max-height:         calc(50vh - 50px);
-}
-
-.sky-autocomplete-results-with-actions {
-  padding-bottom: 0 !important;
 }
 
 .sky-autocomplete-result {
@@ -48,14 +47,14 @@
   }
 }
 
+// This exists outside the mixin as there are host context issues with the overlay.
+.sky-theme-modern.sky-autocomplete-results-container {
+  border-radius: $sky-theme-modern-box-border-radius-default;
+}
+
 @include sky-theme-modern {
   .sky-autocomplete-results {
-    border-radius: $sky-theme-modern-box-border-radius-default;
     padding: $sky-theme-modern-space-sm 0;
-  }
-
-  .sky-autocomplete-actions {
-    margin-top: $sky-theme-modern-space-sm;
   }
 
   .sky-autocomplete-result {

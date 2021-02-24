@@ -18,20 +18,17 @@
   <div
     class="sky-autocomplete-results-container"
     [ngClass]="{
-      'sky-theme-modern' : themeName === 'modern'
+      'sky-theme-modern' : themeName === 'modern',
+      'sky-shadow' : themeName === 'default',
+      'sky-elevation-4' : themeName === 'modern'
     }"
+    #resultsRef
   >
-    <div
+    <div *ngIf="searchText"
       class="sky-autocomplete-results"
       role="listbox"
       [attr.aria-labelledby]="ariaLabelledBy"
       [attr.id]="resultsListId"
-      [ngClass]="{
-        'sky-shadow' : themeName === 'default',
-        'sky-elevation-4' : themeName === 'modern',
-        'sky-autocomplete-results-with-actions': showAddButton
-      }"
-      #resultsRef
     >
       <div *ngFor="let result of searchResults; let i = index"
         class="sky-autocomplete-result"
@@ -51,17 +48,17 @@
       >
         {{ noResultsFoundText || ('skyux_autocomplete_no_results' | skyLibResources) }}
       </div>
-      <div *ngIf="showAddButton"
-        class="sky-autocomplete-actions"
+    </div>
+    <div *ngIf="showAddButton"
+      class="sky-autocomplete-actions"
+    >
+      <button *ngIf="showAddButton"
+        class="sky-autocomplete-add sky-btn sky-btn-link"
+        type="button"
+        (mousedown)="addButtonClicked()"
       >
-        <button
-          class="sky-autocomplete-add sky-btn sky-btn-link"
-          type="button"
-          (mousedown)="addButtonClicked()"
-        >
-          <sky-icon icon="add" iconType="skyux"></sky-icon>{{'skyux_autocomplete_add' | skyLibResources}}
-        </button>
-      </div>
+        <sky-icon icon="add" iconType="skyux"></sky-icon>{{'skyux_autocomplete_add' | skyLibResources}}
+      </button>
     </div>
   </div>
 </ng-template>

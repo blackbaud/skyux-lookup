@@ -108,6 +108,10 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
     this.inputTextValue = this.getValueByKey();
   }
 
+  public get focus(): Observable<void> {
+    return this._focus.asObservable();
+  }
+
   public get inputTextValue(): string {
     return this.elementRef.nativeElement.value;
   }
@@ -159,6 +163,8 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
 
   private _displayWith: string;
 
+  private _focus = new Subject<void>();
+
   private _textChanges = new Subject<SkyAutocompleteInputTextChange>();
 
   private _value: any;
@@ -191,6 +197,15 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
         if (!this.disabled) {
           this.restoreInputTextValueToPreviousState();
           this.onTouched();
+        }
+      });
+
+    observableFromEvent(element, 'focus')
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe(() => {
+        /** Sanity check */
+        if (!this.disabled) {
+          this._focus.next();
         }
       });
 
