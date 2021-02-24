@@ -40,6 +40,11 @@
       }
     }
   }
+
+  .sky-lookup-single-control {
+    display: inline-flex;
+    padding-left: 7px;
+  }
 }
 
 .sky-lookup-search {
@@ -131,6 +136,10 @@ sky-input-box .sky-lookup {
     textarea.sky-lookup-input.sky-form-control {
       padding-left: 0;
       resize: none;
+    }
+
+    .sky-lookup-single-control {
+      padding-left: 0;
     }
   }
 }

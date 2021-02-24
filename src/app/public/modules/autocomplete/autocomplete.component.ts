@@ -269,7 +269,47 @@ export class SkyAutocompleteComponent
   private defaultSearchResultTemplate: TemplateRef<any>;
 
   @ContentChild(SkyAutocompleteInputDirective)
-  private inputDirective: SkyAutocompleteInputDirective;
+  private set inputDirective(directive: SkyAutocompleteInputDirective) {
+    if (this._inputDirective !== directive) {
+
+      if (!directive) {
+        throw Error([
+          'The SkyAutocompleteComponent requires a ContentChild input or',
+          'textarea bound with the SkyAutocomplete directive. For example:',
+          '`<input type="text" skyAutocomplete>`.'
+        ].join(' '));
+      }
+
+      // Unsubscribe from old subscriptions on any previous input directive
+      this.inputDirectiveUnsubscribe.next();
+
+      this._inputDirective = directive;
+
+      this._inputDirective.displayWith = this.descriptorProperty;
+
+      this._inputDirective.textChanges
+        .pipe(
+          takeUntil(this.inputDirectiveUnsubscribe),
+          debounceTime(this.debounceTime)
+        )
+        .subscribe((change) => {
+          this.searchTextChanged(change.value);
+        });
+
+      this._inputDirective.blur
+        .pipe(
+          takeUntil(this.inputDirectiveUnsubscribe)
+        )
+        .subscribe(() => {
+          this.searchText = '';
+          this.closeDropdown();
+        });
+    }
+  }
+
+  private get inputDirective(): SkyAutocompleteInputDirective {
+    return this._inputDirective;
+  }
 
   @ViewChild('resultsTemplateRef', {
     read: TemplateRef
@@ -293,6 +333,8 @@ export class SkyAutocompleteComponent
 
   private affixer: SkyAffixer;
 
+  private inputDirectiveUnsubscribe = new Subject();
+
   private ngUnsubscribe = new Subject();
 
   private overlay: SkyOverlayInstance;
@@ -305,6 +347,7 @@ export class SkyAutocompleteComponent
   private _debounceTime: number;
   private _descriptorProperty: string;
   private _highlightText: string;
+  private _inputDirective: SkyAutocompleteInputDirective;
   private _propertiesToSearch: string[];
   private _resultsRef: ElementRef;
   private _search: SkyAutocompleteSearchFunction;
@@ -319,7 +362,7 @@ export class SkyAutocompleteComponent
     private affixService: SkyAffixService,
     private adapterService: SkyAutocompleteAdapterService,
     private overlayService: SkyOverlayService,
-    @Optional() private themeSvc: SkyThemeService
+    @Optional() private themeSvc?: SkyThemeService
   ) {
     const id = ++uniqueId;
     this.resultsListId = `sky-autocomplete-list-${id}`;
@@ -334,26 +377,6 @@ export class SkyAutocompleteComponent
         '`<input type="text" skyAutocomplete>`.'
       ].join(' '));
     }
-
-    this.inputDirective.displayWith = this.descriptorProperty;
-
-    this.inputDirective.textChanges
-      .pipe(
-        takeUntil(this.ngUnsubscribe),
-        debounceTime(this.debounceTime)
-      )
-      .subscribe((change) => {
-        this.searchTextChanged(change.value);
-      });
-
-    this.inputDirective.blur
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe(() => {
-        this.searchText = '';
-        this.closeDropdown();
-      });
 
     if (this.themeSvc) {
       this.themeSvc.settingsChange
@@ -371,9 +394,10 @@ export class SkyAutocompleteComponent
   }
 
   public ngOnDestroy(): void {
+    this.inputDirectiveUnsubscribe.next();
+    this.inputDirectiveUnsubscribe.complete();
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
-    this.ngUnsubscribe = undefined;
     this.destroyAffixer();
     this.destroyOverlay();
   }

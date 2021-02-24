@@ -30,7 +30,7 @@ export class SkyLookupTemplateTestComponent implements OnInit {
   public placeholderText: string;
   public required: boolean = false;
   public selectedFriends: any;
-  public selectMode: SkyLookupSelectMode = 'multiple';
+  public selectMode: SkyLookupSelectMode = SkyLookupSelectMode.multiple;
 
   public ngOnInit(): void {
     this.data = [
@@ -71,10 +71,10 @@ export class SkyLookupTemplateTestComponent implements OnInit {
   }
 
   public setMultiSelect(): void {
-    this.selectMode = 'multiple';
+    this.selectMode = SkyLookupSelectMode.multiple;
   }
 
   public setSingleSelect(): void {
-    this.selectMode = 'single';
+    this.selectMode = SkyLookupSelectMode.single;
   }
 }

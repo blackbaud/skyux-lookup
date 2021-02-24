@@ -136,12 +136,24 @@ export class SkyLookupComponent
    */
   @Input()
   public set selectMode(value: SkyLookupSelectMode) {
+    let multipleToSingle: boolean = value === SkyLookupSelectMode.single && this.selectMode === SkyLookupSelectMode.multiple;
+
     this._selectMode = value;
     this.updateForSelectMode();
+
+    if (multipleToSingle) {
+      if (this.tokens && this.tokens.length > 1) {
+        // The `setTimeout` is needed to avoid a `ExpressionChangedAfterItHasBeenCheckedError` error in template forms.
+        setTimeout(() => {
+          this.writeValue([this.tokens[0].value]);
+          this.changeDetector.detectChanges();
+        });
+      }
+    }
   }
 
   public get selectMode(): SkyLookupSelectMode {
-    return this._selectMode || 'multiple';
+    return this._selectMode || SkyLookupSelectMode.multiple;
   }
 
   @Output()
@@ -253,6 +265,8 @@ export class SkyLookupComponent
     if (change.selectedItem) {
       this.addToSelected(change.selectedItem);
       this.focusInput();
+    } else if (this.selectMode === SkyLookupSelectMode.single) {
+      this.writeValue([]);
     }
   }
 
@@ -347,6 +361,7 @@ export class SkyLookupComponent
   // If empty on keydown, set a flag so that the appropriate action can be taken on keyup.
 
   public inputKeydown(event: KeyboardEvent, value: string): void {
+    /* Sanity check as this should only be called when in multiple select mode */
     /* istanbul ignore else */
     if (this.selectMode !== 'single') {
       switch (event.key) {
@@ -368,6 +383,7 @@ export class SkyLookupComponent
   }
 
   public inputKeyup(event: KeyboardEvent): void {
+    /* Sanity check as this should only be called when in multiple select mode */
     /* istanbul ignore else */
     if (this.selectMode !== 'single') {
       switch (event.key) {
