@@ -1,12 +1,12 @@
 export enum SkyLookupSelectMode {
 
   /**
-   * Allows for the selection of a single item.
+   * Restricts users to a single selection.
    */
   single = 'single',
 
   /**
-   * Allows for the selection of multiple items.
+   * Allows users to select multiple items.
    */
   multiple = 'multiple'
 
