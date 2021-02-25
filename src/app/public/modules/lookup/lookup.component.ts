@@ -130,8 +130,7 @@ export class SkyLookupComponent
   public showAddButton: boolean = false;
 
   /**
-   * Specifies the selection mode that determines whether users can select one item or
-   * multiple items. The valid options are `single` and `multiple`.
+   * Specifies whether users can select one item or multiple items.
    * @default "mulitple"
    */
   @Input()
