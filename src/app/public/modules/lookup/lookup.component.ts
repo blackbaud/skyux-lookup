@@ -130,6 +130,12 @@ export class SkyLookupComponent
   public showAddButton: boolean = false;
 
   /**
+   * Shows a button to show all results in the results dropdown.
+   */
+  @Input()
+  public showMoreButton: boolean = true;
+
+  /**
    * Specifies whether users can select one item or multiple items.
    * @default "mulitple"
    */

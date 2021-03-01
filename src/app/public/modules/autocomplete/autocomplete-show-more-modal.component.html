@@ -1,0 +1,55 @@
+<sky-modal>
+  <sky-modal-header>
+    FINISH ME!
+  </sky-modal-header>
+  <sky-modal-content>
+    <sky-data-manager>
+      <sky-data-manager-toolbar>
+        <sky-data-manager-toolbar-right-item>
+          <button
+            type="button"
+            class="sky-btn sky-btn-link"
+          >
+            Add
+          </button>
+        </sky-data-manager-toolbar-right-item>
+      </sky-data-manager-toolbar>
+      <sky-data-view
+        [viewId]="viewConfig.id"
+      >
+        <sky-repeater expandMode="none">
+          <sky-repeater-item *ngFor="let item of displayedItems"
+            selectable="true"
+            [(isSelected)]="item.selected"
+            (isSelectedChange)="onItemSelect($event, item)"
+          >
+            <sky-repeater-item-title>
+              {{item[context.descriptorProperty]}}
+            </sky-repeater-item-title>
+          </sky-repeater-item>
+        </sky-repeater>
+        <sky-infinite-scroll
+          [enabled]="itemsHaveMore"
+          (scrollEnd)="addItems()"
+        >
+        </sky-infinite-scroll>
+      </sky-data-view>
+    </sky-data-manager>
+  </sky-modal-content>
+  <sky-modal-footer>
+    <button
+      type="button"
+      class="sky-btn sky-btn-primary sky-margin-inline-compact"
+      (click)="modalInstance.save()"
+    >
+      Select
+    </button>
+    <button
+      type="button"
+      class="sky-btn sky-btn-link"
+      (click)="modalInstance.close()"
+    >
+      Cancel
+    </button>
+  </sky-modal-footer>
+</sky-modal>

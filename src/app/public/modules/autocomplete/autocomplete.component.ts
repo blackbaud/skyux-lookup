@@ -24,6 +24,10 @@ import {
 } from '@skyux/core';
 
 import {
+  SkyModalService
+} from '@skyux/modals';
+
+import {
   SkyThemeService
 } from '@skyux/theme';
 
@@ -60,6 +64,8 @@ import {
 import {
   SkyAutocompleteInputDirective
 } from './autocomplete-input.directive';
+import { SkyAutocompleteShowMoreModalComponent } from './autocomplete-show-more-modal.component';
+import { SkyAutocompleteShowMoreContext } from './types/autocomplete-show-more-context';
 
 /**
  * @internal
@@ -159,8 +165,7 @@ export class SkyAutocompleteComponent
   public get search(): SkyAutocompleteSearchFunction {
     return this._search || skyAutocompleteDefaultSearchFunction({
       propertiesToSearch: this.propertiesToSearch,
-      searchFilters: this.searchFilters,
-      searchResultsLimit: this.searchResultsLimit
+      searchFilters: this.searchFilters
     });
   }
 
@@ -209,7 +214,17 @@ export class SkyAutocompleteComponent
    * By default, the component displays all matching results.
    */
   @Input()
-  public searchResultsLimit: number;
+  public set searchResultsLimit(value: number) {
+    this._searchResultsLimit = value;
+  }
+
+  public get searchResultsLimit(): number {
+    if (this._searchResultsLimit) {
+      return this._searchResultsLimit;
+    } else {
+      return this.showMoreButton ? 5 : this._searchResultsLimit;
+    }
+  }
 
   /**
    * @internal
@@ -217,6 +232,13 @@ export class SkyAutocompleteComponent
    */
   @Input()
   public showAddButton: boolean = false;
+
+  /**
+   * @internal
+   * Shows the Show more button in the actions bar
+   */
+  @Input()
+  public showMoreButton: boolean = false;
 
   /**
    * Specifies the text to play when no search results are found.
@@ -363,6 +385,7 @@ export class SkyAutocompleteComponent
   private _search: SkyAutocompleteSearchFunction;
   private _searchResults: SkyAutocompleteSearchResult[];
   private _searchResultTemplate: TemplateRef<any>;
+  private _searchResultsLimit: number;
   private _searchTextMinimumCharacters: number;
   private _selectionChange = new EventEmitter<SkyAutocompleteSelectionChange>();
 
@@ -372,6 +395,7 @@ export class SkyAutocompleteComponent
     private affixService: SkyAffixService,
     private adapterService: SkyAutocompleteAdapterService,
     private overlayService: SkyOverlayService,
+    private modalService: SkyModalService,
     @Optional() private themeSvc?: SkyThemeService
   ) {
     const id = ++uniqueId;
@@ -415,6 +439,15 @@ export class SkyAutocompleteComponent
   public addButtonClicked(): void {
     this.addClick.emit();
     this.closeDropdown();
+  }
+
+  public moreButtonClicked(): void {
+    this.modalService.open(SkyAutocompleteShowMoreModalComponent, {
+      providers: [{ provide: SkyAutocompleteShowMoreContext, useValue: {
+        items: this.searchText ? this.searchResults.map(result => { return result.data; }) : this.data,
+        descriptorProperty: this.descriptorProperty
+      }}]
+    });
   }
 
   public onResultMouseDown(index: number): void {
