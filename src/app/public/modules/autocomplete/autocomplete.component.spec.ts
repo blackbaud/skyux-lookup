@@ -39,6 +39,10 @@ describe('Autocomplete component', () => {
 
   //#region helpers
 
+  function getAddButton(): HTMLElement {
+    return document.querySelector('.sky-autocomplete-add') as HTMLElement;
+  }
+
   function getAutocompleteElement(): HTMLElement {
     return document.querySelector('sky-autocomplete') as HTMLElement;
   }
@@ -505,6 +509,75 @@ describe('Autocomplete component', () => {
 
         // An undefined selectedItem should have been emitted.
         expect(component.selectionFromChangeEvent).toEqual({ selectedItem: undefined });
+      })
+    );
+
+    it('should emit an event correctly when the add button is enabled and clicked',
+      fakeAsync(() => {
+        component.showAddButton = true;
+        const addButtonSpy = spyOn(component, 'addButtonClicked').and.callThrough();
+        fixture.detectChanges();
+
+        // Type 'r' to activate the autocomplete dropdown, then click the first result.
+        enterSearch('r', fixture);
+
+        const addButton = getAddButton();
+        expect(addButton).not.toBeNull();
+        expect(addButtonSpy).not.toHaveBeenCalled();
+
+        addButton.click();
+        fixture.detectChanges();
+
+        expect(addButtonSpy).toHaveBeenCalled();
+      })
+    );
+
+    it('should not show the add button unless the component input asks for it',
+      fakeAsync(() => {
+        component.showAddButton = false;
+        const addButtonSpy = spyOn(component, 'addButtonClicked').and.callThrough();
+        fixture.detectChanges();
+
+        // Type 'r' to activate the autocomplete dropdown, then click the first result.
+        enterSearch('r', fixture);
+
+        const addButton = getAddButton();
+        expect(addButton).toBeNull();
+        expect(addButtonSpy).not.toHaveBeenCalled();
+      })
+    );
+
+    it('should open the dropdown when the input is focused if the add button is shown',
+      fakeAsync(() => {
+        component.showAddButton = true;
+        fixture.detectChanges();
+
+        const inputElement: HTMLInputElement = getInputElement();
+
+        SkyAppTestUtility.fireDomEvent(inputElement, 'focus');
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+
+        expect(getSearchResultsContainer()).not.toBeNull();
+        expect(getAddButton()).not.toBeNull();
+      })
+    );
+
+    it('should not open the dropdown when the input is focused if the add button is not shown',
+      fakeAsync(() => {
+        component.showAddButton = false;
+        fixture.detectChanges();
+
+        const inputElement: HTMLInputElement = getInputElement();
+
+        SkyAppTestUtility.fireDomEvent(inputElement, 'focus');
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+
+        expect(getSearchResultsContainer()).toBeNull();
+        expect(getAddButton()).toBeNull();
       })
     );
 
@@ -1042,5 +1115,71 @@ describe('Autocomplete component', () => {
       expect(inputElement.disabled).toBeFalsy();
       expect(spy).toHaveBeenCalled();
     }));
+
+    it('should emit an event correctly when the add button is enabled and clicked',
+      fakeAsync(() => {
+        component.showAddButton = true;
+        const addButtonSpy = spyOn(component, 'addButtonClicked').and.callThrough();
+        fixture.detectChanges();
+
+        // Type 'r' to activate the autocomplete dropdown, then click the first result.
+        enterSearch('r', fixture);
+
+        const addButton = getAddButton();
+        expect(addButton).not.toBeNull();
+        expect(addButtonSpy).not.toHaveBeenCalled();
+
+        addButton.click();
+        fixture.detectChanges();
+
+        expect(addButtonSpy).toHaveBeenCalled();
+      })
+    );
+
+    it('should not show the add button unless the component input asks for it',
+      fakeAsync(() => {
+        component.showAddButton = false;
+        const addButtonSpy = spyOn(component, 'addButtonClicked').and.callThrough();
+        fixture.detectChanges();
+
+        // Type 'r' to activate the autocomplete dropdown, then click the first result.
+        enterSearch('r', fixture);
+
+        const addButton = getAddButton();
+        expect(addButton).toBeNull();
+        expect(addButtonSpy).not.toHaveBeenCalled();
+      })
+    );
+
+    it('should open the dropdown when the input is focused if the add button is shown',
+      fakeAsync(() => {
+        component.showAddButton = true;
+        fixture.detectChanges();
+
+        SkyAppTestUtility.fireDomEvent(inputElement, 'focus');
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+
+        expect(getSearchResultsContainer()).not.toBeNull();
+        expect(getAddButton()).not.toBeNull();
+      })
+    );
+
+    it('should not open the dropdown when the input is focused if the add button is not shown',
+      fakeAsync(() => {
+        component.showAddButton = false;
+        fixture.detectChanges();
+
+        SkyAppTestUtility.fireDomEvent(inputElement, 'focus');
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+
+        expect(getSearchResultsContainer()).toBeNull();
+        expect(getAddButton()).toBeNull();
+      })
+    );
+
   });
 });

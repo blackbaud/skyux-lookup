@@ -307,9 +307,9 @@ export class SkyAutocompleteComponent
           this.closeDropdown();
         });
 
-      this.inputDirective.focus
+      this._inputDirective.focus
         .pipe(
-          takeUntil(this.ngUnsubscribe)
+          takeUntil(this.inputDirectiveUnsubscribe)
         )
         .subscribe(() => {
           if (this.showAddButton) {
