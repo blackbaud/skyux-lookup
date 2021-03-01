@@ -56,6 +56,12 @@ describe('Lookup component', () => {
     validateScreenshot(done, screenshotName);
   }
 
+  function validateSingleModeScreenshot(done: DoneFn, screenshotName: string): void {
+    expect('#lookup-single-visual').toMatchBaselineScreenshot(done, {
+      screenshotName: getScreenshotName(screenshotName)
+    });
+  }
+
   function runTests(): void {
     describe('(lg screens)', () => {
       beforeEach(async () => {
@@ -76,6 +82,10 @@ describe('Lookup component', () => {
 
         validateScreenshot(done, 'lookup-disabled');
       });
+
+      it('should match previous lookup single mode screenshot', (done) => {
+        validateSingleModeScreenshot(done, 'lookup-single-mode');
+      });
     });
 
     describe('(xs screens)', () => {
@@ -89,6 +99,10 @@ describe('Lookup component', () => {
 
       it('should match previous lookup w/ menu screenshot', async (done) => {
         await validateScreenshotWithMenu(done, 'lookup-w-menu-xs');
+      });
+
+      it('should match previous lookup single mode screenshot', (done) => {
+        validateSingleModeScreenshot(done, 'lookup-single-mode-xs');
       });
     });
   }
