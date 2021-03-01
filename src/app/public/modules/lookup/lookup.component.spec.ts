@@ -59,7 +59,6 @@ describe('Lookup component', function () {
   function performSearch(searchText: string, fixture: ComponentFixture<any>) {
     const inputElement = getInputElement(fixture.componentInstance.lookupComponent);
     inputElement.value = searchText;
-    inputElement.focus();
     SkyAppTestUtility.fireDomEvent(inputElement, 'input');
     tick();
     fixture.detectChanges();
@@ -537,6 +536,7 @@ describe('Lookup component', function () {
           const inputElement = getInputElement(lookupComponent);
 
           performSearch('s', fixture);
+          inputElement.focus();
 
           expect(inputElement.value).toEqual('s');
 
@@ -1111,6 +1111,7 @@ describe('Lookup component', function () {
           const inputElement = getInputElement(lookupComponent);
 
           performSearch('s', fixture);
+          inputElement.focus();
 
           expect(inputElement.value).toEqual('s');
 
