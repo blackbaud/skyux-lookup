@@ -124,7 +124,7 @@ export class SkyLookupComponent
   public idProperty: string;
 
   /**
-   * Shows a button to add an item in the results dropdown.
+   * Indicates whether to show an "Add" button in the dropdown list.
    */
   @Input()
   public showAddButton: boolean = false;
@@ -155,6 +155,9 @@ export class SkyLookupComponent
     return this._selectMode || SkyLookupSelectMode.multiple;
   }
 
+  /**
+   * Fires when users select the "Add" button.
+   */
   @Output()
   public addClick: EventEmitter<void> = new EventEmitter();
 

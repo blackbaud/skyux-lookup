@@ -213,7 +213,7 @@ export class SkyAutocompleteComponent
 
   /**
    * @internal
-   * Shows the Add button in the actions bar
+   * Fires when users select the "Add" button.
    */
   @Input()
   public showAddButton: boolean = false;
