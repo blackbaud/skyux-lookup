@@ -22,6 +22,8 @@
       'sky-shadow' : themeName === 'default',
       'sky-elevation-4' : themeName === 'modern'
     }"
+    (focusout)="handleBlur($event)"
+    (keydown)="handleKeydown($event)"
     #resultsRef
   >
     <div *ngIf="searchText"
@@ -52,6 +54,7 @@
     <div *ngIf="showAddButton"
       class="sky-autocomplete-actions"
     >
+      <button class="sky-btn sky-btn-primary" type="button">Temp Button</button>
       <button *ngIf="showAddButton"
         class="sky-autocomplete-add sky-btn sky-btn-link"
         type="button"

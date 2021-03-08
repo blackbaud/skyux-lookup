@@ -195,8 +195,7 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
       .subscribe(() => {
         /** Sanity check */
         if (!this.disabled) {
-          this.restoreInputTextValueToPreviousState();
-          this.onTouched();
+          this._blur.next();
         }
       });
 
@@ -247,6 +246,18 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
     this.onValidatorChange = fn;
   }
 
+  public restoreInputTextValueToPreviousState(): void {
+    const modelValue = this.getValueByKey();
+
+    // If the search field contains text, make sure that the value
+    // matches the selected descriptor key.
+    if (this.inputTextValue !== modelValue) {
+      this.inputTextValue = modelValue;
+    }
+
+    this.onTouched();
+  }
+
   public setDisabledState(disabled: boolean): void {
     this.disabled = disabled;
   }
@@ -288,18 +299,6 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
     this.renderer.setAttribute(element, 'autocorrect', 'off');
     this.renderer.setAttribute(element, 'spellcheck', 'false');
     this.renderer.addClass(element, 'sky-form-control');
-  }
-
-  private restoreInputTextValueToPreviousState(): void {
-    const modelValue = this.getValueByKey();
-
-    // If the search field contains text, make sure that the value
-    // matches the selected descriptor key.
-    if (this.inputTextValue !== modelValue) {
-      this.inputTextValue = modelValue;
-    }
-
-    this._blur.next();
   }
 
   private getValueByKey(): string {
