@@ -246,13 +246,18 @@ describe('Lookup component', function () {
 
         it('should NOT add new tokens if value is empty', fakeAsync(function () {
           fixture.detectChanges();
+          tick();
           expect(lookupComponent.value).toEqual([]);
 
           performSearch('s', fixture);
           selectSearchResult(0, fixture);
+          fixture.detectChanges();
+          tick();
 
           performSearch('', fixture);
           getInputElement(lookupComponent).blur();
+          fixture.detectChanges();
+          tick();
 
           const selectedItems = lookupComponent.value;
           expect(selectedItems.length).toEqual(1);
@@ -319,13 +324,18 @@ describe('Lookup component', function () {
 
         it('should NOT add new tokens if value is empty', fakeAsync(function () {
           fixture.detectChanges();
+          tick();
           validateItems([]);
 
           performSearch('s', fixture);
           selectSearchResult(0, fixture);
+          fixture.detectChanges();
+          tick();
 
           performSearch('', fixture);
           getInputElement(lookupComponent).blur();
+          fixture.detectChanges();
+          tick();
 
           validateItems(['Isaac']);
         }));
@@ -859,13 +869,18 @@ describe('Lookup component', function () {
 
         it('should NOT add new tokens if value is empty', fakeAsync(function () {
           fixture.detectChanges();
+          tick();
           expect(lookupComponent.value).toEqual([]);
 
           performSearch('s', fixture);
           selectSearchResult(0, fixture);
+          fixture.detectChanges();
+          tick();
 
           performSearch('', fixture);
           getInputElement(lookupComponent).blur();
+          fixture.detectChanges();
+          tick();
 
           const selectedItems = lookupComponent.value;
           expect(selectedItems.length).toEqual(1);
