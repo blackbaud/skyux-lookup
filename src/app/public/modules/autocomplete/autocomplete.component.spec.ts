@@ -724,7 +724,6 @@ describe('Autocomplete component', () => {
         const notifySpy = spyOn(autocomplete.selectionChange, 'emit')
           .and.callThrough();
 
-
         sendTab(inputElement, fixture);
 
         expect(input.value.name).toEqual('Red');
