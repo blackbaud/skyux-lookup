@@ -59,9 +59,12 @@
         type="button"
         (click)="addButtonClicked()"
       >
-        <sky-icon
+        <sky-icon *ngIf="themeName === 'modern'"
           icon="add"
           iconType="skyux"
+        ></sky-icon>
+        <sky-icon *ngIf="themeName === 'default'"
+          icon="plus-circle"
         ></sky-icon>
         {{'skyux_autocomplete_add' | skyLibResources}}
       </button>
