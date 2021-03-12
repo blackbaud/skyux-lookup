@@ -9,7 +9,6 @@ import {
   EventEmitter,
   Input,
   OnDestroy,
-  Optional,
   Output,
   TemplateRef,
   ViewChild
@@ -23,10 +22,6 @@ import {
   SkyOverlayInstance,
   SkyOverlayService
 } from '@skyux/core';
-
-import {
-  SkyThemeService
-} from '@skyux/theme';
 
 import {
   fromEvent as observableFromEvent,
@@ -261,8 +256,6 @@ export class SkyAutocompleteComponent
 
   public searchText: string;
 
-  public themeName: string;
-
   //#endregion
 
   @ViewChild('defaultSearchResultTemplate', {
@@ -372,8 +365,7 @@ export class SkyAutocompleteComponent
     private affixService: SkyAffixService,
     private adapterService: SkyAutocompleteAdapterService,
     private coreAdapterService: SkyCoreAdapterService,
-    private overlayService: SkyOverlayService,
-    @Optional() private themeSvc?: SkyThemeService
+    private overlayService: SkyOverlayService
   ) {
     const id = ++uniqueId;
     this.resultsListId = `sky-autocomplete-list-${id}`;
@@ -387,16 +379,6 @@ export class SkyAutocompleteComponent
         'textarea bound with the SkyAutocomplete directive. For example:',
         '`<input type="text" skyAutocomplete>`.'
       ].join(' '));
-    }
-
-    if (this.themeSvc) {
-      this.themeSvc.settingsChange
-        .pipe(
-          takeUntil(this.ngUnsubscribe)
-        )
-        .subscribe((themeSettings) => {
-          this.themeName = themeSettings.currentSettings?.theme?.name;
-        });
     }
   }
 
