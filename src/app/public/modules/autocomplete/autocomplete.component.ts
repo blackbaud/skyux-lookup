@@ -419,6 +419,126 @@ export class SkyAutocompleteComponent
     this.closeDropdown();
   }
 
+  public handleBlur(event?: FocusEvent): void {
+    setTimeout(() => {
+      if (event && event.relatedTarget && (<HTMLElement>event.relatedTarget).attributes.getNamedItem('skyautocomplete')) {
+        return;
+      }
+
+      if (this.overlay && this.overlay.componentRef.location.nativeElement.contains(document.activeElement)) {
+        return;
+      }
+
+      this.closeDropdown();
+      this.inputDirective.restoreInputTextValueToPreviousState();
+    });
+  }
+
+  public handleKeydown(event: KeyboardEvent): void {
+    /* Sanity check */
+    /* istanbul ignore else */
+    if (event.key) {
+      const key = event.key.toLowerCase();
+      let focusedActionIndex: number = -1;
+      let focusableActions: HTMLElement[];
+
+      const actionsArea: HTMLElement = document.querySelector('.sky-autocomplete-actions');
+      if (actionsArea) {
+        focusableActions = this.coreAdapterService.getFocusableChildren(actionsArea);
+        /* Sanity check */
+        /* istanbul ignore else */
+        if (focusableActions) {
+          focusedActionIndex = focusableActions.findIndex(child => child === document.activeElement);
+        }
+      }
+
+      /* tslint:disable-next-line:switch-default */
+      switch (key) {
+        case 'enter':
+          if (focusedActionIndex >= 0) {
+            break;
+          }
+          this.selectActiveSearchResult();
+          this.closeDropdown();
+          event.preventDefault();
+          event.stopPropagation();
+          break;
+
+        case 'tab':
+          if (this.showAddButton && focusableActions) {
+              if (event.shiftKey) {
+                /* istanbul ignore else */
+                if (focusedActionIndex === 0) {
+                  this.elementRef.nativeElement.querySelector('input[skyAutocomplete], textarea[skyAutocomplete]').focus();
+                  event.stopPropagation();
+                  event.preventDefault();
+                } else if (focusedActionIndex > 0) {
+                  /* NOTE: This is for future work and this ignore should be removed at that time */
+                  /* istanbul ignore next */
+                  focusableActions[focusedActionIndex - 1].focus();
+                  event.stopPropagation();
+                  event.preventDefault();
+                }
+              } else {
+                /* istanbul ignore else */
+                if (focusedActionIndex < 0) {
+                  focusableActions[0].focus();
+                } else if (focusedActionIndex === focusableActions.length - 1) {
+                  const focusable = this.coreAdapterService.getFocusableChildren(document.body);
+                  const inputIndex = focusable.findIndex(element => element === this.elementRef.nativeElement.querySelector('input[skyAutocomplete], textarea[skyAutocomplete]'));
+                  focusable[inputIndex + 1].focus();
+                  this.inputDirective.restoreInputTextValueToPreviousState();
+                  this.closeDropdown();
+                } else {
+                  /* NOTE: This is for future work and this ignore should be removed at that time */
+                  /* istanbul ignore next */
+                  focusableActions[focusedActionIndex + 1].focus();
+                }
+                event.stopPropagation();
+                event.preventDefault();
+              }
+          } else {
+            this.selectActiveSearchResult();
+            this.closeDropdown();
+          }
+          break;
+
+        case 'escape':
+          this.closeDropdown();
+          break;
+
+        case 'arrowdown':
+        case 'down':
+          if (focusedActionIndex < 0) {
+            this.searchResultsIndex++;
+            if (this.searchResultsIndex > this.searchResults.length - 1) {
+              this.searchResultsIndex = 0;
+            }
+            this.setActiveDescendant();
+            this.changeDetector.markForCheck();
+          }
+          event.preventDefault();
+          event.stopPropagation();
+          break;
+
+        case 'arrowup':
+        case 'up':
+          if (focusedActionIndex < 0) {
+            this.searchResultsIndex--;
+            if (this.searchResultsIndex < 0) {
+              // Fallback to 0 just in case results are async and aren't returned yet.
+              this.searchResultsIndex = Math.max(this.searchResults.length - 1, 0);
+            }
+            this.setActiveDescendant();
+            this.changeDetector.markForCheck();
+          }
+          event.preventDefault();
+          event.stopPropagation();
+          break;
+      }
+    }
+  }
+
   public onResultMouseDown(index: number): void {
     this.searchResultsIndex = index;
     this.selectActiveSearchResult();
@@ -589,126 +709,6 @@ export class SkyAutocompleteComponent
     if (this.affixer) {
       this.affixer.destroy();
       this.affixer = undefined;
-    }
-  }
-
-  private handleBlur(event?: FocusEvent): void {
-    setTimeout(() => {
-      if (event && event.relatedTarget && (<HTMLElement>event.relatedTarget).attributes.getNamedItem('skyautocomplete')) {
-        return;
-      }
-
-      if (this.overlay && this.overlay.componentRef.location.nativeElement.contains(document.activeElement)) {
-        return;
-      }
-
-      this.closeDropdown();
-      this.inputDirective.restoreInputTextValueToPreviousState();
-    });
-  }
-
-  private handleKeydown(event: KeyboardEvent): void {
-    /* Sanity check */
-    /* istanbul ignore else */
-    if (event.key) {
-      const key = event.key.toLowerCase();
-      let focusedActionIndex: number = -1;
-      let focusableActions: HTMLElement[];
-
-      const actionsArea: HTMLElement = document.querySelector('.sky-autocomplete-actions');
-      if (actionsArea) {
-        focusableActions = this.coreAdapterService.getFocusableChildren(actionsArea);
-        /* Sanity check */
-        /* istanbul ignore else */
-        if (focusableActions) {
-          focusedActionIndex = focusableActions.findIndex(child => child === document.activeElement);
-        }
-      }
-
-      /* tslint:disable-next-line:switch-default */
-      switch (key) {
-        case 'enter':
-          if (focusedActionIndex >= 0) {
-            break;
-          }
-          this.selectActiveSearchResult();
-          this.closeDropdown();
-          event.preventDefault();
-          event.stopPropagation();
-          break;
-
-        case 'tab':
-          if (this.showAddButton && focusableActions) {
-              if (event.shiftKey) {
-                /* istanbul ignore else */
-                if (focusedActionIndex === 0) {
-                  this.elementRef.nativeElement.querySelector('input[skyAutocomplete], textarea[skyAutocomplete]').focus();
-                  event.stopPropagation();
-                  event.preventDefault();
-                } else if (focusedActionIndex > 0) {
-                  /* NOTE: This is for future work and this ignore should be removed at that time */
-                  /* istanbul ignore next */
-                  focusableActions[focusedActionIndex - 1].focus();
-                  event.stopPropagation();
-                  event.preventDefault();
-                }
-              } else {
-                /* istanbul ignore else */
-                if (focusedActionIndex < 0) {
-                  focusableActions[0].focus();
-                } else if (focusedActionIndex === focusableActions.length - 1) {
-                  const focusable = this.coreAdapterService.getFocusableChildren(document.body);
-                  const inputIndex = focusable.findIndex(element => element === this.elementRef.nativeElement.querySelector('input[skyAutocomplete], textarea[skyAutocomplete]'));
-                  focusable[inputIndex + 1].focus();
-                  this.inputDirective.restoreInputTextValueToPreviousState();
-                  this.closeDropdown();
-                } else {
-                  /* NOTE: This is for future work and this ignore should be removed at that time */
-                  /* istanbul ignore next */
-                  focusableActions[focusedActionIndex + 1].focus();
-                }
-                event.stopPropagation();
-                event.preventDefault();
-              }
-          } else {
-            this.selectActiveSearchResult();
-            this.closeDropdown();
-          }
-          break;
-
-        case 'escape':
-          this.closeDropdown();
-          break;
-
-        case 'arrowdown':
-        case 'down':
-          if (focusedActionIndex < 0) {
-            this.searchResultsIndex++;
-            if (this.searchResultsIndex > this.searchResults.length - 1) {
-              this.searchResultsIndex = 0;
-            }
-            this.setActiveDescendant();
-            this.changeDetector.markForCheck();
-          }
-          event.preventDefault();
-          event.stopPropagation();
-          break;
-
-        case 'arrowup':
-        case 'up':
-          if (focusedActionIndex < 0) {
-            this.searchResultsIndex--;
-            if (this.searchResultsIndex < 0) {
-              // Fallback to 0 just in case results are async and aren't returned yet.
-              this.searchResultsIndex = Math.max(this.searchResults.length - 1, 0);
-            }
-            this.setActiveDescendant();
-            this.changeDetector.markForCheck();
-          }
-          event.preventDefault();
-          event.stopPropagation();
-          break;
-      }
     }
   }
 
