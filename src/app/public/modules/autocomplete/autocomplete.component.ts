@@ -18,7 +18,6 @@ import {
   SkyAffixAutoFitContext,
   SkyAffixer,
   SkyAffixService,
-  SkyCoreAdapterService,
   SkyOverlayInstance,
   SkyOverlayService
 } from '@skyux/core';
@@ -364,7 +363,6 @@ export class SkyAutocompleteComponent
     private elementRef: ElementRef,
     private affixService: SkyAffixService,
     private adapterService: SkyAutocompleteAdapterService,
-    private coreAdapterService: SkyCoreAdapterService,
     private overlayService: SkyOverlayService
   ) {
     const id = ++uniqueId;
@@ -407,7 +405,7 @@ export class SkyAutocompleteComponent
         return;
       }
 
-      if (this.overlay && this.overlay.componentRef.location.nativeElement.contains(document.activeElement)) {
+      if (this.overlay && this.adapterService.overlayContainsActiveElement(this.overlay)) {
         return;
       }
 
@@ -424,13 +422,12 @@ export class SkyAutocompleteComponent
       let focusedActionIndex: number = -1;
       let focusableActions: HTMLElement[];
 
-      const actionsArea: HTMLElement = document.querySelector('.sky-autocomplete-actions');
-      if (actionsArea) {
-        focusableActions = this.coreAdapterService.getFocusableChildren(actionsArea);
-        /* Sanity check */
+      if (this.overlay) {
+        focusableActions = this.adapterService.getFocasableActions(this.overlay);
+
         /* istanbul ignore else */
         if (focusableActions) {
-          focusedActionIndex = focusableActions.findIndex(child => child === document.activeElement);
+          focusedActionIndex = focusableActions.findIndex(child => child === this.adapterService.getActiveElement());
         }
       }
 
@@ -448,37 +445,35 @@ export class SkyAutocompleteComponent
 
         case 'tab':
           if (this.showAddButton && focusableActions) {
-              if (event.shiftKey) {
-                /* istanbul ignore else */
-                if (focusedActionIndex === 0) {
-                  this.elementRef.nativeElement.querySelector('input[skyAutocomplete], textarea[skyAutocomplete]').focus();
-                  event.stopPropagation();
-                  event.preventDefault();
-                } else if (focusedActionIndex > 0) {
-                  /* NOTE: This is for future work and this ignore should be removed at that time */
-                  /* istanbul ignore next */
-                  focusableActions[focusedActionIndex - 1].focus();
-                  event.stopPropagation();
-                  event.preventDefault();
-                }
-              } else {
-                /* istanbul ignore else */
-                if (focusedActionIndex < 0) {
-                  focusableActions[0].focus();
-                } else if (focusedActionIndex === focusableActions.length - 1) {
-                  const focusable = this.coreAdapterService.getFocusableChildren(document.body);
-                  const inputIndex = focusable.findIndex(element => element === this.elementRef.nativeElement.querySelector('input[skyAutocomplete], textarea[skyAutocomplete]'));
-                  focusable[inputIndex + 1].focus();
-                  this.inputDirective.restoreInputTextValueToPreviousState();
-                  this.closeDropdown();
-                } else {
-                  /* NOTE: This is for future work and this ignore should be removed at that time */
-                  /* istanbul ignore next */
-                  focusableActions[focusedActionIndex + 1].focus();
-                }
+            if (event.shiftKey) {
+              /* istanbul ignore else */
+              if (focusedActionIndex === 0) {
+                this.inputDirective.focusInput();
+                event.stopPropagation();
+                event.preventDefault();
+              } else if (focusedActionIndex > 0) {
+                /* NOTE: This is for future work and this ignore should be removed at that time */
+                /* istanbul ignore next */
+                focusableActions[focusedActionIndex - 1].focus();
                 event.stopPropagation();
                 event.preventDefault();
               }
+            } else {
+              /* istanbul ignore else */
+              if (focusedActionIndex < 0) {
+                focusableActions[0].focus();
+              } else if (focusedActionIndex === focusableActions.length - 1) {
+                this.inputDirective.focusNextSibling();
+                this.inputDirective.restoreInputTextValueToPreviousState();
+                this.closeDropdown();
+              } else {
+                /* NOTE: This is for future work and this ignore should be removed at that time */
+                /* istanbul ignore next */
+                focusableActions[focusedActionIndex + 1].focus();
+              }
+              event.stopPropagation();
+              event.preventDefault();
+            }
           } else {
             this.selectActiveSearchResult();
             this.closeDropdown();
