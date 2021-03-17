@@ -1,3 +1,7 @@
+# 4.10.0 (2021-03-17)
+
+- Addded the abilitly to include an add button to the lookup component results dropdown. [#158](https://github.com/blackbaud/skyux-lookup/pull/158)
+
 # 4.9.0 (2021-03-08)
 
 - Added a single select mode to the lookup component. [#155](https://github.com/blackbaud/skyux-lookup/pull/155)
