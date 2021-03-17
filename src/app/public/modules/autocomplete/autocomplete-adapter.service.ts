@@ -45,7 +45,7 @@ export class SkyAutocompleteAdapterService {
     }
   }
 
-  public overlayContainsActiveElement(overlay: SkyOverlayInstance) {
+  public overlayContainsActiveElement(overlay: SkyOverlayInstance): boolean {
     return overlay.componentRef.location.nativeElement.contains(this.getActiveElement());
   }
 
