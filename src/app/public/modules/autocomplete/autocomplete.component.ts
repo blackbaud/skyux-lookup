@@ -9,7 +9,6 @@ import {
   EventEmitter,
   Input,
   OnDestroy,
-  Optional,
   Output,
   TemplateRef,
   ViewChild
@@ -26,10 +25,6 @@ import {
 import {
   SkyModalService
 } from '@skyux/modals';
-
-import {
-  SkyThemeService
-} from '@skyux/theme';
 
 import {
   fromEvent as observableFromEvent,
@@ -228,7 +223,7 @@ export class SkyAutocompleteComponent
 
   /**
    * @internal
-   * Shows the Add button in the actions bar
+   * Fires when users select the "Add" button.
    */
   @Input()
   public showAddButton: boolean = false;
@@ -282,8 +277,6 @@ export class SkyAutocompleteComponent
 
   public searchText: string;
 
-  public themeName: string;
-
   //#endregion
 
   @ViewChild('defaultSearchResultTemplate', {
@@ -325,8 +318,7 @@ export class SkyAutocompleteComponent
           takeUntil(this.inputDirectiveUnsubscribe)
         )
         .subscribe(() => {
-          this.searchText = '';
-          this.closeDropdown();
+          this.handleBlur();
         });
 
       this._inputDirective.focus
@@ -395,8 +387,7 @@ export class SkyAutocompleteComponent
     private affixService: SkyAffixService,
     private adapterService: SkyAutocompleteAdapterService,
     private overlayService: SkyOverlayService,
-    private modalService: SkyModalService,
-    @Optional() private themeSvc?: SkyThemeService
+    private modalService: SkyModalService
   ) {
     const id = ++uniqueId;
     this.resultsListId = `sky-autocomplete-list-${id}`;
@@ -410,16 +401,6 @@ export class SkyAutocompleteComponent
         'textarea bound with the SkyAutocomplete directive. For example:',
         '`<input type="text" skyAutocomplete>`.'
       ].join(' '));
-    }
-
-    if (this.themeSvc) {
-      this.themeSvc.settingsChange
-        .pipe(
-          takeUntil(this.ngUnsubscribe)
-        )
-        .subscribe((themeSettings) => {
-          this.themeName = themeSettings.currentSettings?.theme?.name;
-        });
     }
   }
 
@@ -438,7 +419,125 @@ export class SkyAutocompleteComponent
 
   public addButtonClicked(): void {
     this.addClick.emit();
+    this.inputDirective.restoreInputTextValueToPreviousState();
     this.closeDropdown();
+  }
+
+  public handleBlur(event?: FocusEvent): void {
+    setTimeout(() => {
+      if (event && event.relatedTarget && (<HTMLElement>event.relatedTarget).attributes.getNamedItem('skyautocomplete')) {
+        return;
+      }
+
+      if (this.overlay && this.adapterService.overlayContainsActiveElement(this.overlay)) {
+        return;
+      }
+
+      this.closeDropdown();
+      this.inputDirective.restoreInputTextValueToPreviousState();
+    });
+  }
+
+  public handleKeydown(event: KeyboardEvent): void {
+    /* Sanity check */
+    /* istanbul ignore else */
+    if (event.key) {
+      const key = event.key.toLowerCase();
+      let focusedActionIndex: number = -1;
+      let focusableActions: HTMLElement[];
+
+      if (this.overlay) {
+        focusableActions = this.adapterService.getFocasableActions(this.overlay);
+
+        /* istanbul ignore else */
+        if (focusableActions) {
+          focusedActionIndex = focusableActions.findIndex(child => child === this.adapterService.getActiveElement());
+        }
+      }
+
+      /* tslint:disable-next-line:switch-default */
+      switch (key) {
+        case 'enter':
+          if (focusedActionIndex >= 0) {
+            break;
+          }
+          this.selectActiveSearchResult();
+          this.closeDropdown();
+          event.preventDefault();
+          event.stopPropagation();
+          break;
+
+        case 'tab':
+          if (this.showAddButton && focusableActions) {
+            if (event.shiftKey) {
+              /* istanbul ignore else */
+              if (focusedActionIndex === 0) {
+                this.inputDirective.focusInput();
+                event.stopPropagation();
+                event.preventDefault();
+              } else if (focusedActionIndex > 0) {
+                /* NOTE: This is for future work and this ignore should be removed at that time */
+                /* istanbul ignore next */
+                focusableActions[focusedActionIndex - 1].focus();
+                event.stopPropagation();
+                event.preventDefault();
+              }
+            } else {
+              /* istanbul ignore else */
+              if (focusedActionIndex < 0) {
+                focusableActions[0].focus();
+              } else if (focusedActionIndex === focusableActions.length - 1) {
+                this.inputDirective.focusNextSibling();
+                this.inputDirective.restoreInputTextValueToPreviousState();
+                this.closeDropdown();
+              } else {
+                /* NOTE: This is for future work and this ignore should be removed at that time */
+                /* istanbul ignore next */
+                focusableActions[focusedActionIndex + 1].focus();
+              }
+              event.stopPropagation();
+              event.preventDefault();
+            }
+          } else {
+            this.selectActiveSearchResult();
+            this.closeDropdown();
+          }
+          break;
+
+        case 'escape':
+          this.closeDropdown();
+          break;
+
+        case 'arrowdown':
+        case 'down':
+          if (focusedActionIndex < 0) {
+            this.searchResultsIndex++;
+            if (this.searchResultsIndex > this.searchResults.length - 1) {
+              this.searchResultsIndex = 0;
+            }
+            this.setActiveDescendant();
+            this.changeDetector.markForCheck();
+          }
+          event.preventDefault();
+          event.stopPropagation();
+          break;
+
+        case 'arrowup':
+        case 'up':
+          if (focusedActionIndex < 0) {
+            this.searchResultsIndex--;
+            if (this.searchResultsIndex < 0) {
+              // Fallback to 0 just in case results are async and aren't returned yet.
+              this.searchResultsIndex = Math.max(this.searchResults.length - 1, 0);
+            }
+            this.setActiveDescendant();
+            this.changeDetector.markForCheck();
+          }
+          event.preventDefault();
+          event.stopPropagation();
+          break;
+      }
+    }
   }
 
   public moreButtonClicked(): void {
@@ -531,21 +630,24 @@ export class SkyAutocompleteComponent
   }
 
   private openDropdown(): void {
-    const overlay = this.overlayService.create({
-      enableClose: false,
-      enablePointerEvents: true
-    });
+    if (!this.overlay) {
+      const overlay = this.overlayService.create({
+        enableClose: false,
+        enablePointerEvents: true
+      });
 
-    overlay.attachTemplate(this.resultsTemplateRef);
+      overlay.attachTemplate(this.resultsTemplateRef);
 
-    this.overlay = overlay;
-    this.isOpen = true;
-    this.setActiveDescendant();
-    this.changeDetector.markForCheck();
+      this.overlay = overlay;
+      this.isOpen = true;
+      this.setActiveDescendant();
+      this.changeDetector.markForCheck();
+    }
   }
 
   private closeDropdown(): void {
     this._searchResults = [];
+    this.searchText = '';
     this._highlightText = '';
     this.searchResultsIndex = 0;
     this.isOpen = false;
@@ -575,53 +677,7 @@ export class SkyAutocompleteComponent
     observableFromEvent(element, 'keydown')
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((event: KeyboardEvent) => {
-        if (event.key) {
-          const key = event.key.toLowerCase();
-
-          /* tslint:disable-next-line:switch-default */
-          switch (key) {
-            case 'enter':
-              this.selectActiveSearchResult();
-              this.closeDropdown();
-              event.preventDefault();
-              event.stopPropagation();
-              break;
-
-            case 'tab':
-              this.selectActiveSearchResult();
-              this.closeDropdown();
-              break;
-
-            case 'escape':
-              this.closeDropdown();
-              break;
-
-            case 'arrowdown':
-            case 'down':
-              this.searchResultsIndex++;
-              if (this.searchResultsIndex > this.searchResults.length - 1) {
-                this.searchResultsIndex = 0;
-              }
-              this.setActiveDescendant();
-              this.changeDetector.markForCheck();
-              event.preventDefault();
-              event.stopPropagation();
-              break;
-
-            case 'arrowup':
-            case 'up':
-              this.searchResultsIndex--;
-              if (this.searchResultsIndex < 0) {
-                // Fallback to 0 just in case results are async and aren't returned yet.
-                this.searchResultsIndex = Math.max(this.searchResults.length - 1, 0);
-              }
-              this.setActiveDescendant();
-              this.changeDetector.markForCheck();
-              event.preventDefault();
-              event.stopPropagation();
-              break;
-          }
-        }
+        this.handleKeydown(event);
       });
 
     observableFromEvent(window, 'resize')
@@ -642,19 +698,21 @@ export class SkyAutocompleteComponent
   }
 
   private createAffixer(): void {
-    const affixer = this.affixService.createAffixer(this.resultsRef);
+    if (!this.affixer) {
+      const affixer = this.affixService.createAffixer(this.resultsRef);
 
-    this.adapterService.setDropdownWidth(this.elementRef, this.resultsRef);
+      this.adapterService.setDropdownWidth(this.elementRef, this.resultsRef);
 
-    affixer.affixTo(this.elementRef.nativeElement, {
-      autoFitContext: SkyAffixAutoFitContext.Viewport,
-      enableAutoFit: true,
-      isSticky: true,
-      placement: 'below',
-      horizontalAlignment: 'left'
-    });
+      affixer.affixTo(this.elementRef.nativeElement, {
+        autoFitContext: SkyAffixAutoFitContext.Viewport,
+        enableAutoFit: true,
+        isSticky: true,
+        placement: 'below',
+        horizontalAlignment: 'left'
+      });
 
-    this.affixer = affixer;
+      this.affixer = affixer;
+    }
   }
 
   private destroyAffixer(): void {

@@ -95,6 +95,30 @@ describe('Autocomplete component', () => {
     blurInput(inputElement, fixture);
   }
 
+  function sendArrowUp(element: HTMLElement, fixture: ComponentFixture<any>): void {
+    SkyAppTestUtility.fireDomEvent(element, 'keydown', {
+      keyboardEventInit: { key: 'ArrowUp' }
+    });
+    fixture.detectChanges();
+    tick();
+  }
+
+  function sendArrowDown(element: HTMLElement, fixture: ComponentFixture<any>): void {
+    SkyAppTestUtility.fireDomEvent(element, 'keydown', {
+      keyboardEventInit: { key: 'ArrowDown' }
+    });
+    fixture.detectChanges();
+    tick();
+  }
+
+  function sendTab(element: HTMLElement, fixture: ComponentFixture<any>, shiftKey?: boolean): void {
+    SkyAppTestUtility.fireDomEvent(element, 'keydown', {
+      keyboardEventInit: { key: 'Tab', shiftKey: shiftKey }
+    });
+    fixture.detectChanges();
+    tick();
+  }
+
   //#endregion
 
   describe('basic setup', () => {
@@ -479,10 +503,7 @@ describe('Autocomplete component', () => {
 
       // Type 'r' to activate the autocomplete dropdown.
       inputElement.value = 'r';
-      SkyAppTestUtility.fireDomEvent(inputElement, 'keydown', {
-        keyboardEventInit: { key: 'Tab' }
-      });
-      tick();
+
       const dropdownElement = getSearchResultsContainer();
 
       expect(dropdownElement).toBeNull();
@@ -703,16 +724,31 @@ describe('Autocomplete component', () => {
         const notifySpy = spyOn(autocomplete.selectionChange, 'emit')
           .and.callThrough();
 
-        SkyAppTestUtility.fireDomEvent(inputElement, 'keydown', {
-          keyboardEventInit: { key: 'Tab' }
-        });
-        tick();
+        sendTab(inputElement, fixture);
 
         expect(input.value.name).toEqual('Red');
         expect(notifySpy).toHaveBeenCalledWith({
           selectedItem: input.value
         });
       }));
+
+      it('should not stop default behavior when shift tab is pressed',
+        fakeAsync(() => {
+          fixture.detectChanges();
+
+          spyOn(KeyboardEvent.prototype, 'stopPropagation').and.callThrough();
+          spyOn(KeyboardEvent.prototype, 'preventDefault').and.callThrough();
+
+          const inputElement: HTMLInputElement = getInputElement();
+
+          sendTab(inputElement, fixture, true);
+          fixture.detectChanges();
+          tick();
+
+          expect(KeyboardEvent.prototype.stopPropagation).not.toHaveBeenCalled();
+          expect(KeyboardEvent.prototype.preventDefault).not.toHaveBeenCalled();
+        })
+      );
 
       it('should navigate items with arrow keys', fakeAsync(() => {
         fixture.detectChanges();
@@ -722,19 +758,11 @@ describe('Autocomplete component', () => {
         enterSearch('r', fixture);
         expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
 
-        SkyAppTestUtility.fireDomEvent(inputElement, 'keydown', {
-          keyboardEventInit: { key: 'ArrowDown' }
-        });
-        fixture.detectChanges();
-        tick();
+        sendArrowDown(inputElement, fixture);
 
         expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
 
-        SkyAppTestUtility.fireDomEvent(inputElement, 'keydown', {
-          keyboardEventInit: { key: 'ArrowUp' }
-        });
-        fixture.detectChanges();
-        tick();
+        sendArrowUp(inputElement, fixture);
 
         expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
 
@@ -799,6 +827,71 @@ describe('Autocomplete component', () => {
           expect(component.myForm.value.favoriteColor).toEqual(selectedValue);
           expect(input.value).toEqual(selectedValue);
           expect(inputElement.value).toEqual(selectedValue.name);
+          expect(getSearchResultsContainer()).toBeNull();
+        })
+      );
+
+      it('should not reset the input text value when a blur is for the dropdown being focused',
+        fakeAsync(() => {
+          component.showAddButton = true;
+          fixture.detectChanges();
+
+          const input: SkyAutocompleteInputDirective = component.autocompleteInput;
+          const inputElement: HTMLInputElement = getInputElement();
+
+          const selectedValue = { name: 'Red' };
+          component.model.favoriteColor = selectedValue;
+
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+
+          enterSearch('re', fixture);
+          inputElement.focus();
+
+          expect(inputElement.value).toEqual('re');
+
+          getAddButton().focus();
+          blurInput(inputElement, fixture);
+          fixture.detectChanges();
+          tick();
+
+          expect(component.myForm.value.favoriteColor).toEqual(selectedValue);
+          expect(input.value).toEqual(selectedValue);
+          expect(inputElement.value).toEqual('re');
+          expect(getSearchResultsContainer()).not.toBeNull();
+        })
+      );
+
+      it('should not reset the input text value when a blur is for the dropdown being blurred and returning to the input',
+        fakeAsync(() => {
+          component.showAddButton = true;
+          fixture.detectChanges();
+
+          const input: SkyAutocompleteInputDirective = component.autocompleteInput;
+          const inputElement: HTMLInputElement = getInputElement();
+
+          const selectedValue = { name: 'Red' };
+          component.model.favoriteColor = selectedValue;
+
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+
+          enterSearch('re', fixture);
+          getAddButton().focus();
+
+          expect(inputElement.value).toEqual('re');
+
+          inputElement.focus();
+          SkyAppTestUtility.fireDomEvent(getAddButton(), 'focusout', { customEventInit: { relatedTarget: inputElement }});
+          fixture.detectChanges();
+          tick();
+
+          expect(component.myForm.value.favoriteColor).toEqual(selectedValue);
+          expect(input.value).toEqual(selectedValue);
+          expect(inputElement.value).toEqual('re');
+          expect(getSearchResultsContainer()).not.toBeNull();
         })
       );
 
@@ -875,6 +968,193 @@ describe('Autocomplete component', () => {
           expect(component.myForm.value.favoriteColor).toBeUndefined();
           expect(input.value).toBeUndefined();
           expect(inputElement.value).toEqual('');
+        })
+      );
+
+      it('should tab to the actions area when an action exists',
+        fakeAsync(() => {
+          component.showAddButton = true;
+          fixture.detectChanges();
+
+          enterSearch('r', fixture);
+
+          const inputElement: HTMLInputElement = getInputElement();
+
+          sendTab(inputElement, fixture);
+
+          expect(document.activeElement).toBe(getAddButton());
+        })
+      );
+
+      it('should reset the value when tabbing out of the actions area',
+        fakeAsync(() => {
+          component.showAddButton = true;
+          fixture.detectChanges();
+
+          const selectedValue = { name: 'Red' };
+          component.model.favoriteColor = selectedValue;
+
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+
+          enterSearch('r', fixture);
+
+          const input: SkyAutocompleteInputDirective = component.autocompleteInput;
+          const inputElement: HTMLInputElement = getInputElement();
+
+          sendTab(inputElement, fixture);
+
+          expect(document.activeElement).toBe(getAddButton());
+
+          sendTab(inputElement, fixture);
+
+          expect(component.myForm.value.favoriteColor).toEqual(selectedValue);
+          expect(input.value).toEqual(selectedValue);
+          expect(inputElement.value).toEqual(selectedValue.name);
+        })
+      );
+
+      it('should reset the value and emit the add event if enter is clicked on add button',
+        fakeAsync(() => {
+          component.showAddButton = true;
+          fixture.detectChanges();
+
+          const selectedValue = { name: 'Red' };
+          component.model.favoriteColor = selectedValue;
+
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+
+          enterSearch('r', fixture);
+
+          const input: SkyAutocompleteInputDirective = component.autocompleteInput;
+          const inputElement: HTMLInputElement = getInputElement();
+
+          // Select an item other than "Red"
+          sendArrowDown(inputElement, fixture);
+
+          sendTab(inputElement, fixture);
+
+          const addButton = getAddButton();
+          expect(document.activeElement).toBe(addButton);
+
+          // In the wild this is done by the user clicking "Enter", but in testing we must send both.
+          SkyAppTestUtility.fireDomEvent(addButton, 'keydown', {
+            keyboardEventInit: { key: 'Enter' }
+          });
+          SkyAppTestUtility.fireDomEvent(addButton, 'click');
+          fixture.detectChanges();
+          tick();
+
+          expect(component.myForm.value.favoriteColor).toEqual(selectedValue);
+          expect(input.value).toEqual(selectedValue);
+          expect(inputElement.value).toEqual(selectedValue.name);
+        })
+      );
+
+      it('should return focus back to the input when Shift-Tab is pressed on the first action',
+        fakeAsync(() => {
+          component.showAddButton = true;
+          fixture.detectChanges();
+
+          enterSearch('r', fixture);
+
+          const inputElement: HTMLInputElement = getInputElement();
+
+          sendTab(inputElement, fixture);
+
+          expect(document.activeElement).toBe(getAddButton());
+
+          sendTab(inputElement, fixture, true);
+
+          expect(document.activeElement).toBe(getInputElement());
+        })
+      );
+
+      it('should not stop default behavior when shift tab is pressed on the input when actions exist',
+        fakeAsync(() => {
+          component.showAddButton = true;
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+
+          enterSearch('r', fixture);
+
+          spyOn(KeyboardEvent.prototype, 'stopPropagation').and.callThrough();
+          spyOn(KeyboardEvent.prototype, 'preventDefault').and.callThrough();
+
+          const inputElement: HTMLInputElement = getInputElement();
+
+          sendTab(inputElement, fixture, true);
+
+          expect(KeyboardEvent.prototype.stopPropagation).not.toHaveBeenCalled();
+          expect(KeyboardEvent.prototype.preventDefault).not.toHaveBeenCalled();
+        })
+      );
+
+      it('should not change the selected item index when arrow down is used on an action item',
+        fakeAsync(() => {
+          component.showAddButton = true;
+          fixture.detectChanges();
+
+          const inputElement: HTMLInputElement = getInputElement();
+
+          enterSearch('r', fixture);
+          expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
+
+          sendArrowDown(inputElement, fixture);
+
+          expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
+
+          sendTab(inputElement, fixture);
+
+          expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
+
+          sendArrowDown(inputElement, fixture);
+
+          expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
+
+          sendTab(inputElement, fixture, true);
+
+          expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
+
+          sendArrowDown(inputElement, fixture);
+
+          expect(getSearchResultItems().item(2)).toHaveCssClass('selected');
+        })
+      );
+
+      it('should not change the selected item index when arrow up is used on an action item',
+        fakeAsync(() => {
+          component.showAddButton = true;
+          fixture.detectChanges();
+
+          const inputElement: HTMLInputElement = getInputElement();
+
+          enterSearch('r', fixture);
+          expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
+
+          sendArrowDown(inputElement, fixture);
+
+          expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
+
+          sendTab(inputElement, fixture);
+
+          expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
+
+          sendArrowUp(inputElement, fixture);
+
+          expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
+
+          sendTab(inputElement, fixture, true);
+
+          expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
+
+          sendArrowUp(inputElement, fixture);
+
+          expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
         })
       );
     });

@@ -16,13 +16,26 @@ import {
 } from '@skyux/core';
 
 import {
+  SkyDataManagerModule
+} from '@skyux/data-manager';
+
+import {
   SkyIconModule,
   SkyTextHighlightModule
 } from '@skyux/indicators';
 
 import {
+  SkyInfiniteScrollModule,
+  SkyRepeaterModule
+} from '@skyux/lists';
+
+import {
   SkyModalModule
 } from '@skyux/modals';
+
+import {
+  SkyThemeModule
+} from '@skyux/theme';
 
 import {
   SkyLookupResourcesModule
@@ -43,8 +56,6 @@ import {
 import {
   SkyAutocompleteShowMoreModalComponent
 } from './autocomplete-show-more-modal.component';
-import { SkyDataManagerModule } from '@skyux/data-manager';
-import { SkyInfiniteScrollModule, SkyRepeaterModule } from '@skyux/lists';
 
 @NgModule({
   declarations: [
@@ -63,7 +74,8 @@ import { SkyInfiniteScrollModule, SkyRepeaterModule } from '@skyux/lists';
     SkyLookupResourcesModule,
     SkyModalModule,
     SkyOverlayModule,
-    SkyRepeaterModule
+    SkyRepeaterModule,
+    SkyThemeModule
   ],
   entryComponents: [
     SkyAutocompleteShowMoreModalComponent

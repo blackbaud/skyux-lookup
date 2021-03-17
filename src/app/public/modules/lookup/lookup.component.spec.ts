@@ -59,7 +59,6 @@ describe('Lookup component', function () {
   function performSearch(searchText: string, fixture: ComponentFixture<any>) {
     const inputElement = getInputElement(fixture.componentInstance.lookupComponent);
     inputElement.value = searchText;
-    inputElement.focus();
     SkyAppTestUtility.fireDomEvent(inputElement, 'input');
     tick();
     fixture.detectChanges();
@@ -247,13 +246,18 @@ describe('Lookup component', function () {
 
         it('should NOT add new tokens if value is empty', fakeAsync(function () {
           fixture.detectChanges();
+          tick();
           expect(lookupComponent.value).toEqual([]);
 
           performSearch('s', fixture);
           selectSearchResult(0, fixture);
+          fixture.detectChanges();
+          tick();
 
           performSearch('', fixture);
           getInputElement(lookupComponent).blur();
+          fixture.detectChanges();
+          tick();
 
           const selectedItems = lookupComponent.value;
           expect(selectedItems.length).toEqual(1);
@@ -320,13 +324,18 @@ describe('Lookup component', function () {
 
         it('should NOT add new tokens if value is empty', fakeAsync(function () {
           fixture.detectChanges();
+          tick();
           validateItems([]);
 
           performSearch('s', fixture);
           selectSearchResult(0, fixture);
+          fixture.detectChanges();
+          tick();
 
           performSearch('', fixture);
           getInputElement(lookupComponent).blur();
+          fixture.detectChanges();
+          tick();
 
           validateItems(['Isaac']);
         }));
@@ -537,6 +546,7 @@ describe('Lookup component', function () {
           const inputElement = getInputElement(lookupComponent);
 
           performSearch('s', fixture);
+          inputElement.focus();
 
           expect(inputElement.value).toEqual('s');
 
@@ -859,13 +869,18 @@ describe('Lookup component', function () {
 
         it('should NOT add new tokens if value is empty', fakeAsync(function () {
           fixture.detectChanges();
+          tick();
           expect(lookupComponent.value).toEqual([]);
 
           performSearch('s', fixture);
           selectSearchResult(0, fixture);
+          fixture.detectChanges();
+          tick();
 
           performSearch('', fixture);
           getInputElement(lookupComponent).blur();
+          fixture.detectChanges();
+          tick();
 
           const selectedItems = lookupComponent.value;
           expect(selectedItems.length).toEqual(1);
@@ -1111,6 +1126,7 @@ describe('Lookup component', function () {
           const inputElement = getInputElement(lookupComponent);
 
           performSearch('s', fixture);
+          inputElement.focus();
 
           expect(inputElement.value).toEqual('s');
 

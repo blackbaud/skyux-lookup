@@ -61,19 +61,10 @@ export class SkyAutocompleteShowMoreModalComponent implements OnInit {
     public context: SkyAutocompleteShowMoreContext,
     private changeDetector: ChangeDetectorRef,
     private dataManagerService: SkyDataManagerService
-    ) { }
+  ) { }
 
   public ngOnInit(): void {
-    setTimeout(() => {
-      this.addItems();
-    });
-
     this.dataManagerService.initDataView(this.viewConfig);
-
-    this.dataManagerService.getDataStateUpdates(this.viewId).subscribe(state => {
-      this.dataState = state;
-      this.updateData();
-    });
 
     this.dataManagerService.initDataManager(
       {
@@ -82,6 +73,15 @@ export class SkyAutocompleteShowMoreModalComponent implements OnInit {
         defaultDataState: this.dataState
       }
     );
+
+    setTimeout(() => {
+      this.addItems();
+
+      this.dataManagerService.getDataStateUpdates(this.viewId).subscribe(state => {
+        this.dataState = state;
+        this.updateData();
+      });
+    });
   }
 
   public addItems(): void {
