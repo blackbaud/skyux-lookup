@@ -41,7 +41,7 @@ describe('Lookup component', () => {
   }
 
   async function validateScreenshotWithMenu(done: DoneFn, screenshotName: string): Promise<void> {
-    const input = element(by.css('textarea'));
+    const input = element(by.css('#lookup-visual textarea'));
     input.value = 'r';
     await input.click();
 
@@ -60,6 +60,22 @@ describe('Lookup component', () => {
     expect('#lookup-single-visual').toMatchBaselineScreenshot(done, {
       screenshotName: getScreenshotName(screenshotName)
     });
+  }
+
+  async function validateSingleModeScreenshotWithMenu(done: DoneFn, screenshotName: string): Promise<void> {
+    const input = element(by.css('#lookup-single-visual textarea'));
+    input.value = 'r';
+    await input.click();
+
+    await browser.actions().sendKeys('r').perform();
+
+    await browser.wait(
+      ExpectedConditions.presenceOf(element(by.css('.sky-autocomplete-results'))),
+      1200,
+      'Autocomplete results dropdown took too long to appear.'
+    );
+
+    validateSingleModeScreenshot(done, screenshotName);
   }
 
   function runTests(): void {
@@ -86,6 +102,10 @@ describe('Lookup component', () => {
       it('should match previous lookup single mode screenshot', (done) => {
         validateSingleModeScreenshot(done, 'lookup-single-mode');
       });
+
+      it('should match previous lookup single mode screenshot', (done) => {
+        validateSingleModeScreenshotWithMenu(done, 'lookup-single-mode-w-menu');
+      });
     });
 
     describe('(xs screens)', () => {
@@ -103,6 +123,10 @@ describe('Lookup component', () => {
 
       it('should match previous lookup single mode screenshot', (done) => {
         validateSingleModeScreenshot(done, 'lookup-single-mode-xs');
+      });
+
+      it('should match previous lookup single mode screenshot', (done) => {
+        validateSingleModeScreenshotWithMenu(done, 'lookup-single-mode-w-menu-xs');
       });
     });
   }
