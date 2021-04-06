@@ -5,7 +5,7 @@
 >
 
   <sky-docs-demo-page-summary>
-    The lookup typeahead search input lets users enter text and then filters a data source based on user entries.
+    The lookup component lets users search and make selections from long lists of options.
   </sky-docs-demo-page-summary>
 
   <sky-docs-demo>
@@ -48,9 +48,77 @@
         headingStyle="success"
       >
         <p class="sky-docs-text-block">
-          Use the lookup component when users know what they are looking for and can select multiple items. For guidance on which selection inputs to use in other scenarios, see the <a href="https://developer.blackbaud.com/skyux/design/guidelines/form-design#selection-inputs">form design guidelines</a>.
+          Use the lookup component when users make a single selection or multiple selections from a long list of options. For guidance on which selection inputs to use in other scenarios, see the <a href="https://developer.blackbaud.com/skyux/design/guidelines/form-design#selection-inputs">form design guidelines</a>.
         </p>
       </sky-docs-design-guideline>
+    </sky-docs-demo-page-section>
+    
+    <sky-docs-demo-page-section
+      heading="Anatomy"
+    >
+      <sky-docs-anatomy
+        *skyThemeIf="'default'" imagePath="~/assets/img/guidelines/lookup/lookup-anatomy-default.png"
+      >
+        <sky-docs-anatomy-item>Input field</sky-docs-anatomy-item>
+        <sky-docs-anatomy-item>Suggestions popover</sky-docs-anatomy-item>
+        <sky-docs-anatomy-item>Suggested results</sky-docs-anatomy-item>
+        <sky-docs-anatomy-item isOptional="true">Button to create new option</sky-docs-anatomy-item>
+      </sky-docs-anatomy>
+      <sky-docs-anatomy
+        *skyThemeIf="'modern'" imagePath="~/assets/img/guidelines/lookup/lookup-anatomy-modern.png"
+      >
+        <sky-docs-anatomy-item>Input field</sky-docs-anatomy-item>
+        <sky-docs-anatomy-item>Suggestions popover</sky-docs-anatomy-item>
+        <sky-docs-anatomy-item>Suggested results</sky-docs-anatomy-item>
+        <sky-docs-anatomy-item isOptional="true">Button to create new option</sky-docs-anatomy-item>
+      </sky-docs-anatomy>
+    </sky-docs-demo-page-section>  
+      
+    <sky-docs-demo-page-section
+      heading="Options"
+    >
+    <sky-docs-design-guideline
+      heading="Single-select and multi-select"
+    >
+        <p>
+          Use a single-select lookup when users need to choose a single option, and use a multi-select lookup when users may choose one or more.
+        </p>
+        <sky-docs-design-guideline-thumbnail 
+            *skyThemeIf="'default'" imageSource="~/assets/img/guidelines/lookup/lookup-options-1-default.png">
+        </sky-docs-design-guideline-thumbnail>
+        <sky-docs-design-guideline-thumbnail 
+            *skyThemeIf="'modern'" imageSource="~/assets/img/guidelines/lookup/lookup-options-1-modern.png">
+        </sky-docs-design-guideline-thumbnail>
+    </sky-docs-design-guideline>
+        
+    <sky-docs-design-guideline
+      heading="Button to create new option"
+    >
+        <p>
+          Include the button to create new options when users may need to add a new option to the list as part of completing their tasks. Clicking this button will begin whatever experience is necessary for creating the new option. When users complete that workflow, the new option is selected in the lookup field.
+        </p>
+        <sky-docs-design-guideline-thumbnail 
+            *skyThemeIf="'default'" imageSource="~/assets/img/guidelines/lookup/lookup-options-2-default.png">
+        </sky-docs-design-guideline-thumbnail>
+        <sky-docs-design-guideline-thumbnail 
+            *skyThemeIf="'modern'" imageSource="~/assets/img/guidelines/lookup/lookup-options-2-modern.png">
+        </sky-docs-design-guideline-thumbnail>
+    </sky-docs-design-guideline>
+    
+    <sky-docs-design-guideline
+      heading="Custom results template"
+    >
+        <p>
+          Use a custom results template when users need more information about the available options to make the correct choice. The custom format will appear in the popover match suggestions.
+        </p>
+        <sky-docs-design-guideline-thumbnail 
+            *skyThemeIf="'default'" imageSource="~/assets/img/guidelines/lookup/lookup-options-3-default.png">
+        </sky-docs-design-guideline-thumbnail>
+        <sky-docs-design-guideline-thumbnail 
+            *skyThemeIf="'modern'" imageSource="~/assets/img/guidelines/lookup/lookup-options-3-modern.png">
+        </sky-docs-design-guideline-thumbnail>
+    </sky-docs-design-guideline>
+      
     </sky-docs-demo-page-section>
 
     <sky-docs-demo-page-section
