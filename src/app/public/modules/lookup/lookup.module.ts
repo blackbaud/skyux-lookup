@@ -1,25 +1,72 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {
+  NgModule
+} from '@angular/core';
 
 import {
-  SkyAppWindowRef
+  CommonModule
+} from '@angular/common';
+
+import {
+  FormsModule
+} from '@angular/forms';
+
+import {
+  SkyAppWindowRef,
+  SkyViewkeeperModule
 } from '@skyux/core';
 
-import { SkyAutocompleteModule } from '../autocomplete/autocomplete.module';
-import { SkyTokensModule } from '@skyux/indicators';
+import {
+  SkyDataManagerModule
+} from '@skyux/data-manager';
 
-import { SkyLookupComponent } from './lookup.component';
+import {
+  SkyTokensModule
+} from '@skyux/indicators';
+
+import {
+  SkyInfiniteScrollModule,
+  SkyRepeaterModule
+} from '@skyux/lists';
+
+import {
+  SkyModalModule
+} from '@skyux/modals';
+
+import {
+  SkyLookupComponent
+} from './lookup.component';
+
+import {
+  SkyLookupShowMoreModalComponent
+} from './lookup-show-more-modal.component';
+
+import {
+  SkyAutocompleteModule
+} from '../autocomplete/autocomplete.module';
+
+import {
+  SkyLookupResourcesModule
+} from '../shared/lookup-resources.module';
 
 @NgModule({
   declarations: [
-    SkyLookupComponent
+    SkyLookupComponent,
+    SkyLookupShowMoreModalComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     SkyAutocompleteModule,
-    SkyTokensModule
+    SkyDataManagerModule,
+    SkyInfiniteScrollModule,
+    SkyLookupResourcesModule,
+    SkyModalModule,
+    SkyRepeaterModule,
+    SkyTokensModule,
+    SkyViewkeeperModule
+  ],
+  entryComponents: [
+    SkyLookupShowMoreModalComponent
   ],
   exports: [
     SkyLookupComponent

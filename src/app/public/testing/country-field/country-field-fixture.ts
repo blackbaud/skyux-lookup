@@ -120,7 +120,7 @@ export class SkyCountryFieldFixture {
     return fixture.whenStable();
   }
 
-  private enterSearch(
+  private async enterSearch(
     newValue: string,
     fixture: ComponentFixture<any>
   ): Promise<void> {
@@ -129,6 +129,8 @@ export class SkyCountryFieldFixture {
 
     SkyAppTestUtility.fireDomEvent(inputElement, 'keyup');
     SkyAppTestUtility.fireDomEvent(inputElement, 'input');
+    fixture.detectChanges();
+    await fixture.whenStable();
     fixture.detectChanges();
     return fixture.whenStable();
   }

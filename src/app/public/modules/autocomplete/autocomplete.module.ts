@@ -16,22 +16,9 @@ import {
 } from '@skyux/core';
 
 import {
-  SkyDataManagerModule
-} from '@skyux/data-manager';
-
-import {
   SkyIconModule,
   SkyTextHighlightModule
 } from '@skyux/indicators';
-
-import {
-  SkyInfiniteScrollModule,
-  SkyRepeaterModule
-} from '@skyux/lists';
-
-import {
-  SkyModalModule
-} from '@skyux/modals';
 
 import {
   SkyThemeModule
@@ -53,32 +40,20 @@ import {
   SkyAutocompleteInputDirective
 } from './autocomplete-input.directive';
 
-import {
-  SkyAutocompleteShowMoreModalComponent
-} from './autocomplete-show-more-modal.component';
-
 @NgModule({
   declarations: [
     SkyAutocompleteComponent,
-    SkyAutocompleteInputDirective,
-    SkyAutocompleteShowMoreModalComponent
+    SkyAutocompleteInputDirective
   ],
   imports: [
     CommonModule,
     FormsModule,
     SkyAffixModule,
-    SkyDataManagerModule,
     SkyTextHighlightModule,
     SkyIconModule,
-    SkyInfiniteScrollModule,
     SkyLookupResourcesModule,
-    SkyModalModule,
     SkyOverlayModule,
-    SkyRepeaterModule,
     SkyThemeModule
-  ],
-  entryComponents: [
-    SkyAutocompleteShowMoreModalComponent
   ],
   exports: [
     SkyAutocompleteComponent,

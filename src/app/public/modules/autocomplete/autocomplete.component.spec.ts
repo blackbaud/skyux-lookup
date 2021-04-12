@@ -298,7 +298,7 @@ describe('Autocomplete component', () => {
       // The letter 'r' should return multiple results.
       enterSearch('r', fixture);
 
-      expect(autocomplete.searchResults.length).toEqual(1);
+      expect(getSearchResultItems().length).toEqual(1);
     }));
 
     it('should not search if search text empty', fakeAsync(() => {

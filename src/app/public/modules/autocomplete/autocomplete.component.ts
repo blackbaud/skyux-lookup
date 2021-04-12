@@ -23,10 +23,6 @@ import {
 } from '@skyux/core';
 
 import {
-  SkyModalService
-} from '@skyux/modals';
-
-import {
   fromEvent as observableFromEvent,
   Subject
 } from 'rxjs';
@@ -59,8 +55,6 @@ import {
 import {
   SkyAutocompleteInputDirective
 } from './autocomplete-input.directive';
-import { SkyAutocompleteShowMoreModalComponent } from './autocomplete-show-more-modal.component';
-import { SkyAutocompleteShowMoreContext } from './types/autocomplete-show-more-context';
 
 /**
  * @internal
@@ -250,6 +244,13 @@ export class SkyAutocompleteComponent
   public addClick: EventEmitter<void> = new EventEmitter();
 
   /**
+   * @internal
+   * Fires when users select the "Show more" button
+   */
+  @Output()
+  public showMoreClick: EventEmitter<void> = new EventEmitter();
+
+  /**
    * Fires when users select items in the dropdown list.
    */
   @Output()
@@ -326,7 +327,7 @@ export class SkyAutocompleteComponent
           takeUntil(this.inputDirectiveUnsubscribe)
         )
         .subscribe(() => {
-          if (this.showAddButton) {
+          if (this.showAddButton || this.showMoreButton) {
             this.openDropdown();
           }
         });
@@ -386,8 +387,7 @@ export class SkyAutocompleteComponent
     private elementRef: ElementRef,
     private affixService: SkyAffixService,
     private adapterService: SkyAutocompleteAdapterService,
-    private overlayService: SkyOverlayService,
-    private modalService: SkyModalService
+    private overlayService: SkyOverlayService
   ) {
     const id = ++uniqueId;
     this.resultsListId = `sky-autocomplete-list-${id}`;
@@ -541,12 +541,7 @@ export class SkyAutocompleteComponent
   }
 
   public moreButtonClicked(): void {
-    this.modalService.open(SkyAutocompleteShowMoreModalComponent, {
-      providers: [{ provide: SkyAutocompleteShowMoreContext, useValue: {
-        items: this.searchText ? this.searchResults.map(result => { return result.data; }) : this.data,
-        descriptorProperty: this.descriptorProperty
-      }}]
-    });
+    this.showMoreClick.emit();
   }
 
   public onResultMouseDown(index: number): void {

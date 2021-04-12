@@ -45,16 +45,24 @@ import {
 } from '@skyux/indicators';
 
 import {
+  SkyModalService
+} from '@skyux/modals';
+
+import {
   SkyThemeService
 } from '@skyux/theme';
 
 import {
-  SkyAutocompleteSelectionChange
-} from '../autocomplete/types/autocomplete-selection-change';
+  SkyAutocompleteComponent
+} from '../autocomplete/autocomplete.component';
 
 import {
   SkyAutocompleteInputDirective
 } from '../autocomplete/autocomplete-input.directive';
+
+import {
+  SkyAutocompleteSelectionChange
+} from '../autocomplete/types/autocomplete-selection-change';
 
 import {
   SkyLookupAutocompleteAdapter
@@ -65,8 +73,20 @@ import {
 } from './lookup-adapter.service';
 
 import {
+  SkyLookupShowMoreModalComponent
+} from './lookup-show-more-modal.component';
+
+import {
   SkyLookupSelectMode
 } from './types/lookup-select-mode';
+
+import {
+  SkyLookupShowMoreConfig
+} from './types/lookup-show-more-config';
+
+import {
+  SkyLookupShowMoreContext
+} from './types/lookup-show-more-context';
 
 @Component({
   selector: 'sky-lookup',
@@ -136,6 +156,12 @@ export class SkyLookupComponent
   public showMoreButton: boolean = true;
 
   /**
+   * Specifies the configuration options for the show more modal.
+   */
+  @Input()
+  public showMoreModalConfig: SkyLookupShowMoreConfig;
+
+  /**
    * Specifies whether users can select one item or multiple items.
    * @default "mulitple"
    */
@@ -201,6 +227,9 @@ export class SkyLookupComponent
     return this._autocompleteInputDirective;
   }
 
+  @ViewChild(SkyAutocompleteComponent)
+  private autocompleteComponent: SkyAutocompleteComponent;
+
   @ViewChild('inputTemplateRef', {
     read: TemplateRef,
     static: true
@@ -221,6 +250,7 @@ export class SkyLookupComponent
     private windowRef: SkyAppWindowRef,
     @Self() @Optional() ngControl: NgControl,
     private adapter: SkyLookupAdapterService,
+    private modalService: SkyModalService,
     @Optional() public inputBoxHostSvc?: SkyInputBoxHostService,
     @Optional() public themeSvc?: SkyThemeService
   ) {
@@ -414,6 +444,47 @@ export class SkyLookupComponent
 
       event.stopPropagation();
     }
+  }
+
+  public showMoreButtonClicked(): void {
+    const modalConfig = this.showMoreModalConfig || {};
+    if (!modalConfig.itemTemplate) {
+      modalConfig.itemTemplate = this.searchResultTemplate;
+    }
+
+    const modalInstance = this.modalService.open(SkyLookupShowMoreModalComponent, {
+      providers: [{ provide: SkyLookupShowMoreContext, useValue: {
+        items: this.data,
+        descriptorProperty: this.descriptorProperty,
+        initialSearch: this.autocompleteComponent.searchText,
+        initialValue: this.tokens,
+        selectMode: this.selectMode,
+        showAddButton: this.showAddButton,
+        userConfig: modalConfig
+      }}]
+    });
+
+    modalInstance.componentInstance.addClick.subscribe(() => {
+      this.addClick.emit();
+    });
+
+    modalInstance.closed.subscribe(closeArgs => {
+      if (closeArgs.reason === 'save') {
+        let selectedItems: any[] = [];
+
+        this.data.forEach((item: any, dataIndex: number) => {
+          if (closeArgs.data.some((savedItemIndex: any) => {
+            return savedItemIndex === dataIndex;
+          })) {
+            selectedItems.push(item);
+          }
+        });
+
+        this.writeValue(selectedItems);
+        this.updateForSelectMode();
+        this.changeDetector.markForCheck();
+      }
+    });
   }
 
   private addToSelected(item: any): void {

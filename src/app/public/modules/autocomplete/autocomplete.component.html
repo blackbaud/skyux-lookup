@@ -58,7 +58,7 @@
       <button *ngIf="showMoreButton"
         class="sky-autocomplete-more sky-btn sky-btn-link"
         type="button"
-        (mousedown)="moreButtonClicked()"
+        (click)="moreButtonClicked()"
       >
         <ng-container *ngIf="!searchText">
           Show all {{data.length}}

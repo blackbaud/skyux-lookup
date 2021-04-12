@@ -120,7 +120,9 @@
           [selectMode]="bestFriendSelectMode"
           [data]="people"
           [debounceTime]="1000"
-          [showAddButton]="true"
+          [searchResultTemplate]="itemTemplate"
+          [showAddButton]="false"
+          [showMoreModalConfig]="{ itemTemplate: itemTemplate2 }"
           (addClick)="addButtonClicked()"
         >
         </sky-lookup>
@@ -128,6 +130,21 @@
     </form>
   </div>
 </div>
+
+<ng-template
+  let-item="item"
+  #itemTemplate
+>
+  <strong>{{item.name}}</strong><br/>
+  {{item.id}}
+</ng-template>
+<ng-template
+  let-item="item"
+  #itemTemplate2
+>
+  {{item.name}}<br/>
+  {{item.id}}
+</ng-template>
 
 <table>
   <tr>

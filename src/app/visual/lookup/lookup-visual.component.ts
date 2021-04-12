@@ -34,6 +34,7 @@ export class LookupVisualComponent implements OnInit {
     { id: 5, name: 'Grace' },
     { id: 6, name: 'Isaac' },
     { id: 7, name: 'John' },
+    { id: 8, name: 'Jupiter' },
     { id: 9, name: 'Joyce' },
     { id: 10, name: 'Lindsey' },
     { id: 11, name: 'Mitch' },
