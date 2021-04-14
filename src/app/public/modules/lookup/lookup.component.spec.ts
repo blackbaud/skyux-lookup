@@ -1,8 +1,8 @@
 import {
   async,
   ComponentFixture,
+  discardPeriodicTasks,
   fakeAsync,
-  flush,
   TestBed,
   tick
 } from '@angular/core/testing';
@@ -554,7 +554,7 @@ describe('Lookup component', function () {
           // injectors than the previous test.
           modalService.dispose();
           fixture.detectChanges();
-          flush();
+          discardPeriodicTasks();
         }));
 
         it('should open the modal when the show more button is clicked',
@@ -1688,7 +1688,7 @@ describe('Lookup component', function () {
           // injectors than the previous test.
           modalService.dispose();
           fixture.detectChanges();
-          flush();
+          discardPeriodicTasks();
         }));
 
         it('should open the modal when the show more button is clicked',
