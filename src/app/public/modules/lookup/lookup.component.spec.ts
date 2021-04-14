@@ -2,7 +2,6 @@ import {
   async,
   ComponentFixture,
   fakeAsync,
-  flush,
   TestBed,
   tick
 } from '@angular/core/testing';
@@ -85,6 +84,9 @@ describe('Lookup component', function () {
   function closeModal(fixture: ComponentFixture<any>): void {
     (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-close'))?.click();
     fixture.detectChanges();
+    tick();
+    fixture.detectChanges();
+    tick();
   }
 
   function dismissSelectedItem(index: number, fixture: ComponentFixture<any>): void {
@@ -547,16 +549,11 @@ describe('Lookup component', function () {
         // This is necessary as due to modals being launched outside of the test bed they will not
         // automatically be disposed between tests.
         afterEach(fakeAsync(() => {
-          closeModal(fixture);
-
           // NOTE: This is important as it ensures that the modal host component is fully disposed of
           // between tests. This is important as the modal host might need a different set of component
           // injectors than the previous test.
           modalService.dispose();
           fixture.detectChanges();
-          tick();
-          tick(500);
-          flush();
         }));
 
         it('should open the modal when the show more button is clicked',
@@ -570,6 +567,8 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(modalService.open).toHaveBeenCalled();
+
+            closeModal(fixture);
           })
         );
 
@@ -595,6 +594,8 @@ describe('Lookup component', function () {
               saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -617,6 +618,8 @@ describe('Lookup component', function () {
               saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -662,6 +665,8 @@ describe('Lookup component', function () {
               saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -693,6 +698,8 @@ describe('Lookup component', function () {
                 },
                 { name: 'Lindsey' }
               ]);
+
+              closeModal(fixture);
             })
           );
 
@@ -719,6 +726,8 @@ describe('Lookup component', function () {
               saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([]);
+
+              closeModal(fixture);
             })
           );
 
@@ -756,6 +765,8 @@ describe('Lookup component', function () {
                   birthDate: '11/1997'
                 }
               ]);
+
+              closeModal(fixture);
             })
           );
 
@@ -780,6 +791,8 @@ describe('Lookup component', function () {
               saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([]);
+
+              closeModal(fixture);
             })
           );
 
@@ -793,6 +806,8 @@ describe('Lookup component', function () {
               clickShowMore(fixture);
 
               expect(getShowMoreModalTitle()).toBe('Select options');
+
+              closeModal(fixture);
             })
           );
 
@@ -809,6 +824,8 @@ describe('Lookup component', function () {
               clickShowMore(fixture);
 
               expect(getShowMoreModalTitle()).toBe('Custom title');
+
+              closeModal(fixture);
             })
           );
 
@@ -837,6 +854,8 @@ describe('Lookup component', function () {
               saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -860,6 +879,8 @@ describe('Lookup component', function () {
               saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -883,6 +904,8 @@ describe('Lookup component', function () {
               closeModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -897,6 +920,8 @@ describe('Lookup component', function () {
               clickShowMore(fixture);
 
               expect(getShowMoreModalTitle()).toBe('Select an option');
+
+              closeModal(fixture);
             })
           );
 
@@ -914,6 +939,8 @@ describe('Lookup component', function () {
               clickShowMore(fixture);
 
               expect(getShowMoreModalTitle()).toBe('Custom title');
+
+              closeModal(fixture);
             })
           );
 
@@ -926,6 +953,8 @@ describe('Lookup component', function () {
               clickShowMore(fixture);
 
               expect(getRepeaterItemCount()).toBe(2);
+
+              closeModal(fixture);
             })
           );
 
@@ -940,6 +969,8 @@ describe('Lookup component', function () {
               clickShowMore(fixture);
 
               expect(getRepeaterItemCount()).toBe(10);
+
+              closeModal(fixture);
             })
           );
 
@@ -975,6 +1006,8 @@ describe('Lookup component', function () {
               fixture.detectChanges();
 
               expect(getRepeaterItemCount()).toBe(21);
+
+              (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-close'))?.click();
             }
           );
 
@@ -993,6 +1026,8 @@ describe('Lookup component', function () {
             clickModalAddButton(fixture);
 
             expect(addButtonSpy).toHaveBeenCalled();
+
+            closeModal(fixture);
           })
         );
 
@@ -1018,6 +1053,8 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(getShowMoreRepeaterItemContent(0)).toBe('Patty');
+
+            closeModal(fixture);
           })
         );
 
@@ -1031,6 +1068,8 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(getShowMoreRepeaterItemContent(0)).toBe('1/1/1996');
+
+            closeModal(fixture);
           })
         );
 
@@ -1045,6 +1084,8 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(getShowMoreRepeaterItemContent(0)).toBe('Ms. Patty');
+
+            closeModal(fixture);
           })
         );
 
@@ -1060,6 +1101,8 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(getShowMoreRepeaterItemContent(0)).toBe('Patty - 1/1/1996');
+
+            closeModal(fixture);
           })
         );
 
@@ -1079,6 +1122,8 @@ describe('Lookup component', function () {
               initialSearch: 'p',
               initialValue: undefined
             });
+
+            closeModal(fixture);
           })
         );
 
@@ -1683,16 +1728,11 @@ describe('Lookup component', function () {
         // This is necessary as due to modals being launched outside of the test bed they will not
         // automatically be disposed between tests.
         afterEach(fakeAsync(() => {
-          closeModal(fixture);
-
           // NOTE: This is important as it ensures that the modal host component is fully disposed of
           // between tests. This is important as the modal host might need a different set of component
           // injectors than the previous test.
           modalService.dispose();
           fixture.detectChanges();
-          tick();
-          tick(500);
-          flush();
         }));
 
         it('should open the modal when the show more button is clicked',
@@ -1705,6 +1745,8 @@ describe('Lookup component', function () {
             performSearch('r', fixture);
             clickShowMore(fixture);
             expect(modalService.open).toHaveBeenCalled();
+
+            closeModal(fixture);
           })
         );
 
@@ -1730,6 +1772,8 @@ describe('Lookup component', function () {
               saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -1752,6 +1796,8 @@ describe('Lookup component', function () {
               saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -1797,6 +1843,8 @@ describe('Lookup component', function () {
               saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -1828,6 +1876,8 @@ describe('Lookup component', function () {
                 },
                 { name: 'Lindsey' }
               ]);
+
+              closeModal(fixture);
             })
           );
 
@@ -1854,6 +1904,8 @@ describe('Lookup component', function () {
               saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([]);
+
+              closeModal(fixture);
             })
           );
 
@@ -1891,6 +1943,8 @@ describe('Lookup component', function () {
                   birthDate: '11/1997'
                 }
               ]);
+
+              closeModal(fixture);
             })
           );
 
@@ -1915,6 +1969,8 @@ describe('Lookup component', function () {
               saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([]);
+
+              closeModal(fixture);
             })
           );
 
@@ -1928,6 +1984,8 @@ describe('Lookup component', function () {
               clickShowMore(fixture);
 
               expect(getShowMoreModalTitle()).toBe('Select options');
+
+              closeModal(fixture);
             })
           );
 
@@ -1944,6 +2002,8 @@ describe('Lookup component', function () {
               clickShowMore(fixture);
 
               expect(getShowMoreModalTitle()).toBe('Custom title');
+
+              closeModal(fixture);
             })
           );
 
@@ -1972,6 +2032,8 @@ describe('Lookup component', function () {
               saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -1995,6 +2057,8 @@ describe('Lookup component', function () {
               saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -2018,6 +2082,8 @@ describe('Lookup component', function () {
               closeModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -2032,6 +2098,8 @@ describe('Lookup component', function () {
               clickShowMore(fixture);
 
               expect(getShowMoreModalTitle()).toBe('Select an option');
+
+              closeModal(fixture);
             })
           );
 
@@ -2049,6 +2117,8 @@ describe('Lookup component', function () {
               clickShowMore(fixture);
 
               expect(getShowMoreModalTitle()).toBe('Custom title');
+
+              closeModal(fixture);
             })
           );
 
@@ -2061,6 +2131,8 @@ describe('Lookup component', function () {
               clickShowMore(fixture);
 
               expect(getRepeaterItemCount()).toBe(2);
+
+              closeModal(fixture);
             })
           );
 
@@ -2075,6 +2147,8 @@ describe('Lookup component', function () {
               clickShowMore(fixture);
 
               expect(getRepeaterItemCount()).toBe(10);
+
+              closeModal(fixture);
             })
           );
 
@@ -2110,6 +2184,8 @@ describe('Lookup component', function () {
               fixture.detectChanges();
 
               expect(getRepeaterItemCount()).toBe(21);
+
+              (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-close'))?.click();
             }
           );
 
@@ -2128,6 +2204,8 @@ describe('Lookup component', function () {
             clickModalAddButton(fixture);
 
             expect(addButtonSpy).toHaveBeenCalled();
+
+            closeModal(fixture);
           })
         );
 
@@ -2153,6 +2231,8 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(getShowMoreRepeaterItemContent(0)).toBe('Patty');
+
+            closeModal(fixture);
           })
         );
 
@@ -2166,6 +2246,8 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(getShowMoreRepeaterItemContent(0)).toBe('1/1/1996');
+
+            closeModal(fixture);
           })
         );
 
@@ -2180,6 +2262,8 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(getShowMoreRepeaterItemContent(0)).toBe('Ms. Patty');
+
+            closeModal(fixture);
           })
         );
 
@@ -2195,6 +2279,8 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(getShowMoreRepeaterItemContent(0)).toBe('Patty - 1/1/1996');
+
+            closeModal(fixture);
           })
         );
 
