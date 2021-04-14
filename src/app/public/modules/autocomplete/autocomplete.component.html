@@ -25,7 +25,7 @@
     (keydown)="handleKeydown($event)"
     #resultsRef
   >
-    <div *ngIf="searchText"
+    <div *ngIf="searchText && (!(showAddButton || showMoreButton) || searchResults.length > 0)"
       class="sky-autocomplete-results"
       role="listbox"
       [attr.aria-labelledby]="ariaLabelledBy"
@@ -46,7 +46,7 @@
           </ng-container>
         </div>
       </ng-container>
-      <div *ngIf="searchResults.length === 0"
+      <div *ngIf="!(showAddButton || showMoreButton) && searchResults.length === 0"
         class="sky-deemphasized sky-padding-squish-default"
       >
         {{ noResultsFoundText || ('skyux_autocomplete_no_results' | skyLibResources) }}
@@ -55,7 +55,7 @@
     <div *ngIf="showAddButton || showMoreButton"
       class="sky-autocomplete-actions"
     >
-      <button *ngIf="showMoreButton"
+      <button *ngIf="showMoreButton && (!searchText || searchResults.length > 0)"
         class="sky-autocomplete-more sky-btn sky-btn-link"
         type="button"
         (click)="moreButtonClicked()"
@@ -67,6 +67,11 @@
           Show matches ({{searchResults.length}})
         </ng-container>
       </button>
+      <div *ngIf="(showAddButton || showMoreButton) && searchText && searchResults.length === 0"
+        class="sky-font-deemphasized sky-autocomplete-actions-no-results"
+      >
+        {{ noResultsFoundText || ('skyux_autocomplete_no_results' | skyLibResources) }}
+      </div>
       <button *ngIf="showAddButton"
         class="sky-autocomplete-add sky-btn sky-btn-link"
         type="button"

@@ -38,6 +38,7 @@ import {
 @Component({
   selector: 'skyux-lookup-show-more-modal',
   templateUrl: './lookup-show-more-modal.component.html',
+  styleUrls: ['./lookup-show-more-modal.component.scss'],
   providers: [SkyDataManagerService],
   changeDetection: ChangeDetectionStrategy.OnPush
 })

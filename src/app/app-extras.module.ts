@@ -12,6 +12,7 @@ import {
 } from '@skyux/docs-tools';
 
 import {
+  SkyCheckboxModule,
   SkyInputBoxModule
 } from '@skyux/forms';
 
@@ -24,6 +25,10 @@ import {
 } from '@skyux/lists';
 
 import {
+  SkyModalModule
+} from '@skyux/modals';
+
+import {
   SkyAppLinkModule
 } from '@skyux/router';
 
@@ -33,6 +38,10 @@ import {
   SkyLookupModule,
   SkySearchModule
 } from './public/public_api';
+
+import {
+  SkyLookupVisualCustomPickerComponent
+} from './visual/lookup/lookup-visual-custom-picker.component';
 
 @NgModule({
   imports: [
@@ -44,11 +53,13 @@ import {
   exports: [
     SkyAppLinkModule,
     SkyAutocompleteModule,
+    SkyCheckboxModule,
     SkyCountryFieldModule,
     SkyDocsToolsModule,
     SkyIdModule,
     SkyInputBoxModule,
     SkyLookupModule,
+    SkyModalModule,
     SkyRepeaterModule,
     SkySearchModule,
     SkyToolbarModule
@@ -62,6 +73,8 @@ import {
       }
     }
   ],
-  entryComponents: []
+  entryComponents: [
+    SkyLookupVisualCustomPickerComponent
+  ]
 })
 export class AppExtrasModule { }

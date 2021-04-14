@@ -52,28 +52,38 @@ describe('Lookup component', function () {
 
   //#region helpers
 
-  function clearShowMoreSearch(): void {
+  function clearShowMoreSearch(fixture: ComponentFixture<any>): void {
     (<HTMLElement>document.querySelector('.sky-lookup-show-more-data-manager .sky-search-btn-clear')).click();
+
+    fixture.detectChanges();
+    tick(250);
+    fixture.detectChanges();
   }
 
-  function clickModalAddButton(): void {
+  function clickModalAddButton(fixture: ComponentFixture<any>): void {
     getModalAddButton().click();
+    fixture.detectChanges();
   }
 
-  function clickShowMore(): void {
+  function clickShowMore(fixture: ComponentFixture<any>): void {
     getShowMoreButton().click();
+    fixture.detectChanges();
+    tick();
   }
 
-  function clickShowMoreClearAll(): void {
+  function clickShowMoreClearAll(fixture: ComponentFixture<any>): void {
     (<HTMLElement>document.querySelector('.sky-data-manager-clear-all-btn')).click();
+    fixture.detectChanges();
   }
 
-  function clickShowMoreSelectAll(): void {
+  function clickShowMoreSelectAll(fixture: ComponentFixture<any>): void {
     (<HTMLElement>document.querySelector('.sky-data-manager-select-all-btn')).click();
+    fixture.detectChanges();
   }
 
-  function closeModal(): void {
+  function closeModal(fixture: ComponentFixture<any>): void {
     (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-close'))?.click();
+    fixture.detectChanges();
   }
 
   function dismissSelectedItem(index: number, fixture: ComponentFixture<any>): void {
@@ -125,8 +135,9 @@ describe('Lookup component', function () {
     tick();
   }
 
-  function saveShowMoreModal(): void {
+  function saveShowMoreModal(fixture: ComponentFixture<any>): void {
     (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-save')).click();
+    fixture.detectChanges();
   }
 
   function selectSearchResult(index: number, fixture: ComponentFixture<any>): void {
@@ -137,16 +148,21 @@ describe('Lookup component', function () {
     tick();
   }
 
-  function selectShowOnlySelected(): void {
+  function selectShowOnlySelected(fixture: ComponentFixture<any>): void {
     (<HTMLElement>document.querySelector('.sky-lookup-show-more-data-manager .sky-toolbar-view-actions input')).click();
+    fixture.detectChanges();
+    tick(250);
+    fixture.detectChanges();
   }
 
-  function selectShowMoreItemMultiple(index: number): void {
+  function selectShowMoreItemMultiple(index: number, fixture: ComponentFixture<any>): void {
     (<HTMLElement>document.querySelectorAll('.sky-lookup-show-more-repeater sky-repeater-item input')[index]).click();
+    fixture.detectChanges();
   }
 
-  function selectShowMoreItemSingle(index: number): void {
+  function selectShowMoreItemSingle(index: number, fixture: ComponentFixture<any>): void {
     (<HTMLElement>document.querySelectorAll('.sky-lookup-show-more-repeater sky-repeater-item')[index]).click();
+    fixture.detectChanges();
   }
 
   function triggerClick(element: Element, fixture: ComponentFixture<any>, focusable = false): void {
@@ -289,8 +305,6 @@ describe('Lookup component', function () {
 
           performSearch('s', fixture);
           selectSearchResult(0, fixture);
-          fixture.detectChanges();
-          tick();
 
           performSearch('', fixture);
           getInputElement(lookupComponent).blur();
@@ -367,8 +381,6 @@ describe('Lookup component', function () {
 
           performSearch('s', fixture);
           selectSearchResult(0, fixture);
-          fixture.detectChanges();
-          tick();
 
           performSearch('', fixture);
           getInputElement(lookupComponent).blur();
@@ -534,8 +546,7 @@ describe('Lookup component', function () {
         // This is necessary as due to modals being launched outside of the test bed they will not
         // automatically be disposed between tests.
         afterEach(() => {
-          closeModal();
-          fixture.detectChanges();
+          closeModal(fixture);
 
           // NOTE: This is important as it ensures that the modal host component is fully disposed of
           // between tests. This is important as the modal host might need a different set of component
@@ -552,9 +563,8 @@ describe('Lookup component', function () {
             spyOn(modalService, 'open').and.callThrough();
 
             performSearch('r', fixture);
-            clickShowMore();
-            fixture.detectChanges();
-            tick();
+            clickShowMore(fixture);
+
             expect(modalService.open).toHaveBeenCalled();
           })
         );
@@ -576,12 +586,9 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
             })
@@ -599,15 +606,11 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              selectShowMoreItemMultiple(0);
-              fixture.detectChanges();
+              selectShowMoreItemMultiple(0, fixture);
 
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
             })
@@ -625,15 +628,11 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              selectShowMoreItemMultiple(0);
-              fixture.detectChanges();
+              selectShowMoreItemMultiple(0, fixture);
 
-              closeModal();
-              fixture.detectChanges();
+              closeModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
             })
@@ -651,18 +650,12 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              selectShowMoreItemMultiple(0);
-              fixture.detectChanges();
+              selectShowMoreItemMultiple(0, fixture);
+              selectShowMoreItemMultiple(1, fixture);
 
-              selectShowMoreItemMultiple(1);
-              fixture.detectChanges();
-
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
             })
@@ -680,20 +673,13 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              clearShowMoreSearch();
-              fixture.detectChanges();
-              tick(250);
-              fixture.detectChanges();
+              clearShowMoreSearch(fixture);
 
-              selectShowMoreItemMultiple(0);
-              fixture.detectChanges();
+              selectShowMoreItemMultiple(0, fixture);
 
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([
                 {
@@ -722,15 +708,11 @@ describe('Lookup component', function () {
               }]);
 
               performSearch('Pa', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              clickShowMoreClearAll();
-              fixture.detectChanges();
+              clickShowMoreClearAll(fixture);
 
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([]);
             })
@@ -752,15 +734,11 @@ describe('Lookup component', function () {
               }]);
 
               performSearch('Pa', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              clickShowMoreSelectAll();
-              fixture.detectChanges();
+              clickShowMoreSelectAll(fixture);
 
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([
                 {
@@ -789,20 +767,13 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              selectShowOnlySelected();
-              fixture.detectChanges();
-              tick(250);
-              fixture.detectChanges();
+              selectShowOnlySelected(fixture);
 
-              selectShowMoreItemMultiple(0);
-              fixture.detectChanges();
+              selectShowMoreItemMultiple(0, fixture);
 
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([]);
             })
@@ -815,9 +786,7 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
               expect(getShowMoreModalTitle()).toBe('Select options');
             })
@@ -833,9 +802,7 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
               expect(getShowMoreModalTitle()).toBe('Custom title');
             })
@@ -861,12 +828,9 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
             })
@@ -885,15 +849,11 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              selectShowMoreItemSingle(0);
-              fixture.detectChanges();
+              selectShowMoreItemSingle(0, fixture);
 
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
             })
@@ -912,15 +872,11 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              selectShowMoreItemSingle(0);
-              fixture.detectChanges();
+              selectShowMoreItemSingle(0, fixture);
 
-              closeModal();
-              fixture.detectChanges();
+              closeModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
             })
@@ -934,9 +890,7 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
               expect(getShowMoreModalTitle()).toBe('Select an option');
             })
@@ -953,9 +907,7 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
               expect(getShowMoreModalTitle()).toBe('Custom title');
             })
@@ -967,9 +919,7 @@ describe('Lookup component', function () {
               fixture.detectChanges();
 
               performSearch('Pa', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
               expect(getRepeaterItemCount()).toBe(2);
             })
@@ -983,9 +933,7 @@ describe('Lookup component', function () {
               triggerInputFocus(fixture);
               fixture.detectChanges();
               tick();
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
               expect(getRepeaterItemCount()).toBe(10);
             })
@@ -999,7 +947,8 @@ describe('Lookup component', function () {
               triggerInputFocus(fixture);
               fixture.detectChanges();
               await fixture.whenStable();
-              clickShowMore();
+              // Not using `clickShowMore` due to it being for `fakeAsync`
+              getShowMoreButton().click();
               fixture.detectChanges();
               await fixture.whenStable();
 
@@ -1035,12 +984,9 @@ describe('Lookup component', function () {
             fixture.detectChanges();
 
             performSearch('r', fixture);
-            clickShowMore();
-            fixture.detectChanges();
-            tick();
+            clickShowMore(fixture);
 
-            clickModalAddButton();
-            fixture.detectChanges();
+            clickModalAddButton(fixture);
 
             expect(addButtonSpy).toHaveBeenCalled();
           })
@@ -1065,9 +1011,7 @@ describe('Lookup component', function () {
             fixture.detectChanges();
 
             performSearch('p', fixture);
-            clickShowMore();
-            fixture.detectChanges();
-            tick();
+            clickShowMore(fixture);
 
             expect(getShowMoreRepeaterItemContent(0)).toBe('Patty');
           })
@@ -1080,9 +1024,7 @@ describe('Lookup component', function () {
             fixture.detectChanges();
 
             performSearch('p', fixture);
-            clickShowMore();
-            fixture.detectChanges();
-            tick();
+            clickShowMore(fixture);
 
             expect(getShowMoreRepeaterItemContent(0)).toBe('1/1/1996');
           })
@@ -1096,9 +1038,7 @@ describe('Lookup component', function () {
             fixture.detectChanges();
 
             performSearch('p', fixture);
-            clickShowMore();
-            fixture.detectChanges();
-            tick();
+            clickShowMore(fixture);
 
             expect(getShowMoreRepeaterItemContent(0)).toBe('Ms. Patty');
           })
@@ -1113,11 +1053,49 @@ describe('Lookup component', function () {
             fixture.detectChanges();
 
             performSearch('p', fixture);
-            clickShowMore();
-            fixture.detectChanges();
-            tick();
+            clickShowMore(fixture);
 
             expect(getShowMoreRepeaterItemContent(0)).toBe('Patty - 1/1/1996');
+          })
+        );
+
+        it('should open a custom picker when enabled with no value',
+          fakeAsync(() => {
+            component.showMoreButton = true;
+            component.enableCustomPicker();
+            fixture.detectChanges();
+
+            const customPickerSpy = spyOn(component.customPicker, 'open').and.callThrough();
+
+            performSearch('p', fixture);
+            clickShowMore(fixture);
+
+            expect(customPickerSpy).toHaveBeenCalledWith({
+              items: component.data,
+              initialSearch: 'p',
+              initialValue: undefined
+            });
+          })
+        );
+
+        it('should open a custom picker when enabled with a value',
+          fakeAsync(() => {
+            component.showMoreButton = true;
+            component.enableCustomPicker();
+            fixture.detectChanges();
+
+            const customPickerSpy = spyOn(component.customPicker, 'open').and.callThrough();
+
+            performSearch('p', fixture);
+            selectSearchResult(0, fixture);
+            performSearch('p', fixture);
+            clickShowMore(fixture);
+
+            expect(customPickerSpy).toHaveBeenCalledWith({
+              items: component.data,
+              initialSearch: 'p',
+              initialValue: [component.data.find(item => item.name === 'Patty')]
+            });
           })
         );
       });
@@ -1131,7 +1109,6 @@ describe('Lookup component', function () {
         fixture.detectChanges();
         expect(component.form.invalid).toEqual(false);
         dismissSelectedItem(0, fixture);
-        fixture.detectChanges();
         expect(component.form.invalid).toEqual(true);
       }));
     });
@@ -1521,8 +1498,6 @@ describe('Lookup component', function () {
 
           performSearch('s', fixture);
           selectSearchResult(0, fixture);
-          fixture.detectChanges();
-          tick();
 
           performSearch('', fixture);
           getInputElement(lookupComponent).blur();
@@ -1704,8 +1679,7 @@ describe('Lookup component', function () {
         // This is necessary as due to modals being launched outside of the test bed they will not
         // automatically be disposed between tests.
         afterEach(() => {
-          closeModal();
-          fixture.detectChanges();
+          closeModal(fixture);
 
           // NOTE: This is important as it ensures that the modal host component is fully disposed of
           // between tests. This is important as the modal host might need a different set of component
@@ -1722,9 +1696,7 @@ describe('Lookup component', function () {
             spyOn(modalService, 'open').and.callThrough();
 
             performSearch('r', fixture);
-            clickShowMore();
-            fixture.detectChanges();
-            tick();
+            clickShowMore(fixture);
             expect(modalService.open).toHaveBeenCalled();
           })
         );
@@ -1746,12 +1718,9 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
             })
@@ -1769,15 +1738,11 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              selectShowMoreItemMultiple(0);
-              fixture.detectChanges();
+              selectShowMoreItemMultiple(0, fixture);
 
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
             })
@@ -1795,15 +1760,11 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              selectShowMoreItemMultiple(0);
-              fixture.detectChanges();
+              selectShowMoreItemMultiple(0, fixture);
 
-              closeModal();
-              fixture.detectChanges();
+              closeModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
             })
@@ -1821,18 +1782,12 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              selectShowMoreItemMultiple(0);
-              fixture.detectChanges();
+              selectShowMoreItemMultiple(0, fixture);
+              selectShowMoreItemMultiple(1, fixture);
 
-              selectShowMoreItemMultiple(1);
-              fixture.detectChanges();
-
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
             })
@@ -1850,20 +1805,13 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              clearShowMoreSearch();
-              fixture.detectChanges();
-              tick(250);
-              fixture.detectChanges();
+              clearShowMoreSearch(fixture);
 
-              selectShowMoreItemMultiple(0);
-              fixture.detectChanges();
+              selectShowMoreItemMultiple(0, fixture);
 
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([
                 {
@@ -1892,15 +1840,11 @@ describe('Lookup component', function () {
               }]);
 
               performSearch('Pa', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              clickShowMoreClearAll();
-              fixture.detectChanges();
+              clickShowMoreClearAll(fixture);
 
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([]);
             })
@@ -1922,15 +1866,11 @@ describe('Lookup component', function () {
               }]);
 
               performSearch('Pa', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              clickShowMoreSelectAll();
-              fixture.detectChanges();
+              clickShowMoreSelectAll(fixture);
 
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([
                 {
@@ -1959,20 +1899,13 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              selectShowOnlySelected();
-              fixture.detectChanges();
-              tick(250);
-              fixture.detectChanges();
+              selectShowOnlySelected(fixture);
 
-              selectShowMoreItemMultiple(0);
-              fixture.detectChanges();
+              selectShowMoreItemMultiple(0, fixture);
 
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([]);
             })
@@ -1985,9 +1918,7 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
               expect(getShowMoreModalTitle()).toBe('Select options');
             })
@@ -2003,9 +1934,7 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
               expect(getShowMoreModalTitle()).toBe('Custom title');
             })
@@ -2031,12 +1960,9 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
             })
@@ -2055,15 +1981,11 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              selectShowMoreItemSingle(0);
-              fixture.detectChanges();
+              selectShowMoreItemSingle(0, fixture);
 
-              saveShowMoreModal();
-              fixture.detectChanges();
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
             })
@@ -2082,15 +2004,11 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
-              selectShowMoreItemSingle(0);
-              fixture.detectChanges();
+              selectShowMoreItemSingle(0, fixture);
 
-              closeModal();
-              fixture.detectChanges();
+              closeModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
             })
@@ -2104,9 +2022,7 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
               expect(getShowMoreModalTitle()).toBe('Select an option');
             })
@@ -2123,9 +2039,7 @@ describe('Lookup component', function () {
               expect(lookupComponent.value).toEqual([]);
 
               performSearch('s', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
               expect(getShowMoreModalTitle()).toBe('Custom title');
             })
@@ -2137,9 +2051,7 @@ describe('Lookup component', function () {
               fixture.detectChanges();
 
               performSearch('Pa', fixture);
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
               expect(getRepeaterItemCount()).toBe(2);
             })
@@ -2153,9 +2065,7 @@ describe('Lookup component', function () {
               triggerInputFocus(fixture);
               fixture.detectChanges();
               tick();
-              clickShowMore();
-              fixture.detectChanges();
-              tick();
+              clickShowMore(fixture);
 
               expect(getRepeaterItemCount()).toBe(10);
             })
@@ -2169,7 +2079,8 @@ describe('Lookup component', function () {
               triggerInputFocus(fixture);
               fixture.detectChanges();
               await fixture.whenStable();
-              clickShowMore();
+              // Not using `clickShowMore` due to it being for `fakeAsync`
+              getShowMoreButton().click();
               fixture.detectChanges();
               await fixture.whenStable();
 
@@ -2205,12 +2116,9 @@ describe('Lookup component', function () {
             fixture.detectChanges();
 
             performSearch('r', fixture);
-            clickShowMore();
-            fixture.detectChanges();
-            tick();
+            clickShowMore(fixture);
 
-            clickModalAddButton();
-            fixture.detectChanges();
+            clickModalAddButton(fixture);
 
             expect(addButtonSpy).toHaveBeenCalled();
           })
@@ -2235,9 +2143,7 @@ describe('Lookup component', function () {
             fixture.detectChanges();
 
             performSearch('p', fixture);
-            clickShowMore();
-            fixture.detectChanges();
-            tick();
+            clickShowMore(fixture);
 
             expect(getShowMoreRepeaterItemContent(0)).toBe('Patty');
           })
@@ -2250,9 +2156,7 @@ describe('Lookup component', function () {
             fixture.detectChanges();
 
             performSearch('p', fixture);
-            clickShowMore();
-            fixture.detectChanges();
-            tick();
+            clickShowMore(fixture);
 
             expect(getShowMoreRepeaterItemContent(0)).toBe('1/1/1996');
           })
@@ -2266,9 +2170,7 @@ describe('Lookup component', function () {
             fixture.detectChanges();
 
             performSearch('p', fixture);
-            clickShowMore();
-            fixture.detectChanges();
-            tick();
+            clickShowMore(fixture);
 
             expect(getShowMoreRepeaterItemContent(0)).toBe('Ms. Patty');
           })
@@ -2283,11 +2185,49 @@ describe('Lookup component', function () {
             fixture.detectChanges();
 
             performSearch('p', fixture);
-            clickShowMore();
-            fixture.detectChanges();
-            tick();
+            clickShowMore(fixture);
 
             expect(getShowMoreRepeaterItemContent(0)).toBe('Patty - 1/1/1996');
+          })
+        );
+
+        it('should open a custom picker when enabled with no value',
+          fakeAsync(() => {
+            component.showMoreButton = true;
+            component.enableCustomPicker();
+            fixture.detectChanges();
+
+            const customPickerSpy = spyOn(component.customPicker, 'open').and.callThrough();
+
+            performSearch('p', fixture);
+            clickShowMore(fixture);
+
+            expect(customPickerSpy).toHaveBeenCalledWith({
+              items: component.data,
+              initialSearch: 'p',
+              initialValue: undefined
+            });
+          })
+        );
+
+        it('should open a custom picker when enabled with a value',
+          fakeAsync(() => {
+            component.showMoreButton = true;
+            component.enableCustomPicker();
+            fixture.detectChanges();
+
+            const customPickerSpy = spyOn(component.customPicker, 'open').and.callThrough();
+
+            performSearch('p', fixture);
+            selectSearchResult(0, fixture);
+            performSearch('p', fixture);
+            clickShowMore(fixture);
+
+            expect(customPickerSpy).toHaveBeenCalledWith({
+              items: component.data,
+              initialSearch: 'p',
+              initialValue: [component.data.find(item => item.name === 'Patty')]
+            });
           })
         );
       });
@@ -2412,6 +2352,8 @@ describe('Lookup component', function () {
 
         it('should not focus the last token if search text is present', fakeAsync(function () {
           component.selectedFriends = [{ name: 'Rachel' }];
+          fixture.detectChanges();
+          tick();
           fixture.detectChanges();
 
           const inputElement = getInputElement(lookupComponent);

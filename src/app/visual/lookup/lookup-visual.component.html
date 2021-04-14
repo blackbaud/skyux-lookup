@@ -95,6 +95,13 @@
     >
       Toggle select mode
     </button>
+    <sky-checkbox
+      (change)="toggleCustomPicker()"
+    >
+      <sky-checkbox-label>
+        Enable Custom Picker
+      </sky-checkbox-label>
+    </sky-checkbox>
   </p>
 
   <div
@@ -121,8 +128,10 @@
           [data]="people"
           [debounceTime]="1000"
           [searchResultTemplate]="itemTemplate"
-          [showAddButton]="false"
+          [showAddButton]="true"
+          [showMoreButton]="true"
           [showMoreModalConfig]="{ itemTemplate: itemTemplate2 }"
+          [showMoreModalCustomPicker]="customPicker"
           (addClick)="addButtonClicked()"
         >
         </sky-lookup>

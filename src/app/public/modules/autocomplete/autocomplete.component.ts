@@ -231,7 +231,7 @@ export class SkyAutocompleteComponent
 
   /**
    * Specifies the text to play when no search results are found.
-   * @default No matching items found
+   * @default No matches found
    */
   @Input()
   public noResultsFoundText: string;
@@ -476,8 +476,6 @@ export class SkyAutocompleteComponent
                 event.stopPropagation();
                 event.preventDefault();
               } else if (focusedActionIndex > 0) {
-                /* NOTE: This is for future work and this ignore should be removed at that time */
-                /* istanbul ignore next */
                 focusableActions[focusedActionIndex - 1].focus();
                 event.stopPropagation();
                 event.preventDefault();
@@ -491,8 +489,6 @@ export class SkyAutocompleteComponent
                 this.inputDirective.restoreInputTextValueToPreviousState();
                 this.closeDropdown();
               } else {
-                /* NOTE: This is for future work and this ignore should be removed at that time */
-                /* istanbul ignore next */
                 focusableActions[focusedActionIndex + 1].focus();
               }
               event.stopPropagation();

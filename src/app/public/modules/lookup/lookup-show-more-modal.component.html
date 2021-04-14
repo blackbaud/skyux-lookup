@@ -20,6 +20,11 @@
       <sky-data-view
         [viewId]="viewConfig.id"
       >
+        <div *ngIf="displayedItems.length===0"
+          class="sky-font-deemphasized sky-lookup-show-more-no-results"
+        >
+          {{ 'skyux_lookup_show_more_no_results' | skyLibResources }}
+        </div>
         <sky-repeater
           class="sky-lookup-show-more-repeater"
           expandMode="none"

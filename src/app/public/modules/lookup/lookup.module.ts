@@ -33,6 +33,10 @@ import {
 } from '@skyux/modals';
 
 import {
+  SkyThemeModule
+} from '@skyux/theme';
+
+import {
   SkyLookupComponent
 } from './lookup.component';
 
@@ -62,6 +66,7 @@ import {
     SkyLookupResourcesModule,
     SkyModalModule,
     SkyRepeaterModule,
+    SkyThemeModule,
     SkyTokensModule,
     SkyViewkeeperModule
   ],

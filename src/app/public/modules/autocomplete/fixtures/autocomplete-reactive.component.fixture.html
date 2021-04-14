@@ -11,7 +11,9 @@
   <sky-autocomplete
     [data]="data"
     [showAddButton]="showAddButton"
+    [showMoreButton]="showMoreButton"
     (addClick)="addButtonClicked()"
+    (showMoreClick)="showMoreButtonClicked()"
   >
     <input
       id="my-autocomplete-input"

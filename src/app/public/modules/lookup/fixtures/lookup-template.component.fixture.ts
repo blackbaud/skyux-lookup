@@ -17,6 +17,14 @@ import {
   SkyLookupShowMoreConfig
 } from '../types/lookup-show-more-config';
 
+import {
+  SkyLookupCustomPicker
+} from '../types/lookup-show-more-custom-picker';
+
+import {
+  SkyLookupShowMoreCustomPickerContext
+} from '../types/lookup-show-more-custom-picker-context';
+
 @Component({
   selector: 'sky-test-cmp',
   templateUrl: './lookup-template.component.fixture.html'
@@ -36,6 +44,7 @@ export class SkyLookupTemplateTestComponent implements OnInit {
 
   public ariaLabel: string;
   public ariaLabelledBy: string;
+  public customPicker: SkyLookupCustomPicker;
   public data: any[];
   public descriptorProperty: string;
   public disabled: boolean = false;
@@ -96,6 +105,14 @@ export class SkyLookupTemplateTestComponent implements OnInit {
 
   public disableLookup(): void {
     this.disabled = true;
+  }
+
+  public enableCustomPicker(): void {
+    this.customPicker = {
+      open: (context: SkyLookupShowMoreCustomPickerContext) => {
+        return;
+      }
+    };
   }
 
   public enableSearchResultTemplate(): void {
