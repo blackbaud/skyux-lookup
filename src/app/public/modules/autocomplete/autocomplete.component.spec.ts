@@ -1206,30 +1206,6 @@ describe('Autocomplete component', () => {
         })
       );
 
-      it('should Shift-Tab to the first action when multiple actions exists',
-        fakeAsync(() => {
-          component.showAddButton = true;
-          component.showMoreButton = true;
-          fixture.detectChanges();
-
-          enterSearch('r', fixture);
-
-          const inputElement: HTMLInputElement = getInputElement();
-
-          sendTab(inputElement, fixture);
-
-          expect(document.activeElement).toBe(getShowMoreButton());
-
-          sendTab(inputElement, fixture);
-
-          expect(document.activeElement).toBe(getAddButton());
-
-          sendTab(inputElement, fixture, true);
-
-          expect(document.activeElement).toBe(getShowMoreButton());
-        })
-      );
-
       it('should not stop default behavior when shift tab is pressed on the input when actions exist',
         fakeAsync(() => {
           component.showAddButton = true;
