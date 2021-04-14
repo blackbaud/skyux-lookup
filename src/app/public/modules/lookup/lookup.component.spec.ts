@@ -1,7 +1,6 @@
 import {
   async,
   ComponentFixture,
-  discardPeriodicTasks,
   fakeAsync,
   TestBed,
   tick
@@ -546,7 +545,7 @@ describe('Lookup component', function () {
 
         // This is necessary as due to modals being launched outside of the test bed they will not
         // automatically be disposed between tests.
-        afterEach(fakeAsync(() => {
+        afterEach(async () => {
           closeModal(fixture);
 
           // NOTE: This is important as it ensures that the modal host component is fully disposed of
@@ -554,8 +553,8 @@ describe('Lookup component', function () {
           // injectors than the previous test.
           modalService.dispose();
           fixture.detectChanges();
-          discardPeriodicTasks();
-        }));
+          await fixture.whenStable();
+        });
 
         it('should open the modal when the show more button is clicked',
           fakeAsync(() => {
@@ -1680,7 +1679,7 @@ describe('Lookup component', function () {
 
         // This is necessary as due to modals being launched outside of the test bed they will not
         // automatically be disposed between tests.
-        afterEach(fakeAsync(() => {
+        afterEach(async () => {
           closeModal(fixture);
 
           // NOTE: This is important as it ensures that the modal host component is fully disposed of
@@ -1688,8 +1687,8 @@ describe('Lookup component', function () {
           // injectors than the previous test.
           modalService.dispose();
           fixture.detectChanges();
-          discardPeriodicTasks();
-        }));
+          await fixture.whenStable();
+        });
 
         it('should open the modal when the show more button is clicked',
           fakeAsync(() => {
