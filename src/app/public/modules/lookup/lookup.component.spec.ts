@@ -545,7 +545,7 @@ describe('Lookup component', function () {
 
         // This is necessary as due to modals being launched outside of the test bed they will not
         // automatically be disposed between tests.
-        afterEach(() => {
+        afterEach(fakeAsync(() => {
           closeModal(fixture);
 
           // NOTE: This is important as it ensures that the modal host component is fully disposed of
@@ -554,7 +554,7 @@ describe('Lookup component', function () {
           modalService.dispose();
           fixture.detectChanges();
           tick(500);
-        });
+        }));
 
         it('should open the modal when the show more button is clicked',
           fakeAsync(() => {
@@ -1679,7 +1679,7 @@ describe('Lookup component', function () {
 
         // This is necessary as due to modals being launched outside of the test bed they will not
         // automatically be disposed between tests.
-        afterEach(() => {
+        afterEach(fakeAsync(() => {
           closeModal(fixture);
 
           // NOTE: This is important as it ensures that the modal host component is fully disposed of
@@ -1688,7 +1688,7 @@ describe('Lookup component', function () {
           modalService.dispose();
           fixture.detectChanges();
           tick(500);
-        });
+        }));
 
         it('should open the modal when the show more button is clicked',
           fakeAsync(() => {
