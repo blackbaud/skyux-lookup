@@ -2187,7 +2187,7 @@ describe('Lookup component', function () {
 
               (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-close'))?.click();
             }
-          );
+          , 10000);
 
         });
 
