@@ -120,19 +120,16 @@ export class SkyCountryFieldFixture {
     return fixture.whenStable();
   }
 
-  private async enterSearch(
+  private enterSearch(
     newValue: string,
     fixture: ComponentFixture<any>
   ): Promise<void> {
     const inputElement = this.getInputElement();
     inputElement.value = newValue;
-
     SkyAppTestUtility.fireDomEvent(inputElement, 'keyup');
     SkyAppTestUtility.fireDomEvent(inputElement, 'input');
     fixture.detectChanges();
-    await fixture.whenStable();
-    fixture.detectChanges();
-    await fixture.whenStable();
+    return fixture.whenStable();
   }
 
   private async searchAndGetResults(
@@ -140,6 +137,8 @@ export class SkyCountryFieldFixture {
     fixture: ComponentFixture<any>
   ): Promise<NodeListOf<HTMLElement>> {
     await this.enterSearch(newValue, fixture);
+    fixture.detectChanges();
+    await fixture.whenStable();
     return this.getAutocompleteElement().querySelectorAll('.sky-autocomplete-result');
   }
 
