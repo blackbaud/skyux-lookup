@@ -7,9 +7,6 @@ import {
 } from '@skyux/lookup';
 
 @NgModule({
-  imports: [
-    SkySearchModule
-  ],
   exports: [
     SkySearchModule
   ]
