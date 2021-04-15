@@ -32,7 +32,8 @@ import {
 
 @Component({
   selector: 'lookup-visual',
-  templateUrl: './lookup-visual.component.html'
+  templateUrl: './lookup-visual.component.html',
+  styleUrls: ['./lookup-visual.component.scss']
 })
 export class LookupVisualComponent implements OnInit {
   public friendsForm: FormGroup;

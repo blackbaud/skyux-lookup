@@ -2152,43 +2152,6 @@ describe('Lookup component', function () {
             })
           );
 
-          it('should add items when scrolling ends',
-            async () => {
-              component.showMoreButton = true;
-              fixture.detectChanges();
-
-              triggerInputFocus(fixture);
-              fixture.detectChanges();
-              await fixture.whenStable();
-              // Not using `clickShowMore` due to it being for `fakeAsync`
-              getShowMoreButton().click();
-              fixture.detectChanges();
-              await fixture.whenStable();
-
-              expect(getRepeaterItemCount()).toBe(10);
-
-              let modalContent = document.querySelector('.sky-modal-content');
-              modalContent.scrollTop = modalContent.scrollHeight;
-              SkyAppTestUtility.fireDomEvent(modalContent, 'scroll');
-              fixture.detectChanges();
-              await fixture.whenStable();
-              fixture.detectChanges();
-
-              expect(getRepeaterItemCount()).toBe(20);
-
-              modalContent = document.querySelector('.sky-modal-content');
-              modalContent.scrollTop = modalContent.scrollHeight;
-              SkyAppTestUtility.fireDomEvent(modalContent, 'scroll');
-              fixture.detectChanges();
-              await fixture.whenStable();
-              fixture.detectChanges();
-
-              expect(getRepeaterItemCount()).toBe(21);
-
-              (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-close'))?.click();
-            }
-          , 10000);
-
         });
 
         it('should trickle down the add button click event when triggered from the show all modal',

@@ -1,6 +1,12 @@
-<sky-docs-demo-control-panel-theme
-  (themeSettingsChange)="themeSettingsChange($event)"
-></sky-docs-demo-control-panel-theme>
+<div id="theme-controls">
+  <sky-docs-demo-control-panel-theme
+    (themeSettingsChange)="themeSettingsChange($event)"
+  ></sky-docs-demo-control-panel-theme>
+</div>
+
+<div
+  id="show-more-modal-screenshot"
+></div>
 
 <div
   class="app-screenshot"
@@ -24,6 +30,8 @@
           placeholderText="Type a person's name..."
           [data]="people"
           [debounceTime]="1000"
+          [showAddButton]="true"
+          [showMoreButton]="true"
         >
         </sky-lookup>
       </div>
@@ -155,7 +163,7 @@
   {{item.id}}
 </ng-template>
 
-<table>
+<table id="single-mode-info">
   <tr>
     <th>Touched</th>
     <td>{{ bestFriendsForm.touched }}</td>
