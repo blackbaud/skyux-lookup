@@ -132,7 +132,7 @@ export class SkyCountryFieldFixture {
     fixture.detectChanges();
     await fixture.whenStable();
     fixture.detectChanges();
-    return fixture.whenStable();
+    await fixture.whenStable();
   }
 
   private async searchAndGetResults(
