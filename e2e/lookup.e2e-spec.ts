@@ -2,7 +2,8 @@ import {
   browser,
   by,
   element,
-  ExpectedConditions
+  ExpectedConditions,
+  protractor
 } from 'protractor';
 
 import {
@@ -67,6 +68,8 @@ describe('Lookup component', () => {
     input.value = 'r';
     await input.click();
 
+    await browser.actions().sendKeys(protractor.Key.chord(protractor.Key.CONTROL, 'a')).perform();
+    await browser.actions().sendKeys(protractor.Key.BACK_SPACE).perform();
     await browser.actions().sendKeys('r').perform();
 
     await browser.wait(
