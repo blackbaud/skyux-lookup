@@ -7,30 +7,11 @@
     [required]="required ? true : undefined"
     [data]="data"
     [disabled]="disabled"
-    [descriptorProperty]="descriptorProperty"
     [placeholderText]="placeholderText"
-    [searchResultTemplate]="enabledSearchResultTemplate"
     [selectMode]="selectMode"
     [showAddButton]="showAddButton"
-    [showMoreButton]="showMoreButton"
-    [showMoreModalConfig]="showMoreModalConfig"
-    [showMoreModalCustomPicker]="customPicker"
     (addClick)="addButtonClicked()"
     [(ngModel)]="selectedFriends"
   >
   </sky-lookup>
 </form>
-
-<ng-template
-  let-item="item"
-  #customSearchResultTemplate
->
-  {{ item.description }}
-</ng-template>
-
-<ng-template
-  let-item="item"
-  #customShowMoreTemplate
->
-  {{ item.name }} - {{ item.birthDate }}
-</ng-template>
