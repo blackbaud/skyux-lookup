@@ -144,7 +144,8 @@ describe('Country field', () => {
       });
     });
 
-    it(
+    // tslint:disable-next-line: no-disabled-tests
+    xit(
       'should match previous screenshot while disabled and populated (xs screen)',
       async (done) => {
         await element(by.css('#disable-toggle')).click();
