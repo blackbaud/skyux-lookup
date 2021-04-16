@@ -41,10 +41,6 @@ import {
 } from './lookup.component';
 
 import {
-  SkyLookupShowMoreModalComponent
-} from './lookup-show-more-modal.component';
-
-import {
   SkyAutocompleteModule
 } from '../autocomplete/autocomplete.module';
 
@@ -54,8 +50,7 @@ import {
 
 @NgModule({
   declarations: [
-    SkyLookupComponent,
-    SkyLookupShowMoreModalComponent
+    SkyLookupComponent
   ],
   imports: [
     CommonModule,
@@ -69,9 +64,6 @@ import {
     SkyThemeModule,
     SkyTokensModule,
     SkyViewkeeperModule
-  ],
-  entryComponents: [
-    SkyLookupShowMoreModalComponent
   ],
   exports: [
     SkyLookupComponent
