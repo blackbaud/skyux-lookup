@@ -26,11 +26,9 @@
     [searchResultTemplate]="searchResultTemplate"
     [searchTextMinimumCharacters]="searchTextMinimumCharacters"
     [showAddButton]="showAddButton"
-    [showMoreButton]="showMoreButton"
     [noResultsFoundText]="customNoResultsMessage"
     (addClick)="addButtonClicked()"
     (selectionChange)="onSelectionChange($event)"
-    (showMoreClick)="showMoreButtonClicked()"
   >
     <input *ngIf="!hideInput"
       id="my-autocomplete-input"

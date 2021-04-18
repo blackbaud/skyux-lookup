@@ -154,7 +154,8 @@ export class SkyAutocompleteComponent
   public get search(): SkyAutocompleteSearchFunction {
     return this._search || skyAutocompleteDefaultSearchFunction({
       propertiesToSearch: this.propertiesToSearch,
-      searchFilters: this.searchFilters
+      searchFilters: this.searchFilters,
+      searchResultsLimit: this.searchResultsLimit
     });
   }
 
@@ -203,17 +204,7 @@ export class SkyAutocompleteComponent
    * By default, the component displays all matching results.
    */
   @Input()
-  public set searchResultsLimit(value: number) {
-    this._searchResultsLimit = value;
-  }
-
-  public get searchResultsLimit(): number {
-    if (this._searchResultsLimit) {
-      return this._searchResultsLimit;
-    } else {
-      return this.showMoreButton ? 5 : this._searchResultsLimit;
-    }
-  }
+  public searchResultsLimit: number;
 
   /**
    * @internal
@@ -223,15 +214,8 @@ export class SkyAutocompleteComponent
   public showAddButton: boolean = false;
 
   /**
-   * @internal
-   * Shows the Show more button in the actions bar
-   */
-  @Input()
-  public showMoreButton: boolean = false;
-
-  /**
    * Specifies the text to play when no search results are found.
-   * @default No matches found
+   * @default No matching items found
    */
   @Input()
   public noResultsFoundText: string;
@@ -242,13 +226,6 @@ export class SkyAutocompleteComponent
    */
   @Output()
   public addClick: EventEmitter<void> = new EventEmitter();
-
-  /**
-   * @internal
-   * Fires when users select the "Show more" button
-   */
-  @Output()
-  public showMoreClick: EventEmitter<void> = new EventEmitter();
 
   /**
    * Fires when users select items in the dropdown list.
@@ -327,7 +304,7 @@ export class SkyAutocompleteComponent
           takeUntil(this.inputDirectiveUnsubscribe)
         )
         .subscribe(() => {
-          if (this.showAddButton || this.showMoreButton) {
+          if (this.showAddButton) {
             this.openDropdown();
           }
         });
@@ -378,7 +355,6 @@ export class SkyAutocompleteComponent
   private _search: SkyAutocompleteSearchFunction;
   private _searchResults: SkyAutocompleteSearchResult[];
   private _searchResultTemplate: TemplateRef<any>;
-  private _searchResultsLimit: number;
   private _searchTextMinimumCharacters: number;
   private _selectionChange = new EventEmitter<SkyAutocompleteSelectionChange>();
 
@@ -476,6 +452,8 @@ export class SkyAutocompleteComponent
                 event.stopPropagation();
                 event.preventDefault();
               } else if (focusedActionIndex > 0) {
+                /* NOTE: This is for future work and this ignore should be removed at that time */
+                /* istanbul ignore next */
                 focusableActions[focusedActionIndex - 1].focus();
                 event.stopPropagation();
                 event.preventDefault();
@@ -489,6 +467,8 @@ export class SkyAutocompleteComponent
                 this.inputDirective.restoreInputTextValueToPreviousState();
                 this.closeDropdown();
               } else {
+                /* NOTE: This is for future work and this ignore should be removed at that time */
+                /* istanbul ignore next */
                 focusableActions[focusedActionIndex + 1].focus();
               }
               event.stopPropagation();
@@ -534,10 +514,6 @@ export class SkyAutocompleteComponent
           break;
       }
     }
-  }
-
-  public moreButtonClicked(): void {
-    this.showMoreClick.emit();
   }
 
   public onResultMouseDown(index: number): void {
