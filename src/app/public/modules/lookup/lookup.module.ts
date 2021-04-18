@@ -1,27 +1,16 @@
-import {
-  NgModule
-} from '@angular/core';
-
-import {
-  CommonModule
-} from '@angular/common';
-
-import {
-  FormsModule
-} from '@angular/forms';
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 import {
   SkyAppWindowRef,
   SkyViewkeeperModule
 } from '@skyux/core';
 
-import {
-  SkyDataManagerModule
-} from '@skyux/data-manager';
+import { SkyAutocompleteModule } from '../autocomplete/autocomplete.module';
+import { SkyTokensModule } from '@skyux/indicators';
 
-import {
-  SkyTokensModule
-} from '@skyux/indicators';
+import { SkyLookupComponent } from './lookup.component';
 
 import {
   SkyInfiniteScrollModule,
@@ -37,14 +26,6 @@ import {
 } from '@skyux/theme';
 
 import {
-  SkyLookupComponent
-} from './lookup.component';
-
-import {
-  SkyAutocompleteModule
-} from '../autocomplete/autocomplete.module';
-
-import {
   SkyLookupResourcesModule
 } from '../shared/lookup-resources.module';
 
@@ -56,7 +37,6 @@ import {
     CommonModule,
     FormsModule,
     SkyAutocompleteModule,
-    SkyDataManagerModule,
     SkyInfiniteScrollModule,
     SkyLookupResourcesModule,
     SkyModalModule,
