@@ -1122,6 +1122,8 @@ describe('Lookup component', function () {
         it('should not focus the last token if search text is present', fakeAsync(function () {
           component.selectedFriends = [{ name: 'Rachel' }];
           fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
 
           const inputElement = getInputElement(lookupComponent);
 
