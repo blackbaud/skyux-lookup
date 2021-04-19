@@ -6,10 +6,6 @@ import {
   SkyAppWindowRef
 } from '@skyux/core';
 
-import {
-  SkyDataManagerModule
-} from '@skyux/data-manager';
-
 import { SkyAutocompleteModule } from '../autocomplete/autocomplete.module';
 import { SkyTokensModule } from '@skyux/indicators';
 
@@ -23,7 +19,6 @@ import { SkyLookupComponent } from './lookup.component';
     CommonModule,
     FormsModule,
     SkyAutocompleteModule,
-    SkyDataManagerModule,
     SkyTokensModule
   ],
   exports: [

@@ -16,6 +16,10 @@ import {
 } from '@skyux/core';
 
 import {
+  SkyDataManagerModule
+} from '@skyux/data-manager';
+
+import {
   SkyIconModule,
   SkyTextHighlightModule
 } from '@skyux/indicators';
@@ -49,6 +53,7 @@ import {
     CommonModule,
     FormsModule,
     SkyAffixModule,
+    SkyDataManagerModule,
     SkyTextHighlightModule,
     SkyIconModule,
     SkyLookupResourcesModule,
