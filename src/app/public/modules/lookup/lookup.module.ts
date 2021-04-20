@@ -20,6 +20,7 @@ import {
 } from '@skyux/data-manager';
 
 import {
+  SkyIconModule,
   SkyTokensModule
 } from '@skyux/indicators';
 
@@ -62,6 +63,7 @@ import {
     FormsModule,
     SkyAutocompleteModule,
     SkyDataManagerModule,
+    SkyIconModule,
     SkyInfiniteScrollModule,
     SkyLookupResourcesModule,
     SkyModalModule,
