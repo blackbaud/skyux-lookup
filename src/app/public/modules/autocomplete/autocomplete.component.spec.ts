@@ -1290,6 +1290,43 @@ describe('Autocomplete component', () => {
           expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
         })
       );
+
+      it('should navigate items with arrow keys with search results limits', fakeAsync(() => {
+        component.searchResultsLimit = 4;
+        fixture.detectChanges();
+
+        const inputElement: HTMLInputElement = getInputElement();
+
+        enterSearch('r', fixture);
+        expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
+
+        sendArrowDown(inputElement, fixture);
+
+        expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
+
+        sendArrowUp(inputElement, fixture);
+
+        expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
+
+        // Move up again to loop back to the bottom of the list.
+        SkyAppTestUtility.fireDomEvent(inputElement, 'keydown', {
+          keyboardEventInit: { key: 'Up' }
+        });
+        fixture.detectChanges();
+        tick();
+
+        expect(getSearchResultItems().item(3)).toHaveCssClass('selected');
+
+        // Move down to loop back to the top.
+        SkyAppTestUtility.fireDomEvent(inputElement, 'keydown', {
+          keyboardEventInit: { key: 'Down' }
+        });
+        fixture.detectChanges();
+        tick();
+
+        expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
+
+      }));
     });
 
     describe('mouse interactions', () => {

@@ -508,7 +508,7 @@ export class SkyAutocompleteComponent
         case 'down':
           if (focusedActionIndex < 0) {
             this.searchResultsIndex++;
-            if (this.searchResultsIndex > this.searchResults.length - 1) {
+            if (this.searchResultsIndex >= (this.searchResultsLimit || this.searchResults.length)) {
               this.searchResultsIndex = 0;
             }
             this.setActiveDescendant();
@@ -524,7 +524,7 @@ export class SkyAutocompleteComponent
             this.searchResultsIndex--;
             if (this.searchResultsIndex < 0) {
               // Fallback to 0 just in case results are async and aren't returned yet.
-              this.searchResultsIndex = Math.max(this.searchResults.length - 1, 0);
+              this.searchResultsIndex = Math.max((this.searchResultsLimit || this.searchResults.length) - 1, 0);
             }
             this.setActiveDescendant();
             this.changeDetector.markForCheck();
