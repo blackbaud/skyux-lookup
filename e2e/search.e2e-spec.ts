@@ -1,6 +1,7 @@
 import {
   by,
-  element
+  element,
+  Key
 } from 'protractor';
 
 import {
@@ -42,6 +43,10 @@ describe('search component', () => {
     await element(by.css(selector)).click();
   }
 
+  async function pressEnter(selector: string): Promise<void> {
+    await element(by.css(selector)).sendKeys(Key.ENTER);
+  }
+
   async function openSearch(): Promise<void> {
     await clickElement('.sky-search-btn-open');
     await SkyHostBrowser.moveCursorOffScreen();
@@ -49,7 +54,7 @@ describe('search component', () => {
 
   async function applySearchText(): Promise<void> {
     await element(by.css('.sky-search-input')).sendKeys('Value');
-    await clickElement('.sky-search-btn-apply');
+    await pressEnter('.sky-search-input');
     await SkyHostBrowser.moveCursorOffScreen();
   }
 

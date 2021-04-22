@@ -130,7 +130,7 @@ describe('Search component', () => {
 
   function triggerInputEnter() {
     let inputEl = element.query(By.css('input'));
-    inputEl.triggerEventHandler('keyup', { which: 13});
+    inputEl.triggerEventHandler('keyup', { which: 13, code: 'Enter' });
     fixture.detectChanges();
   }
 
