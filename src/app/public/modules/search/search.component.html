@@ -3,7 +3,7 @@
     <button
       class="sky-btn sky-btn-default sky-btn-icon sky-search-btn-open"
       type="button"
-      [attr.title]="'skyux_search_open' | skyLibResources"
+      [attr.aria-label]="'skyux_search_open' | skyLibResources"
       [hidden]="!searchButtonShown"
       [ngClass]="{'sky-search-btn-open-applied': clearButtonShown}"
       (click)="toggleSearchInput(true)"
@@ -54,10 +54,7 @@
               <sky-icon *skyThemeIf="'default'"
                 icon="times"
               ></sky-icon>
-              <sky-icon *skyThemeIf="'modern'"
-                icon="close"
-                iconType="skyux"
-              ></sky-icon>
+              <ng-container *skyThemeIf="'modern'">✕</ng-container>
             </button>
           </span>
           <span *skyThemeIf="'default'"
@@ -75,6 +72,7 @@
           </span>
           <label *skyThemeIf="'modern'"
             class="sky-control-label"
+            [attr.aria-label]="'skyux_search_label' | skyLibResources"
             [attr.for]="searchInput.id"
           >
             <ng-container *ngTemplateOutlet="searchIconTemplate"></ng-container>
