@@ -1,20 +1,11 @@
 import {
-  HTTP_INTERCEPTORS,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest
-} from '@angular/common/http';
-
-import {
   TestBed,
   ComponentFixture,
   async
 } from '@angular/core/testing';
 
 import {
-  DebugElement,
-  Injectable
+  DebugElement
 } from '@angular/core';
 
 import {
@@ -26,8 +17,7 @@ import {
 } from '@angular/platform-browser/animations';
 
 import {
-  BehaviorSubject,
-  Observable
+  BehaviorSubject
 } from 'rxjs';
 
 import {
@@ -72,16 +62,6 @@ import {
   SearchTestComponent
 } from './fixtures/search.component.fixture';
 
-@Injectable()
-class TestHttpRequestInterceptor implements HttpInterceptor {
-  public intercept(req: HttpRequest<any>, next: HttpHandler):
-    Observable<HttpEvent<any>> {
-    return new Observable<any>(observer => {
-      observer.next({} as HttpEvent<any>);
-    });
-  }
-}
-
 describe('Search component', () => {
   let fixture: ComponentFixture<SearchTestComponent>;
   let component: SearchTestComponent;
@@ -124,11 +104,6 @@ describe('Search component', () => {
         {
           provide: SkyThemeService,
           useValue: mockThemeSvc
-        },
-        {
-          provide: HTTP_INTERCEPTORS,
-          useClass: TestHttpRequestInterceptor,
-          multi: true
         }
       ]
     });
@@ -543,17 +518,6 @@ describe('Search component', () => {
       await expectAsync(fixture.nativeElement).toBeAccessible();
 
       setInput('foo bar');
-      await fixture.whenStable();
-      await expectAsync(fixture.nativeElement).toBeAccessible();
-      triggerClearButton();
-
-      await triggerXsBreakpoint();
-      await expectAsync(fixture.nativeElement).toBeAccessible();
-
-      await triggerOpenButton();
-      await expectAsync(fixture.nativeElement).toBeAccessible();
-
-      setInput('foo bam');
       await fixture.whenStable();
       await expectAsync(fixture.nativeElement).toBeAccessible();
     }
