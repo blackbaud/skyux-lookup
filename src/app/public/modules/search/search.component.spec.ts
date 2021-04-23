@@ -1,11 +1,20 @@
 import {
+  HTTP_INTERCEPTORS,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest
+} from '@angular/common/http';
+
+import {
   TestBed,
   ComponentFixture,
   async
 } from '@angular/core/testing';
 
 import {
-  DebugElement
+  DebugElement,
+  Injectable
 } from '@angular/core';
 
 import {
@@ -17,7 +26,8 @@ import {
 } from '@angular/platform-browser/animations';
 
 import {
-  BehaviorSubject
+  BehaviorSubject,
+  Observable
 } from 'rxjs';
 
 import {
@@ -62,6 +72,16 @@ import {
   SearchTestComponent
 } from './fixtures/search.component.fixture';
 
+@Injectable()
+class TestHttpRequestInterceptor implements HttpInterceptor {
+  public intercept(req: HttpRequest<any>, next: HttpHandler):
+    Observable<HttpEvent<any>> {
+    return new Observable<any>(observer => {
+      observer.next({} as HttpEvent<any>);
+    });
+  }
+}
+
 describe('Search component', () => {
   let fixture: ComponentFixture<SearchTestComponent>;
   let component: SearchTestComponent;
@@ -104,6 +124,11 @@ describe('Search component', () => {
         {
           provide: SkyThemeService,
           useValue: mockThemeSvc
+        },
+        {
+          provide: HTTP_INTERCEPTORS,
+          useClass: TestHttpRequestInterceptor,
+          multi: true
         }
       ]
     });
