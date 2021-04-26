@@ -54,7 +54,11 @@
               <sky-icon *skyThemeIf="'default'"
                 icon="times"
               ></sky-icon>
-              <ng-container *skyThemeIf="'modern'">✕</ng-container>
+              <sky-icon *skyThemeIf="'modern'"
+                icon="close"
+                iconType="skyux"
+                size="sm"
+              ></sky-icon>
             </button>
           </span>
           <span *skyThemeIf="'default'"

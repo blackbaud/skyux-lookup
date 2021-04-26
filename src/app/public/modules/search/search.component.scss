@@ -138,6 +138,10 @@ sky-search {
   sky-search {
     .sky-input-box .sky-input-group-btn .sky-btn.sky-search-btn {
       width: 40px;
+
+      .sky-icon.sky-i-close {
+        font-size: inherit;
+      }
     }
 
     .sky-search-btn-open-applied {
@@ -164,13 +168,13 @@ sky-search {
         .sky-input-box-form-group-inner {
           label {
             flex-grow: 0;
-            padding: 6px 6px 1px;
+            padding: $sky-theme-modern-space-sm $sky-theme-modern-space-sm 1px;
           }
 
           input {
             flex-basis: auto;
             width: auto;
-            padding: 6px 6px 6px 0;
+            padding: $sky-theme-modern-space-sm $sky-theme-modern-space-sm $sky-theme-modern-space-sm 0;
             margin: 0;
           }
         }
