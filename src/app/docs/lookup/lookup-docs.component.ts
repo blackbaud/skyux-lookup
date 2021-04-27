@@ -12,6 +12,8 @@ import {
 import {
   SkyAutocompleteSearchFunctionFilter
 } from '@skyux/lookup';
+import { SkyModalCloseArgs, SkyModalService } from '@skyux/modals';
+import { SkyLookupDocsDemoModalComponent } from './lookup-docs-demo-modal.component';
 
 @Component({
   selector: 'app-lookup-docs',
@@ -49,11 +51,34 @@ export class LookupDocsComponent implements OnInit {
   ];
 
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private modalService: SkyModalService
   ) { }
 
   public ngOnInit(): void {
     this.createForm();
+  }
+
+  public addButtonClicked(): void {
+    console.log('clicked');
+
+    const modalInstance = this.modalService.open(SkyLookupDocsDemoModalComponent);
+    modalInstance.closed.subscribe((modalCloseArgs: SkyModalCloseArgs) => {
+      if (modalCloseArgs.reason === 'save') {
+        const formControl: FormControl = this.myForm.get('friends') as FormControl;
+        let newValue: any[] = formControl.value.concat([{ name: modalCloseArgs.data }]);
+
+        this.people.push({ name: modalCloseArgs.data });
+        this.people = this.people.sort((a, b) => {
+          return a.name.localeCompare(b.name);
+       });
+
+       newValue = newValue.sort((a, b) => {
+         return this.people.indexOf(a) < this.people.indexOf(b) ? 1 : -1;
+       });
+       formControl.setValue(newValue);
+      }
+    });
   }
 
   // Only show people in the search results that have not been chosen already.
