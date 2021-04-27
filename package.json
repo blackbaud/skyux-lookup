@@ -1,6 +1,6 @@
 {
   "name": "@skyux/lookup",
-  "version": "4.10.0",
+  "version": "4.11.0",
   "description": "SKY UX Lookup",
   "scripts": {
     "build": "skyux build-public-library",
@@ -71,7 +71,7 @@
     "@skyux/omnibar-interop": "4.0.1",
     "@skyux/popovers": "4.5.1",
     "@skyux/router": "4.1.0",
-    "@skyux/tabs": "4.6.4",
+    "@skyux/tabs": "4.6.5",
     "@skyux/theme": "4.16.1",
     "codelyzer": "5.2.2",
     "rxjs": "6.6.7",
