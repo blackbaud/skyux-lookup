@@ -82,10 +82,6 @@ export class SkyLookupTestComponent implements OnInit {
     this.form.controls.friends.disable();
   }
 
-  public patchValue(index: number): void {
-    this.form.patchValue({ 'friends': [this.data[index]] });
-  }
-
   public resetForm(): void {
     this.form.reset();
   }
