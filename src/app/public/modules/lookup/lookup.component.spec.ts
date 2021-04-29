@@ -52,7 +52,7 @@ describe('Lookup component', function () {
   //#region helpers
 
   function cancelShowMoreModal(provider: SkyModalProvider, fixture: ComponentFixture<any>): void {
-    (provider.closeCallback as Subject<SkyModalProviderCloseArgs>).next({
+    (provider.closed as Subject<SkyModalProviderCloseArgs>).next({
       reason: 'cancel',
       data: undefined
     });
@@ -104,7 +104,7 @@ describe('Lookup component', function () {
   }
 
   function saveShowMoreModal(data: any, provider: SkyModalProvider, fixture: ComponentFixture<any>): void {
-    (provider.closeCallback as Subject<SkyModalProviderCloseArgs>).next({
+    (provider.closed as Subject<SkyModalProviderCloseArgs>).next({
       reason: 'save',
       data: data
     });
@@ -485,7 +485,7 @@ describe('Lookup component', function () {
 
         const mockModalProvider: SkyModalProvider = {
           open: () => { },
-          closeCallback: new Subject(),
+          closed: new Subject(),
           type: 'lookup-show-more',
           events: { 'addClick': new EventEmitter() }
         };
@@ -1456,7 +1456,7 @@ describe('Lookup component', function () {
 
         const mockModalProvider: SkyModalProvider = {
           open: () => { },
-          closeCallback: new Subject(),
+          closed: new Subject(),
           type: 'lookup-show-more',
           events: { 'addClick': new EventEmitter() }
         };

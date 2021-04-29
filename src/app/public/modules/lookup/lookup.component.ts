@@ -27,6 +27,7 @@ import {
 } from 'rxjs';
 
 import {
+  take,
   takeUntil
 } from 'rxjs/operators';
 
@@ -488,7 +489,7 @@ export class SkyLookupComponent
         this.addClick.emit();
       });
 
-      this.modalProvider.closeCallback.subscribe(closeArgs => {
+      this.modalProvider.closed.pipe(take(1)).subscribe(closeArgs => {
         if (closeArgs.reason === 'save') {
           let selectedItems: any[] = [];
 
