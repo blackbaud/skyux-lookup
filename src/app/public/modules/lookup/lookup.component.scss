@@ -107,7 +107,7 @@ sky-input-box .sky-lookup {
 
         sky-token {
           padding-bottom: 0;
-          padding-top: 0;
+          padding-top: 2px;
         }
 
         .sky-tokens-content {
@@ -118,6 +118,12 @@ sky-input-box .sky-lookup {
             padding-left: 0;
           }
         }
+      }
+    }
+
+    &:not(.sky-lookup-single) {
+      textarea.sky-lookup-input.sky-form-control {
+        margin-top: -24px;
       }
     }
 
