@@ -11,8 +11,7 @@ import {
 } from '@angular/forms';
 
 import {
-  SkyAppWindowRef,
-  SkyModalProviderModule
+  SkyAppWindowRef
 } from '@skyux/core';
 
 import {
@@ -35,7 +34,6 @@ import {
     CommonModule,
     FormsModule,
     SkyAutocompleteModule,
-    SkyModalProviderModule,
     SkyTokensModule
   ],
   exports: [

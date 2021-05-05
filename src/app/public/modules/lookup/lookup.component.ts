@@ -33,8 +33,8 @@ import {
 
 import {
   SkyAppWindowRef,
-  SkyModalProvider,
-  SkyModalProviderService
+  SkyCoreModalProvider,
+  SkyCoreModalProviderService
 } from '@skyux/core';
 
 import {
@@ -251,7 +251,7 @@ export class SkyLookupComponent
   private ngUnsubscribe = new Subject();
   private idle = new Subject();
   private markForTokenFocusOnKeyUp = false;
-  private modalProvider: SkyModalProvider;
+  private modalProvider: SkyCoreModalProvider;
 
   private _autocompleteInputDirective: SkyAutocompleteInputDirective;
   private _selectMode: SkyLookupSelectMode;
@@ -266,7 +266,7 @@ export class SkyLookupComponent
     private adapter: SkyLookupAdapterService,
     @Optional() public inputBoxHostSvc?: SkyInputBoxHostService,
     @Optional() public themeSvc?: SkyThemeService,
-    @Optional() public modalProviderService?: SkyModalProviderService
+    @Optional() public modalProviderService?: SkyCoreModalProviderService
   ) {
     super();
     ngControl.valueAccessor = this;
@@ -483,13 +483,13 @@ export class SkyLookupComponent
         showAddButton: this.showAddButton,
         userConfig: modalConfig
       };
-      this.modalProvider.open(modalContext);
+      const modalInstance = this.modalProvider.open({ context: modalContext });
 
-      this.modalProvider.events['addClick'].subscribe(() => {
+      modalInstance.componentInstance.addClick.subscribe(() => {
         this.addClick.emit();
       });
 
-      this.modalProvider.closed.pipe(take(1)).subscribe(closeArgs => {
+      modalInstance.closed.pipe(take(1)).subscribe(closeArgs => {
         if (closeArgs.reason === 'save') {
           let selectedItems: any[] = [];
 

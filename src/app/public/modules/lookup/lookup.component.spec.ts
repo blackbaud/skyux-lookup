@@ -1,4 +1,8 @@
 import {
+  EventEmitter
+} from '@angular/core';
+
+import {
   async,
   ComponentFixture,
   fakeAsync,
@@ -15,10 +19,21 @@ import {
 } from '@angular/platform-browser';
 
 import {
+  SkyCoreModalCloseArgs,
+  SkyCoreModalInstance,
+  SkyCoreModalProvider,
+  SkyCoreModalProviderService
+} from '@skyux/core';
+
+import {
   expect,
   expectAsync,
   SkyAppTestUtility
 } from '@skyux-sdk/testing';
+
+import {
+  Subject
+} from 'rxjs';
 
 import {
   SkyLookupComponent
@@ -43,24 +58,21 @@ import {
 import {
   SkyLookupSelectMode
 } from './types/lookup-select-mode';
-import { SkyModalProvider, SkyModalProviderCloseArgs, SkyModalProviderService } from '@skyux/core';
-import { EventEmitter } from '@angular/core';
-import { Subject } from 'rxjs';
 
 describe('Lookup component', function () {
 
   //#region helpers
 
-  function cancelShowMoreModal(provider: SkyModalProvider, fixture: ComponentFixture<any>): void {
-    (provider.closed as Subject<SkyModalProviderCloseArgs>).next({
+  function cancelShowMoreModal(instance: SkyCoreModalInstance, fixture: ComponentFixture<any>): void {
+    (instance.closed as Subject<SkyCoreModalCloseArgs>).next({
       reason: 'cancel',
       data: undefined
     });
     fixture.detectChanges();
   }
 
-  function clickModalAddButton(provider: SkyModalProvider, fixture: ComponentFixture<any>): void {
-    provider.events['addClick'].emit();
+  function clickModalAddButton(instance: SkyCoreModalInstance, fixture: ComponentFixture<any>): void {
+    instance.componentInstance.addClick.emit();
     fixture.detectChanges();
   }
 
@@ -103,8 +115,8 @@ describe('Lookup component', function () {
     tick();
   }
 
-  function saveShowMoreModal(data: any, provider: SkyModalProvider, fixture: ComponentFixture<any>): void {
-    (provider.closed as Subject<SkyModalProviderCloseArgs>).next({
+  function saveShowMoreModal(data: any, instance: SkyCoreModalInstance, fixture: ComponentFixture<any>): void {
+    (instance.closed as Subject<SkyCoreModalCloseArgs>).next({
       reason: 'save',
       data: data
     });
@@ -483,15 +495,26 @@ describe('Lookup component', function () {
 
       describe('show more button', () => {
 
-        const mockModalProvider: SkyModalProvider = {
-          open: () => { },
+        const mockModalInstance: SkyCoreModalInstance = {
+          beforeClose: undefined,
           closed: new Subject(),
-          type: 'lookup-show-more',
-          events: { 'addClick': new EventEmitter() }
+          componentInstance: {
+            addClick: new EventEmitter()
+          },
+          close: () => { },
+          cancel: () => { },
+          save: () => { }
+        };
+
+        const mockModalProvider: SkyCoreModalProvider = {
+          open: () => {
+            return mockModalInstance;
+          },
+          type: 'lookup-show-more'
         };
 
         beforeEach(() => {
-          const modalProviderService = TestBed.inject(SkyModalProviderService);
+          const modalProviderService = TestBed.inject(SkyCoreModalProviderService);
           spyOn(modalProviderService, 'getModalForType').and.returnValue(mockModalProvider);
         });
 
@@ -506,13 +529,15 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(mockModalProvider.open).toHaveBeenCalledWith({
-              items: component.data,
-              descriptorProperty: 'name',
-              initialSearch: 'r',
-              initialValue: undefined,
-              selectMode: SkyLookupSelectMode.multiple,
-              showAddButton: false,
-              userConfig: {}
+              context: {
+                items: component.data,
+                descriptorProperty: 'name',
+                initialSearch: 'r',
+                initialValue: undefined,
+                selectMode: SkyLookupSelectMode.multiple,
+                showAddButton: false,
+                userConfig: {}
+              }
             });
           })
         );
@@ -528,13 +553,15 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(mockModalProvider.open).toHaveBeenCalledWith({
-              items: component.data,
-              descriptorProperty: 'name',
-              initialSearch: 'r',
-              initialValue: undefined,
-              selectMode: SkyLookupSelectMode.multiple,
-              showAddButton: false,
-              userConfig: {}
+              context: {
+                items: component.data,
+                descriptorProperty: 'name',
+                initialSearch: 'r',
+                initialValue: undefined,
+                selectMode: SkyLookupSelectMode.multiple,
+                showAddButton: false,
+                userConfig: {}
+              }
             });
           })
         );
@@ -553,13 +580,15 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(mockModalProvider.open).toHaveBeenCalledWith({
-              items: component.data,
-              descriptorProperty: 'name',
-              initialSearch: 's',
-              initialValue: [{ value: { name: 'Isaac' } }],
-              selectMode: SkyLookupSelectMode.multiple,
-              showAddButton: false,
-              userConfig: {}
+              context: {
+                items: component.data,
+                descriptorProperty: 'name',
+                initialSearch: 's',
+                initialValue: [{ value: { name: 'Isaac' } }],
+                selectMode: SkyLookupSelectMode.multiple,
+                showAddButton: false,
+                userConfig: {}
+              }
             });
           })
         );
@@ -576,13 +605,15 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(mockModalProvider.open).toHaveBeenCalledWith({
-              items: component.data,
-              descriptorProperty: 'name',
-              initialSearch: 's',
-              initialValue: undefined,
-              selectMode: SkyLookupSelectMode.single,
-              showAddButton: false,
-              userConfig: {}
+              context: {
+                items: component.data,
+                descriptorProperty: 'name',
+                initialSearch: 's',
+                initialValue: undefined,
+                selectMode: SkyLookupSelectMode.single,
+                showAddButton: false,
+                userConfig: {}
+              }
             });
           })
         );
@@ -599,13 +630,15 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(mockModalProvider.open).toHaveBeenCalledWith({
-              items: component.data,
-              descriptorProperty: 'name',
-              initialSearch: 's',
-              initialValue: undefined,
-              selectMode: SkyLookupSelectMode.multiple,
-              showAddButton: true,
-              userConfig: {}
+              context: {
+                items: component.data,
+                descriptorProperty: 'name',
+                initialSearch: 's',
+                initialValue: undefined,
+                selectMode: SkyLookupSelectMode.multiple,
+                showAddButton: true,
+                userConfig: {}
+              }
             });
           })
         );
@@ -624,13 +657,15 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(mockModalProvider.open).toHaveBeenCalledWith({
-              items: component.data,
-              descriptorProperty: 'name',
-              initialSearch: 's',
-              initialValue: undefined,
-              selectMode: SkyLookupSelectMode.multiple,
-              showAddButton: false,
-              userConfig: customConfig
+              context: {
+                items: component.data,
+                descriptorProperty: 'name',
+                initialSearch: 's',
+                initialValue: undefined,
+                selectMode: SkyLookupSelectMode.multiple,
+                showAddButton: false,
+                userConfig: customConfig
+              }
             });
           })
         );
@@ -648,14 +683,16 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(mockModalProvider.open).toHaveBeenCalledWith({
-              items: component.data,
-              descriptorProperty: 'name',
-              initialSearch: 's',
-              initialValue: undefined,
-              selectMode: SkyLookupSelectMode.multiple,
-              showAddButton: false,
-              userConfig: {
-                itemTemplate: component.searchResultTemplate
+              context: {
+                items: component.data,
+                descriptorProperty: 'name',
+                initialSearch: 's',
+                initialValue: undefined,
+                selectMode: SkyLookupSelectMode.multiple,
+                showAddButton: false,
+                userConfig: {
+                  itemTemplate: component.searchResultTemplate
+                }
               }
             });
           })
@@ -680,7 +717,7 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([6, 9], mockModalProvider, fixture);
+              saveShowMoreModal([6, 9], mockModalInstance, fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
             })
@@ -700,7 +737,7 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([6, 9], mockModalProvider, fixture);
+              saveShowMoreModal([6, 9], mockModalInstance, fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
             })
@@ -720,7 +757,7 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              cancelShowMoreModal(mockModalProvider, fixture);
+              cancelShowMoreModal(mockModalInstance, fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
             })
@@ -740,7 +777,7 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([6], mockModalProvider, fixture);
+              saveShowMoreModal([6], mockModalInstance, fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
             })
@@ -768,7 +805,7 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([9], mockModalProvider, fixture);
+              saveShowMoreModal([9], mockModalInstance, fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
             })
@@ -789,7 +826,7 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([6], mockModalProvider, fixture);
+              saveShowMoreModal([6], mockModalInstance, fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
             })
@@ -810,7 +847,7 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              cancelShowMoreModal(mockModalProvider, fixture);
+              cancelShowMoreModal(mockModalInstance, fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
             })
@@ -827,7 +864,7 @@ describe('Lookup component', function () {
             performSearch('r', fixture);
             clickShowMore(fixture);
 
-            clickModalAddButton(mockModalProvider, fixture);
+            clickModalAddButton(mockModalInstance, fixture);
 
             expect(addButtonSpy).toHaveBeenCalled();
           })
@@ -1454,15 +1491,26 @@ describe('Lookup component', function () {
 
       describe('show more button', () => {
 
-        const mockModalProvider: SkyModalProvider = {
-          open: () => { },
+        const mockModalInstance: SkyCoreModalInstance = {
+          beforeClose: undefined,
           closed: new Subject(),
-          type: 'lookup-show-more',
-          events: { 'addClick': new EventEmitter() }
+          componentInstance: {
+            addClick: new EventEmitter()
+          },
+          close: () => { },
+          cancel: () => { },
+          save: () => { }
+        };
+
+        const mockModalProvider: SkyCoreModalProvider = {
+          open: () => {
+            return mockModalInstance;
+          },
+          type: 'lookup-show-more'
         };
 
         beforeEach(() => {
-          const modalProviderService = TestBed.inject(SkyModalProviderService);
+          const modalProviderService = TestBed.inject(SkyCoreModalProviderService);
           spyOn(modalProviderService, 'getModalForType').and.returnValue(mockModalProvider);
         });
 
@@ -1477,13 +1525,15 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(mockModalProvider.open).toHaveBeenCalledWith({
-              items: component.data,
-              descriptorProperty: 'name',
-              initialSearch: 'r',
-              initialValue: undefined,
-              selectMode: SkyLookupSelectMode.multiple,
-              showAddButton: false,
-              userConfig: {}
+              context: {
+                items: component.data,
+                descriptorProperty: 'name',
+                initialSearch: 'r',
+                initialValue: undefined,
+                selectMode: SkyLookupSelectMode.multiple,
+                showAddButton: false,
+                userConfig: {}
+              }
             });
           })
         );
@@ -1499,13 +1549,15 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(mockModalProvider.open).toHaveBeenCalledWith({
-              items: component.data,
-              descriptorProperty: 'name',
-              initialSearch: 'r',
-              initialValue: undefined,
-              selectMode: SkyLookupSelectMode.multiple,
-              showAddButton: false,
-              userConfig: {}
+              context: {
+                items: component.data,
+                descriptorProperty: 'name',
+                initialSearch: 'r',
+                initialValue: undefined,
+                selectMode: SkyLookupSelectMode.multiple,
+                showAddButton: false,
+                userConfig: {}
+              }
             });
           })
         );
@@ -1524,13 +1576,15 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(mockModalProvider.open).toHaveBeenCalledWith({
-              items: component.data,
-              descriptorProperty: 'name',
-              initialSearch: 's',
-              initialValue: [{ value: { name: 'Isaac' } }],
-              selectMode: SkyLookupSelectMode.multiple,
-              showAddButton: false,
-              userConfig: {}
+              context: {
+                items: component.data,
+                descriptorProperty: 'name',
+                initialSearch: 's',
+                initialValue: [{ value: { name: 'Isaac' } }],
+                selectMode: SkyLookupSelectMode.multiple,
+                showAddButton: false,
+                userConfig: {}
+              }
             });
           })
         );
@@ -1547,13 +1601,15 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(mockModalProvider.open).toHaveBeenCalledWith({
-              items: component.data,
-              descriptorProperty: 'name',
-              initialSearch: 's',
-              initialValue: undefined,
-              selectMode: SkyLookupSelectMode.single,
-              showAddButton: false,
-              userConfig: {}
+              context: {
+                items: component.data,
+                descriptorProperty: 'name',
+                initialSearch: 's',
+                initialValue: undefined,
+                selectMode: SkyLookupSelectMode.single,
+                showAddButton: false,
+                userConfig: {}
+              }
             });
           })
         );
@@ -1570,13 +1626,15 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(mockModalProvider.open).toHaveBeenCalledWith({
-              items: component.data,
-              descriptorProperty: 'name',
-              initialSearch: 's',
-              initialValue: undefined,
-              selectMode: SkyLookupSelectMode.multiple,
-              showAddButton: true,
-              userConfig: {}
+              context: {
+                items: component.data,
+                descriptorProperty: 'name',
+                initialSearch: 's',
+                initialValue: undefined,
+                selectMode: SkyLookupSelectMode.multiple,
+                showAddButton: true,
+                userConfig: {}
+              }
             });
           })
         );
@@ -1595,13 +1653,15 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(mockModalProvider.open).toHaveBeenCalledWith({
-              items: component.data,
-              descriptorProperty: 'name',
-              initialSearch: 's',
-              initialValue: undefined,
-              selectMode: SkyLookupSelectMode.multiple,
-              showAddButton: false,
-              userConfig: customConfig
+              context: {
+                items: component.data,
+                descriptorProperty: 'name',
+                initialSearch: 's',
+                initialValue: undefined,
+                selectMode: SkyLookupSelectMode.multiple,
+                showAddButton: false,
+                userConfig: customConfig
+              }
             });
           })
         );
@@ -1619,14 +1679,16 @@ describe('Lookup component', function () {
             clickShowMore(fixture);
 
             expect(mockModalProvider.open).toHaveBeenCalledWith({
-              items: component.data,
-              descriptorProperty: 'name',
-              initialSearch: 's',
-              initialValue: undefined,
-              selectMode: SkyLookupSelectMode.multiple,
-              showAddButton: false,
-              userConfig: {
-                itemTemplate: component.searchResultTemplate
+              context: {
+                items: component.data,
+                descriptorProperty: 'name',
+                initialSearch: 's',
+                initialValue: undefined,
+                selectMode: SkyLookupSelectMode.multiple,
+                showAddButton: false,
+                userConfig: {
+                  itemTemplate: component.searchResultTemplate
+                }
               }
             });
           })
@@ -1651,7 +1713,7 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([6, 9], mockModalProvider, fixture);
+              saveShowMoreModal([6, 9], mockModalInstance, fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
             })
@@ -1671,7 +1733,7 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([6, 9], mockModalProvider, fixture);
+              saveShowMoreModal([6, 9], mockModalInstance, fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
             })
@@ -1691,7 +1753,7 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              cancelShowMoreModal(mockModalProvider, fixture);
+              cancelShowMoreModal(mockModalInstance, fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
             })
@@ -1711,7 +1773,7 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([6], mockModalProvider, fixture);
+              saveShowMoreModal([6], mockModalInstance, fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
             })
@@ -1739,7 +1801,7 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([9], mockModalProvider, fixture);
+              saveShowMoreModal([9], mockModalInstance, fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
             })
@@ -1760,7 +1822,7 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([6], mockModalProvider, fixture);
+              saveShowMoreModal([6], mockModalInstance, fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
             })
@@ -1781,7 +1843,7 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              cancelShowMoreModal(mockModalProvider, fixture);
+              cancelShowMoreModal(mockModalInstance, fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
             })
@@ -1798,7 +1860,7 @@ describe('Lookup component', function () {
             performSearch('r', fixture);
             clickShowMore(fixture);
 
-            clickModalAddButton(mockModalProvider, fixture);
+            clickModalAddButton(mockModalInstance, fixture);
 
             expect(addButtonSpy).toHaveBeenCalled();
           })
