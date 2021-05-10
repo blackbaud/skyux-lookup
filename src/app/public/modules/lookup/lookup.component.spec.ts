@@ -457,8 +457,16 @@ describe('Lookup component', function () {
           component.setValue(0);
 
           expect(lookupComponent.tokens.length).toBe(1);
-          expect(lookupComponent.tokens[0].value).toEqual({ name: 'Andy' });
-          expect(lookupComponent.value).toEqual([{ name: 'Andy' }]);
+          expect(lookupComponent.tokens[0].value).toEqual({
+            name: 'Andy',
+            description: 'Mr. Andy',
+            birthDate: '1/1/1995'
+          });
+          expect(lookupComponent.value).toEqual([{
+            name: 'Andy',
+            description: 'Mr. Andy',
+            birthDate: '1/1/1995'
+          }]);
         }));
       });
     });
@@ -555,7 +563,11 @@ describe('Lookup component', function () {
           component.setValue(0);
 
           expect(getInputElement(lookupComponent).value).toBe('Andy');
-          expect(lookupComponent.value).toEqual([{ name: 'Andy' }]);
+          expect(lookupComponent.value).toEqual([{
+            name: 'Andy',
+            description: 'Mr. Andy',
+            birthDate: '1/1/1995'
+          }]);
         }));
       });
     });
@@ -1186,7 +1198,7 @@ describe('Lookup component', function () {
             expect(customPickerSpy).toHaveBeenCalledWith({
               items: component.data,
               initialSearch: 'p',
-              initialValue: undefined
+              initialValue: []
             });
 
             closeModal(fixture);
@@ -2329,7 +2341,7 @@ describe('Lookup component', function () {
             expect(customPickerSpy).toHaveBeenCalledWith({
               items: component.data,
               initialSearch: 'p',
-              initialValue: undefined
+              initialValue: []
             });
           })
         );
