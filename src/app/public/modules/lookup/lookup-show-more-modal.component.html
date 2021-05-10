@@ -49,14 +49,14 @@
               </ng-container>
             </sky-repeater-item-content>
           </sky-repeater-item>
-          <sky-infinite-scroll
-            [enabled]="itemsHaveMore"
-            (scrollEnd)="addItems()"
-          >
-          </sky-infinite-scroll>
         </sky-repeater>
       </sky-data-view>
     </sky-data-manager>
+    <sky-infinite-scroll
+      [enabled]="itemsHaveMore"
+      (scrollEnd)="addItems()"
+    >
+    </sky-infinite-scroll>
   </sky-modal-content>
   <sky-modal-footer>
     <button
