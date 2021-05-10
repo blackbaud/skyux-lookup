@@ -1,8 +1,4 @@
 import {
-  EventEmitter
-} from '@angular/core';
-
-import {
   async,
   ComponentFixture,
   fakeAsync,
@@ -19,21 +15,14 @@ import {
 } from '@angular/platform-browser';
 
 import {
-  SkyCoreModalCloseArgs,
-  SkyCoreModalInstance,
-  SkyCoreModalProvider,
-  SkyCoreModalProviderService
-} from '@skyux/core';
+  SkyModalService
+} from '@skyux/modals';
 
 import {
   expect,
   expectAsync,
   SkyAppTestUtility
 } from '@skyux-sdk/testing';
-
-import {
-  Subject
-} from 'rxjs';
 
 import {
   SkyLookupComponent
@@ -63,21 +52,39 @@ describe('Lookup component', function () {
 
   //#region helpers
 
-  function cancelShowMoreModal(instance: SkyCoreModalInstance, fixture: ComponentFixture<any>): void {
-    (instance.closed as Subject<SkyCoreModalCloseArgs>).next({
-      reason: 'cancel',
-      data: undefined
-    });
+  function clearShowMoreSearch(fixture: ComponentFixture<any>): void {
+    (<HTMLElement>document.querySelector('.sky-lookup-show-more-data-manager .sky-search-btn-clear')).click();
+
+    fixture.detectChanges();
+    tick(250);
     fixture.detectChanges();
   }
 
-  function clickModalAddButton(instance: SkyCoreModalInstance, fixture: ComponentFixture<any>): void {
-    instance.componentInstance.addClick.emit();
+  function clickModalAddButton(fixture: ComponentFixture<any>): void {
+    getModalAddButton().click();
     fixture.detectChanges();
   }
 
   function clickShowMore(fixture: ComponentFixture<any>): void {
     getShowMoreButton().click();
+    fixture.detectChanges();
+    tick();
+  }
+
+  function clickShowMoreClearAll(fixture: ComponentFixture<any>): void {
+    (<HTMLElement>document.querySelector('.sky-data-manager-clear-all-btn')).click();
+    fixture.detectChanges();
+  }
+
+  function clickShowMoreSelectAll(fixture: ComponentFixture<any>): void {
+    (<HTMLElement>document.querySelector('.sky-data-manager-select-all-btn')).click();
+    fixture.detectChanges();
+  }
+
+  function closeModal(fixture: ComponentFixture<any>): void {
+    (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-close'))?.click();
+    fixture.detectChanges();
+    tick();
     fixture.detectChanges();
     tick();
   }
@@ -98,10 +105,26 @@ describe('Lookup component', function () {
     return lookupComponent['elementRef'].nativeElement.querySelector('.sky-lookup-input');
   }
 
+  function getModalAddButton(): HTMLElement {
+    return document.querySelector('.sky-lookup-show-more-modal-add') as HTMLElement;
+  }
+
+  function getRepeaterItemCount(): number {
+    return document.querySelectorAll('sky-modal sky-repeater-item').length;
+  }
+
   function getShowMoreButton(): HTMLElement {
     return document.querySelector('.sky-autocomplete-more') as HTMLElement;
   }
 
+  function getShowMoreRepeaterItemContent(index: number): string {
+    return (<HTMLElement>document
+      .querySelectorAll('sky-modal sky-repeater-item-content')[index]).textContent.trim();
+  }
+
+  function getShowMoreModalTitle(): string {
+    return document.querySelector('sky-modal-header').textContent.trim();
+  }
   function getTokenElements(): NodeListOf<Element> {
     return document.querySelectorAll('.sky-token');
   }
@@ -115,11 +138,8 @@ describe('Lookup component', function () {
     tick();
   }
 
-  function saveShowMoreModal(data: any, instance: SkyCoreModalInstance, fixture: ComponentFixture<any>): void {
-    (instance.closed as Subject<SkyCoreModalCloseArgs>).next({
-      reason: 'save',
-      data: data
-    });
+  function saveShowMoreModal(fixture: ComponentFixture<any>): void {
+    (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-save')).click();
     fixture.detectChanges();
   }
 
@@ -129,6 +149,23 @@ describe('Lookup component', function () {
     tick();
     fixture.detectChanges();
     tick();
+  }
+
+  function selectShowOnlySelected(fixture: ComponentFixture<any>): void {
+    (<HTMLElement>document.querySelector('.sky-lookup-show-more-data-manager .sky-toolbar-view-actions input')).click();
+    fixture.detectChanges();
+    tick(250);
+    fixture.detectChanges();
+  }
+
+  function selectShowMoreItemMultiple(index: number, fixture: ComponentFixture<any>): void {
+    (<HTMLElement>document.querySelectorAll('.sky-lookup-show-more-repeater sky-repeater-item input')[index]).click();
+    fixture.detectChanges();
+  }
+
+  function selectShowMoreItemSingle(index: number, fixture: ComponentFixture<any>): void {
+    (<HTMLElement>document.querySelectorAll('.sky-lookup-show-more-repeater sky-repeater-item')[index]).click();
+    fixture.detectChanges();
   }
 
   function triggerClick(element: Element, fixture: ComponentFixture<any>, focusable = false): void {
@@ -148,6 +185,11 @@ describe('Lookup component', function () {
     tick();
     fixture.detectChanges();
     tick();
+  }
+
+  function triggerInputFocus(fixture: ComponentFixture<any>): void {
+    const inputElement = getInputElement(fixture.componentInstance.lookupComponent);
+    SkyAppTestUtility.fireDomEvent(inputElement, 'focus');
   }
 
   function triggerKeyPress(element: Element, key: string, fixture: ComponentFixture<any>): void {
@@ -495,206 +537,38 @@ describe('Lookup component', function () {
 
       describe('show more button', () => {
 
-        const mockModalInstance: SkyCoreModalInstance = {
-          beforeClose: undefined,
-          closed: new Subject(),
-          componentInstance: {
-            addClick: new EventEmitter()
-          },
-          close: () => { },
-          cancel: () => { },
-          save: () => { }
-        };
+        let modalService: SkyModalService;
 
-        const mockModalProvider: SkyCoreModalProvider = {
-          open: () => {
-            return mockModalInstance;
-          },
-          type: 'lookup-show-more'
-        };
+        beforeEach(fakeAsync(() => {
+          modalService = TestBed.inject(SkyModalService);
 
-        beforeEach(() => {
-          const modalProviderService = TestBed.inject(SkyCoreModalProviderService);
-          spyOn(modalProviderService, 'getModalForType').and.returnValue(mockModalProvider);
-        });
+          fixture.detectChanges();
+          tick();
+        }));
+
+        // This is necessary as due to modals being launched outside of the test bed they will not
+        // automatically be disposed between tests.
+        afterEach(fakeAsync(() => {
+          // NOTE: This is important as it ensures that the modal host component is fully disposed of
+          // between tests. This is important as the modal host might need a different set of component
+          // injectors than the previous test.
+          modalService.dispose();
+          fixture.detectChanges();
+        }));
 
         it('should open the modal when the show more button is clicked',
           fakeAsync(() => {
             component.showMoreButton = true;
             fixture.detectChanges();
 
-            spyOn(mockModalProvider, 'open').and.callThrough();
+            spyOn(modalService, 'open').and.callThrough();
 
             performSearch('r', fixture);
             clickShowMore(fixture);
 
-            expect(mockModalProvider.open).toHaveBeenCalledWith({
-              context: {
-                items: component.data,
-                descriptorProperty: 'name',
-                initialSearch: 'r',
-                initialValue: undefined,
-                selectMode: SkyLookupSelectMode.multiple,
-                showAddButton: false,
-                userConfig: {}
-              }
-            });
-          })
-        );
+            expect(modalService.open).toHaveBeenCalled();
 
-        it('should open the modal when the show more button is clicked',
-          fakeAsync(() => {
-            component.showMoreButton = true;
-            fixture.detectChanges();
-
-            spyOn(mockModalProvider, 'open').and.callThrough();
-
-            performSearch('r', fixture);
-            clickShowMore(fixture);
-
-            expect(mockModalProvider.open).toHaveBeenCalledWith({
-              context: {
-                items: component.data,
-                descriptorProperty: 'name',
-                initialSearch: 'r',
-                initialValue: undefined,
-                selectMode: SkyLookupSelectMode.multiple,
-                showAddButton: false,
-                userConfig: {}
-              }
-            });
-          })
-        );
-
-        it('should send the initial value to the show more modal when an item is selected',
-          fakeAsync(() => {
-            component.showMoreButton = true;
-            fixture.detectChanges();
-
-            spyOn(mockModalProvider, 'open').and.callThrough();
-
-            performSearch('s', fixture);
-            selectSearchResult(0, fixture);
-
-            performSearch('s', fixture);
-            clickShowMore(fixture);
-
-            expect(mockModalProvider.open).toHaveBeenCalledWith({
-              context: {
-                items: component.data,
-                descriptorProperty: 'name',
-                initialSearch: 's',
-                initialValue: [{ value: { name: 'Isaac' } }],
-                selectMode: SkyLookupSelectMode.multiple,
-                showAddButton: false,
-                userConfig: {}
-              }
-            });
-          })
-        );
-
-        it('should send the select mode to the show more modal',
-          fakeAsync(() => {
-            component.showMoreButton = true;
-            component.selectMode = SkyLookupSelectMode.single;
-            fixture.detectChanges();
-
-            spyOn(mockModalProvider, 'open').and.callThrough();
-
-            performSearch('s', fixture);
-            clickShowMore(fixture);
-
-            expect(mockModalProvider.open).toHaveBeenCalledWith({
-              context: {
-                items: component.data,
-                descriptorProperty: 'name',
-                initialSearch: 's',
-                initialValue: undefined,
-                selectMode: SkyLookupSelectMode.single,
-                showAddButton: false,
-                userConfig: {}
-              }
-            });
-          })
-        );
-
-        it('should send that the add button is enbaled to the show more modal when appropriate',
-          fakeAsync(() => {
-            component.showMoreButton = true;
-            component.showAddButton = true;
-            fixture.detectChanges();
-
-            spyOn(mockModalProvider, 'open').and.callThrough();
-
-            performSearch('s', fixture);
-            clickShowMore(fixture);
-
-            expect(mockModalProvider.open).toHaveBeenCalledWith({
-              context: {
-                items: component.data,
-                descriptorProperty: 'name',
-                initialSearch: 's',
-                initialValue: undefined,
-                selectMode: SkyLookupSelectMode.multiple,
-                showAddButton: true,
-                userConfig: {}
-              }
-            });
-          })
-        );
-
-        it('should send a user config to the show more modal when given',
-          fakeAsync(() => {
-            component.showMoreButton = true;
-            component.enableSearchResultTemplate();
-            const customConfig = { itemTemplate: component.showMoreTemplate, title: 'custom' };
-            component.setShowMoreModalConfig(customConfig);
-            fixture.detectChanges();
-
-            spyOn(mockModalProvider, 'open').and.callThrough();
-
-            performSearch('s', fixture);
-            clickShowMore(fixture);
-
-            expect(mockModalProvider.open).toHaveBeenCalledWith({
-              context: {
-                items: component.data,
-                descriptorProperty: 'name',
-                initialSearch: 's',
-                initialValue: undefined,
-                selectMode: SkyLookupSelectMode.multiple,
-                showAddButton: false,
-                userConfig: customConfig
-              }
-            });
-          })
-        );
-
-        it('should send the dropdown template to the show more modal when given and no user config is given',
-          fakeAsync(() => {
-            component.showMoreButton = true;
-            fixture.detectChanges();
-            component.enableSearchResultTemplate();
-            fixture.detectChanges();
-
-            spyOn(mockModalProvider, 'open').and.callThrough();
-
-            performSearch('s', fixture);
-            clickShowMore(fixture);
-
-            expect(mockModalProvider.open).toHaveBeenCalledWith({
-              context: {
-                items: component.data,
-                descriptorProperty: 'name',
-                initialSearch: 's',
-                initialValue: undefined,
-                selectMode: SkyLookupSelectMode.multiple,
-                showAddButton: false,
-                userConfig: {
-                  itemTemplate: component.searchResultTemplate
-                }
-              }
-            });
+            closeModal(fixture);
           })
         );
 
@@ -717,9 +591,11 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([6, 9], mockModalInstance, fixture);
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -737,9 +613,13 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([6, 9], mockModalInstance, fixture);
+              selectShowMoreItemMultiple(0, fixture);
+
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -757,7 +637,9 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              cancelShowMoreModal(mockModalInstance, fixture);
+              selectShowMoreItemMultiple(0, fixture);
+
+              closeModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
             })
@@ -777,9 +659,173 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([6], mockModalInstance, fixture);
+              selectShowMoreItemMultiple(0, fixture);
+              selectShowMoreItemMultiple(1, fixture);
+
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should select the correct items after existing search text is cleared',
+            fakeAsync(() => {
+              component.showMoreButton = true;
+              fixture.detectChanges();
+              expect(lookupComponent.value).toEqual([]);
+
+              performSearch('s', fixture);
+              selectSearchResult(1, fixture);
+
+              expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
+
+              performSearch('s', fixture);
+              clickShowMore(fixture);
+
+              clearShowMoreSearch(fixture);
+
+              selectShowMoreItemMultiple(0, fixture);
+
+              saveShowMoreModal(fixture);
+
+              expect(lookupComponent.value).toEqual([
+                {
+                  name: 'Andy',
+                  description: 'Mr. Andy',
+                  birthDate: '1/1/1995'
+                },
+                { name: 'Lindsey' }
+              ]);
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should handle "Clear all" correct in the show more modal',
+            fakeAsync(() => {
+              component.showMoreButton = true;
+              fixture.detectChanges();
+              expect(lookupComponent.value).toEqual([]);
+
+              performSearch('Pa', fixture);
+              selectSearchResult(0, fixture);
+
+              expect(lookupComponent.value).toEqual([{
+                name: 'Patty',
+                description: 'Ms. Patty',
+                birthDate: '1/1/1996'
+              }]);
+
+              performSearch('Pa', fixture);
+              clickShowMore(fixture);
+
+              clickShowMoreClearAll(fixture);
+
+              saveShowMoreModal(fixture);
+
+              expect(lookupComponent.value).toEqual([]);
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should handle "Select all" correct in the show more modal',
+            fakeAsync(() => {
+              component.showMoreButton = true;
+              fixture.detectChanges();
+              expect(lookupComponent.value).toEqual([]);
+
+              performSearch('Pa', fixture);
+              selectSearchResult(0, fixture);
+
+              expect(lookupComponent.value).toEqual([{
+                name: 'Patty',
+                description: 'Ms. Patty',
+                birthDate: '1/1/1996'
+              }]);
+
+              performSearch('Pa', fixture);
+              clickShowMore(fixture);
+
+              clickShowMoreSelectAll(fixture);
+
+              saveShowMoreModal(fixture);
+
+              expect(lookupComponent.value).toEqual([
+                {
+                  name: 'Patty',
+                  description: 'Ms. Patty',
+                  birthDate: '1/1/1996'
+                },
+                {
+                  name: 'Paul',
+                  description: 'Mr. Paul',
+                  birthDate: '11/1997'
+                }
+              ]);
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should handle "Only show selected correctly in the show more modal',
+            fakeAsync(() => {
+              component.showMoreButton = true;
+              fixture.detectChanges();
+              expect(lookupComponent.value).toEqual([]);
+
+              performSearch('s', fixture);
+              selectSearchResult(1, fixture);
+
+              expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
+
+              performSearch('s', fixture);
+              clickShowMore(fixture);
+
+              selectShowOnlySelected(fixture);
+
+              selectShowMoreItemMultiple(0, fixture);
+
+              saveShowMoreModal(fixture);
+
+              expect(lookupComponent.value).toEqual([]);
+
+              closeModal(fixture);
+            })
+          );
+
+          it('the default modal title should be correct',
+            fakeAsync(() => {
+              component.showMoreButton = true;
+              fixture.detectChanges();
+              expect(lookupComponent.value).toEqual([]);
+
+              performSearch('s', fixture);
+              clickShowMore(fixture);
+
+              expect(getShowMoreModalTitle()).toBe('Select options');
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should respect a custom modal title',
+            fakeAsync(() => {
+              component.showMoreButton = true;
+              component.setShowMoreModalConfig({
+                title: 'Custom title'
+              });
+              fixture.detectChanges();
+              expect(lookupComponent.value).toEqual([]);
+
+              performSearch('s', fixture);
+              clickShowMore(fixture);
+
+              expect(getShowMoreModalTitle()).toBe('Custom title');
+
+              closeModal(fixture);
             })
           );
 
@@ -805,9 +851,11 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([9], mockModalInstance, fixture);
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -826,9 +874,13 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([6], mockModalInstance, fixture);
+              selectShowMoreItemSingle(0, fixture);
+
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -847,11 +899,118 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              cancelShowMoreModal(mockModalInstance, fixture);
+              selectShowMoreItemSingle(0, fixture);
+
+              closeModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
+
+              closeModal(fixture);
             })
           );
+
+          it('the default modal title should be correct',
+            fakeAsync(() => {
+              component.selectMode = SkyLookupSelectMode.single;
+              component.showMoreButton = true;
+              fixture.detectChanges();
+              expect(lookupComponent.value).toEqual([]);
+
+              performSearch('s', fixture);
+              clickShowMore(fixture);
+
+              expect(getShowMoreModalTitle()).toBe('Select an option');
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should respect a custom modal title',
+            fakeAsync(() => {
+              component.selectMode = SkyLookupSelectMode.single;
+              component.showMoreButton = true;
+              component.setShowMoreModalConfig({
+                title: 'Custom title'
+              });
+              fixture.detectChanges();
+              expect(lookupComponent.value).toEqual([]);
+
+              performSearch('s', fixture);
+              clickShowMore(fixture);
+
+              expect(getShowMoreModalTitle()).toBe('Custom title');
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should show only searched items when search is enabled',
+            fakeAsync(() => {
+              component.showMoreButton = true;
+              fixture.detectChanges();
+
+              performSearch('Pa', fixture);
+              clickShowMore(fixture);
+
+              expect(getRepeaterItemCount()).toBe(2);
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should 10 items by default',
+            fakeAsync(() => {
+              component.showMoreButton = true;
+              fixture.detectChanges();
+
+              triggerInputFocus(fixture);
+              fixture.detectChanges();
+              tick();
+              clickShowMore(fixture);
+
+              expect(getRepeaterItemCount()).toBe(10);
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should add items when scrolling ends',
+            async () => {
+              component.showMoreButton = true;
+              fixture.detectChanges();
+
+              triggerInputFocus(fixture);
+              fixture.detectChanges();
+              await fixture.whenStable();
+              // Not using `clickShowMore` due to it being for `fakeAsync`
+              getShowMoreButton().click();
+              fixture.detectChanges();
+              await fixture.whenStable();
+
+              expect(getRepeaterItemCount()).toBe(10);
+
+              let modalContent = document.querySelector('.sky-modal-content');
+              modalContent.scrollTop = modalContent.scrollHeight;
+              SkyAppTestUtility.fireDomEvent(modalContent, 'scroll');
+              fixture.detectChanges();
+              await fixture.whenStable();
+              fixture.detectChanges();
+
+              expect(getRepeaterItemCount()).toBe(20);
+
+              modalContent = document.querySelector('.sky-modal-content');
+              modalContent.scrollTop = modalContent.scrollHeight;
+              SkyAppTestUtility.fireDomEvent(modalContent, 'scroll');
+              fixture.detectChanges();
+              await fixture.whenStable();
+              fixture.detectChanges();
+
+              expect(getRepeaterItemCount()).toBe(21);
+
+              (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-close'))?.click();
+            }
+          );
+
         });
 
         it('should trickle down the add button click event when triggered from the show all modal',
@@ -864,9 +1023,11 @@ describe('Lookup component', function () {
             performSearch('r', fixture);
             clickShowMore(fixture);
 
-            clickModalAddButton(mockModalInstance, fixture);
+            clickModalAddButton(fixture);
 
             expect(addButtonSpy).toHaveBeenCalled();
+
+            closeModal(fixture);
           })
         );
 
@@ -880,6 +1041,68 @@ describe('Lookup component', function () {
 
             const showMoreButton = getShowMoreButton();
             expect(showMoreButton).toBeNull();
+          })
+        );
+
+        it('should show the "name" property in the modal items by default',
+          fakeAsync(() => {
+            component.showMoreButton = true;
+            fixture.detectChanges();
+
+            performSearch('p', fixture);
+            clickShowMore(fixture);
+
+            expect(getShowMoreRepeaterItemContent(0)).toBe('Patty');
+
+            closeModal(fixture);
+          })
+        );
+
+        it('should respect a descriptor property being sent into the show more modal',
+          fakeAsync(() => {
+            component.showMoreButton = true;
+            component.descriptorProperty = 'birthDate';
+            fixture.detectChanges();
+
+            performSearch('p', fixture);
+            clickShowMore(fixture);
+
+            expect(getShowMoreRepeaterItemContent(0)).toBe('1/1/1996');
+
+            closeModal(fixture);
+          })
+        );
+
+        it('should send the search result template into the show more modal',
+          fakeAsync(() => {
+            component.showMoreButton = true;
+            component.descriptorProperty = 'birthDate';
+            component.enableSearchResultTemplate();
+            fixture.detectChanges();
+
+            performSearch('p', fixture);
+            clickShowMore(fixture);
+
+            expect(getShowMoreRepeaterItemContent(0)).toBe('Ms. Patty');
+
+            closeModal(fixture);
+          })
+        );
+
+        it('should respect a custom modal template',
+          fakeAsync(() => {
+            component.showMoreButton = true;
+            component.descriptorProperty = 'birthDate';
+            component.enableSearchResultTemplate();
+            component.setShowMoreModalConfig({ itemTemplate: component.showMoreTemplate });
+            fixture.detectChanges();
+
+            performSearch('p', fixture);
+            clickShowMore(fixture);
+
+            expect(getShowMoreRepeaterItemContent(0)).toBe('Patty - 1/1/1996');
+
+            closeModal(fixture);
           })
         );
 
@@ -899,6 +1122,8 @@ describe('Lookup component', function () {
               initialSearch: 'p',
               initialValue: undefined
             });
+
+            closeModal(fixture);
           })
         );
 
@@ -1491,206 +1716,37 @@ describe('Lookup component', function () {
 
       describe('show more button', () => {
 
-        const mockModalInstance: SkyCoreModalInstance = {
-          beforeClose: undefined,
-          closed: new Subject(),
-          componentInstance: {
-            addClick: new EventEmitter()
-          },
-          close: () => { },
-          cancel: () => { },
-          save: () => { }
-        };
+        let modalService: SkyModalService;
 
-        const mockModalProvider: SkyCoreModalProvider = {
-          open: () => {
-            return mockModalInstance;
-          },
-          type: 'lookup-show-more'
-        };
+        beforeEach(fakeAsync(() => {
+          modalService = TestBed.inject(SkyModalService);
 
-        beforeEach(() => {
-          const modalProviderService = TestBed.inject(SkyCoreModalProviderService);
-          spyOn(modalProviderService, 'getModalForType').and.returnValue(mockModalProvider);
-        });
+          fixture.detectChanges();
+          tick();
+        }));
+
+        // This is necessary as due to modals being launched outside of the test bed they will not
+        // automatically be disposed between tests.
+        afterEach(fakeAsync(() => {
+          // NOTE: This is important as it ensures that the modal host component is fully disposed of
+          // between tests. This is important as the modal host might need a different set of component
+          // injectors than the previous test.
+          modalService.dispose();
+          fixture.detectChanges();
+        }));
 
         it('should open the modal when the show more button is clicked',
           fakeAsync(() => {
             component.showMoreButton = true;
             fixture.detectChanges();
 
-            spyOn(mockModalProvider, 'open').and.callThrough();
+            spyOn(modalService, 'open').and.callThrough();
 
             performSearch('r', fixture);
             clickShowMore(fixture);
+            expect(modalService.open).toHaveBeenCalled();
 
-            expect(mockModalProvider.open).toHaveBeenCalledWith({
-              context: {
-                items: component.data,
-                descriptorProperty: 'name',
-                initialSearch: 'r',
-                initialValue: undefined,
-                selectMode: SkyLookupSelectMode.multiple,
-                showAddButton: false,
-                userConfig: {}
-              }
-            });
-          })
-        );
-
-        it('should open the modal when the show more button is clicked',
-          fakeAsync(() => {
-            component.showMoreButton = true;
-            fixture.detectChanges();
-
-            spyOn(mockModalProvider, 'open').and.callThrough();
-
-            performSearch('r', fixture);
-            clickShowMore(fixture);
-
-            expect(mockModalProvider.open).toHaveBeenCalledWith({
-              context: {
-                items: component.data,
-                descriptorProperty: 'name',
-                initialSearch: 'r',
-                initialValue: undefined,
-                selectMode: SkyLookupSelectMode.multiple,
-                showAddButton: false,
-                userConfig: {}
-              }
-            });
-          })
-        );
-
-        it('should send the initial value to the show more modal when an item is selected',
-          fakeAsync(() => {
-            component.showMoreButton = true;
-            fixture.detectChanges();
-
-            spyOn(mockModalProvider, 'open').and.callThrough();
-
-            performSearch('s', fixture);
-            selectSearchResult(0, fixture);
-
-            performSearch('s', fixture);
-            clickShowMore(fixture);
-
-            expect(mockModalProvider.open).toHaveBeenCalledWith({
-              context: {
-                items: component.data,
-                descriptorProperty: 'name',
-                initialSearch: 's',
-                initialValue: [{ value: { name: 'Isaac' } }],
-                selectMode: SkyLookupSelectMode.multiple,
-                showAddButton: false,
-                userConfig: {}
-              }
-            });
-          })
-        );
-
-        it('should send the select mode to the show more modal',
-          fakeAsync(() => {
-            component.showMoreButton = true;
-            component.selectMode = SkyLookupSelectMode.single;
-            fixture.detectChanges();
-
-            spyOn(mockModalProvider, 'open').and.callThrough();
-
-            performSearch('s', fixture);
-            clickShowMore(fixture);
-
-            expect(mockModalProvider.open).toHaveBeenCalledWith({
-              context: {
-                items: component.data,
-                descriptorProperty: 'name',
-                initialSearch: 's',
-                initialValue: undefined,
-                selectMode: SkyLookupSelectMode.single,
-                showAddButton: false,
-                userConfig: {}
-              }
-            });
-          })
-        );
-
-        it('should send that the add button is enbaled to the show more modal when appropriate',
-          fakeAsync(() => {
-            component.showMoreButton = true;
-            component.showAddButton = true;
-            fixture.detectChanges();
-
-            spyOn(mockModalProvider, 'open').and.callThrough();
-
-            performSearch('s', fixture);
-            clickShowMore(fixture);
-
-            expect(mockModalProvider.open).toHaveBeenCalledWith({
-              context: {
-                items: component.data,
-                descriptorProperty: 'name',
-                initialSearch: 's',
-                initialValue: undefined,
-                selectMode: SkyLookupSelectMode.multiple,
-                showAddButton: true,
-                userConfig: {}
-              }
-            });
-          })
-        );
-
-        it('should send a user config to the show more modal when given',
-          fakeAsync(() => {
-            component.showMoreButton = true;
-            component.enableSearchResultTemplate();
-            const customConfig = { itemTemplate: component.showMoreTemplate, title: 'custom' };
-            component.setShowMoreModalConfig(customConfig);
-            fixture.detectChanges();
-
-            spyOn(mockModalProvider, 'open').and.callThrough();
-
-            performSearch('s', fixture);
-            clickShowMore(fixture);
-
-            expect(mockModalProvider.open).toHaveBeenCalledWith({
-              context: {
-                items: component.data,
-                descriptorProperty: 'name',
-                initialSearch: 's',
-                initialValue: undefined,
-                selectMode: SkyLookupSelectMode.multiple,
-                showAddButton: false,
-                userConfig: customConfig
-              }
-            });
-          })
-        );
-
-        it('should send the dropdown template to the show more modal when given and no user config is given',
-          fakeAsync(() => {
-            component.showMoreButton = true;
-            fixture.detectChanges();
-            component.enableSearchResultTemplate();
-            fixture.detectChanges();
-
-            spyOn(mockModalProvider, 'open').and.callThrough();
-
-            performSearch('s', fixture);
-            clickShowMore(fixture);
-
-            expect(mockModalProvider.open).toHaveBeenCalledWith({
-              context: {
-                items: component.data,
-                descriptorProperty: 'name',
-                initialSearch: 's',
-                initialValue: undefined,
-                selectMode: SkyLookupSelectMode.multiple,
-                showAddButton: false,
-                userConfig: {
-                  itemTemplate: component.searchResultTemplate
-                }
-              }
-            });
+            closeModal(fixture);
           })
         );
 
@@ -1713,9 +1769,11 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([6, 9], mockModalInstance, fixture);
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -1733,9 +1791,13 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([6, 9], mockModalInstance, fixture);
+              selectShowMoreItemMultiple(0, fixture);
+
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }, { name: 'Lindsey' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -1753,7 +1815,9 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              cancelShowMoreModal(mockModalInstance, fixture);
+              selectShowMoreItemMultiple(0, fixture);
+
+              closeModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
             })
@@ -1773,9 +1837,173 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([6], mockModalInstance, fixture);
+              selectShowMoreItemMultiple(0, fixture);
+              selectShowMoreItemMultiple(1, fixture);
+
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should select the correct items after existing search text is cleared',
+            fakeAsync(() => {
+              component.showMoreButton = true;
+              fixture.detectChanges();
+              expect(lookupComponent.value).toEqual([]);
+
+              performSearch('s', fixture);
+              selectSearchResult(1, fixture);
+
+              expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
+
+              performSearch('s', fixture);
+              clickShowMore(fixture);
+
+              clearShowMoreSearch(fixture);
+
+              selectShowMoreItemMultiple(0, fixture);
+
+              saveShowMoreModal(fixture);
+
+              expect(lookupComponent.value).toEqual([
+                {
+                  name: 'Andy',
+                  description: 'Mr. Andy',
+                  birthDate: '1/1/1995'
+                },
+                { name: 'Lindsey' }
+              ]);
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should handle "Clear all" correct in the show more modal',
+            fakeAsync(() => {
+              component.showMoreButton = true;
+              fixture.detectChanges();
+              expect(lookupComponent.value).toEqual([]);
+
+              performSearch('Pa', fixture);
+              selectSearchResult(0, fixture);
+
+              expect(lookupComponent.value).toEqual([{
+                name: 'Patty',
+                description: 'Ms. Patty',
+                birthDate: '1/1/1996'
+              }]);
+
+              performSearch('Pa', fixture);
+              clickShowMore(fixture);
+
+              clickShowMoreClearAll(fixture);
+
+              saveShowMoreModal(fixture);
+
+              expect(lookupComponent.value).toEqual([]);
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should handle "Select all" correct in the show more modal',
+            fakeAsync(() => {
+              component.showMoreButton = true;
+              fixture.detectChanges();
+              expect(lookupComponent.value).toEqual([]);
+
+              performSearch('Pa', fixture);
+              selectSearchResult(0, fixture);
+
+              expect(lookupComponent.value).toEqual([{
+                name: 'Patty',
+                description: 'Ms. Patty',
+                birthDate: '1/1/1996'
+              }]);
+
+              performSearch('Pa', fixture);
+              clickShowMore(fixture);
+
+              clickShowMoreSelectAll(fixture);
+
+              saveShowMoreModal(fixture);
+
+              expect(lookupComponent.value).toEqual([
+                {
+                  name: 'Patty',
+                  description: 'Ms. Patty',
+                  birthDate: '1/1/1996'
+                },
+                {
+                  name: 'Paul',
+                  description: 'Mr. Paul',
+                  birthDate: '11/1997'
+                }
+              ]);
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should handle "Only show selected correctly in the show more modal',
+            fakeAsync(() => {
+              component.showMoreButton = true;
+              fixture.detectChanges();
+              expect(lookupComponent.value).toEqual([]);
+
+              performSearch('s', fixture);
+              selectSearchResult(1, fixture);
+
+              expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
+
+              performSearch('s', fixture);
+              clickShowMore(fixture);
+
+              selectShowOnlySelected(fixture);
+
+              selectShowMoreItemMultiple(0, fixture);
+
+              saveShowMoreModal(fixture);
+
+              expect(lookupComponent.value).toEqual([]);
+
+              closeModal(fixture);
+            })
+          );
+
+          it('the default modal title should be correct',
+            fakeAsync(() => {
+              component.showMoreButton = true;
+              fixture.detectChanges();
+              expect(lookupComponent.value).toEqual([]);
+
+              performSearch('s', fixture);
+              clickShowMore(fixture);
+
+              expect(getShowMoreModalTitle()).toBe('Select options');
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should respect a custom modal title',
+            fakeAsync(() => {
+              component.showMoreButton = true;
+              component.setShowMoreModalConfig({
+                title: 'Custom title'
+              });
+              fixture.detectChanges();
+              expect(lookupComponent.value).toEqual([]);
+
+              performSearch('s', fixture);
+              clickShowMore(fixture);
+
+              expect(getShowMoreModalTitle()).toBe('Custom title');
+
+              closeModal(fixture);
             })
           );
 
@@ -1801,9 +2029,11 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([9], mockModalInstance, fixture);
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -1822,9 +2052,13 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              saveShowMoreModal([6], mockModalInstance, fixture);
+              selectShowMoreItemSingle(0, fixture);
+
+              saveShowMoreModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
+
+              closeModal(fixture);
             })
           );
 
@@ -1843,11 +2077,81 @@ describe('Lookup component', function () {
               performSearch('s', fixture);
               clickShowMore(fixture);
 
-              cancelShowMoreModal(mockModalInstance, fixture);
+              selectShowMoreItemSingle(0, fixture);
+
+              closeModal(fixture);
 
               expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
+
+              closeModal(fixture);
             })
           );
+
+          it('the default modal title should be correct',
+            fakeAsync(() => {
+              component.selectMode = SkyLookupSelectMode.single;
+              component.showMoreButton = true;
+              fixture.detectChanges();
+              expect(lookupComponent.value).toEqual([]);
+
+              performSearch('s', fixture);
+              clickShowMore(fixture);
+
+              expect(getShowMoreModalTitle()).toBe('Select an option');
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should respect a custom modal title',
+            fakeAsync(() => {
+              component.selectMode = SkyLookupSelectMode.single;
+              component.showMoreButton = true;
+              component.setShowMoreModalConfig({
+                title: 'Custom title'
+              });
+              fixture.detectChanges();
+              expect(lookupComponent.value).toEqual([]);
+
+              performSearch('s', fixture);
+              clickShowMore(fixture);
+
+              expect(getShowMoreModalTitle()).toBe('Custom title');
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should show only searched items when search is enabled',
+            fakeAsync(() => {
+              component.showMoreButton = true;
+              fixture.detectChanges();
+
+              performSearch('Pa', fixture);
+              clickShowMore(fixture);
+
+              expect(getRepeaterItemCount()).toBe(2);
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should 10 items by default',
+            fakeAsync(() => {
+              component.showMoreButton = true;
+              fixture.detectChanges();
+
+              triggerInputFocus(fixture);
+              fixture.detectChanges();
+              tick();
+              clickShowMore(fixture);
+
+              expect(getRepeaterItemCount()).toBe(10);
+
+              closeModal(fixture);
+            })
+          );
+
         });
 
         it('should trickle down the add button click event when triggered from the show all modal',
@@ -1860,9 +2164,11 @@ describe('Lookup component', function () {
             performSearch('r', fixture);
             clickShowMore(fixture);
 
-            clickModalAddButton(mockModalInstance, fixture);
+            clickModalAddButton(fixture);
 
             expect(addButtonSpy).toHaveBeenCalled();
+
+            closeModal(fixture);
           })
         );
 
@@ -1876,6 +2182,68 @@ describe('Lookup component', function () {
 
             const showMoreButton = getShowMoreButton();
             expect(showMoreButton).toBeNull();
+          })
+        );
+
+        it('should show the "name" property in the modal items by default',
+          fakeAsync(() => {
+            component.showMoreButton = true;
+            fixture.detectChanges();
+
+            performSearch('p', fixture);
+            clickShowMore(fixture);
+
+            expect(getShowMoreRepeaterItemContent(0)).toBe('Patty');
+
+            closeModal(fixture);
+          })
+        );
+
+        it('should respect a descriptor property being sent into the show more modal',
+          fakeAsync(() => {
+            component.showMoreButton = true;
+            component.descriptorProperty = 'birthDate';
+            fixture.detectChanges();
+
+            performSearch('p', fixture);
+            clickShowMore(fixture);
+
+            expect(getShowMoreRepeaterItemContent(0)).toBe('1/1/1996');
+
+            closeModal(fixture);
+          })
+        );
+
+        it('should send the search result template into the show more modal',
+          fakeAsync(() => {
+            component.showMoreButton = true;
+            component.descriptorProperty = 'birthDate';
+            component.enableSearchResultTemplate();
+            fixture.detectChanges();
+
+            performSearch('p', fixture);
+            clickShowMore(fixture);
+
+            expect(getShowMoreRepeaterItemContent(0)).toBe('Ms. Patty');
+
+            closeModal(fixture);
+          })
+        );
+
+        it('should respect a custom modal template',
+          fakeAsync(() => {
+            component.showMoreButton = true;
+            component.descriptorProperty = 'birthDate';
+            component.enableSearchResultTemplate();
+            component.setShowMoreModalConfig({ itemTemplate: component.showMoreTemplate });
+            fixture.detectChanges();
+
+            performSearch('p', fixture);
+            clickShowMore(fixture);
+
+            expect(getShowMoreRepeaterItemContent(0)).toBe('Patty - 1/1/1996');
+
+            closeModal(fixture);
           })
         );
 
