@@ -13,11 +13,10 @@
         skyId
         #friendsLabel="skyId"
       >
-        Who are your friends?
+        Favorite names
       </label>
       <sky-lookup
         formControlName="friends"
-        placeholderText="Enter a name."
         [ariaLabelledBy]="friendsLabel.id"
         [data]="people"
         [searchFilters]="getSearchFilters()"

@@ -366,8 +366,8 @@ export class SkyLookupComponent
   }
 
   public writeValue(value: any[]): void {
-    if (value && !this.disabled) {
-      const copy = this.cloneItems(value);
+    if (!this.disabled) {
+      const copy = value ? this.cloneItems(value) : [];
       this.tokens = this.parseTokens(copy);
       this.updateForSelectMode();
     }

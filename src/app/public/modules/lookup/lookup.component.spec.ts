@@ -427,6 +427,40 @@ describe('Lookup component', function () {
 
         expect(lookupComponent.value).toEqual([{ name: 'Rachel' }]);
       }));
+
+      describe('form control interactions', function () {
+        it('should properly reset a form', fakeAsync(function () {
+          fixture.detectChanges();
+
+          performSearch('s', fixture);
+          selectSearchResult(0, fixture);
+
+          expect(lookupComponent.tokens.length).toBe(1);
+          expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
+
+          component.resetForm();
+
+          expect(lookupComponent.tokens.length).toBe(0);
+          expect(lookupComponent.value).toEqual([]);
+        }));
+
+        it('should properly set a value through the form control', fakeAsync(function () {
+          fixture.detectChanges();
+
+          performSearch('s', fixture);
+          selectSearchResult(0, fixture);
+
+          expect(lookupComponent.tokens.length).toBe(1);
+          expect(lookupComponent.tokens[0].value).toEqual({ name: 'Isaac' });
+          expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
+
+          component.setValue(0);
+
+          expect(lookupComponent.tokens.length).toBe(1);
+          expect(lookupComponent.tokens[0].value).toEqual({ name: 'Andy' });
+          expect(lookupComponent.value).toEqual([{ name: 'Andy' }]);
+        }));
+      });
     });
 
     describe('single select', () => {
@@ -492,6 +526,38 @@ describe('Lookup component', function () {
 
         expect(lookupComponent.value).toEqual([]);
       }));
+
+      describe('form control interactions', function () {
+        it('should properly reset a form', fakeAsync(function () {
+          fixture.detectChanges();
+
+          performSearch('s', fixture);
+          selectSearchResult(0, fixture);
+
+          expect(getInputElement(lookupComponent).value).toBe('Isaac');
+          expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
+
+          component.resetForm();
+
+          expect(getInputElement(lookupComponent).value).toBe('');
+          expect(lookupComponent.value).toEqual([]);
+        }));
+
+        it('should properly set a value through the form control', fakeAsync(function () {
+          fixture.detectChanges();
+
+          performSearch('s', fixture);
+          selectSearchResult(0, fixture);
+
+          expect(getInputElement(lookupComponent).value).toBe('Isaac');
+          expect(lookupComponent.value).toEqual([{ name: 'Isaac' }]);
+
+          component.setValue(0);
+
+          expect(getInputElement(lookupComponent).value).toBe('Andy');
+          expect(lookupComponent.value).toEqual([{ name: 'Andy' }]);
+        }));
+      });
     });
 
     describe('actions', () => {
@@ -1249,6 +1315,8 @@ describe('Lookup component', function () {
 
         it('should not focus the last token if search text is present', fakeAsync(function () {
           component.friends = [{ name: 'Rachel' }];
+          fixture.detectChanges();
+          tick();
           fixture.detectChanges();
 
           const inputElement = getInputElement(lookupComponent);
