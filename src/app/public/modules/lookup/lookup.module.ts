@@ -12,31 +12,68 @@ import {
 
 import {
   SkyAppWindowRef,
-  SkyModalProviderModule
+  SkyViewkeeperModule
 } from '@skyux/core';
 
 import {
+  SkyDataManagerModule
+} from '@skyux/data-manager';
+
+import {
+  SkyIconModule,
   SkyTokensModule
 } from '@skyux/indicators';
+
+import {
+  SkyInfiniteScrollModule,
+  SkyRepeaterModule
+} from '@skyux/lists';
+
+import {
+  SkyModalModule
+} from '@skyux/modals';
+
+import {
+  SkyThemeModule
+} from '@skyux/theme';
 
 import {
   SkyLookupComponent
 } from './lookup.component';
 
 import {
+  SkyLookupShowMoreModalComponent
+} from './lookup-show-more-modal.component';
+
+import {
   SkyAutocompleteModule
 } from '../autocomplete/autocomplete.module';
 
+import {
+  SkyLookupResourcesModule
+} from '../shared/lookup-resources.module';
+
 @NgModule({
   declarations: [
-    SkyLookupComponent
+    SkyLookupComponent,
+    SkyLookupShowMoreModalComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
     SkyAutocompleteModule,
-    SkyModalProviderModule,
-    SkyTokensModule
+    SkyDataManagerModule,
+    SkyIconModule,
+    SkyInfiniteScrollModule,
+    SkyLookupResourcesModule,
+    SkyModalModule,
+    SkyRepeaterModule,
+    SkyThemeModule,
+    SkyTokensModule,
+    SkyViewkeeperModule
+  ],
+  entryComponents: [
+    SkyLookupShowMoreModalComponent
   ],
   exports: [
     SkyLookupComponent

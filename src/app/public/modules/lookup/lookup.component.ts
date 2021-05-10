@@ -31,9 +31,7 @@ import {
 } from 'rxjs/operators';
 
 import {
-  SkyAppWindowRef,
-  SkyModalProvider,
-  SkyModalProviderService
+  SkyAppWindowRef
 } from '@skyux/core';
 
 import {
@@ -45,6 +43,10 @@ import {
   SkyTokensMessage,
   SkyTokensMessageType
 } from '@skyux/indicators';
+
+import {
+  SkyModalService
+} from '@skyux/modals';
 
 import {
   SkyThemeService
@@ -71,6 +73,10 @@ import {
 } from './lookup-adapter.service';
 
 import {
+  SkyLookupShowMoreModalComponent
+} from './lookup-show-more-modal.component';
+
+import {
   SkyLookupSelectMode
 } from './types/lookup-select-mode';
 
@@ -79,9 +85,12 @@ import {
 } from './types/lookup-show-more-config';
 
 import {
+  SkyLookupShowMoreContext
+} from './types/lookup-show-more-context';
+
+import {
   SkyLookupCustomPicker
 } from './types/lookup-show-more-custom-picker';
-import { SkyLookupShowMoreContext } from './types/lookup-show-more-context';
 
 @Component({
   selector: 'sky-lookup',
@@ -148,17 +157,7 @@ export class SkyLookupComponent
    * Shows a button to show all results in the results dropdown.
    */
   @Input()
-  public set showMoreButton(value: boolean) {
-    this._showMoreButton = value;
-
-    if (value && !this.modalProvider) {
-      this.modalProvider = this.modalProviderService.getModalForType('lookup-show-more');
-    }
-  }
-
-  public get showMoreButton(): boolean {
-    return (this._showMoreButton && !!this.modalProvider);
-  }
+  public showMoreButton: boolean = false;
 
   /**
    * Specifies the configuration options for the show more modal.
@@ -250,11 +249,9 @@ export class SkyLookupComponent
   private ngUnsubscribe = new Subject();
   private idle = new Subject();
   private markForTokenFocusOnKeyUp = false;
-  private modalProvider: SkyModalProvider;
 
   private _autocompleteInputDirective: SkyAutocompleteInputDirective;
   private _selectMode: SkyLookupSelectMode;
-  private _showMoreButton: boolean;
   private _tokens: SkyToken[];
 
   constructor(
@@ -263,9 +260,9 @@ export class SkyLookupComponent
     private windowRef: SkyAppWindowRef,
     @Self() @Optional() ngControl: NgControl,
     private adapter: SkyLookupAdapterService,
+    private modalService: SkyModalService,
     @Optional() public inputBoxHostSvc?: SkyInputBoxHostService,
-    @Optional() public themeSvc?: SkyThemeService,
-    @Optional() public modalProviderService?: SkyModalProviderService
+    @Optional() public themeSvc?: SkyThemeService
   ) {
     super();
     ngControl.valueAccessor = this;
@@ -369,8 +366,8 @@ export class SkyLookupComponent
   }
 
   public writeValue(value: any[]): void {
-    if (value && !this.disabled) {
-      const copy = this.cloneItems(value);
+    if (!this.disabled) {
+      const copy = value ? this.cloneItems(value) : [];
       this.tokens = this.parseTokens(copy);
       this.updateForSelectMode();
     }
@@ -469,26 +466,29 @@ export class SkyLookupComponent
       });
     } else {
       const modalConfig = this.showMoreModalConfig || {};
-      if (!modalConfig.itemTemplate && this.searchResultTemplate) {
+      if (!modalConfig.itemTemplate) {
         modalConfig.itemTemplate = this.searchResultTemplate;
       }
 
-      const modalContext: SkyLookupShowMoreContext = {
-        items: this.data,
-        descriptorProperty: this.descriptorProperty,
-        initialSearch: this.autocompleteComponent.searchText,
-        initialValue: this.tokens,
-        selectMode: this.selectMode,
-        showAddButton: this.showAddButton,
-        userConfig: modalConfig
-      };
-      this.modalProvider.open(modalContext);
+      const modalInstance = this.modalService.open(SkyLookupShowMoreModalComponent, {
+        providers: [{
+          provide: SkyLookupShowMoreContext, useValue: {
+            items: this.data,
+            descriptorProperty: this.descriptorProperty,
+            initialSearch: this.autocompleteComponent.searchText,
+            initialValue: this.tokens,
+            selectMode: this.selectMode,
+            showAddButton: this.showAddButton,
+            userConfig: modalConfig
+          }
+        }]
+      });
 
-      this.modalProvider.events['addClick'].subscribe(() => {
+      modalInstance.componentInstance.addClick.subscribe(() => {
         this.addClick.emit();
       });
 
-      this.modalProvider.closeCallback.subscribe(closeArgs => {
+      modalInstance.closed.subscribe(closeArgs => {
         if (closeArgs.reason === 'save') {
           let selectedItems: any[] = [];
 

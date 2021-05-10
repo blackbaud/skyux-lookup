@@ -278,6 +278,10 @@ export class SkyAutocompleteComponent
 
   public searchText: string;
 
+  public get showActionsArea(): boolean {
+    return this.showAddButton || this.showMoreButton;
+  }
+
   //#endregion
 
   @ViewChild('defaultSearchResultTemplate', {

@@ -134,6 +134,10 @@ export class SkyLookupTestComponent implements OnInit {
     this.form.controls.friends.disable();
   }
 
+  public resetForm(): void {
+    this.form.reset();
+  }
+
   public setMultiSelect(): void {
     this.selectMode = SkyLookupSelectMode.multiple;
   }
@@ -148,6 +152,10 @@ export class SkyLookupTestComponent implements OnInit {
 
   public setSingleSelect(): void {
     this.selectMode = SkyLookupSelectMode.single;
+  }
+
+  public setValue(index: number): void {
+    this.form.controls.friends.setValue([this.data[index]]);
   }
 
   public removeRequired(): void {
