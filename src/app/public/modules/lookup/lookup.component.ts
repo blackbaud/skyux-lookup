@@ -154,7 +154,7 @@ export class SkyLookupComponent
   public showAddButton: boolean = false;
 
   /**
-   * Shows a button to show all results in the results dropdown.
+   * Indicates whether to show a button to show all results in the results dropdown in a modal.
    */
   @Input()
   public showMoreButton: boolean = false;

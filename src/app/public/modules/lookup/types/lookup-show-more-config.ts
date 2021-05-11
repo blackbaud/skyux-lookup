@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 
 /**
- * Configuration for the lookup show more modal.
+ * Configuration for the default lookup show more modal.
  */
 export interface SkyLookupShowMoreConfig {
   /**
