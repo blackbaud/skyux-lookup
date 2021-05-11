@@ -522,11 +522,11 @@ describe('Search component', () => {
       await expectAsync(fixture.nativeElement).toBeAccessible();
     }
 
-    it('should be accessible using default theme at wide and small breakpoints', async () => {
-      await checkAccessibility();
-    }, 6000);
+    it('should be accessible using default theme at wide and small breakpoints', async(() => {
+      checkAccessibility();
+    }));
 
-    it('should be accessible using modern theme at wide and small breakpoints', async () => {
+    it('should be accessible using modern theme at wide and small breakpoints', async(() => {
       mockThemeSvc.settingsChange.next({
         currentSettings: new SkyThemeSettings(
           SkyTheme.presets.modern,
@@ -534,8 +534,8 @@ describe('Search component', () => {
         ),
         previousSettings: mockThemeSvc.settingsChange.value.currentSettings
       });
-      await checkAccessibility();
-    }, 6000);
+      checkAccessibility();
+    }));
 
   });
 });
