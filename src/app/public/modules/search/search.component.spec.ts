@@ -523,7 +523,7 @@ describe('Search component', () => {
           });
         });
       });
-    }));
+    }), 10000);
 
     it('should be accessible using modern theme at wide and small breakpoints', async(() => {
       mockThemeSvc.settingsChange.next({
@@ -542,7 +542,7 @@ describe('Search component', () => {
           });
         });
       });
-    }));
+    }), 10000);
 
   });
 });
