@@ -512,18 +512,17 @@ describe('Search component', () => {
  });
 
   describe('a11y', async () => {
-    async function checkAccessibility() {
-      fixture.detectChanges();
-      await fixture.whenStable();
-      await expectAsync(fixture.nativeElement).toBeAccessible();
-
-      setInput('foo bar');
-      await fixture.whenStable();
-      await expectAsync(fixture.nativeElement).toBeAccessible();
-    }
 
     it('should be accessible using default theme at wide and small breakpoints', async(() => {
-      checkAccessibility();
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        expectAsync(fixture.nativeElement).toBeAccessible().then(() => {
+          setInput('foo bar');
+          fixture.whenStable().then(() => {
+            expectAsync(fixture.nativeElement).toBeAccessible();
+          });
+        });
+      });
     }));
 
     it('should be accessible using modern theme at wide and small breakpoints', async(() => {
@@ -534,7 +533,15 @@ describe('Search component', () => {
         ),
         previousSettings: mockThemeSvc.settingsChange.value.currentSettings
       });
-      checkAccessibility();
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        expectAsync(fixture.nativeElement).toBeAccessible().then(() => {
+          setInput('foo bar');
+          fixture.whenStable().then(() => {
+            expectAsync(fixture.nativeElement).toBeAccessible();
+          });
+        });
+      });
     }));
 
   });
