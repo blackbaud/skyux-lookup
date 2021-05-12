@@ -12,7 +12,7 @@ import {
  */
  export class SkyLookupShowMoreContext {
   public items: any[];
-  public descriptorProperty: any;
+  public descriptorProperty: string;
   public initialSearch: string;
   public initialValue: any;
   public selectMode: SkyLookupSelectMode;
