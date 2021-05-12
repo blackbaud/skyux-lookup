@@ -1,5 +1,5 @@
 /**
- * Provides information for the launching of a custom "Show more" modal.
+ * Provides information for the launching of a custom "Show more" picker.
  */
 export class SkyLookupShowMoreCustomPickerContext {
   /**

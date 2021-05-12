@@ -84,7 +84,7 @@ export class LookupVisualComponent implements OnInit {
 
   @ViewChild('itemTemplate2')
   public set modalItemTemplate(itemTemplate: TemplateRef<any>) {
-    this.showMoreConfig.defaultPickerConfig = {
+    this.showMoreConfig.nativePickerConfig = {
       itemTemplate: itemTemplate
     };
   }

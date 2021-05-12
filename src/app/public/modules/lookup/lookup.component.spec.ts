@@ -892,7 +892,7 @@ describe('Lookup component', function () {
           it('should respect a custom modal title',
             fakeAsync(() => {
               component.enableShowMore = true;
-              component.setShowMoreDefaultPickerConfig({
+              component.setShowMoreNativePickerConfig({
                 title: 'Custom title'
               });
               fixture.detectChanges();
@@ -1007,7 +1007,7 @@ describe('Lookup component', function () {
             fakeAsync(() => {
               component.selectMode = SkyLookupSelectMode.single;
               component.enableShowMore = true;
-              component.setShowMoreDefaultPickerConfig({
+              component.setShowMoreNativePickerConfig({
                 title: 'Custom title'
               });
               fixture.detectChanges();
@@ -1172,7 +1172,7 @@ describe('Lookup component', function () {
             component.enableShowMore = true;
             component.descriptorProperty = 'birthDate';
             component.enableSearchResultTemplate();
-            component.setShowMoreDefaultPickerConfig({ itemTemplate: component.showMoreTemplate });
+            component.setShowMoreNativePickerConfig({ itemTemplate: component.showMoreTemplate });
             fixture.detectChanges();
 
             performSearch('p', fixture);
@@ -2072,7 +2072,7 @@ describe('Lookup component', function () {
           it('should respect a custom modal title',
             fakeAsync(() => {
               component.enableShowMore = true;
-              component.setShowMoreDefaultPickerConfig({
+              component.setShowMoreNativePickerConfig({
                 title: 'Custom title'
               });
               fixture.detectChanges();
@@ -2187,7 +2187,7 @@ describe('Lookup component', function () {
             fakeAsync(() => {
               component.selectMode = SkyLookupSelectMode.single;
               component.enableShowMore = true;
-              component.setShowMoreDefaultPickerConfig({
+              component.setShowMoreNativePickerConfig({
                 title: 'Custom title'
               });
               fixture.detectChanges();
@@ -2315,7 +2315,7 @@ describe('Lookup component', function () {
             component.enableShowMore = true;
             component.descriptorProperty = 'birthDate';
             component.enableSearchResultTemplate();
-            component.setShowMoreDefaultPickerConfig({ itemTemplate: component.showMoreTemplate });
+            component.setShowMoreNativePickerConfig({ itemTemplate: component.showMoreTemplate });
             fixture.detectChanges();
 
             performSearch('p', fixture);

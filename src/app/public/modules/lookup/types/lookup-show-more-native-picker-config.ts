@@ -3,18 +3,18 @@ import {
 } from '@angular/core';
 
 /**
- * Configuration for the default lookup show more modal.
+ * Configuration for the native lookup show more picker.
  */
-export interface SkyLookupShowMoreDefaultPickerConfig {
+export interface SkyLookupShowMoreNativePickerConfig {
   /**
-   * Specifies a template to format each search result in the modal list.
+   * Specifies a template to format each search result in the picker's list.
    * The autocomplete component injects search result values into the template as item variables
    * that reference all of the object properties of the search results.
    */
   itemTemplate?: TemplateRef<any>;
 
   /**
-   * Specifies the title of the modal.
+   * Specifies the title of the picker.
    * @default 'Select an option/Select options'
    */
   title?: string;

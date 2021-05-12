@@ -21,8 +21,8 @@ import {
 } from '../types/lookup-show-more-custom-picker-context';
 
 import {
-  SkyLookupShowMoreDefaultPickerConfig
-} from '../types/lookup-show-more-default-picker-config';
+  SkyLookupShowMoreNativePickerConfig
+} from '../types/lookup-show-more-native-picker-config';
 
 @Component({
   selector: 'sky-test-cmp',
@@ -129,8 +129,8 @@ export class SkyLookupTemplateTestComponent implements OnInit {
     this.selectMode = SkyLookupSelectMode.multiple;
   }
 
-  public setShowMoreDefaultPickerConfig(config: SkyLookupShowMoreDefaultPickerConfig): void {
-    this.showMoreConfig.defaultPickerConfig = config;
+  public setShowMoreNativePickerConfig(config: SkyLookupShowMoreNativePickerConfig): void {
+    this.showMoreConfig.nativePickerConfig = config;
   }
 
   public setSingleSelect(): void {

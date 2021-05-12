@@ -85,8 +85,8 @@ import {
 } from './types/lookup-show-more-config';
 
 import {
-  SkyLookupShowMoreContext
-} from './types/lookup-show-more-context';
+  SkyLookupShowMoreNativePickerContext
+} from './types/lookup-show-more-native-picker-context';
 
 @Component({
   selector: 'sky-lookup',
@@ -131,7 +131,7 @@ export class SkyLookupComponent
   public disabled = false;
 
   /**
-   * Indicates whether to allow consumers to veiw all search results in a modal.
+   * Indicates whether to allow consumers to view all search results in a picker.
    */
   @Input()
   public enableShowMore: boolean = false;
@@ -155,7 +155,7 @@ export class SkyLookupComponent
   @Input()
   public showAddButton: boolean = false;
   /**
-   * Specifies the configuration options for the show more modal.
+   * Specifies the configuration options for the show more feature.
    */
   @Input()
   public showMoreConfig: SkyLookupShowMoreConfig;
@@ -454,14 +454,14 @@ export class SkyLookupComponent
         initialValue: this.tokens?.map(token => { return token.value; })
       });
     } else {
-      const modalConfig = this.showMoreConfig.defaultPickerConfig || {};
+      const modalConfig = this.showMoreConfig.nativePickerConfig || {};
       if (!modalConfig.itemTemplate) {
         modalConfig.itemTemplate = this.searchResultTemplate;
       }
 
       const modalInstance = this.modalService.open(SkyLookupShowMoreModalComponent, {
         providers: [{
-          provide: SkyLookupShowMoreContext, useValue: {
+          provide: SkyLookupShowMoreNativePickerContext, useValue: {
             items: this.data,
             descriptorProperty: this.descriptorProperty,
             initialSearch: this.autocompleteComponent.searchText,

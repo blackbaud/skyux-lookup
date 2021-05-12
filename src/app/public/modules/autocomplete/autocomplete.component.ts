@@ -129,7 +129,7 @@ export class SkyAutocompleteComponent
 
   /**
    * @internal
-   * Shows the Show more button in the actions bar
+   * Indicates whether to allow consumers to view all search results in a picker.
    */
   @Input()
   public enableShowMore: boolean = false;

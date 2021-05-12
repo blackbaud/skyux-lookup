@@ -3,8 +3,8 @@ import {
 } from './lookup-show-more-custom-picker';
 
 import {
-  SkyLookupShowMoreDefaultPickerConfig
-} from './lookup-show-more-default-picker-config';
+  SkyLookupShowMoreNativePickerConfig
+} from './lookup-show-more-native-picker-config';
 
 /**
  * Configuration for the lookup show more functionality.
@@ -18,5 +18,5 @@ export interface SkyLookupShowMoreConfig {
   /**
    * Specifies the configuration for the built in UI when users select the show more button.
    */
-  defaultPickerConfig?: SkyLookupShowMoreDefaultPickerConfig;
+  nativePickerConfig?: SkyLookupShowMoreNativePickerConfig;
 }
