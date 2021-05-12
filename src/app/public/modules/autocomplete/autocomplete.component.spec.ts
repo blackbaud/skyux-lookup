@@ -290,7 +290,7 @@ describe('Autocomplete component', () => {
 
     it('should show a no results found message in the actions area if the show more button is shown',
       fakeAsync(() => {
-        component.showMoreButton = true;
+        component.enableShowMore = true;
         const expectedMessage = 'No matches found';
         fixture.detectChanges();
 
@@ -648,7 +648,7 @@ describe('Autocomplete component', () => {
 
     it('should emit an event correctly when the add button is enabled and clicked',
       fakeAsync(() => {
-        component.showMoreButton = true;
+        component.enableShowMore = true;
         const showMoreButtonSpy = spyOn(component, 'showMoreButtonClicked').and.callThrough();
         fixture.detectChanges();
 
@@ -668,7 +668,7 @@ describe('Autocomplete component', () => {
 
     it('should not show the show more button unless the component input asks for it',
       fakeAsync(() => {
-        component.showMoreButton = false;
+        component.enableShowMore = false;
         const showMoreButtonSpy = spyOn(component, 'showMoreButtonClicked').and.callThrough();
         fixture.detectChanges();
 
@@ -683,7 +683,7 @@ describe('Autocomplete component', () => {
 
     it('should open the dropdown when the input is focused if the show more button is shown',
       fakeAsync(() => {
-        component.showMoreButton = true;
+        component.enableShowMore = true;
         fixture.detectChanges();
 
         const inputElement: HTMLInputElement = getInputElement();
@@ -700,7 +700,7 @@ describe('Autocomplete component', () => {
 
     it('should not open the dropdown when the input is focused if the add button is not shown',
       fakeAsync(() => {
-        component.showMoreButton = false;
+        component.enableShowMore = false;
         fixture.detectChanges();
 
         const inputElement: HTMLInputElement = getInputElement();
@@ -1102,7 +1102,7 @@ describe('Autocomplete component', () => {
       it('should tab to the second action when multiple actions exists',
         fakeAsync(() => {
           component.showAddButton = true;
-          component.showMoreButton = true;
+          component.enableShowMore = true;
           fixture.detectChanges();
 
           enterSearch('r', fixture);
@@ -1633,7 +1633,7 @@ describe('Autocomplete component', () => {
 
     it('should emit an event correctly when the add button is enabled and clicked',
       fakeAsync(() => {
-        component.showMoreButton = true;
+        component.enableShowMore = true;
         const showMoreButtonSpy = spyOn(component, 'showMoreButtonClicked').and.callThrough();
         fixture.detectChanges();
 
@@ -1653,7 +1653,7 @@ describe('Autocomplete component', () => {
 
     it('should not show the show more button unless the component input asks for it',
       fakeAsync(() => {
-        component.showMoreButton = false;
+        component.enableShowMore = false;
         const showMoreButtonSpy = spyOn(component, 'showMoreButtonClicked').and.callThrough();
         fixture.detectChanges();
 
@@ -1668,7 +1668,7 @@ describe('Autocomplete component', () => {
 
     it('should open the dropdown when the input is focused if the show more button is shown',
       fakeAsync(() => {
-        component.showMoreButton = true;
+        component.enableShowMore = true;
         fixture.detectChanges();
 
         SkyAppTestUtility.fireDomEvent(inputElement, 'focus');
@@ -1683,7 +1683,7 @@ describe('Autocomplete component', () => {
 
     it('should not open the dropdown when the input is focused if the add button is not shown',
       fakeAsync(() => {
-        component.showMoreButton = false;
+        component.enableShowMore = false;
         fixture.detectChanges();
 
         SkyAppTestUtility.fireDomEvent(inputElement, 'focus');

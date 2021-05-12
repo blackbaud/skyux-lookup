@@ -89,7 +89,7 @@ import {
 } from './types/lookup-show-more-context';
 
 import {
-  SkyLookupCustomPicker
+  SkyLookupShowMoreCustomPicker
 } from './types/lookup-show-more-custom-picker';
 
 @Component({
@@ -135,6 +135,12 @@ export class SkyLookupComponent
   public disabled = false;
 
   /**
+   * Indicates whether to allow consumers to veiw all search results in a modal.
+   */
+  @Input()
+  public enableShowMore: boolean = false;
+
+  /**
    * Specifies placeholder text to display in the lookup field.
    */
   @Input()
@@ -152,24 +158,17 @@ export class SkyLookupComponent
    */
   @Input()
   public showAddButton: boolean = false;
-
-  /**
-   * Indicates whether to show a button to show all results in the results dropdown in a modal.
-   */
-  @Input()
-  public showMoreButton: boolean = false;
-
   /**
    * Specifies the configuration options for the show more modal.
    */
   @Input()
-  public showMoreModalConfig: SkyLookupShowMoreConfig;
+  public showMoreConfig: SkyLookupShowMoreConfig;
 
   /**
    * Specifies an object to display a custom UI when users select the show more button.
    */
   @Input()
-  public showMoreModalCustomPicker: SkyLookupCustomPicker;
+  public showMoreCustomPicker: SkyLookupShowMoreCustomPicker;
 
   /**
    * Specifies whether users can select one item or multiple items.
@@ -458,14 +457,14 @@ export class SkyLookupComponent
   }
 
   public showMoreButtonClicked(): void {
-    if (this.showMoreModalCustomPicker) {
-      this.showMoreModalCustomPicker.open({
+    if (this.showMoreConfig.customPicker) {
+      this.showMoreConfig.customPicker.open({
         items: this.data,
         initialSearch: this.autocompleteComponent.searchText,
         initialValue: this.tokens?.map(token => { return token.value; })
       });
     } else {
-      const modalConfig = this.showMoreModalConfig || {};
+      const modalConfig = this.showMoreConfig.defaultPickerConfig || {};
       if (!modalConfig.itemTemplate) {
         modalConfig.itemTemplate = this.searchResultTemplate;
       }

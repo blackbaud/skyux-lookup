@@ -35,8 +35,8 @@ export class SkyAutocompleteReactiveFixtureComponent implements OnInit {
     { name: 'Black' }
   ];
 
+  public enableShowMore: boolean = false;
   public showAddButton: boolean = false;
-  public showMoreButton: boolean = false;
 
   @ViewChild(SkyAutocompleteComponent, {
     read: SkyAutocompleteComponent,

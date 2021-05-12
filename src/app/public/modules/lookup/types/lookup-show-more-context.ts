@@ -3,8 +3,8 @@ import {
 } from './lookup-select-mode';
 
 import {
-  SkyLookupShowMoreConfig
-} from './lookup-show-more-config';
+  SkyLookupShowMoreDefaultPickerConfig
+} from './lookup-show-more-default-picker-config';
 
 /**
  * @internal
@@ -17,5 +17,5 @@ import {
   public initialValue: any;
   public selectMode: SkyLookupSelectMode;
   public showAddButton: boolean;
-  public userConfig: SkyLookupShowMoreConfig;
+  public userConfig: SkyLookupShowMoreDefaultPickerConfig;
 }

@@ -5,7 +5,7 @@ import {
 /**
  * Interface for defining a custom lookup show more modal.
  */
-export interface SkyLookupCustomPicker {
+export interface SkyLookupShowMoreCustomPicker {
 
   open: (
     pickerContext: SkyLookupShowMoreCustomPickerContext

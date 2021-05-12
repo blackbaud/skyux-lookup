@@ -29,9 +29,9 @@
           idProperty="id"
           placeholderText="Type a person's name..."
           [data]="people"
+          [enableShowMore]="true"
           [debounceTime]="1000"
           [showAddButton]="true"
-          [showMoreButton]="true"
         >
         </sky-lookup>
       </div>
@@ -135,11 +135,10 @@
           [selectMode]="bestFriendSelectMode"
           [data]="people"
           [debounceTime]="1000"
+          [enableShowMore]="true"
           [searchResultTemplate]="itemTemplate"
           [showAddButton]="true"
-          [showMoreButton]="true"
-          [showMoreModalConfig]="{ itemTemplate: itemTemplate2 }"
-          [showMoreModalCustomPicker]="customPicker"
+          [showMoreConfig]="showMoreConfig"
           (addClick)="addButtonClicked()"
         >
         </sky-lookup>

@@ -1,7 +1,9 @@
 import {
   ChangeDetectorRef,
   Component,
-  OnInit
+  OnInit,
+  TemplateRef,
+  ViewChild
 } from '@angular/core';
 
 import {
@@ -27,7 +29,7 @@ import {
 import {
   SkyLookupSelectMode,
   SkyLookupShowMoreCustomPickerContext,
-  SkyLookupCustomPicker
+  SkyLookupShowMoreConfig
 } from '../../public/public_api';
 
 @Component({
@@ -38,7 +40,7 @@ import {
 export class LookupVisualComponent implements OnInit {
   public friendsForm: FormGroup;
   public bestFriendsForm: FormGroup;
-  public customPicker: SkyLookupCustomPicker;
+  public showMoreConfig: SkyLookupShowMoreConfig = {};
 
   public people: any[] = [
     { id: 1, name: 'Andy' },
@@ -80,6 +82,13 @@ export class LookupVisualComponent implements OnInit {
 
   public bestFriendSelectMode: SkyLookupSelectMode = SkyLookupSelectMode.single;
 
+  @ViewChild('itemTemplate2')
+  public set modalItemTemplate(itemTemplate: TemplateRef<any>) {
+    this.showMoreConfig.defaultPickerConfig = {
+      itemTemplate: itemTemplate
+    };
+  }
+
   constructor(
     private formBuilder: FormBuilder,
     private themeSvc: SkyThemeService,
@@ -104,10 +113,10 @@ export class LookupVisualComponent implements OnInit {
   }
 
   public toggleCustomPicker(): void {
-    if (this.customPicker) {
-      this.customPicker = undefined;
+    if (this.showMoreConfig.customPicker) {
+      this.showMoreConfig.customPicker = undefined;
     } else {
-      this.customPicker = {
+      this.showMoreConfig.customPicker = {
         open: (context: SkyLookupShowMoreCustomPickerContext) => {
           const instance = this.modalService.open(SkyLookupVisualCustomPickerComponent, {
             providers: [

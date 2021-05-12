@@ -128,6 +128,13 @@ export class SkyAutocompleteComponent
   }
 
   /**
+   * @internal
+   * Shows the Show more button in the actions bar
+   */
+  @Input()
+  public enableShowMore: boolean = false;
+
+  /**
    * Specifies the object properties to search.
    * @default ['name']
    */
@@ -211,7 +218,7 @@ export class SkyAutocompleteComponent
     if (this._searchResultsLimit) {
       return this._searchResultsLimit;
     } else {
-      return this.showMoreButton ? 5 : this._searchResultsLimit;
+      return this.enableShowMore ? 5 : this._searchResultsLimit;
     }
   }
 
@@ -221,13 +228,6 @@ export class SkyAutocompleteComponent
    */
   @Input()
   public showAddButton: boolean = false;
-
-  /**
-   * @internal
-   * Shows the Show more button in the actions bar
-   */
-  @Input()
-  public showMoreButton: boolean = false;
 
   /**
    * Specifies the text to play when no search results are found.
@@ -279,7 +279,7 @@ export class SkyAutocompleteComponent
   public searchText: string;
 
   public get showActionsArea(): boolean {
-    return this.showAddButton || this.showMoreButton;
+    return this.showAddButton || this.enableShowMore;
   }
 
   //#endregion
@@ -331,7 +331,7 @@ export class SkyAutocompleteComponent
           takeUntil(this.inputDirectiveUnsubscribe)
         )
         .subscribe(() => {
-          if (this.showAddButton || this.showMoreButton) {
+          if (this.showAddButton || this.enableShowMore) {
             this.openDropdown();
           }
         });
