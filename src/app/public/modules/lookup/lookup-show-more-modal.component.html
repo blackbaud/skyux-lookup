@@ -1,6 +1,8 @@
 <sky-modal>
   <sky-modal-header>
-    {{getModalTitle()}}
+    <ng-container *ngIf="context.userConfig?.title; else defaultTitle">
+      {{context.userConfig.title}}
+    </ng-container>
   </sky-modal-header>
   <sky-modal-content>
     <sky-data-manager
@@ -81,4 +83,13 @@
   #defaultItemTemplate
 >
   {{ item[context.descriptorProperty] }}
+</ng-template>
+
+<ng-template #defaultTitle>
+  <ng-container *ngIf="context.selectMode === 'single'">
+    {{ 'skyux_lookup_show_more_modal_title_single' | skyLibResources }}
+  </ng-container>
+  <ng-container *ngIf="context.selectMode === 'multiple'">
+    {{ 'skyux_lookup_show_more_modal_title_multiple' | skyLibResources }}
+  </ng-container>
 </ng-template>

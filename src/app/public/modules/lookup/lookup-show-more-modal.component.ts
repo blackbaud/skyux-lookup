@@ -194,18 +194,6 @@ export class SkyLookupShowMoreModalComponent implements AfterViewInit, OnDestroy
     this.changeDetector.markForCheck();
   }
 
-  public getModalTitle(): string {
-    if (this.context.userConfig?.title) {
-      return this.context.userConfig.title;
-    } else {
-      if (this.context.selectMode === SkyLookupSelectMode.single) {
-        return 'Select an option';
-      } else {
-        return 'Select options';
-      }
-    }
-  }
-
   public itemClick(selectedItem: any): void {
     if (this.context.selectMode === SkyLookupSelectMode.single) {
       if (!selectedItem.selected) {
