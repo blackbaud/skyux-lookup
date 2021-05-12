@@ -47,11 +47,13 @@ export function skyAutocompleteDefaultSearchFunction(
       // This section is for handling the historical `searchResultsLimit` option. However, this
       // option was deprecated as we added the `Show more` functionality.
       // tslint:disable:deprecation
+      // istanbul ignore next
       const limitReached = (
         options.searchResultsLimit &&
         options.searchResultsLimit <= results.length
       );
 
+      // istanbul ignore next
       if (limitReached) {
         return results;
       }
