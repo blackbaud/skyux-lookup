@@ -44,6 +44,19 @@ export function skyAutocompleteDefaultSearchFunction(
     const results = [];
 
     for (let i = 0, n = filteredData.length; i < n; i++) {
+      // This section is for handling the historical `searchResultsLimit` option. However, this
+      // option was deprecated as we added the `Show more` functionality.
+      // tslint:disable:deprecation
+      const limitReached = (
+        options.searchResultsLimit &&
+        options.searchResultsLimit <= results.length
+      );
+
+      if (limitReached) {
+        return results;
+      }
+      // tslint:enable:deprecation
+
       const result = filteredData[i];
       const isMatch = options.propertiesToSearch.find((property: string) => {
         const value = (result[property] || '').toString().toLowerCase();
