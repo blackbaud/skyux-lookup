@@ -88,10 +88,6 @@ import {
   SkyLookupShowMoreContext
 } from './types/lookup-show-more-context';
 
-import {
-  SkyLookupShowMoreCustomPicker
-} from './types/lookup-show-more-custom-picker';
-
 @Component({
   selector: 'sky-lookup',
   templateUrl: './lookup.component.html',
@@ -163,12 +159,6 @@ export class SkyLookupComponent
    */
   @Input()
   public showMoreConfig: SkyLookupShowMoreConfig;
-
-  /**
-   * Specifies an object to display a custom UI when users select the show more button.
-   */
-  @Input()
-  public showMoreCustomPicker: SkyLookupShowMoreCustomPicker;
 
   /**
    * Specifies whether users can select one item or multiple items.
