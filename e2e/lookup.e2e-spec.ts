@@ -72,7 +72,7 @@ describe('Lookup component', () => {
       'Autocomplete results dropdown took too long to appear.'
     );
 
-    const showMoreButton = element(by.css('.sky-autocomplete-more'));
+    const showMoreButton = element(by.css('.sky-autocomplete-action-more'));
     showMoreButton.click();
 
     await browser.wait(
@@ -129,7 +129,7 @@ describe('Lookup component', () => {
       'Autocomplete results dropdown took too long to appear.'
     );
 
-    const showMoreButton = element(by.css('.sky-autocomplete-more'));
+    const showMoreButton = element(by.css('.sky-autocomplete-action-more'));
     showMoreButton.click();
 
     await browser.wait(

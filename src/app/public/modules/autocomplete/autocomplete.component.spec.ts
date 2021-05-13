@@ -40,7 +40,7 @@ describe('Autocomplete component', () => {
   //#region helpers
 
   function getAddButton(): HTMLElement {
-    return document.querySelector('.sky-autocomplete-add') as HTMLElement;
+    return document.querySelector('.sky-autocomplete-action-add') as HTMLElement;
   }
 
   function getActionsContainer(): HTMLElement {
@@ -68,7 +68,7 @@ describe('Autocomplete component', () => {
   }
 
   function getShowMoreButton(): HTMLElement {
-    return document.querySelector('.sky-autocomplete-more') as HTMLElement;
+    return document.querySelector('.sky-autocomplete-action-more') as HTMLElement;
   }
 
   function enterSearch(newValue: string, fixture: ComponentFixture<any>): void {
