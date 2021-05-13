@@ -31,14 +31,15 @@
       [attr.aria-labelledby]="ariaLabelledBy"
       [attr.id]="resultsListId"
     >
-      <div *ngFor="let result of searchResults; let i = index"
+      <div *ngFor="let result of searchResults"
         class="sky-autocomplete-result"
         role="option"
-        [attr.aria-selected]="isResultFocused(i)"
+        tabindex="0"
+        [attr.aria-selected]="isElementFocused(searchResultEl)"
         [attr.id]="result.elementId"
-        [class.selected]="isResultFocused(i)"
         [skyHighlight]="highlightText"
-        (mousedown)="onResultMouseDown(i)"
+        (mousedown)="onResultMouseDown(result.elementId)"
+        #searchResultEl
       >
         <ng-container
           *ngTemplateOutlet="searchResultTemplate; context: { item: result.data }">
@@ -54,9 +55,13 @@
       class="sky-autocomplete-actions"
     >
       <button *ngIf="showAddButton"
-        class="sky-autocomplete-add sky-btn sky-btn-link"
+        class="sky-autocomplete-action sky-autocomplete-add sky-btn sky-btn-link"
+        tabindex="0"
         type="button"
+        skyId
+        [class.focused]="isElementFocused(addButtonEl)"
         (click)="addButtonClicked()"
+        #addButtonEl
       >
         <sky-icon *skyThemeIf="'modern'"
           icon="add"

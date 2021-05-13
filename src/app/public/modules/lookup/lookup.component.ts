@@ -362,7 +362,6 @@ export class SkyLookupComponent
   // Check for empty search text on keydown, before the escape key is fully pressed.
   // (Otherwise, a single character being escaped would register as empty on keyup.)
   // If empty on keydown, set a flag so that the appropriate action can be taken on keyup.
-
   public inputKeydown(event: KeyboardEvent, value: string): void {
     /* Sanity check as this should only be called when in multiple select mode */
     /* istanbul ignore else */

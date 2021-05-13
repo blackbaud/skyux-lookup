@@ -41,10 +41,19 @@
 
 .sky-autocomplete-add {
   float: right;
+  border: none;
 
   sky-icon {
     padding-right: $sky-theme-modern-space-xs;
   }
+}
+
+.sky-autocomplete-descendant-focus {
+  @include sky-theme-modern-border-focus(
+    $sky-theme-modern-background-color-primary-dark,
+    $sky-theme-modern-elevation-3-shadow-size,
+    $sky-theme-modern-elevation-3-shadow-color
+  );
 }
 
 // This exists outside the mixin as there are host context issues with the overlay.
