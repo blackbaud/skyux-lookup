@@ -447,14 +447,14 @@ export class SkyLookupComponent
   }
 
   public showMoreButtonClicked(): void {
-    if (this.showMoreConfig.customPicker) {
+    if (this.showMoreConfig?.customPicker) {
       this.showMoreConfig.customPicker.open({
         items: this.data,
         initialSearch: this.autocompleteComponent.searchText,
         initialValue: this.tokens?.map(token => { return token.value; })
       });
     } else {
-      const modalConfig = this.showMoreConfig.nativePickerConfig || {};
+      const modalConfig = this.showMoreConfig?.nativePickerConfig || {};
       if (!modalConfig.itemTemplate) {
         modalConfig.itemTemplate = this.searchResultTemplate;
       }
