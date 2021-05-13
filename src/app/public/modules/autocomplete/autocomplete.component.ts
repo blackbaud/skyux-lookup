@@ -409,19 +409,9 @@ export class SkyAutocompleteComponent
     this.closeDropdown();
   }
 
-  public handleBlur(event?: FocusEvent): void {
-    setTimeout(() => {
-      if (event && event.relatedTarget && (<HTMLElement>event.relatedTarget).attributes.getNamedItem('skyautocomplete')) {
-        return;
-      }
-
-      if (this.overlay && this.adapterService.overlayContainsActiveElement(this.overlay)) {
-        return;
-      }
-
-      this.closeDropdown();
-      this.inputDirective.restoreInputTextValueToPreviousState();
-    });
+  public handleBlur(): void {
+    this.closeDropdown();
+    this.inputDirective.restoreInputTextValueToPreviousState();
   }
 
   public handleKeydown(event: KeyboardEvent): void {
@@ -705,8 +695,5 @@ export class SkyAutocompleteComponent
       this.setActiveDescendant();
     }
   }
-
-  // TODO: figure out more graceful way to handle adding/removing css classes on intial open
-  // TODO: figure out how to handle clicks on non-search results. (ithink this already works but dowuble check)
 
 }

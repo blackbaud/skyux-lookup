@@ -24,8 +24,13 @@ export class SkyAutocompleteAdapterService {
     this.renderer = this.rendererFactory.createRenderer(undefined, undefined);
   }
 
-  public getActiveElement(): Element {
-    return document.activeElement;
+  /**
+   * Adds the className for the provided element.
+   */
+  public addCSSClass(element: HTMLElement, className: string): void {
+    if (element) {
+      this.renderer.addClass(element, className);
+    }
   }
 
   public getBodyFocusable(): HTMLElement[] {
@@ -39,27 +44,13 @@ export class SkyAutocompleteAdapterService {
     );
   }
 
-  public overlayContainsActiveElement(overlay: SkyOverlayInstance): boolean {
-    return overlay.componentRef.location.nativeElement.contains(this.getActiveElement());
-  }
-
-  public addCSSClass(element: HTMLElement, className: string): void {
-    if (element) {
-      this.renderer.addClass(element, className);
-    }
-  }
-
+  /**
+   * Removes the className for the provided element.
+   */
   public removeCSSClass(element: HTMLElement, className: string): void {
     if (element) {
       this.renderer.removeClass(element, className);
     }
-  }
-
-  /**
-   * Sets the `tabIndex` of the `element` to the provided `tabIndex`.
-   */
-  public setTabIndex(element: HTMLElement, tabIndex: number): void {
-    element.tabIndex = tabIndex;
   }
 
   public setDropdownWidth(elementRef: ElementRef, dropdownRef: ElementRef): void {
@@ -67,8 +58,10 @@ export class SkyAutocompleteAdapterService {
     this.renderer.setStyle(dropdownRef.nativeElement, 'width', `${width}px`);
   }
 
-  public sendEvent(elementRef: HTMLElement, eventName: string): void {
-    const event = new Event(eventName);
-    elementRef.dispatchEvent(event);
+  /**
+   * Sets the `tabIndex` of the `element` to the provided `tabIndex`.
+   */
+  public setTabIndex(element: HTMLElement, tabIndex: number): void {
+    element.tabIndex = tabIndex;
   }
 }
