@@ -16,13 +16,17 @@ import {
 } from '@skyux/core';
 
 import {
-  SkyDataManagerModule
-} from '@skyux/data-manager';
+  SkyCheckboxModule
+} from '@skyux/forms';
 
 import {
   SkyIconModule,
   SkyTokensModule
 } from '@skyux/indicators';
+
+import {
+  SkyToolbarModule
+} from '@skyux/layout';
 
 import {
   SkyInfiniteScrollModule,
@@ -50,6 +54,10 @@ import {
 } from '../autocomplete/autocomplete.module';
 
 import {
+  SkySearchModule
+} from '../search/search.module';
+
+import {
   SkyLookupResourcesModule
 } from '../shared/lookup-resources.module';
 
@@ -62,14 +70,16 @@ import {
     CommonModule,
     FormsModule,
     SkyAutocompleteModule,
-    SkyDataManagerModule,
+    SkyCheckboxModule,
     SkyIconModule,
     SkyInfiniteScrollModule,
     SkyLookupResourcesModule,
     SkyModalModule,
     SkyRepeaterModule,
+    SkySearchModule,
     SkyThemeModule,
     SkyTokensModule,
+    SkyToolbarModule,
     SkyViewkeeperModule
   ],
   entryComponents: [
