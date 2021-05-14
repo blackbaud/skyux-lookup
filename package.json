@@ -61,7 +61,6 @@
     "@skyux/assets": "4.0.1",
     "@skyux/config": "4.4.0",
     "@skyux/core": "4.5.0",
-    "@skyux/data-manager": "4.1.1",
     "@skyux/docs-tools": "4.9.0",
     "@skyux/forms": "4.17.1",
     "@skyux/http": "4.2.0",

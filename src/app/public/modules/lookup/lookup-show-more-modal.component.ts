@@ -63,9 +63,9 @@ export class SkyLookupShowMoreModalComponent implements AfterViewInit, OnDestroy
   public itemsHaveMore: boolean = false;
   public onlyShowSelected: boolean = false;
   public searchText: string;
+  public selectedIds: any[] = [];
 
   private itemIndex: number = 0;
-  private selectedIds: any[] = [];
   private ngUnsubscribe = new Subject<void>();
 
   constructor(
