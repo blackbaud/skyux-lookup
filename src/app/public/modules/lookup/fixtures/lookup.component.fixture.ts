@@ -25,12 +25,12 @@ import {
 } from '../types/lookup-show-more-config';
 
 import {
-  SkyLookupCustomPicker
-} from '../types/lookup-show-more-custom-picker';
-
-import {
   SkyLookupShowMoreCustomPickerContext
 } from '../types/lookup-show-more-custom-picker-context';
+
+import {
+  SkyLookupShowMoreNativePickerConfig
+} from '../types/lookup-show-more-native-picker-config';
 
 @Component({
   selector: 'sky-test-cmp',
@@ -53,18 +53,17 @@ export class SkyLookupTestComponent implements OnInit {
   public ariaLabel: string;
   public ariaLabelledBy: string;
   public autocompleteAttribute: string;
-  public customPicker: SkyLookupCustomPicker;
   public data: any[];
   public descriptorProperty: string;
   public enabledSearchResultTemplate: TemplateRef<any>;
+  public enableShowMore: boolean = false;
   public friends: any[];
   public form: FormGroup;
   public idProperty: string;
   public placeholderText: string;
   public selectMode: SkyLookupSelectMode;
   public showAddButton: boolean = false;
-  public showMoreButton: boolean = false;
-  public showMoreModalConfig: SkyLookupShowMoreConfig;
+  public showMoreConfig: SkyLookupShowMoreConfig = {};
 
   constructor(
     private formBuilder: FormBuilder
@@ -115,7 +114,7 @@ export class SkyLookupTestComponent implements OnInit {
   }
 
   public enableCustomPicker(): void {
-    this.customPicker = {
+    this.showMoreConfig.customPicker = {
       open: (context: SkyLookupShowMoreCustomPickerContext) => {
         return;
       }
@@ -146,8 +145,8 @@ export class SkyLookupTestComponent implements OnInit {
     this.form.controls.friends.setValidators([Validators.required]);
   }
 
-  public setShowMoreModalConfig(config: SkyLookupShowMoreConfig): void {
-    this.showMoreModalConfig = config;
+  public setShowMoreNativePickerConfig(config: SkyLookupShowMoreNativePickerConfig): void {
+    this.showMoreConfig.nativePickerConfig = config;
   }
 
   public setSingleSelect(): void {

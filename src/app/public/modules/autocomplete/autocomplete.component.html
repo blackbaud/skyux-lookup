@@ -55,7 +55,7 @@
     <div *ngIf="showActionsArea"
       class="sky-autocomplete-actions"
     >
-      <button *ngIf="showMoreButton && (!searchText || searchResults.length > 0)"
+      <button *ngIf="enableShowMore && (!searchText || searchResults.length > 0)"
         class="sky-autocomplete-more sky-btn sky-btn-link"
         type="button"
         (click)="moreButtonClicked()"

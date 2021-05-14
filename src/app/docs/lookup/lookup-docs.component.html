@@ -49,10 +49,10 @@
             formControlName="names"
             [ariaLabelledBy]="namesLabel.id"
             [data]="people"
+            [enableShowMore]="true"
             [searchFilters]="getSearchFilters()"
             [selectMode]="selectMode"
             [showAddButton]="showAddButton"
-            [showMoreButton]="true"
             (addClick)="addButtonClicked()"
           >
           </sky-lookup>
@@ -160,6 +160,9 @@
 
   <sky-docs-code-examples
     [packageDependencies]="{
+      '@skyux/data-manager': '*',
+      '@skyux/inline-form': '*',
+      '@skyux/lists': '*',
       '@skyux/lookup': '*'
     }"
   >

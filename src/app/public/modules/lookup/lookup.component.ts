@@ -85,12 +85,8 @@ import {
 } from './types/lookup-show-more-config';
 
 import {
-  SkyLookupShowMoreContext
-} from './types/lookup-show-more-context';
-
-import {
-  SkyLookupCustomPicker
-} from './types/lookup-show-more-custom-picker';
+  SkyLookupShowMoreNativePickerContext
+} from './types/lookup-show-more-native-picker-context';
 
 @Component({
   selector: 'sky-lookup',
@@ -135,6 +131,12 @@ export class SkyLookupComponent
   public disabled = false;
 
   /**
+   * Indicates whether to allow consumers to view all search results in a picker.
+   */
+  @Input()
+  public enableShowMore: boolean = false;
+
+  /**
    * Specifies placeholder text to display in the lookup field.
    */
   @Input()
@@ -152,24 +154,11 @@ export class SkyLookupComponent
    */
   @Input()
   public showAddButton: boolean = false;
-
   /**
-   * Shows a button to show all results in the results dropdown.
+   * Specifies the configuration options for the show more feature.
    */
   @Input()
-  public showMoreButton: boolean = false;
-
-  /**
-   * Specifies the configuration options for the show more modal.
-   */
-  @Input()
-  public showMoreModalConfig: SkyLookupShowMoreConfig;
-
-  /**
-   * Specifies an object to display a custom UI when users select the show more button.
-   */
-  @Input()
-  public showMoreModalCustomPicker: SkyLookupCustomPicker;
+  public showMoreConfig: SkyLookupShowMoreConfig;
 
   /**
    * Specifies whether users can select one item or multiple items.
@@ -458,21 +447,21 @@ export class SkyLookupComponent
   }
 
   public showMoreButtonClicked(): void {
-    if (this.showMoreModalCustomPicker) {
-      this.showMoreModalCustomPicker.open({
+    if (this.showMoreConfig?.customPicker) {
+      this.showMoreConfig.customPicker.open({
         items: this.data,
         initialSearch: this.autocompleteComponent.searchText,
         initialValue: this.tokens?.map(token => { return token.value; })
       });
     } else {
-      const modalConfig = this.showMoreModalConfig || {};
+      const modalConfig = this.showMoreConfig?.nativePickerConfig || {};
       if (!modalConfig.itemTemplate) {
         modalConfig.itemTemplate = this.searchResultTemplate;
       }
 
       const modalInstance = this.modalService.open(SkyLookupShowMoreModalComponent, {
         providers: [{
-          provide: SkyLookupShowMoreContext, useValue: {
+          provide: SkyLookupShowMoreNativePickerContext, useValue: {
             items: this.data,
             descriptorProperty: this.descriptorProperty,
             initialSearch: this.autocompleteComponent.searchText,

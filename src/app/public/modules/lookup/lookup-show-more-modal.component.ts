@@ -30,12 +30,12 @@ import {
 } from './types/lookup-select-mode';
 
 import {
-  SkyLookupShowMoreContext
-} from './types/lookup-show-more-context';
+  SkyLookupShowMoreNativePickerContext
+} from './types/lookup-show-more-native-picker-context';
 
 /**
  * @internal
- * Internal component for our implementation of the show more modal.
+ * Internal component for our implementation of the show more native picker.
  */
 @Component({
   selector: 'skyux-lookup-show-more-modal',
@@ -91,7 +91,7 @@ export class SkyLookupShowMoreModalComponent implements AfterViewInit, OnDestroy
 
   constructor(
     public modalInstance: SkyModalInstance,
-    public context: SkyLookupShowMoreContext,
+    public context: SkyLookupShowMoreNativePickerContext,
     private changeDetector: ChangeDetectorRef,
     private dataManagerService: SkyDataManagerService
   ) { }
@@ -192,18 +192,6 @@ export class SkyLookupShowMoreModalComponent implements AfterViewInit, OnDestroy
     this.dataState.selectedIds = [];
     this.dataManagerService.updateDataState(this.dataState, this.viewId);
     this.changeDetector.markForCheck();
-  }
-
-  public getModalTitle(): string {
-    if (this.context.userConfig?.title) {
-      return this.context.userConfig.title;
-    } else {
-      if (this.context.selectMode === SkyLookupSelectMode.single) {
-        return 'Select an option';
-      } else {
-        return 'Select options';
-      }
-    }
   }
 
   public itemClick(selectedItem: any): void {

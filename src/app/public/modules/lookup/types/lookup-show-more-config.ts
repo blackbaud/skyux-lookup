@@ -1,21 +1,22 @@
 import {
-  TemplateRef
-} from '@angular/core';
+  SkyLookupShowMoreCustomPicker
+} from './lookup-show-more-custom-picker';
+
+import {
+  SkyLookupShowMoreNativePickerConfig
+} from './lookup-show-more-native-picker-config';
 
 /**
- * Configuration for the lookup show more modal.
+ * Configuration for the lookup show more functionality.
  */
 export interface SkyLookupShowMoreConfig {
   /**
-   * Specifies a template to format each search result in the modal list.
-   * The autocomplete component injects search result values into the template as item variables
-   * that reference all of the object properties of the search results.
+   * Specifies a configuration object to display a custom UI when users select the show more button.
    */
-  itemTemplate?: TemplateRef<any>;
+  customPicker?: SkyLookupShowMoreCustomPicker;
 
   /**
-   * Specifies the title of the modal.
-   * @default 'Select an option/Select options'
+   * Specifies the configuration for the built in UI when users select the show more button.
    */
-  title?: string;
+  nativePickerConfig?: SkyLookupShowMoreNativePickerConfig;
 }

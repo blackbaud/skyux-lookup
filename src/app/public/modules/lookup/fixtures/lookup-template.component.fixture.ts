@@ -12,18 +12,17 @@ import {
 import {
   SkyLookupSelectMode
 } from '../types/lookup-select-mode';
-
 import {
   SkyLookupShowMoreConfig
 } from '../types/lookup-show-more-config';
 
 import {
-  SkyLookupCustomPicker
-} from '../types/lookup-show-more-custom-picker';
-
-import {
   SkyLookupShowMoreCustomPickerContext
 } from '../types/lookup-show-more-custom-picker-context';
+
+import {
+  SkyLookupShowMoreNativePickerConfig
+} from '../types/lookup-show-more-native-picker-config';
 
 @Component({
   selector: 'sky-test-cmp',
@@ -44,18 +43,17 @@ export class SkyLookupTemplateTestComponent implements OnInit {
 
   public ariaLabel: string;
   public ariaLabelledBy: string;
-  public customPicker: SkyLookupCustomPicker;
   public data: any[];
   public descriptorProperty: string;
   public disabled: boolean = false;
   public enabledSearchResultTemplate: TemplateRef<any>;
+  public enableShowMore: boolean = false;
   public placeholderText: string;
   public required: boolean = false;
   public selectedFriends: any;
   public selectMode: SkyLookupSelectMode = SkyLookupSelectMode.multiple;
   public showAddButton: boolean = false;
-  public showMoreButton: boolean = false;
-  public showMoreModalConfig: SkyLookupShowMoreConfig;
+  public showMoreConfig: SkyLookupShowMoreConfig = {};
 
   public ngOnInit(): void {
     this.data = [
@@ -108,7 +106,7 @@ export class SkyLookupTemplateTestComponent implements OnInit {
   }
 
   public enableCustomPicker(): void {
-    this.customPicker = {
+    this.showMoreConfig.customPicker = {
       open: (context: SkyLookupShowMoreCustomPickerContext) => {
         return;
       }
@@ -131,8 +129,8 @@ export class SkyLookupTemplateTestComponent implements OnInit {
     this.selectMode = SkyLookupSelectMode.multiple;
   }
 
-  public setShowMoreModalConfig(config: SkyLookupShowMoreConfig): void {
-    this.showMoreModalConfig = config;
+  public setShowMoreNativePickerConfig(config: SkyLookupShowMoreNativePickerConfig): void {
+    this.showMoreConfig.nativePickerConfig = config;
   }
 
   public setSingleSelect(): void {
