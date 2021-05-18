@@ -12,7 +12,7 @@ import {
 
 import {
   SkyAutocompleteSearchFunctionFilter,
-  SkyLookupCustomPicker,
+  SkyLookupShowMoreConfig,
   SkyLookupShowMoreCustomPickerContext
 } from '@skyux/lookup';
 
@@ -32,7 +32,7 @@ import {
 })
 export class LookupCustomPickerDemoComponent implements OnInit {
 
-  public customPicker: SkyLookupCustomPicker;
+  public showMoreConfig: SkyLookupShowMoreConfig;
 
   public names: any[] = [
     { name: 'Shirley' }
@@ -68,26 +68,28 @@ export class LookupCustomPickerDemoComponent implements OnInit {
     private formBuilder: FormBuilder,
     private modalService: SkyModalService
   ) {
-    this.customPicker = {
-      open: (context: SkyLookupShowMoreCustomPickerContext) => {
-        const instance = this.modalService.open(LookupCustomPickerDemoModalComponent, {
-          providers: [
-            {
-              provide: SkyLookupShowMoreCustomPickerContext,
-              useValue: context
-            }
-          ]
-        });
+    this.showMoreConfig = {
+      customPicker: {
+        open: (context: SkyLookupShowMoreCustomPickerContext) => {
+          const instance = this.modalService.open(LookupCustomPickerDemoModalComponent, {
+            providers: [
+              {
+                provide: SkyLookupShowMoreCustomPickerContext,
+                useValue: context
+              }
+            ]
+          });
 
-        instance.closed.subscribe((closeArgs: SkyModalCloseArgs) => {
-          if (closeArgs.reason === 'save') {
-            if (closeArgs.data) {
-              this.myForm
-                .setValue({ 'bestFriennamesd': [this.people[this.people.length - 1]] });
-              this.changeDetector.markForCheck();
+          instance.closed.subscribe((closeArgs: SkyModalCloseArgs) => {
+            if (closeArgs.reason === 'save') {
+              if (closeArgs.data) {
+                this.myForm
+                  .setValue({ 'names': [this.people[this.people.length - 1]] });
+                this.changeDetector.markForCheck();
+              }
             }
-          }
-        });
+          });
+        }
       }
     };
   }

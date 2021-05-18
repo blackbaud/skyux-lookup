@@ -1,6 +1,8 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  TemplateRef,
+  ViewChild
 } from '@angular/core';
 
 import {
@@ -10,7 +12,8 @@ import {
 } from '@angular/forms';
 
 import {
-  SkyAutocompleteSearchFunctionFilter
+  SkyAutocompleteSearchFunctionFilter,
+  SkyLookupShowMoreConfig
 } from '@skyux/lookup';
 
 @Component({
@@ -108,6 +111,15 @@ export class LookupResultTemplatesDemoComponent implements OnInit {
       formal: 'Ms. Jenkins'
     }
   ];
+
+  public showMoreConfig: SkyLookupShowMoreConfig = {
+    nativePickerConfig: {}
+  };
+
+  @ViewChild('modalItemTemplate')
+  public set modalItemTempalte(template: TemplateRef<any>) {
+    this.showMoreConfig.nativePickerConfig.itemTemplate = template;
+  }
 
   constructor(
     private formBuilder: FormBuilder
