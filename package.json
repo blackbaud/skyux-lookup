@@ -1,6 +1,6 @@
 {
   "name": "@skyux/lookup",
-  "version": "4.12.0",
+  "version": "4.12.1",
   "description": "SKY UX Lookup",
   "scripts": {
     "build": "skyux build-public-library",
@@ -26,11 +26,12 @@
     "@angular/core": "^9.1.6",
     "@angular/router": "^9.1.6",
     "@skyux/core": "^4.0.0",
-    "@skyux/data-manager": "^4.0.0",
     "@skyux/modals": "^4.0.0",
     "@skyux/forms": "^4.13.3",
     "@skyux/i18n": "^4.0.0",
     "@skyux/indicators": "^4.0.0",
+    "@skyux/layout": "^4.0.0",
+    "@skyux/list": "^4.0.0",
     "@skyux/theme": "^4.14.0"
   },
   "dependencies": {
@@ -60,7 +61,6 @@
     "@skyux/assets": "4.0.1",
     "@skyux/config": "4.4.0",
     "@skyux/core": "4.5.0",
-    "@skyux/data-manager": "4.1.1",
     "@skyux/docs-tools": "4.9.0",
     "@skyux/forms": "4.17.1",
     "@skyux/http": "4.2.0",
@@ -69,7 +69,7 @@
     "@skyux/inline-form": "4.1.1",
     "@skyux/layout": "4.6.2",
     "@skyux/lists": "4.7.2",
-    "@skyux/lookup": "4.12.0",
+    "@skyux/lookup": "4.12.1",
     "@skyux/modals": "4.5.3",
     "@skyux/omnibar-interop": "4.0.1",
     "@skyux/popovers": "4.5.2",

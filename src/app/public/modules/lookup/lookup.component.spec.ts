@@ -53,7 +53,7 @@ describe('Lookup component', function () {
   //#region helpers
 
   function clearShowMoreSearch(fixture: ComponentFixture<any>): void {
-    (<HTMLElement>document.querySelector('.sky-lookup-show-more-data-manager .sky-search-btn-clear')).click();
+    (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-toolbar .sky-search-btn-clear')).click();
 
     fixture.detectChanges();
     tick(250);
@@ -72,12 +72,12 @@ describe('Lookup component', function () {
   }
 
   function clickShowMoreClearAll(fixture: ComponentFixture<any>): void {
-    (<HTMLElement>document.querySelector('.sky-data-manager-clear-all-btn')).click();
+    (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-clear-all-btn')).click();
     fixture.detectChanges();
   }
 
   function clickShowMoreSelectAll(fixture: ComponentFixture<any>): void {
-    (<HTMLElement>document.querySelector('.sky-data-manager-select-all-btn')).click();
+    (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-select-all-btn')).click();
     fixture.detectChanges();
   }
 
@@ -152,7 +152,7 @@ describe('Lookup component', function () {
   }
 
   function selectShowOnlySelected(fixture: ComponentFixture<any>): void {
-    (<HTMLElement>document.querySelector('.sky-lookup-show-more-data-manager .sky-toolbar-view-actions input')).click();
+    (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-muiltiselect-toolbar .sky-toolbar-view-actions input')).click();
     fixture.detectChanges();
     tick(250);
     fixture.detectChanges();
