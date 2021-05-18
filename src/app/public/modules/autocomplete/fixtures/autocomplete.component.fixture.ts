@@ -67,7 +67,6 @@ export class SkyAutocompleteFixtureComponent {
   public searchTextMinimumCharacters: number;
   public selectionFromChangeEvent: SkyAutocompleteSelectionChange;
   public showAddButton: boolean = false;
-  public showMoreButton: boolean = false;
 
   @ViewChild(SkyAutocompleteComponent, {
     read: SkyAutocompleteComponent,
