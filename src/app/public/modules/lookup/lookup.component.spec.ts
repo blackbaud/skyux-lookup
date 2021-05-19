@@ -71,6 +71,12 @@ describe('Lookup component', function () {
     tick();
   }
 
+  function clickSearchButton(fixture: ComponentFixture<any>): void {
+    getSearchButton().click();
+    fixture.detectChanges();
+    tick();
+  }
+
   function clickShowMoreClearAll(fixture: ComponentFixture<any>): void {
     (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-clear-all-btn')).click();
     fixture.detectChanges();
@@ -111,6 +117,10 @@ describe('Lookup component', function () {
 
   function getRepeaterItemCount(): number {
     return document.querySelectorAll('sky-modal sky-repeater-item').length;
+  }
+
+  function getSearchButton(): HTMLElement {
+    return document.querySelector('.sky-lookup-search-btn') as HTMLElement;
   }
 
   function getShowMoreButton(): HTMLElement {
@@ -643,6 +653,21 @@ describe('Lookup component', function () {
 
             performSearch('r', fixture);
             clickShowMore(fixture);
+
+            expect(modalService.open).toHaveBeenCalled();
+
+            closeModal(fixture);
+          })
+        );
+
+        it('should open the modal when the search button is clicked',
+          fakeAsync(() => {
+            component.enableShowMore = true;
+            fixture.detectChanges();
+
+            spyOn(modalService, 'open').and.callThrough();
+
+            clickSearchButton(fixture);
 
             expect(modalService.open).toHaveBeenCalled();
 

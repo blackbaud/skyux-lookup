@@ -229,11 +229,23 @@ export class SkyLookupComponent
   @ViewChild(SkyAutocompleteComponent)
   private autocompleteComponent: SkyAutocompleteComponent;
 
+  @ViewChild('buttonsTemplateRef', {
+    read: TemplateRef,
+    static: true
+  })
+  private buttonsTemplateRef: TemplateRef<any>;
+
   @ViewChild('inputTemplateRef', {
     read: TemplateRef,
     static: true
   })
   private inputTemplateRef: TemplateRef<any>;
+
+  @ViewChild('insetButtonsTemplateRef', {
+    read: TemplateRef,
+    static: true
+  })
+  private insetButtonsTemplateRef: TemplateRef<any>;
 
   private ngUnsubscribe = new Subject();
   private idle = new Subject();
@@ -261,7 +273,9 @@ export class SkyLookupComponent
     if (this.inputBoxHostSvc) {
       this.inputBoxHostSvc.populate(
         {
-          inputTemplate: this.inputTemplateRef
+          inputTemplate: this.inputTemplateRef,
+          buttonsTemplate: this.enableShowMore ? this.buttonsTemplateRef : undefined,
+          buttonsInsetTemplate: this.enableShowMore ? undefined : this.insetButtonsTemplateRef
         }
       );
     }
@@ -446,7 +460,7 @@ export class SkyLookupComponent
     }
   }
 
-  public showMoreButtonClicked(): void {
+  public onShowMoreClick(): void {
     if (this.showMoreConfig?.customPicker) {
       this.showMoreConfig.customPicker.open({
         items: this.data,
