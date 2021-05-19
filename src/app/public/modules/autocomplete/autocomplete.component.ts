@@ -697,11 +697,13 @@ export class SkyAutocompleteComponent
   private initOverlayFocusableElements(): void {
     // Wait for dropdown elements to render.
     setTimeout(() => {
-      this.overlayFocusableElements = this.adapterService.getOverlayFocusableElements(this.overlay);
-      this.overlayFocusableElements.forEach(el => {
-        this.adapterService.setTabIndex(el, -1);
-      });
-      this.addFocusedClass();
+      if (this.overlay) {
+        this.overlayFocusableElements = this.adapterService.getOverlayFocusableElements(this.overlay);
+        this.overlayFocusableElements.forEach(el => {
+          this.adapterService.setTabIndex(el, -1);
+        });
+        this.addFocusedClass();
+      }
     });
   }
 
