@@ -464,7 +464,11 @@ describe('Autocomplete component', () => {
 
       enterSearch('r', fixture);
 
-      expect(adapterSpy).toHaveBeenCalledWith(autocomplete['elementRef'], autocomplete['resultsRef']);
+      expect(adapterSpy).toHaveBeenCalledWith(
+        autocomplete['elementRef'],
+        autocomplete['resultsRef'],
+        false
+      );
 
       const dropdownElement = getSearchResultsContainer();
       const autocompleteElement = getAutocompleteElement();
@@ -486,7 +490,11 @@ describe('Autocomplete component', () => {
       fixture.detectChanges();
       tick();
 
-      expect(adapterSpy).toHaveBeenCalledWith(autocomplete['elementRef'], autocomplete['resultsRef']);
+      expect(adapterSpy).toHaveBeenCalledWith(
+        autocomplete['elementRef'],
+        autocomplete['resultsRef'],
+        false
+      );
 
       const dropdownElement = getSearchResultsContainer();
       const autocompleteElement = getAutocompleteElement();

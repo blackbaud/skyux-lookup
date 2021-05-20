@@ -229,11 +229,11 @@ export class SkyLookupComponent
   @ViewChild(SkyAutocompleteComponent)
   private autocompleteComponent: SkyAutocompleteComponent;
 
-  @ViewChild('buttonsTemplateRef', {
+  @ViewChild('showMoreButtonTemplateRef', {
     read: TemplateRef,
     static: true
   })
-  private buttonsTemplateRef: TemplateRef<any>;
+  private showMoreButtonTemplateRef: TemplateRef<any>;
 
   @ViewChild('inputTemplateRef', {
     read: TemplateRef,
@@ -241,11 +241,11 @@ export class SkyLookupComponent
   })
   private inputTemplateRef: TemplateRef<any>;
 
-  @ViewChild('insetButtonsTemplateRef', {
+  @ViewChild('searchIconTemplateRef', {
     read: TemplateRef,
     static: true
   })
-  private insetButtonsTemplateRef: TemplateRef<any>;
+  private searchIconTemplateRef: TemplateRef<any>;
 
   private ngUnsubscribe = new Subject();
   private idle = new Subject();
@@ -274,8 +274,8 @@ export class SkyLookupComponent
       this.inputBoxHostSvc.populate(
         {
           inputTemplate: this.inputTemplateRef,
-          buttonsTemplate: this.enableShowMore ? this.buttonsTemplateRef : undefined,
-          buttonsInsetTemplate: this.enableShowMore ? undefined : this.insetButtonsTemplateRef
+          buttonsTemplate: this.enableShowMore ? this.showMoreButtonTemplateRef : undefined,
+          buttonsInsetTemplate: this.enableShowMore ? undefined : this.searchIconTemplateRef
         }
       );
     }
@@ -472,7 +472,6 @@ export class SkyLookupComponent
       if (!modalConfig.itemTemplate) {
         modalConfig.itemTemplate = this.searchResultTemplate;
       }
-
       const modalInstance = this.modalService.open(SkyLookupShowMoreModalComponent, {
         providers: [{
           provide: SkyLookupShowMoreNativePickerContext, useValue: {

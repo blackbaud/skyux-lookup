@@ -9,6 +9,7 @@ import {
   EventEmitter,
   Input,
   OnDestroy,
+  Optional,
   Output,
   TemplateRef,
   ViewChild
@@ -21,6 +22,10 @@ import {
   SkyOverlayInstance,
   SkyOverlayService
 } from '@skyux/core';
+
+import {
+  SkyInputBoxHostService
+} from '@skyux/forms';
 
 import {
   fromEvent as observableFromEvent,
@@ -391,7 +396,8 @@ export class SkyAutocompleteComponent
     private elementRef: ElementRef,
     private affixService: SkyAffixService,
     private adapterService: SkyAutocompleteAdapterService,
-    private overlayService: SkyOverlayService
+    private overlayService: SkyOverlayService,
+    @Optional() private inputBoxHostSvc?: SkyInputBoxHostService
   ) {
     const id = ++uniqueId;
     this.resultsListId = `sky-autocomplete-list-${id}`;
@@ -680,7 +686,11 @@ export class SkyAutocompleteComponent
       .subscribe(() => {
         /* istanbul ignore else */
         if (this.isOpen) {
-          this.adapterService.setDropdownWidth(this.elementRef, this.resultsRef);
+          this.adapterService.setDropdownWidth(
+            this.elementRef,
+            this.resultsRef,
+            !!this.inputBoxHostSvc
+          );
         }
       });
   }
@@ -696,7 +706,11 @@ export class SkyAutocompleteComponent
     if (!this.affixer) {
       const affixer = this.affixService.createAffixer(this.resultsRef);
 
-      this.adapterService.setDropdownWidth(this.elementRef, this.resultsRef);
+      this.adapterService.setDropdownWidth(
+        this.elementRef,
+        this.resultsRef,
+        !!this.inputBoxHostSvc
+      );
 
       affixer.affixTo(this.elementRef.nativeElement, {
         autoFitContext: SkyAffixAutoFitContext.Viewport,

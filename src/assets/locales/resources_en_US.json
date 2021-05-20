@@ -11,8 +11,8 @@
     "_description": "Placeholder for country search autocomplete",
     "message": "Search for a country"
   },
-  "skyux_lookup_search_button": {
-    "_description": "Label for lookup's search button",
+  "skyux_lookup_search_icon": {
+    "_description": "Label for lookup's search icon",
     "message": "Search"
   },
   "skyux_lookup_search_button_show_more": {

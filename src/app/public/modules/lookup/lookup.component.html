@@ -83,10 +83,10 @@
           </div>
         </div>
         <ng-container *ngIf="!inputBoxHostSvc && enableShowMore">
-          <ng-container *ngTemplateOutlet="buttonsTemplateRef"></ng-container>
+          <ng-container *ngTemplateOutlet="showMoreButtonTemplateRef"></ng-container>
         </ng-container>
         <ng-container *ngIf="!inputBoxHostSvc && !enableShowMore">
-          <ng-container *ngTemplateOutlet="insetButtonsTemplateRef"></ng-container>
+          <ng-container *ngTemplateOutlet="searchIconTemplateRef"></ng-container>
         </ng-container>
       </div>
     </sky-autocomplete>
@@ -94,7 +94,7 @@
 </ng-template>
 
 <ng-template
-  #buttonsTemplateRef
+  #showMoreButtonTemplateRef
 >
   <div
     class="sky-input-group-btn"
@@ -117,19 +117,19 @@
 </ng-template>
 
 <ng-template
-  #insetButtonsTemplateRef
+  #searchIconTemplateRef
 >
   <div
     class="sky-input-group-btn sky-lookup-inset-search-icon"
   >
     <sky-icon *skyThemeIf="'default'"
       icon="search"
-      [attr.aria-label]="'skyux_lookup_search_button' | skyLibResources"
+      [attr.aria-label]="'skyux_lookup_search_icon' | skyLibResources"
     ></sky-icon>
     <sky-icon *skyThemeIf="'modern'"
       iconType="skyux"
       icon="search"
-      [attr.aria-label]="'skyux_lookup_search_button' | skyLibResources"
+      [attr.aria-label]="'skyux_lookup_search_icon' | skyLibResources"
     ></sky-icon>
   </div>
 </ng-template>
