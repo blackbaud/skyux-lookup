@@ -12,6 +12,10 @@ import {
 } from '@skyux-sdk/testing';
 
 import {
+  SkyInputBoxHostService
+} from '@skyux/forms';
+
+import {
   SkyAutocompleteComponent
 } from './autocomplete.component';
 
@@ -34,8 +38,6 @@ import {
 import {
   SkyAutocompleteSearchFunction
 } from './types/autocomplete-search-function';
-import { SkyAutocompleteInputBoxFixtureComponent } from './fixtures/autocomplete-input-box.component.fixture';
-import { SkyInputBoxHostService, SkyInputBoxModule } from '@skyux/forms';
 
 describe('Autocomplete component', () => {
 
