@@ -34,6 +34,8 @@ import {
 import {
   SkyAutocompleteSearchFunction
 } from './types/autocomplete-search-function';
+import { SkyAutocompleteInputBoxFixtureComponent } from './fixtures/autocomplete-input-box.component.fixture';
+import { SkyInputBoxHostService, SkyInputBoxModule } from '@skyux/forms';
 
 describe('Autocomplete component', () => {
 
@@ -1703,6 +1705,47 @@ describe('Autocomplete component', () => {
         expect(getShowMoreButton()).toBeNull();
       })
     );
+
+  });
+
+  describe('within an input box', () => {
+    let fixture: ComponentFixture<SkyAutocompleteFixtureComponent>;
+    let component: SkyAutocompleteFixtureComponent;
+    let autocomplete: SkyAutocompleteComponent;
+
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          SkyAutocompleteFixturesModule
+        ],
+        providers: [
+          SkyInputBoxHostService
+        ]
+      });
+
+      fixture = TestBed.createComponent(SkyAutocompleteFixtureComponent);
+      component = fixture.componentInstance;
+      autocomplete = component.autocomplete;
+    });
+
+    afterEach(() => {
+      fixture.destroy();
+    });
+
+    it('should call the setDropdownWidth with the proper parameters', fakeAsync(() => {
+      const adapterSpy = spyOn(autocomplete['adapterService'], 'setDropdownWidth').and.callThrough();
+
+      fixture.detectChanges();
+      tick();
+
+      enterSearch('r', fixture);
+
+      expect(adapterSpy).toHaveBeenCalledWith(
+        autocomplete['elementRef'],
+        autocomplete['resultsRef'],
+        true
+      );
+    }));
 
   });
 });
