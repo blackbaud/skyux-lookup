@@ -20,3 +20,11 @@ if (!Element.prototype.closest) {
     return null;
   };
 }
+
+// Polyfill for Element.matches().
+// https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
+// Returns true if the element would be selected by the specified selector string.
+if (!Element.prototype.matches) {
+  Element.prototype.matches = (Element.prototype as any).msMatchesSelector
+    /* istanbul ignore next */ || Element.prototype.webkitMatchesSelector;
+}

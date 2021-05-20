@@ -41,6 +41,24 @@ describe('Polyfills', () => {
     fixture.detectChanges();
   });
 
+  describe('matches()', () => {
+
+    it('should return true if element matches', () => {
+      let targetEl = nativeElement.querySelector('#one');
+      let actual = targetEl.matches('#one');
+
+      expect(actual).toBe(true);
+    });
+
+    it('should return false if element does not match', () => {
+      let targetEl = nativeElement.querySelector('#two');
+      let actual = targetEl.matches('#one');
+
+      expect(actual).toBe(false);
+    });
+
+  });
+
   describe('closest()', () => {
 
     it('should find the closest element through several ancestors', () => {
