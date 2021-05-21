@@ -1,15 +1,14 @@
 import {
   NgModule
 } from '@angular/core';
+
 import {
   CommonModule
 } from '@angular/common';
+
 import {
   FormsModule
 } from '@angular/forms';
-import {
-  BrowserAnimationsModule
-} from '@angular/platform-browser/animations';
 
 import {
   SkyIdModule,
@@ -41,7 +40,6 @@ import {
     SkySearchComponent
   ],
   imports: [
-    BrowserAnimationsModule,
     CommonModule,
     SkyInputBoxModule,
     SkyLookupResourcesModule,

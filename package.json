@@ -29,10 +29,10 @@
     "@skyux/modals": "^4.0.0",
     "@skyux/forms": "^4.13.3",
     "@skyux/i18n": "^4.0.0",
-    "@skyux/indicators": "^4.0.0",
+    "@skyux/indicators": "^5.0.0-alpha.0",
     "@skyux/layout": "^4.0.0",
     "@skyux/lists": "^4.0.0",
-    "@skyux/theme": "^4.14.0"
+    "@skyux/theme": "^5.0.0-alpha.0"
   },
   "dependencies": {
     "intl-tel-input": "14.1.0"
@@ -65,7 +65,7 @@
     "@skyux/forms": "4.17.1",
     "@skyux/http": "4.2.0",
     "@skyux/i18n": "4.1.0",
-    "@skyux/indicators": "4.9.2",
+    "@skyux/indicators": "5.0.0-alpha.0",
     "@skyux/inline-form": "4.1.1",
     "@skyux/layout": "4.6.2",
     "@skyux/lists": "4.7.2",
@@ -75,7 +75,7 @@
     "@skyux/popovers": "4.5.2",
     "@skyux/router": "4.1.0",
     "@skyux/tabs": "4.6.6",
-    "@skyux/theme": "4.16.2",
+    "@skyux/theme": "5.0.0-alpha.0",
     "codelyzer": "5.2.2",
     "rxjs": "6.6.7",
     "ts-node": "8.3.0",
