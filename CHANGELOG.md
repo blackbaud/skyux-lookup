@@ -1,3 +1,7 @@
+# 5.0.0-alpha.0 (2021-05-21)
+
+- Removed `BrowserAnimationsModule` from the `imports` section of `SkySearchModule` to support lazy-loading. Consumers of `SkySearchModule` must now import `BrowserAnimationsModule` into their application's root module. [#185](https://github.com/blackbaud/skyux-lookup/pull/185)
+
 # 4.13.1 (2021-05-19)
 
 - Fixed the peer dependencies to list `@skyux/lists` as a dependency instead of `@skyux/list`. [#182](https://github.com/blackbaud/skyux-lookup/pull/182)
