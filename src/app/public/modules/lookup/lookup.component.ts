@@ -131,8 +131,7 @@ export class SkyLookupComponent
   public disabled = false;
 
   /**
-   * Indicates whether to display a button in the dropdown that opens a picker
-   * where users can view all options.
+   * Indicates whether to enable users to open a picker where they can view all options.
    */
   @Input()
   public enableShowMore: boolean = false;
