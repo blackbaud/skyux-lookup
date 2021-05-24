@@ -72,10 +72,8 @@
 <ng-template
   #searchIconTemplateRef
 >
-  <button
-    class="sky-btn sky-btn-default"
-    type="button"
-    [attr.aria-label]="'skyux_country_field_search_button' | skyLibResources"
+  <div
+    class="sky-input-group-icon sky-input-box-icon-inset"
   >
     <sky-icon *skyThemeIf="'default'"
       icon="search"
@@ -84,5 +82,5 @@
       iconType="skyux"
       icon="search"
     ></sky-icon>
-  </button>
+  </div>
 </ng-template>

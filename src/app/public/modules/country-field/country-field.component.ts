@@ -32,6 +32,10 @@ import {
 } from '@skyux/core';
 
 import {
+  SkyThemeService
+} from '@skyux/theme';
+
+import {
   SkyInputBoxHostService
 } from '@skyux/forms';
 
@@ -58,7 +62,6 @@ import {
 import {
   SkyCountryFieldCountry
 } from './types/country';
-import { SkyThemeService } from '@skyux/theme';
 
 // tslint:disable:no-forward-ref no-use-before-declare
 const SKY_COUNTRY_FIELD_VALIDATOR = {
@@ -535,7 +538,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
       this.inputBoxHostSvc.populate(
         {
           inputTemplate: this.inputTemplateRef,
-          buttonsInsetTemplate: this.currentTheme === 'modern' ? this.searchIconTemplateRef : undefined
+          iconsInsetTemplate: this.currentTheme === 'modern' ? this.searchIconTemplateRef : undefined
         }
       );
     }

@@ -7,10 +7,6 @@
     "_description": "Placeholder text for autocomplete input component when no results are found",
     "message": "No matches found"
   },
-  "skyux_country_field_search_button": {
-    "_description": "Label for country search button",
-    "message": "Search"
-  },
   "skyux_country_field_search_placeholder": {
     "_description": "Placeholder for country search autocomplete",
     "message": "Search for a country"
