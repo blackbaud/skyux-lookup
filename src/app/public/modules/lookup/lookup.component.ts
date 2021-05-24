@@ -275,7 +275,7 @@ export class SkyLookupComponent
         {
           inputTemplate: this.inputTemplateRef,
           buttonsTemplate: this.enableShowMore ? this.showMoreButtonTemplateRef : undefined,
-          buttonsInsetTemplate: this.enableShowMore ? undefined : this.searchIconTemplateRef
+          iconsInsetTemplate: this.enableShowMore ? undefined : this.searchIconTemplateRef
         }
       );
     }

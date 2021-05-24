@@ -97,10 +97,10 @@
   #showMoreButtonTemplateRef
 >
   <div
-    class="sky-input-group-btn"
+    class="sky-input-group-btn sky-input-box-btn-inset"
   >
     <button
-      class="sky-btn sky-btn-default sky-lookup-search-btn"
+      class="sky-btn sky-btn-default"
       type="button"
       [attr.aria-label]="'skyux_lookup_search_button_show_more' | skyLibResources"
       (click)="onShowMoreClick()"
@@ -120,7 +120,7 @@
   #searchIconTemplateRef
 >
   <div
-    class="sky-input-group-btn sky-lookup-inset-search-icon"
+    class="sky-input-group-icon sky-input-box-icon-inset"
   >
     <sky-icon *skyThemeIf="'default'"
       icon="search"
