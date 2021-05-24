@@ -43,6 +43,7 @@ import {
 } from 'rxjs';
 
 import {
+  skip,
   takeUntil
 } from 'rxjs/operators';
 
@@ -57,6 +58,7 @@ import {
 import {
   SkyCountryFieldCountry
 } from './types/country';
+import { SkyThemeService } from '@skyux/theme';
 
 // tslint:disable:no-forward-ref no-use-before-declare
 const SKY_COUNTRY_FIELD_VALIDATOR = {
@@ -235,6 +237,8 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     return this._selectedCountry;
   }
 
+  public currentTheme: string = 'default';
+
   public inputId: string;
 
   @ViewChild('inputTemplateRef', {
@@ -242,6 +246,12 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     static: true
   })
   private inputTemplateRef: TemplateRef<any>;
+
+  @ViewChild('searchIconTemplateRef', {
+    read: TemplateRef,
+    static: true
+  })
+  private searchIconTemplateRef: TemplateRef<any>;
 
   private defaultCountryData: SkyCountryFieldCountry;
 
@@ -270,11 +280,19 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     private elRef: ElementRef,
     private windowRef: SkyAppWindowRef,
     private injector: Injector,
-    @Optional() public inputBoxHostSvc?: SkyInputBoxHostService
+    @Optional() public inputBoxHostSvc?: SkyInputBoxHostService,
+    @Optional() themeSvc?: SkyThemeService
   ) {
     this.setupCountries();
 
     this.countrySearchFormControl = new FormControl();
+
+    themeSvc.settingsChange
+      .pipe(skip(2))
+      .subscribe(change => {
+        this.currentTheme = change.currentSettings.theme.name;
+        this.updateInputBox();
+      });
   }
 
   /**
@@ -282,13 +300,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
    * @internal
    */
   public ngOnInit(): void {
-    if (this.inputBoxHostSvc) {
-      this.inputBoxHostSvc.populate(
-        {
-          inputTemplate: this.inputTemplateRef
-        }
-      );
-    }
+    this.updateInputBox();
 
     // tslint:disable-next-line: no-null-keyword
     this.ngControl = this.injector.get<NgControl>(NgControl as unknown as Type<NgControl>, null);
@@ -516,6 +528,17 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     }
 
     this.countries = sortedNewCountries;
+  }
+
+  private updateInputBox(): void {
+    if (this.inputBoxHostSvc) {
+      this.inputBoxHostSvc.populate(
+        {
+          inputTemplate: this.inputTemplateRef,
+          buttonsInsetTemplate: this.currentTheme === 'modern' ? this.searchIconTemplateRef : undefined
+        }
+      );
+    }
   }
 
 }
