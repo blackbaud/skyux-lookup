@@ -69,10 +69,86 @@
         heading="Use when"
         headingStyle="success"
       >
-        <p class="sky-docs-text-block">
-          Use the lookup component when users need to select an option or multiple options from a long list of options. For guidance on which selection inputs to use in other scenarios, see the <a href="https://developer.blackbaud.com/skyux/design/guidelines/form-design#selection-inputs">form design guidelines</a>.
+        <p>
+          Use lookup when users must choose an option from a long list of options. It is especially useful when the options are user-defined, but system-defined options can be appropriate as well.
         </p>
+        <sky-docs-design-guideline-thumbnail
+            *skyThemeIf="'default'" caption="Do use lookup when users choose from long lists of options."
+                                    captionType="success"
+                                    imageSource="~/assets/img/guidelines/lookup/lookup-usage-1-default.png">
+        </sky-docs-design-guideline-thumbnail>
+        <sky-docs-design-guideline-thumbnail
+            *skyThemeIf="'modern'" caption="Do use lookup when users choose from long lists of options."
+                                   captionType="success"
+                                   imageSource="~/assets/img/guidelines/lookup/lookup-usage-1-modern.png">
+        </sky-docs-design-guideline-thumbnail>
       </sky-docs-design-guideline>
+        
+      <sky-docs-design-guideline>
+        <p>
+          Use lookup when users may choose more than one option from a long list.
+        </p>
+        <sky-docs-design-guideline-thumbnail
+            *skyThemeIf="'default'" caption="Do use lookup when users may need to select more than one option."
+                                    captionType="success"
+                                    imageSource="~/assets/img/guidelines/lookup/lookup-usage-2-default.png">
+        </sky-docs-design-guideline-thumbnail>
+        <sky-docs-design-guideline-thumbnail
+            *skyThemeIf="'modern'" caption="Do use lookup when users may need to select more than one option."
+                                   captionType="success"
+                                   imageSource="~/assets/img/guidelines/lookup/lookup-usage-2-modern.png">
+        </sky-docs-design-guideline-thumbnail>
+      </sky-docs-design-guideline>
+        
+      <sky-docs-design-guideline>
+        <p>
+          Use lookup when users may need to create a new option in the middle of their current task.
+        </p>
+        <sky-docs-design-guideline-thumbnail
+            *skyThemeIf="'default'" caption="Do use lookup when users may find that the needed option does not exist yet."
+                                    captionType="success"
+                                    imageSource="~/assets/img/guidelines/lookup/lookup-usage-3-default.png">
+        </sky-docs-design-guideline-thumbnail>
+        <sky-docs-design-guideline-thumbnail
+            *skyThemeIf="'modern'" caption="Do use lookup when users may find that the needed option does not exist yet."
+                                   captionType="success"
+                                   imageSource="~/assets/img/guidelines/lookup/lookup-usage-3-modern.png">
+        </sky-docs-design-guideline-thumbnail>
+      </sky-docs-design-guideline>
+        
+      <sky-docs-design-guideline
+        heading="Don't use when"
+        headingStyle="danger"
+      >
+        <p>
+            Don’t use lookup when users must choose an option from a short list of options (5 or less), especially when it is valuable to see all available options at once. Use
+            <a *skyThemeIf="'default'" href="https://developer.blackbaud.com/skyux-forms/docs/checkbox">checkboxes</a>
+            <a *skyThemeIf="'modern'" href="https://developer.blackbaud.com/skyux-forms/docs/checkbox?svcid=skyux-modern">checkboxes</a> or 
+            <a *skyThemeIf="'default'" href="https://developer.blackbaud.com/skyux-forms/docs/radio">radio buttons</a>
+            <a *skyThemeIf="'modern'" href="https://developer.blackbaud.com/skyux-forms/docs/radio?svcid=skyux-modern">radio buttons</a> instead.
+        </p>
+        <sky-docs-design-guideline-thumbnail
+            *skyThemeIf="'default'" caption="Don't use lookup when there are 5 or fewer options."
+                                    captionType="danger"
+                                    imageSource="~/assets/img/guidelines/lookup/lookup-usage-4-default.png">
+        </sky-docs-design-guideline-thumbnail>
+        <sky-docs-design-guideline-thumbnail
+            *skyThemeIf="'modern'" caption="Don't use lookup when there are 5 or fewer options."
+                                   captionType="danger"
+                                   imageSource="~/assets/img/guidelines/lookup/lookup-usage-4-modern.png">
+        </sky-docs-design-guideline-thumbnail>
+        <sky-docs-design-guideline-thumbnail
+            *skyThemeIf="'default'" caption="Do use different selection inputs for small numbers of options."
+                                    captionType="success"
+                                    imageSource="~/assets/img/guidelines/lookup/lookup-usage-5-default.png">
+        </sky-docs-design-guideline-thumbnail>
+        <sky-docs-design-guideline-thumbnail
+            *skyThemeIf="'modern'" caption="Do use different selection inputs for small numbers of options."
+                                   captionType="success"
+                                   imageSource="~/assets/img/guidelines/lookup/lookup-usage-5-modern.png">
+        </sky-docs-design-guideline-thumbnail>
+      </sky-docs-design-guideline>
+        
     </sky-docs-demo-page-section>
 
     <sky-docs-demo-page-section
@@ -82,17 +158,21 @@
         *skyThemeIf="'default'" imagePath="~/assets/img/guidelines/lookup/lookup-anatomy-default.png"
       >
         <sky-docs-anatomy-item>Input field</sky-docs-anatomy-item>
+        <sky-docs-anatomy-item>Search button</sky-docs-anatomy-item>
         <sky-docs-anatomy-item>Lookup menu</sky-docs-anatomy-item>
         <sky-docs-anatomy-item>Search results</sky-docs-anatomy-item>
-        <sky-docs-anatomy-item isOptional="true">Button to create new option</sky-docs-anatomy-item>
+        <sky-docs-anatomy-item>'Show all/matches' button</sky-docs-anatomy-item>
+        <sky-docs-anatomy-item isOptional="true">'New' button</sky-docs-anatomy-item>
       </sky-docs-anatomy>
       <sky-docs-anatomy
         *skyThemeIf="'modern'" imagePath="~/assets/img/guidelines/lookup/lookup-anatomy-modern.png"
       >
         <sky-docs-anatomy-item>Input field</sky-docs-anatomy-item>
+        <sky-docs-anatomy-item>Search button</sky-docs-anatomy-item>
         <sky-docs-anatomy-item>Lookup menu</sky-docs-anatomy-item>
         <sky-docs-anatomy-item>Search results</sky-docs-anatomy-item>
-        <sky-docs-anatomy-item isOptional="true">Button to create new option</sky-docs-anatomy-item>
+        <sky-docs-anatomy-item>'Show all/matches' button</sky-docs-anatomy-item>
+        <sky-docs-anatomy-item isOptional="true">'New' button</sky-docs-anatomy-item>
       </sky-docs-anatomy>
     </sky-docs-demo-page-section>
 
@@ -140,12 +220,220 @@
             *skyThemeIf="'modern'" imageSource="~/assets/img/guidelines/lookup/lookup-options-3-modern.png">
         </sky-docs-design-guideline-thumbnail>
     </sky-docs-design-guideline>
+        
+    <sky-docs-design-guideline
+      heading="Custom picker"
+    >
+        <p>
+          When users click the search button or Show all/matches button, the modal that opens displays a simple list of options by default (with checkboxes in the multi-select case). Use a custom picker when a different presentation of the options is valuable, like a 
+          <a *skyThemeIf="'default'" href="https://developer.blackbaud.com/skyux-lists/docs/repeater">repeater</a>
+          <a *skyThemeIf="'modern'" href="https://developer.blackbaud.com/skyux-lists/docs/repeater?svcid=skyux-modern">repeater</a> 
+          or 
+          <a *skyThemeIf="'default'" href="https://developer.blackbaud.com/skyux-angular-tree-component/docs/angular-tree">tree view</a>
+          <a *skyThemeIf="'modern'" >tree view</a>. This can be combined with a custom results template.
+        </p>
+        <sky-docs-design-guideline-thumbnail
+            *skyThemeIf="'default'" imageSource="~/assets/img/guidelines/lookup/lookup-options-4-default.png">
+        </sky-docs-design-guideline-thumbnail>
+        <sky-docs-design-guideline-thumbnail
+            *skyThemeIf="'modern'" imageSource="~/assets/img/guidelines/lookup/lookup-options-4-modern.png">
+        </sky-docs-design-guideline-thumbnail>
+    </sky-docs-design-guideline>
 
     </sky-docs-demo-page-section>
 
     <sky-docs-demo-page-section
+      heading="Behavior and states"
+    >
+      
+        <sky-docs-design-guideline
+          heading="Behavior"
+        >
+            <p class="sky-docs-text-block">
+            When the lookup component gains focus, the menu appears with buttons for “Show all #” and “New”.
+            </p>
+            <p class="sky-docs-text-block">
+            When users enter the minimum number of characters, search results are returned with their text matches highlighted. The “Show all #” button changes to “Show matches (#)”.
+            </p>
+            <p class="sky-docs-text-block">
+            At any time, users can click the search button or the “Show all/matches” button to open a modal that lists all available options, or, if search text is entered, all options that match the search text.
+            </p>
+            <p class="sky-docs-text-block">
+            When users choose an option in a single-select lookup, the menu or modal closes and the chosen option appears as text inside the text input field.
+            </p>
+            <p class="sky-docs-text-block">
+            When users choose an option in a multi-select lookup, the chosen option appears as a token inside the text input field and the cursor returns to the text input field. The menu shows no suggestions until users enter enough characters for another search.
+            </p>
+            <p class="sky-docs-text-block">
+            If the lookup field loses focus before users choose a valid option, any text entered is deleted.
+            </p>
+        </sky-docs-design-guideline>
+        
+        <h3>States</h3>
+        
+            <table class="sky-docs-table">
+              <tr>
+                <td class="sky-docs-table-cell sky-docs-table-cell-primary">
+                  Base
+                </td>
+                <td class="sky-docs-table-cell">
+                  <sky-docs-design-guideline-thumbnail
+                        *skyThemeIf="'default'"
+                        imageSource="~/assets/img/guidelines/lookup/lookup-states-base-default.png"
+                  >
+                  </sky-docs-design-guideline-thumbnail>
+                  <sky-docs-design-guideline-thumbnail
+                        *skyThemeIf="'modern'"
+                        imageSource="~/assets/img/guidelines/lookup/lookup-states-base-modern.png"
+                  >
+                  </sky-docs-design-guideline-thumbnail>
+                </td>
+              </tr>
+              <tr>
+                <td class="sky-docs-table-cell">
+                  Focus
+                </td>
+                <td class="sky-docs-table-cell">
+                  <sky-docs-design-guideline-thumbnail
+                        *skyThemeIf="'default'"
+                        imageSource="~/assets/img/guidelines/lookup/lookup-states-focus-default.png"
+                  >
+                  </sky-docs-design-guideline-thumbnail>
+                  <sky-docs-design-guideline-thumbnail
+                        *skyThemeIf="'modern'"
+                        imageSource="~/assets/img/guidelines/lookup/lookup-states-focus-modern.png"
+                  >
+                  </sky-docs-design-guideline-thumbnail>
+                </td>
+              </tr>
+              <tr>
+                <td class="sky-docs-table-cell">
+                  Search string
+                </td>
+                <td class="sky-docs-table-cell">
+                  <sky-docs-design-guideline-thumbnail
+                        *skyThemeIf="'default'"
+                        imageSource="~/assets/img/guidelines/lookup/lookup-states-search-string-default.png"
+                  >
+                  </sky-docs-design-guideline-thumbnail>
+                  <sky-docs-design-guideline-thumbnail
+                        *skyThemeIf="'modern'"
+                        imageSource="~/assets/img/guidelines/lookup/lookup-states-search-string-modern.png"
+                  >
+                  </sky-docs-design-guideline-thumbnail>
+                </td>
+              </tr>
+              <tr>
+                <td class="sky-docs-table-cell sky-docs-table-cell-primary">
+                  Selected option (single-select)
+                </td>
+                <td class="sky-docs-table-cell">
+                  <sky-docs-design-guideline-thumbnail
+                        *skyThemeIf="'default'"
+                        imageSource="~/assets/img/guidelines/lookup/lookup-states-result-selected-default.png"
+                  >
+                  </sky-docs-design-guideline-thumbnail>
+                  <sky-docs-design-guideline-thumbnail
+                        *skyThemeIf="'modern'"
+                        imageSource="~/assets/img/guidelines/lookup/lookup-states-result-selected-modern.png"
+                  >
+                  </sky-docs-design-guideline-thumbnail>
+                </td>
+              </tr>
+              <tr>
+                <td class="sky-docs-table-cell">
+                  Selected option (multi-select)
+                </td>
+                <td class="sky-docs-table-cell">
+                  <sky-docs-design-guideline-thumbnail
+                        *skyThemeIf="'default'"
+                        imageSource="~/assets/img/guidelines/lookup/lookup-states-results-selected-default.png"
+                  >
+                  </sky-docs-design-guideline-thumbnail>
+                  <sky-docs-design-guideline-thumbnail
+                        *skyThemeIf="'modern'"
+                        imageSource="~/assets/img/guidelines/lookup/lookup-states-results-selected-modern.png"
+                  >
+                  </sky-docs-design-guideline-thumbnail>
+                </td>
+              </tr>
+              <tr>
+                <td class="sky-docs-table-cell">
+                  Wrapped selections (multi-select)
+                </td>
+                <td class="sky-docs-table-cell">
+                  <sky-docs-design-guideline-thumbnail
+                        *skyThemeIf="'default'"
+                        imageSource="~/assets/img/guidelines/lookup/lookup-states-wrapped-default.png"
+                  >
+                  </sky-docs-design-guideline-thumbnail>
+                  <sky-docs-design-guideline-thumbnail
+                        *skyThemeIf="'modern'"
+                        imageSource="~/assets/img/guidelines/lookup/lookup-states-wrapped-modern.png"
+                  >
+                  </sky-docs-design-guideline-thumbnail>
+                </td>
+              </tr>
+              <tr>
+                <td class="sky-docs-table-cell">
+                  Show all modal
+                </td>
+                <td class="sky-docs-table-cell">
+                  <sky-docs-design-guideline-thumbnail
+                        *skyThemeIf="'default'"
+                        imageSource="~/assets/img/guidelines/lookup/lookup-states-modal-open-default.png"
+                  >
+                  </sky-docs-design-guideline-thumbnail>
+                  <sky-docs-design-guideline-thumbnail
+                        *skyThemeIf="'modern'"
+                        imageSource="~/assets/img/guidelines/lookup/lookup-states-modal-open-modern.png"
+                  >
+                  </sky-docs-design-guideline-thumbnail>
+                </td>
+              </tr>
+              <tr>
+                <td class="sky-docs-table-cell">
+                  Search inside modal
+                </td>
+                <td class="sky-docs-table-cell">
+                  <sky-docs-design-guideline-thumbnail
+                        *skyThemeIf="'default'"
+                        imageSource="~/assets/img/guidelines/lookup/lookup-states-modal-search-default.png"
+                  >
+                  </sky-docs-design-guideline-thumbnail>
+                  <sky-docs-design-guideline-thumbnail
+                        *skyThemeIf="'modern'"
+                        imageSource="~/assets/img/guidelines/lookup/lookup-states-modal-search-modern.png"
+                  >
+                  </sky-docs-design-guideline-thumbnail>
+                </td>
+              </tr>
+            </table>
+
+      
+    </sky-docs-demo-page-section>
+        
+    <sky-docs-demo-page-section
       heading="Related information"
     >
+        <ul>
+          <li>
+            <a *skyThemeIf="'default'" href="https://developer.blackbaud.com/skyux-forms/docs/checkbox">Checkbox</a>
+            <a *skyThemeIf="'modern'" href="https://developer.blackbaud.com/skyux-forms/docs/checkbox?svcid=skyux-modern">Checkbox</a>
+          </li>
+          <li>
+            <a *skyThemeIf="'default'" href="https://developer.blackbaud.com/skyux-forms/docs/input-box">Input box</a>
+            <a *skyThemeIf="'modern'" href="https://developer.blackbaud.com/skyux-forms/docs/input-box?svcid=skyux-modern">Input box</a>
+          </li>
+          <li>
+            <a *skyThemeIf="'default'" href="https://developer.blackbaud.com/skyux-modals/docs/modal">Modal</a>
+            <a *skyThemeIf="'modern'" href="https://developer.blackbaud.com/skyux-modals/docs/modal?svcid=skyux-modern">Modal</a>
+          </li>
+          <li>
+            <a *skyThemeIf="'default'" href="https://developer.blackbaud.com/skyux-forms/docs/radio">Radio button</a>
+            <a *skyThemeIf="'modern'" href="https://developer.blackbaud.com/skyux-forms/docs/radio?svcid=skyux-modern">Radio button</a>
+          </li>
+        </ul>
       <sky-docs-design-guideline
         heading="Guidelines"
       >
@@ -156,6 +444,7 @@
         </ul>
       </sky-docs-design-guideline>
     </sky-docs-demo-page-section>
+          
   </sky-docs-design-guidelines>
 
   <sky-docs-code-examples
