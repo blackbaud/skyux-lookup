@@ -217,6 +217,7 @@ export class SkyLookupComponent
         });
     } else {
       this._tokens = value;
+      this.changeDetector.markForCheck();
     }
   }
 
