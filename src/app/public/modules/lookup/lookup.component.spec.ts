@@ -120,7 +120,7 @@ describe('Lookup component', function () {
   }
 
   function getSearchButton(): HTMLElement {
-    return document.querySelector('.sky-lookup-search-btn') as HTMLElement;
+    return document.querySelector('.sky-autocomplete .sky-btn') as HTMLElement;
   }
 
   function getShowMoreButton(): HTMLElement {
