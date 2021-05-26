@@ -1,3 +1,7 @@
+# 4.14.0 (2021-05-26)
+
+- Updated the lookup component to collapse tokens when more than 5 items are selected and the picker to show more results is enabled. [#186](https://github.com/blackbaud/skyux-lookup/pull/186)
+
 # 4.13.1 (2021-05-19)
 
 - Fixed the peer dependencies to list `@skyux/lists` as a dependency instead of `@skyux/list`. [#182](https://github.com/blackbaud/skyux-lookup/pull/182)
