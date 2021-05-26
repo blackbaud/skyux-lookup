@@ -149,6 +149,32 @@
         </sky-docs-design-guideline-thumbnail>
       </sky-docs-design-guideline>
         
+      <sky-docs-design-guideline>
+        <p>
+            Don’t use lookup when the options are highly predictable, especially if they are not unique to the system. Use an HTML Select instead.
+        </p>
+        <sky-docs-design-guideline-thumbnail
+            *skyThemeIf="'default'" caption="Don't use lookup in cases where users would reasonably know all the options."
+                                    captionType="danger"
+                                    imageSource="~/assets/img/guidelines/lookup/lookup-usage-6-default.png">
+        </sky-docs-design-guideline-thumbnail>
+        <sky-docs-design-guideline-thumbnail
+            *skyThemeIf="'modern'" caption="Don't use lookup in cases where users would reasonably know all the options."
+                                   captionType="danger"
+                                   imageSource="~/assets/img/guidelines/lookup/lookup-usage-6-modern.png">
+        </sky-docs-design-guideline-thumbnail>
+        <sky-docs-design-guideline-thumbnail
+            *skyThemeIf="'default'" caption="Do use HTML select for predictable or common sets of options."
+                                    captionType="success"
+                                    imageSource="~/assets/img/guidelines/lookup/lookup-usage-7-default.png">
+        </sky-docs-design-guideline-thumbnail>
+        <sky-docs-design-guideline-thumbnail
+            *skyThemeIf="'modern'" caption="Do use HTML select for predictable or common sets of options."
+                                   captionType="success"
+                                   imageSource="~/assets/img/guidelines/lookup/lookup-usage-7-modern.png">
+        </sky-docs-design-guideline-thumbnail>
+      </sky-docs-design-guideline>
+        
     </sky-docs-demo-page-section>
 
     <sky-docs-demo-page-section
