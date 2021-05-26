@@ -1,6 +1,6 @@
 # 4.14.0 (2021-05-26)
 
-- Updated the lookup component to collapse tokens when more than 5 items are selected and the picker to show more results is enabled. [#186](https://github.com/blackbaud/skyux-lookup/pull/186)
+- Updated the lookup component to collapse tokens if users select more than 5 items when the lookup menu includes the 'Show all/matches' button. [#186](https://github.com/blackbaud/skyux-lookup/pull/186)
 
 # 4.13.1 (2021-05-19)
 
