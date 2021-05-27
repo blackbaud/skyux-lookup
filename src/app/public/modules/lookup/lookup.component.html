@@ -27,7 +27,7 @@
       [searchTextMinimumCharacters]="searchTextMinimumCharacters"
       [showAddButton]="showAddButton"
       (addClick)="addButtonClicked()"
-      (showMoreClick)="showMoreButtonClicked()"
+      (showMoreClick)="showMoreButtonClicked($event)"
       (selectionChange)="onAutocompleteSelectionChange($event)">
 
       <div

@@ -33,10 +33,6 @@ export class SkyAutocompleteAdapterService {
     }
   }
 
-  public getBodyFocusable(): HTMLElement[] {
-    return this.coreAdapterService.getFocusableChildren(document.body);
-  }
-
   public getOverlayFocusableElements(overlay: SkyOverlayInstance): HTMLElement[] {
     return this.coreAdapterService.getFocusableChildren(
       overlay?.componentRef.location.nativeElement,

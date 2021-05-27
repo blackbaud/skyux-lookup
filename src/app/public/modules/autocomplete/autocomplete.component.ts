@@ -45,6 +45,10 @@ import {
 } from './types/autocomplete-selection-change';
 
 import {
+  SkyAutocompleteShowMoreArgs
+} from './types/autocomplete-show-more-args';
+
+import {
   SkyAutocompleteAdapterService
 } from './autocomplete-adapter.service';
 
@@ -248,7 +252,7 @@ export class SkyAutocompleteComponent
    * Fires when users select the button to view all options.
    */
   @Output()
-  public showMoreClick: EventEmitter<void> = new EventEmitter();
+  public showMoreClick: EventEmitter<SkyAutocompleteShowMoreArgs> = new EventEmitter();
 
   /**
    * Fires when users select items in the dropdown list.
@@ -323,7 +327,7 @@ export class SkyAutocompleteComponent
           takeUntil(this.inputDirectiveUnsubscribe)
         )
         .subscribe(() => {
-          this.handleBlur();
+          this.inputDirective.onTouched();
         });
 
       this._inputDirective.focus
@@ -437,11 +441,6 @@ export class SkyAutocompleteComponent
     this.closeDropdown();
   }
 
-  public handleBlur(): void {
-    this.closeDropdown();
-    this.inputDirective.restoreInputTextValueToPreviousState();
-  }
-
   public handleKeydown(event: KeyboardEvent): void {
     /* Sanity check */
     /* istanbul ignore else */
@@ -471,8 +470,10 @@ export class SkyAutocompleteComponent
         case 'tab':
           if (targetIsSearchResult) {
             this.selectSearchResultById(activeElementId);
-            this.closeDropdown();
+          } else {
+            this.inputDirective.restoreInputTextValueToPreviousState();
           }
+          this.closeDropdown();
           break;
 
         case 'escape':
@@ -515,7 +516,9 @@ export class SkyAutocompleteComponent
   }
 
   public moreButtonClicked(): void {
-    this.showMoreClick.emit();
+    this.showMoreClick.emit({ inputValue: this.inputDirective.inputTextValue });
+    this.inputDirective.restoreInputTextValueToPreviousState();
+    this.closeDropdown();
   }
 
   public onResultMouseDown(id: string): void {
@@ -617,6 +620,15 @@ export class SkyAutocompleteComponent
       this.isOpen = true;
       this.changeDetector.markForCheck();
       this.initOverlayFocusableElements();
+
+      overlay.backdropClick
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(() => {
+          if (document.activeElement !== this.inputDirective.inputElement) {
+            this.inputDirective.restoreInputTextValueToPreviousState();
+            this.closeDropdown();
+          }
+        });
     }
   }
 

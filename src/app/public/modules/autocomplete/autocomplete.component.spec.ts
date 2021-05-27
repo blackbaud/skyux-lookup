@@ -981,18 +981,22 @@ describe('Autocomplete component', () => {
         expect(getSearchResultsContainer()).toBeNull();
       }));
 
-      it('should reset input text value to previous value on blur', fakeAsync(() => {
+      it('should reset input text value when user clicks the overlay backdrop', fakeAsync(() => {
         fixture.detectChanges();
         const input: SkyAutocompleteInputDirective = component.autocompleteInput;
         const inputElement: HTMLInputElement = getInputElement();
         const selectedValue = { name: 'Red' };
+        const btn = document.getElementById('previousButton');
 
         updateNgModel(fixture, selectedValue);
         enterSearch('re', fixture);
 
         expect(inputElement.value).toEqual('re');
 
-        blurInput(inputElement, fixture);
+        // Firing the click event in a test won't move focus, so we move focus manually here.
+        btn.focus();
+        const overlay = document.querySelector('.sky-overlay') as any;
+        SkyAppTestUtility.fireDomEvent(overlay, 'click');
 
         expect(component.myForm.value.favoriteColor).toEqual(selectedValue);
         expect(input.value).toEqual(selectedValue);

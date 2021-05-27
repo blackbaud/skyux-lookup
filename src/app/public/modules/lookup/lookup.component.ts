@@ -53,8 +53,8 @@ import {
 } from '@skyux/theme';
 
 import {
-  SkyAutocompleteComponent
-} from '../autocomplete/autocomplete.component';
+  SkyAutocompleteShowMoreArgs
+} from '../autocomplete/types/autocomplete-show-more-args';
 
 import {
   SkyAutocompleteInputDirective
@@ -225,9 +225,6 @@ export class SkyLookupComponent
   private get autocompleteInputDirective(): SkyAutocompleteInputDirective {
     return this._autocompleteInputDirective;
   }
-
-  @ViewChild(SkyAutocompleteComponent)
-  private autocompleteComponent: SkyAutocompleteComponent;
 
   @ViewChild('inputTemplateRef', {
     read: TemplateRef,
@@ -445,11 +442,11 @@ export class SkyLookupComponent
     }
   }
 
-  public showMoreButtonClicked(): void {
+  public showMoreButtonClicked(event: SkyAutocompleteShowMoreArgs): void {
     if (this.showMoreConfig?.customPicker) {
       this.showMoreConfig.customPicker.open({
         items: this.data,
-        initialSearch: this.autocompleteComponent.searchText,
+        initialSearch: event.inputValue,
         initialValue: this.tokens?.map(token => { return token.value; })
       });
     } else {
@@ -463,7 +460,7 @@ export class SkyLookupComponent
           provide: SkyLookupShowMoreNativePickerContext, useValue: {
             items: this.data,
             descriptorProperty: this.descriptorProperty,
-            initialSearch: this.autocompleteComponent.searchText,
+            initialSearch: event.inputValue,
             initialValue: this.tokens,
             selectMode: this.selectMode,
             showAddButton: this.showAddButton,
