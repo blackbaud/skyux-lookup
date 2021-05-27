@@ -47,7 +47,6 @@ import {
 } from 'rxjs';
 
 import {
-  skip,
   takeUntil
 } from 'rxjs/operators';
 
@@ -291,7 +290,6 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     this.countrySearchFormControl = new FormControl();
 
     themeSvc.settingsChange
-      .pipe(skip(2))
       .subscribe(change => {
         this.currentTheme = change.currentSettings.theme.name;
         this.updateInputBox();
@@ -542,6 +540,7 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
         }
       );
     }
+    this.changeDetector.markForCheck();
   }
 
 }
