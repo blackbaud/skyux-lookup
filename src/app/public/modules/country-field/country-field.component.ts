@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -81,7 +82,7 @@ let uniqueId: number = 0;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy, OnInit, Validator {
+export class SkyCountryFieldComponent implements AfterViewInit, ControlValueAccessor, OnDestroy, OnInit, Validator {
 
   /**
    * Specifies the value for the `autocomplete` attribute on the form input.
@@ -283,17 +284,11 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     private windowRef: SkyAppWindowRef,
     private injector: Injector,
     @Optional() public inputBoxHostSvc?: SkyInputBoxHostService,
-    @Optional() themeSvc?: SkyThemeService
+    @Optional() private themeSvc?: SkyThemeService
   ) {
     this.setupCountries();
 
     this.countrySearchFormControl = new FormControl();
-
-    themeSvc.settingsChange
-      .subscribe(change => {
-        this.currentTheme = change.currentSettings.theme.name;
-        this.updateInputBox();
-      });
   }
 
   /**
@@ -335,6 +330,15 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
     if (!this.disabled) {
       this.addEventListeners();
     }
+  }
+
+  public ngAfterViewInit(): void {
+    this.themeSvc.settingsChange
+      .subscribe(change => {
+        this.currentTheme = change.currentSettings.theme.name;
+        this.updateInputBox();
+        this.changeDetector.markForCheck();
+      });
   }
 
   /**
@@ -540,7 +544,6 @@ export class SkyCountryFieldComponent implements ControlValueAccessor, OnDestroy
         }
       );
     }
-    this.changeDetector.markForCheck();
   }
 
 }
