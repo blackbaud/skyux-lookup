@@ -571,6 +571,8 @@ export class SkyAutocompleteComponent
           this.activeElementIndex = -1;
         }
 
+        this.changeDetector.markForCheck();
+
         if (this.isOpen) {
           // Let the results populate in the DOM before recalculating placement.
           setTimeout(() => {

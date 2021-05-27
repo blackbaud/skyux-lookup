@@ -2,8 +2,7 @@ import {
   browser,
   by,
   element,
-  ExpectedConditions,
-  protractor
+  ExpectedConditions
 } from 'protractor';
 
 import {
@@ -95,13 +94,13 @@ describe('Lookup component', () => {
   }
 
   async function validateSingleModeScreenshotWithMenu(done: DoneFn, screenshotName: string): Promise<void> {
-    SkyHostBrowser.scrollTo('#single-mode-info');
+    await SkyHostBrowser.scrollTo('#single-mode-info');
     const input = element(by.css('#lookup-single-visual textarea'));
+    const resetValueBtn = element(by.css('#btn-reset-value'));
     input.value = 'r';
+    await resetValueBtn.click();
     await input.click();
 
-    await browser.actions().sendKeys(protractor.Key.chord(protractor.Key.CONTROL, 'a')).perform();
-    await browser.actions().sendKeys(protractor.Key.BACK_SPACE).perform();
     await browser.actions().sendKeys('r').perform();
 
     await browser.wait(
@@ -114,13 +113,13 @@ describe('Lookup component', () => {
   }
 
   async function validateSingleModeShowMoreModalScreenshot(done: DoneFn, screenshotName: string): Promise<void> {
-    SkyHostBrowser.scrollTo('#single-mode-info');
+    await SkyHostBrowser.scrollTo('#single-mode-info');
     const input = element(by.css('#lookup-single-visual textarea'));
+    const resetValueBtn = element(by.css('#btn-reset-value'));
     input.value = 'r';
+    await resetValueBtn.click();
     await input.click();
 
-    await browser.actions().sendKeys(protractor.Key.chord(protractor.Key.CONTROL, 'a')).perform();
-    await browser.actions().sendKeys(protractor.Key.BACK_SPACE).perform();
     await browser.actions().sendKeys('r').perform();
 
     await browser.wait(
@@ -130,7 +129,7 @@ describe('Lookup component', () => {
     );
 
     const showMoreButton = element(by.css('.sky-autocomplete-action-more'));
-    showMoreButton.click();
+    await showMoreButton.click();
 
     await browser.wait(
       ExpectedConditions.presenceOf(element(by.css('sky-modal'))),
@@ -138,7 +137,7 @@ describe('Lookup component', () => {
       'Show more modal took too long to appear.'
     );
 
-    SkyHostBrowser.scrollTo('#show-more-modal-screenshot');
+    await SkyHostBrowser.scrollTo('#show-more-modal-screenshot');
     expect('#show-more-modal-screenshot').toMatchBaselineScreenshot(done, {
       screenshotName: getScreenshotName(screenshotName)
     });
