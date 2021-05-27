@@ -477,7 +477,7 @@ export class SkyLookupComponent
     if (this.showMoreConfig?.customPicker) {
       this.showMoreConfig.customPicker.open({
         items: this.data,
-        initialSearch: event.inputValue,
+        initialSearch: event?.inputValue,
         initialValue: this.value
       });
     } else {
@@ -491,7 +491,7 @@ export class SkyLookupComponent
           provide: SkyLookupShowMoreNativePickerContext, useValue: {
             items: this.data,
             descriptorProperty: this.descriptorProperty,
-            initialSearch: event.inputValue,
+            initialSearch: event?.inputValue,
             initialValue: this.value,
             selectMode: this.selectMode,
             showAddButton: this.showAddButton,

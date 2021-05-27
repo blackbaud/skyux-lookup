@@ -28,10 +28,6 @@ import {
 } from 'rxjs/operators';
 
 import {
-  SkyAutocompleteAdapterService
-} from './autocomplete-adapter.service';
-
-import {
   SkyAutocompleteInputTextChange
 } from './types/autocomplete-input-text-change';
 
@@ -181,7 +177,6 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
   private _value: any;
 
   constructor(
-    private adapterService: SkyAutocompleteAdapterService,
     private elementRef: ElementRef,
     private renderer: Renderer2
   ) { }
