@@ -505,8 +505,8 @@ export class SkyAutocompleteComponent
           } else {
             this.activeElementIndex = this.activeElementIndex - 1;
           }
-          this.changeDetector.markForCheck();
           this.addFocusedClass();
+          this.changeDetector.markForCheck();
           event.preventDefault();
           event.stopPropagation();
           break;
@@ -524,6 +524,13 @@ export class SkyAutocompleteComponent
   public onResultMouseDown(id: string): void {
     this.selectSearchResultById(id);
     this.closeDropdown();
+  }
+
+  public onResultMouseOver(id: number): void {
+    this.removeFocusedClass();
+    this.activeElementIndex = id;
+    this.addFocusedClass();
+    this.changeDetector.markForCheck();
   }
 
   public isElementFocused(ref: HTMLElement): boolean {
