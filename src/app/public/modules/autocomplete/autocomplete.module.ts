@@ -33,10 +33,6 @@ import {
 } from './autocomplete.component';
 
 import {
-  SkyAutocompleteAdapterService
-} from './autocomplete-adapter.service';
-
-import {
   SkyAutocompleteInputDirective
 } from './autocomplete-input.directive';
 
@@ -58,9 +54,6 @@ import {
   exports: [
     SkyAutocompleteComponent,
     SkyAutocompleteInputDirective
-  ],
-  providers: [
-    SkyAutocompleteAdapterService
   ]
 })
 export class SkyAutocompleteModule { }
