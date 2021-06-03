@@ -107,7 +107,7 @@ describe('Lookup component', function () {
   }
 
   function getInputElement(lookupComponent: SkyLookupComponent): HTMLInputElement {
-    return lookupComponent['elementRef'].nativeElement.querySelector('.sky-lookup-input');
+    return lookupComponent['lookupWrapperRef'].nativeElement.querySelector('.sky-lookup-input');
   }
 
   function getModalAddButton(): HTMLElement {

@@ -258,6 +258,11 @@ export class SkyLookupComponent
   })
   private inputTemplateRef: TemplateRef<any>;
 
+  @ViewChild('lookupWrapper', {
+    read: ElementRef
+  })
+  private lookupWrapperRef: ElementRef;
+
   private ngUnsubscribe = new Subject();
   private idle = new Subject();
   private markForTokenFocusOnKeyUp = false;
@@ -326,7 +331,6 @@ export class SkyLookupComponent
     /* istanbul ignore else */
     if (change.selectedItem) {
       this.addToSelected(change.selectedItem);
-      this.focusInput();
     } else if (this.selectMode === SkyLookupSelectMode.single) {
       this.writeValue([]);
     }
@@ -341,11 +345,11 @@ export class SkyLookupComponent
       return;
     }
 
-    if (change.length === 0) {
-      this.focusInput();
-    }
-
     if (this.tokens !== change) {
+      if (change.length === 0) {
+        this.focusInput();
+      }
+
       // NOTE: We do this here instead of just using the `value` setter because we need to use the
       // set of tokens returned here for the purposes of setting focus (see `onTokensKeyUp`).
       this._value = change.map(token => { return token.value; });
@@ -524,6 +528,8 @@ export class SkyLookupComponent
           this.updateForSelectMode();
           this.changeDetector.markForCheck();
         }
+
+        this.focusInput();
       });
     }
   }
@@ -595,7 +601,7 @@ export class SkyLookupComponent
   }
 
   private focusInput(): void {
-    this.adapter.focusInput(this.elementRef);
+    this.adapter.focusInput(this.lookupWrapperRef);
   }
 
   private cloneItems(items: any[]): any[] {

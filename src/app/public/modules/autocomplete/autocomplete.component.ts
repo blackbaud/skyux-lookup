@@ -424,7 +424,7 @@ export class SkyAutocompleteComponent
   public addButtonClicked(): void {
     this.addClick.emit();
     this.inputDirective.restoreInputTextValueToPreviousState();
-    this.closeDropdown();
+    this.closeDropdown(false);
   }
 
   public handleBlur(event?: FocusEvent): void {
@@ -437,7 +437,7 @@ export class SkyAutocompleteComponent
         return;
       }
 
-      this.closeDropdown();
+      this.closeDropdown(false);
       this.inputDirective.restoreInputTextValueToPreviousState();
     });
   }
@@ -491,7 +491,7 @@ export class SkyAutocompleteComponent
               } else if (focusedActionIndex === focusableActions.length - 1) {
                 this.inputDirective.focusNextSibling();
                 this.inputDirective.restoreInputTextValueToPreviousState();
-                this.closeDropdown();
+                this.closeDropdown(false);
               } else {
                 focusableActions[focusedActionIndex + 1].focus();
               }
@@ -567,7 +567,7 @@ export class SkyAutocompleteComponent
       }
 
       this.searchText = '';
-      this.closeDropdown();
+      this.closeDropdown(false);
       return;
     }
 
@@ -640,7 +640,7 @@ export class SkyAutocompleteComponent
     }
   }
 
-  private closeDropdown(): void {
+  private closeDropdown(refocusInput = true): void {
     this._searchResults = [];
     this.searchText = '';
     this._highlightText = '';
@@ -648,6 +648,14 @@ export class SkyAutocompleteComponent
     this.isOpen = false;
     this.destroyOverlay();
     this.setActiveDescendant();
+
+    if (refocusInput) {
+      // We need the overlay to be fully removed before we focus or focus does not stay on the
+      // input. Without the `detectChanges` we would need a `setTimeout`.
+      this.changeDetector.detectChanges();
+      this.inputDirective.focusInput();
+    }
+
     this.changeDetector.markForCheck();
   }
 
