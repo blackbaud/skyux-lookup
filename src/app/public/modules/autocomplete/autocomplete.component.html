@@ -39,7 +39,7 @@
           [attr.id]="result.elementId"
           [skyHighlight]="highlightText"
           (mousedown)="onResultMouseDown(result.elementId)"
-          (mouseover)="onResultMouseOver(i)"
+          (mousemove)="onResultMouseMove(i)"
           #searchResultEl
         >
           <ng-container

@@ -128,8 +128,8 @@ describe('Autocomplete component', () => {
     tick();
   }
 
-  function sendMouseOver(element: HTMLElement, fixture: ComponentFixture<any>): void {
-    SkyAppTestUtility.fireDomEvent(element, 'mouseover');
+  function sendMouseMove(element: HTMLElement, fixture: ComponentFixture<any>): void {
+    SkyAppTestUtility.fireDomEvent(element, 'mousemove');
     fixture.detectChanges();
     tick();
   }
@@ -976,39 +976,6 @@ describe('Autocomplete component', () => {
         expect(getSearchResultItems().item(0)).toHaveCssClass('sky-autocomplete-descendant-focus');
       }));
 
-      it('should navigate items with mouseover event', fakeAsync(() => {
-        fixture.detectChanges();
-
-        enterSearch('r', fixture);
-
-        const results: NodeListOf<Element> = getSearchResultItems();
-
-        expect(results.item(0)).toHaveCssClass('sky-autocomplete-descendant-focus');
-
-        sendMouseOver(results.item(1) as HTMLElement, fixture);
-
-        expect(results.item(0)).not.toHaveCssClass('sky-autocomplete-descendant-focus');
-        expect(results.item(1)).toHaveCssClass('sky-autocomplete-descendant-focus');
-      }));
-
-      it('should navigate items with both mouseover event and key events', fakeAsync(() => {
-        fixture.detectChanges();
-        const inputElement: HTMLInputElement = getInputElement();
-
-        enterSearch('r', fixture);
-
-        const results: NodeListOf<Element> = getSearchResultItems();
-
-        expect(results.item(0)).toHaveCssClass('sky-autocomplete-descendant-focus');
-
-        sendMouseOver(results.item(1) as HTMLElement, fixture);
-        sendArrowDown(inputElement, fixture);
-
-        expect(results.item(0)).not.toHaveCssClass('sky-autocomplete-descendant-focus');
-        expect(results.item(1)).not.toHaveCssClass('sky-autocomplete-descendant-focus');
-        expect(results.item(2)).toHaveCssClass('sky-autocomplete-descendant-focus');
-      }));
-
       it('should close the menu without changes when escape key pressed', fakeAsync(() => {
         fixture.detectChanges();
         const inputElement: HTMLInputElement = getInputElement();
@@ -1172,6 +1139,39 @@ describe('Autocomplete component', () => {
         expect(notifySpy).toHaveBeenCalledWith({
           selectedItem: input.value
         });
+      }));
+
+      it('should navigate items with mousemove event', fakeAsync(() => {
+        fixture.detectChanges();
+
+        enterSearch('r', fixture);
+
+        const results: NodeListOf<Element> = getSearchResultItems();
+
+        expect(results.item(0)).toHaveCssClass('sky-autocomplete-descendant-focus');
+
+        sendMouseMove(results.item(1) as HTMLElement, fixture);
+
+        expect(results.item(0)).not.toHaveCssClass('sky-autocomplete-descendant-focus');
+        expect(results.item(1)).toHaveCssClass('sky-autocomplete-descendant-focus');
+      }));
+
+      it('should navigate items with both mousemove event and key events', fakeAsync(() => {
+        fixture.detectChanges();
+        const inputElement: HTMLInputElement = getInputElement();
+
+        enterSearch('r', fixture);
+
+        const results: NodeListOf<Element> = getSearchResultItems();
+
+        expect(results.item(0)).toHaveCssClass('sky-autocomplete-descendant-focus');
+
+        sendMouseMove(results.item(1) as HTMLElement, fixture);
+        sendArrowDown(inputElement, fixture);
+
+        expect(results.item(0)).not.toHaveCssClass('sky-autocomplete-descendant-focus');
+        expect(results.item(1)).not.toHaveCssClass('sky-autocomplete-descendant-focus');
+        expect(results.item(2)).toHaveCssClass('sky-autocomplete-descendant-focus');
       }));
     });
 

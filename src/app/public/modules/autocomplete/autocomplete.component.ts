@@ -526,11 +526,13 @@ export class SkyAutocompleteComponent
     this.closeDropdown();
   }
 
-  public onResultMouseOver(id: number): void {
-    this.removeFocusedClass();
-    this.activeElementIndex = id;
-    this.addFocusedClass();
-    this.changeDetector.markForCheck();
+  public onResultMouseMove(id: number): void {
+    if (id !== this.activeElementIndex) {
+      this.removeFocusedClass();
+      this.activeElementIndex = id;
+      this.addFocusedClass();
+      this.changeDetector.markForCheck();
+    }
   }
 
   public isElementFocused(ref: HTMLElement): boolean {
