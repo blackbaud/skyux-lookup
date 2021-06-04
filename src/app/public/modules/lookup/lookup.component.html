@@ -28,7 +28,7 @@
       [searchTextMinimumCharacters]="searchTextMinimumCharacters"
       [showAddButton]="showAddButton"
       (addClick)="addButtonClicked()"
-      (showMoreClick)="showMoreButtonClicked()"
+      (showMoreClick)="showMoreButtonClicked($event)"
       (selectionChange)="onAutocompleteSelectionChange($event)">
 
       <div
@@ -47,7 +47,7 @@
           [tokens]="tokens"
           (keyup)="onTokensKeyUp($event)"
           (tokensChange)="onTokensChange($event)"
-          (tokenSelected)="enableShowMore ? showMoreButtonClicked() : undefined"
+          (tokenSelected)="enableShowMore ? showMoreButtonClicked(undefined) : undefined"
           (focusIndexOverRange)="onTokensFocusIndexOverRange()"
         >
           <textarea
