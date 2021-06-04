@@ -516,7 +516,7 @@ export class SkyAutocompleteComponent
   }
 
   public moreButtonClicked(): void {
-    this.showMoreClick.emit({ inputValue: this.inputDirective.inputTextValue });
+    this.showMoreClick.emit({ inputValue: this.searchText });
     this.inputDirective.restoreInputTextValueToPreviousState();
     this.closeDropdown();
   }
