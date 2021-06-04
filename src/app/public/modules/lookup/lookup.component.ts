@@ -569,7 +569,7 @@ export class SkyLookupComponent
   }
 
   private focusInputOnHostClick(): void {
-    const hostElement = this.elementRef.nativeElement;
+    const hostElement = !this.inputBoxHostSvc ? this.elementRef.nativeElement : this.lookupWrapperRef.nativeElement;
     const documentObj = this.windowRef.nativeWindow.document;
 
     // Handles focusing the input when the host is clicked.
