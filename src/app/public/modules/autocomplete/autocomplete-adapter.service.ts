@@ -51,10 +51,6 @@ export class SkyAutocompleteAdapterService {
     }
   }
 
-  public overlayContainsActiveElement(overlay: SkyOverlayInstance): boolean {
-    return overlay.componentRef.location.nativeElement.contains(document.activeElement);
-  }
-
   public setDropdownWidth(
     elementRef: ElementRef,
     dropdownRef: ElementRef,

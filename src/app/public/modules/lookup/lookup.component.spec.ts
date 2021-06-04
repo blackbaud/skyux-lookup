@@ -387,7 +387,7 @@ describe('Lookup component', function () {
         }));
 
         it('should not do anything on token click', fakeAsync(() => {
-          const showMoreSpy = spyOn(component.lookupComponent, 'showMoreButtonClicked').and.stub();
+          const showMoreSpy = spyOn(component.lookupComponent, 'openPicker').and.stub();
 
           component.friends = [
             { name: 'Fred' },
@@ -1023,7 +1023,7 @@ describe('Lookup component', function () {
           }));
 
           it('should open the show more modal on token click', fakeAsync(() => {
-            const showMoreSpy = spyOn(component.lookupComponent, 'showMoreButtonClicked').and.stub();
+            const showMoreSpy = spyOn(component.lookupComponent, 'openPicker').and.stub();
 
             component.enableShowMore = true;
             component.friends = [
@@ -1038,7 +1038,7 @@ describe('Lookup component', function () {
           }));
 
           it('should open the show more modal on collapsed token click', fakeAsync(() => {
-            const showMoreSpy = spyOn(component.lookupComponent, 'showMoreButtonClicked').and.stub();
+            const showMoreSpy = spyOn(component.lookupComponent, 'openPicker').and.stub();
 
             component.enableShowMore = true;
             component.friends = [
@@ -1843,7 +1843,7 @@ describe('Lookup component', function () {
         }));
 
         it('should not do anything on token click', fakeAsync(() => {
-          const showMoreSpy = spyOn(component.lookupComponent, 'showMoreButtonClicked').and.stub();
+          const showMoreSpy = spyOn(component.lookupComponent, 'openPicker').and.stub();
 
           component.selectedFriends = [
             { name: 'Fred' },
@@ -2329,7 +2329,7 @@ describe('Lookup component', function () {
           }));
 
           it('should open the show more modal on token click', fakeAsync(() => {
-            const showMoreSpy = spyOn(component.lookupComponent, 'showMoreButtonClicked').and.stub();
+            const showMoreSpy = spyOn(component.lookupComponent, 'openPicker').and.stub();
 
             component.enableShowMore = true;
             component.selectedFriends = [
@@ -2346,7 +2346,7 @@ describe('Lookup component', function () {
           }));
 
           it('should open the show more modal on collapsed token click', fakeAsync(() => {
-            const showMoreSpy = spyOn(component.lookupComponent, 'showMoreButtonClicked').and.stub();
+            const showMoreSpy = spyOn(component.lookupComponent, 'openPicker').and.stub();
 
             component.enableShowMore = true;
             component.selectedFriends = [

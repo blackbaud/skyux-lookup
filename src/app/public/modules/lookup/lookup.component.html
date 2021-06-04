@@ -19,6 +19,7 @@
       [debounceTime]="debounceTime"
       [descriptorProperty]="descriptorProperty"
       [enableShowMore]="enableShowMore"
+      [messageStream]="autocompleteController"
       [propertiesToSearch]="propertiesToSearch"
       [search]="search"
       [searchFilters]="searchFilters"
@@ -28,7 +29,7 @@
       [showAddButton]="showAddButton"
       (addClick)="addButtonClicked()"
       (selectionChange)="onAutocompleteSelectionChange($event)"
-      (showMoreClick)="showMoreButtonClicked($event)"
+      (showMoreClick)="onShowMoreClick($event)"
     >
 
       <div class="sky-lookup-search-flex-wrapper">
@@ -103,7 +104,7 @@
       class="sky-btn sky-btn-default"
       type="button"
       [attr.aria-label]="'skyux_lookup_search_button_show_more' | skyLibResources"
-      (click)="onShowMoreClick()"
+      (click)="onSearchButtonClick()"
     >
       <sky-icon *skyThemeIf="'default'"
         icon="search"
