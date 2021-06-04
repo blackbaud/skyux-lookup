@@ -87,6 +87,11 @@ describe('Lookup component', function () {
     fixture.detectChanges();
   }
 
+  function clickToken(index: number, fixture: ComponentFixture<any>): void {
+    (<HTMLElement>document.querySelectorAll('.sky-lookup-tokens .sky-token')[index]).click();
+    fixture.detectChanges();
+  }
+
   function closeModal(fixture: ComponentFixture<any>): void {
     (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-close'))?.click();
     fixture.detectChanges();
@@ -104,7 +109,7 @@ describe('Lookup component', function () {
   }
 
   function getAddButton(): HTMLElement {
-    return document.querySelector('.sky-autocomplete-add') as HTMLElement;
+    return document.querySelector('.sky-autocomplete-action-add') as HTMLElement;
   }
 
   function getInputElement(lookupComponent: SkyLookupComponent): HTMLInputElement {
@@ -124,7 +129,7 @@ describe('Lookup component', function () {
   }
 
   function getShowMoreButton(): HTMLElement {
-    return document.querySelector('.sky-autocomplete-more') as HTMLElement;
+    return document.querySelector('.sky-autocomplete-action-more') as HTMLElement;
   }
 
   function getShowMoreRepeaterItemContent(index: number): string {
@@ -311,6 +316,41 @@ describe('Lookup component', function () {
           expect(selectedItems[0].name).toEqual('Isaac');
         }));
 
+        it('should not collapse tokens if more than 5 items are selected with `enableShowMore` disabled', fakeAsync(() => {
+          component.friends = [
+            { name: 'Fred' },
+            { name: 'Isaac' },
+            { name: 'John' },
+            { name: 'Joyce' },
+            { name: 'Lindsey' }
+          ];
+          fixture.detectChanges();
+
+          expect(lookupComponent.tokens.length).toBe(5);
+          expect(lookupComponent.tokens[0].value).toEqual({ name: 'Fred' });
+          expect(lookupComponent.value).toEqual([
+            { name: 'Fred' },
+            { name: 'Isaac' },
+            { name: 'John' },
+            { name: 'Joyce' },
+            { name: 'Lindsey' }
+          ]);
+
+          performSearch('Oli', fixture);
+          selectSearchResult(0, fixture);
+
+          expect(lookupComponent.tokens.length).toBe(6);
+          expect(lookupComponent.tokens[0].value).toEqual({ name: 'Fred' });
+          expect(lookupComponent.value).toEqual([
+            { name: 'Fred' },
+            { name: 'Isaac' },
+            { name: 'John' },
+            { name: 'Joyce' },
+            { name: 'Lindsey' },
+            { name: 'Oliver' }
+          ]);
+        }));
+
         it('should NOT add new tokens if value is empty', fakeAsync(function () {
           fixture.detectChanges();
           tick();
@@ -344,6 +384,20 @@ describe('Lookup component', function () {
           dismissSelectedItem(0, fixture);
 
           expect(lookupComponent.value.length).toEqual(1);
+        }));
+
+        it('should not do anything on token click', fakeAsync(() => {
+          const showMoreSpy = spyOn(component.lookupComponent, 'showMoreButtonClicked').and.stub();
+
+          component.friends = [
+            { name: 'Fred' },
+            { name: 'Isaac' }
+          ];
+          fixture.detectChanges();
+
+          clickToken(0, fixture);
+
+          expect(showMoreSpy).not.toHaveBeenCalled();
         }));
 
         it('should focus the input if all tokens are dismissed', fakeAsync(() => {
@@ -931,6 +985,76 @@ describe('Lookup component', function () {
               closeModal(fixture);
             })
           );
+
+          it('should collapse tokens if more than 5 items are selected', fakeAsync(() => {
+            component.enableShowMore = true;
+            component.friends = [
+              { name: 'Fred' },
+              { name: 'Isaac' },
+              { name: 'John' },
+              { name: 'Joyce' },
+              { name: 'Lindsey' }
+            ];
+            fixture.detectChanges();
+
+            expect(lookupComponent.tokens.length).toBe(5);
+            expect(lookupComponent.tokens[0].value).toEqual({ name: 'Fred' });
+            expect(lookupComponent.value).toEqual([
+              { name: 'Fred' },
+              { name: 'Isaac' },
+              { name: 'John' },
+              { name: 'Joyce' },
+              { name: 'Lindsey' }
+            ]);
+
+            performSearch('Oli', fixture);
+            selectSearchResult(0, fixture);
+
+            expect(lookupComponent.tokens.length).toBe(1);
+            expect(lookupComponent.tokens[0].value).toEqual({ name: '6 items selected' });
+            expect(lookupComponent.value).toEqual([
+              { name: 'Fred' },
+              { name: 'Isaac' },
+              { name: 'John' },
+              { name: 'Joyce' },
+              { name: 'Lindsey' },
+              { name: 'Oliver' }
+            ]);
+          }));
+
+          it('should open the show more modal on token click', fakeAsync(() => {
+            const showMoreSpy = spyOn(component.lookupComponent, 'showMoreButtonClicked').and.stub();
+
+            component.enableShowMore = true;
+            component.friends = [
+              { name: 'Fred' },
+              { name: 'Isaac' }
+            ];
+            fixture.detectChanges();
+
+            clickToken(0, fixture);
+
+            expect(showMoreSpy).toHaveBeenCalled();
+          }));
+
+          it('should open the show more modal on collapsed token click', fakeAsync(() => {
+            const showMoreSpy = spyOn(component.lookupComponent, 'showMoreButtonClicked').and.stub();
+
+            component.enableShowMore = true;
+            component.friends = [
+              { name: 'Fred' },
+              { name: 'Isaac' },
+              { name: 'John' },
+              { name: 'Joyce' },
+              { name: 'Lindsey' },
+              { name: 'Oliver' }
+            ];
+            fixture.detectChanges();
+
+            clickToken(0, fixture);
+
+            expect(showMoreSpy).toHaveBeenCalled();
+          }));
 
         });
 
@@ -1645,6 +1769,44 @@ describe('Lookup component', function () {
           expect(selectedItems[0].name).toEqual('Isaac');
         }));
 
+        it('should not collapse tokens if more than 5 items are selected with `enableShowMore` disabled', fakeAsync(() => {
+          fixture.detectChanges();
+          component.selectedFriends = [
+            { name: 'Fred' },
+            { name: 'Isaac' },
+            { name: 'John' },
+            { name: 'Joyce' },
+            { name: 'Lindsey' }
+          ];
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+
+          expect(lookupComponent.tokens.length).toBe(5);
+          expect(lookupComponent.tokens[0].value).toEqual({ name: 'Fred' });
+          expect(lookupComponent.value).toEqual([
+            { name: 'Fred' },
+            { name: 'Isaac' },
+            { name: 'John' },
+            { name: 'Joyce' },
+            { name: 'Lindsey' }
+          ]);
+
+          performSearch('Oli', fixture);
+          selectSearchResult(0, fixture);
+
+          expect(lookupComponent.tokens.length).toBe(6);
+          expect(lookupComponent.tokens[0].value).toEqual({ name: 'Fred' });
+          expect(lookupComponent.value).toEqual([
+            { name: 'Fred' },
+            { name: 'Isaac' },
+            { name: 'John' },
+            { name: 'Joyce' },
+            { name: 'Lindsey' },
+            { name: 'Oliver' }
+          ]);
+        }));
+
         it('should NOT add new tokens if value is empty', fakeAsync(function () {
           fixture.detectChanges();
           tick();
@@ -1678,6 +1840,22 @@ describe('Lookup component', function () {
           dismissSelectedItem(0, fixture);
 
           expect(lookupComponent.value.length).toEqual(1);
+        }));
+
+        it('should not do anything on token click', fakeAsync(() => {
+          const showMoreSpy = spyOn(component.lookupComponent, 'showMoreButtonClicked').and.stub();
+
+          component.selectedFriends = [
+            { name: 'Fred' },
+            { name: 'Isaac' }
+          ];
+          fixture.detectChanges();
+          tick();
+          fixture.detectChanges();
+
+          clickToken(0, fixture);
+
+          expect(showMoreSpy).not.toHaveBeenCalled();
         }));
 
         it('should focus the input if all tokens are dismissed', fakeAsync(() => {
@@ -2111,6 +2289,82 @@ describe('Lookup component', function () {
               closeModal(fixture);
             })
           );
+
+          it('should collapse tokens if more than 5 items are selected', fakeAsync(() => {
+            component.enableShowMore = true;
+            component.selectedFriends = [
+              { name: 'Fred' },
+              { name: 'Isaac' },
+              { name: 'John' },
+              { name: 'Joyce' },
+              { name: 'Lindsey' }
+            ];
+            fixture.detectChanges();
+            tick();
+            fixture.detectChanges();
+
+            expect(lookupComponent.tokens.length).toBe(5);
+            expect(lookupComponent.tokens[0].value).toEqual({ name: 'Fred' });
+            expect(lookupComponent.value).toEqual([
+              { name: 'Fred' },
+              { name: 'Isaac' },
+              { name: 'John' },
+              { name: 'Joyce' },
+              { name: 'Lindsey' }
+            ]);
+
+            performSearch('Oli', fixture);
+            selectSearchResult(0, fixture);
+
+            expect(lookupComponent.tokens.length).toBe(1);
+            expect(lookupComponent.tokens[0].value).toEqual({ name: '6 items selected' });
+            expect(lookupComponent.value).toEqual([
+              { name: 'Fred' },
+              { name: 'Isaac' },
+              { name: 'John' },
+              { name: 'Joyce' },
+              { name: 'Lindsey' },
+              { name: 'Oliver' }
+            ]);
+          }));
+
+          it('should open the show more modal on token click', fakeAsync(() => {
+            const showMoreSpy = spyOn(component.lookupComponent, 'showMoreButtonClicked').and.stub();
+
+            component.enableShowMore = true;
+            component.selectedFriends = [
+              { name: 'Fred' },
+              { name: 'Isaac' }
+            ];
+            fixture.detectChanges();
+            tick();
+            fixture.detectChanges();
+
+            clickToken(0, fixture);
+
+            expect(showMoreSpy).toHaveBeenCalled();
+          }));
+
+          it('should open the show more modal on collapsed token click', fakeAsync(() => {
+            const showMoreSpy = spyOn(component.lookupComponent, 'showMoreButtonClicked').and.stub();
+
+            component.enableShowMore = true;
+            component.selectedFriends = [
+              { name: 'Fred' },
+              { name: 'Isaac' },
+              { name: 'John' },
+              { name: 'Joyce' },
+              { name: 'Lindsey' },
+              { name: 'Oliver' }
+            ];
+            fixture.detectChanges();
+            tick();
+            fixture.detectChanges();
+
+            clickToken(0, fixture);
+
+            expect(showMoreSpy).toHaveBeenCalled();
+          }));
 
         });
 
