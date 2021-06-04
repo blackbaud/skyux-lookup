@@ -678,7 +678,7 @@ describe('Autocomplete component', () => {
     it('should emit an event correctly when the add button is enabled and clicked',
       fakeAsync(() => {
         component.enableShowMore = true;
-        const showMoreButtonSpy = spyOn(component, 'openPicker').and.callThrough();
+        const showMoreButtonSpy = spyOn(component, 'onShowMoreClick').and.callThrough();
         fixture.detectChanges();
 
         // Type 'r' to activate the autocomplete dropdown, then click the first result.
@@ -698,7 +698,7 @@ describe('Autocomplete component', () => {
     it('should not show the show more button unless the component input asks for it',
       fakeAsync(() => {
         component.enableShowMore = false;
-        const showMoreButtonSpy = spyOn(component, 'openPicker').and.callThrough();
+        const showMoreButtonSpy = spyOn(component, 'onShowMoreClick').and.callThrough();
         fixture.detectChanges();
 
         // Type 'r' to activate the autocomplete dropdown, then click the first result.
@@ -1470,7 +1470,7 @@ describe('Autocomplete component', () => {
     it('should emit an event correctly when the add button is enabled and clicked',
       fakeAsync(() => {
         component.enableShowMore = true;
-        const showMoreButtonSpy = spyOn(component, 'openPicker').and.callThrough();
+        const showMoreButtonSpy = spyOn(component, 'onShowMoreClick').and.callThrough();
         fixture.detectChanges();
 
         // Type 'r' to activate the autocomplete dropdown, then click the first result.
@@ -1490,7 +1490,7 @@ describe('Autocomplete component', () => {
     it('should not show the show more button unless the component input asks for it',
       fakeAsync(() => {
         component.enableShowMore = false;
-        const showMoreButtonSpy = spyOn(component, 'openPicker').and.callThrough();
+        const showMoreButtonSpy = spyOn(component, 'onShowMoreClick').and.callThrough();
         fixture.detectChanges();
 
         // Type 'r' to activate the autocomplete dropdown, then click the first result.
