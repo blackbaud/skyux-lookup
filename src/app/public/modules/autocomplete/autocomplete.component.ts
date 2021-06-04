@@ -518,7 +518,7 @@ export class SkyAutocompleteComponent
   public moreButtonClicked(): void {
     this.showMoreClick.emit({ inputValue: this.searchText });
     this.inputDirective.restoreInputTextValueToPreviousState();
-    this.closeDropdown();
+    this.closeDropdown(false);
   }
 
   public onResultMouseDown(id: string): void {
@@ -637,7 +637,7 @@ export class SkyAutocompleteComponent
         .subscribe(() => {
           if (document.activeElement !== this.inputDirective.inputElement) {
             this.inputDirective.restoreInputTextValueToPreviousState();
-            this.closeDropdown();
+            this.closeDropdown(false);
           }
         });
     }
