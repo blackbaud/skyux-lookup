@@ -758,6 +758,7 @@ export class SkyAutocompleteComponent
   }
 
   private initMessageStream(): void {
+    /* istanbul ignore if */
     if (this.messageStreamSub) {
       this.messageStreamSub.unsubscribe();
     }
