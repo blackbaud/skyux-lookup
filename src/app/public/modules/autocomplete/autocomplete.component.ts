@@ -335,7 +335,7 @@ export class SkyAutocompleteComponent
           takeUntil(this.inputDirectiveUnsubscribe)
         )
         .subscribe(() => {
-          if (this.showAddButton || this.enableShowMore) {
+          if (this.showActionsArea) {
             this.openDropdown();
           }
         });
@@ -438,7 +438,7 @@ export class SkyAutocompleteComponent
   public addButtonClicked(): void {
     this.addClick.emit();
     this.inputDirective.restoreInputTextValueToPreviousState();
-    this.closeDropdown(false);
+    this.closeDropdown();
   }
 
   public handleKeydown(event: KeyboardEvent): void {
@@ -456,7 +456,7 @@ export class SkyAutocompleteComponent
 
           if (targetIsSearchResult) {
             this.selectSearchResultById(activeElementId);
-            this.closeDropdown();
+            this.resetSearch();
           } else {
             if (activeElement) {
               activeElement.click();
@@ -473,7 +473,7 @@ export class SkyAutocompleteComponent
           } else {
             this.inputDirective.restoreInputTextValueToPreviousState();
           }
-          this.closeDropdown();
+          this.resetSearch();
           break;
 
         case 'escape':
@@ -518,12 +518,15 @@ export class SkyAutocompleteComponent
   public moreButtonClicked(): void {
     this.showMoreClick.emit({ inputValue: this.searchText });
     this.inputDirective.restoreInputTextValueToPreviousState();
-    this.closeDropdown(false);
+    this.closeDropdown();
   }
 
-  public onResultMouseDown(id: string): void {
+  public onResultMouseDown(id: string, event: MouseEvent): void {
     this.selectSearchResultById(id);
-    this.closeDropdown();
+
+    this.resetSearch();
+    event.preventDefault();
+    event.stopPropagation();
   }
 
   public onResultMouseMove(id: number): void {
@@ -552,7 +555,7 @@ export class SkyAutocompleteComponent
       }
 
       this.searchText = '';
-      this.closeDropdown(false);
+      this.closeDropdown();
       return;
     }
 
@@ -637,27 +640,17 @@ export class SkyAutocompleteComponent
         .subscribe(() => {
           if (document.activeElement !== this.inputDirective.inputElement) {
             this.inputDirective.restoreInputTextValueToPreviousState();
-            this.closeDropdown(false);
+            this.closeDropdown();
           }
         });
     }
   }
 
-  private closeDropdown(refocusInput = true): void {
-    this._searchResults = [];
-    this.searchText = '';
-    this._highlightText = '';
-    this.activeElementIndex = -1;
+  private closeDropdown(): void {
+    this.resetSearch();
     this.isOpen = false;
     this.destroyOverlay();
     this.removeActiveDescendant();
-
-    if (refocusInput) {
-      // We need the overlay to be fully removed before we focus or focus does not stay on the
-      // input. Without the `detectChanges` we would need a `setTimeout`.
-      this.changeDetector.detectChanges();
-      this.inputDirective.focusInput();
-    }
     this.changeDetector.markForCheck();
   }
 
@@ -671,6 +664,14 @@ export class SkyAutocompleteComponent
   private removeActiveDescendant(): void {
     /* tslint:disable-next-line:no-null-keyword */
     this.inputDirective.setActiveDescendant(null);
+  }
+
+  private resetSearch(): void {
+    this._searchResults = [];
+    this.searchText = '';
+    this._highlightText = '';
+    this.activeElementIndex = -1;
+    this.removeActiveDescendant();
   }
 
   private addInputEventListeners(): void {

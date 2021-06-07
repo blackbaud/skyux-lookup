@@ -237,10 +237,6 @@ export class SkyAutocompleteInputDirective implements OnInit, OnDestroy, Control
       this.ngUnsubscribe = undefined;
   }
 
-  public focusInput(): void {
-    this.elementRef.nativeElement.focus();
-  }
-
   public writeValue(value: any): void {
     this.value = value;
   }
