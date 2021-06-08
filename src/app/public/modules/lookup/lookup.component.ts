@@ -27,6 +27,7 @@ import {
 } from 'rxjs';
 
 import {
+  take,
   takeUntil
 } from 'rxjs/operators';
 
@@ -37,6 +38,10 @@ import {
 import {
   SkyInputBoxHostService
 } from '@skyux/forms';
+
+import {
+  SkyLibResourcesService
+} from '@skyux/i18n';
 
 import {
   SkyToken,
@@ -53,8 +58,8 @@ import {
 } from '@skyux/theme';
 
 import {
-  SkyAutocompleteComponent
-} from '../autocomplete/autocomplete.component';
+  SkyAutocompleteShowMoreArgs
+} from '../autocomplete/types/autocomplete-show-more-args';
 
 import {
   SkyAutocompleteInputDirective
@@ -172,10 +177,10 @@ export class SkyLookupComponent
     this.updateForSelectMode();
 
     if (multipleToSingle) {
-      if (this.tokens && this.tokens.length > 1) {
+      if (this.value && this.value.length > 1) {
         // The `setTimeout` is needed to avoid a `ExpressionChangedAfterItHasBeenCheckedError` error in template forms.
         setTimeout(() => {
-          this.writeValue([this.tokens[0].value]);
+          this.writeValue([this.value[0]]);
           this.changeDetector.detectChanges();
         });
       }
@@ -197,17 +202,35 @@ export class SkyLookupComponent
   }
 
   public set tokens(value: SkyToken[]) {
-    this._tokens = value;
-    this.onChange(this.value);
-    this.onTouched();
+    // Collapse the tokens into a single token if the user has selected many options.
+    if (this.enableShowMore && this.value.length > 5) {
+      this.resourcesService.getString(
+        'skyux_lookup_tokens_summary',
+        this.value.length.toString()
+      )
+        .pipe(take(1))
+        .subscribe((label) => {
+          this._tokens = [{
+            value: { [this.descriptorProperty]: label }
+          }];
+          this.changeDetector.markForCheck();
+        });
+    } else {
+      this._tokens = value;
+      this.changeDetector.markForCheck();
+    }
   }
 
   public get value(): any[] {
-    if (!this.tokens) {
-      return [];
-    }
+    return this._value ? this._value : [];
+  }
 
-    return this.tokens.map(token => token.value);
+  public set value(newValue: any[]) {
+    this._value = newValue;
+    this.tokens = this.parseTokens(newValue);
+
+    this.onChange(this._value);
+    this.onTouched();
   }
 
   public isInputFocused = false;
@@ -226,9 +249,6 @@ export class SkyLookupComponent
     return this._autocompleteInputDirective;
   }
 
-  @ViewChild(SkyAutocompleteComponent)
-  private autocompleteComponent: SkyAutocompleteComponent;
-
   @ViewChild('inputTemplateRef', {
     read: TemplateRef,
     static: true
@@ -242,6 +262,7 @@ export class SkyLookupComponent
   private _autocompleteInputDirective: SkyAutocompleteInputDirective;
   private _selectMode: SkyLookupSelectMode;
   private _tokens: SkyToken[];
+  private _value: any[];
 
   constructor(
     private changeDetector: ChangeDetectorRef,
@@ -250,6 +271,7 @@ export class SkyLookupComponent
     @Self() @Optional() ngControl: NgControl,
     private adapter: SkyLookupAdapterService,
     private modalService: SkyModalService,
+    private resourcesService: SkyLibResourcesService,
     @Optional() public inputBoxHostSvc?: SkyInputBoxHostService,
     @Optional() public themeSvc?: SkyThemeService
   ) {
@@ -321,7 +343,13 @@ export class SkyLookupComponent
     }
 
     if (this.tokens !== change) {
+      // NOTE: We do this here instead of just using the `value` setter because we need to use the
+      // set of tokens returned here for the purposes of setting focus (see `onTokensKeyUp`).
+      this._value = change.map(token => { return token.value; });
       this.tokens = change;
+
+      this.onChange(this._value);
+      this.onTouched();
     }
   }
 
@@ -357,7 +385,7 @@ export class SkyLookupComponent
   public writeValue(value: any[]): void {
     if (!this.disabled) {
       const copy = value ? this.cloneItems(value) : [];
-      this.tokens = this.parseTokens(copy);
+      this.value = copy;
       this.updateForSelectMode();
     }
   }
@@ -397,7 +425,6 @@ export class SkyLookupComponent
   // Check for empty search text on keydown, before the escape key is fully pressed.
   // (Otherwise, a single character being escaped would register as empty on keyup.)
   // If empty on keydown, set a flag so that the appropriate action can be taken on keyup.
-
   public inputKeydown(event: KeyboardEvent, value: string): void {
     /* Sanity check as this should only be called when in multiple select mode */
     /* istanbul ignore else */
@@ -446,12 +473,12 @@ export class SkyLookupComponent
     }
   }
 
-  public showMoreButtonClicked(): void {
+  public showMoreButtonClicked(event: SkyAutocompleteShowMoreArgs): void {
     if (this.showMoreConfig?.customPicker) {
       this.showMoreConfig.customPicker.open({
         items: this.data,
-        initialSearch: this.autocompleteComponent.searchText,
-        initialValue: this.tokens?.map(token => { return token.value; })
+        initialSearch: event?.inputValue,
+        initialValue: this.value
       });
     } else {
       const modalConfig = this.showMoreConfig?.nativePickerConfig || {};
@@ -464,8 +491,8 @@ export class SkyLookupComponent
           provide: SkyLookupShowMoreNativePickerContext, useValue: {
             items: this.data,
             descriptorProperty: this.descriptorProperty,
-            initialSearch: this.autocompleteComponent.searchText,
-            initialValue: this.tokens,
+            initialSearch: event?.inputValue,
+            initialValue: this.value,
             selectMode: this.selectMode,
             showAddButton: this.showAddButton,
             userConfig: modalConfig
@@ -503,13 +530,13 @@ export class SkyLookupComponent
     if (this.selectMode === 'single') {
       selectedItems = [item];
     } else {
-      selectedItems = this.tokens?.map(token => token.value) || [];
+      selectedItems = this.value;
 
       // If items have a unique identifier, don't allow the same item to be added twice.
       if (
         !this.idProperty ||
-        !this.tokens?.some(
-          token => token.value[this.idProperty] === item[this.idProperty]
+        !this.value.some(
+          existingItem => existingItem[this.idProperty] === item[this.idProperty]
         )
       ) {
         selectedItems.push(item);
@@ -588,9 +615,8 @@ export class SkyLookupComponent
   private updateForSelectMode(): void {
     if (this.autocompleteInputDirective) {
       if (this.selectMode === 'single') {
-        this.autocompleteInputDirective.value = this.tokens &&
-          this.tokens[0] &&
-          this.tokens[0].value;
+        this.autocompleteInputDirective.value = this.value &&
+          this.value[0];
       } else {
         this.clearSearchText();
       }
