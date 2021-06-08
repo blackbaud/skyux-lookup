@@ -645,6 +645,7 @@ describe('Lookup component', function () {
 
             addButton.click();
             fixture.detectChanges();
+            tick();
 
             expect(addButtonSpy).toHaveBeenCalled();
           })
@@ -1950,6 +1951,7 @@ describe('Lookup component', function () {
 
             addButton.click();
             fixture.detectChanges();
+            tick();
 
             expect(addButtonSpy).toHaveBeenCalled();
           })

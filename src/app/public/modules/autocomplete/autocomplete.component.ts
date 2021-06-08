@@ -456,7 +456,12 @@ export class SkyAutocompleteComponent
 
           if (targetIsSearchResult) {
             this.selectSearchResultById(activeElementId);
-            this.resetSearch();
+
+            if (!this.showActionsArea) {
+              this.closeDropdown();
+            } else {
+              this.resetSearch();
+            }
           } else {
             if (activeElement) {
               activeElement.click();
@@ -473,7 +478,8 @@ export class SkyAutocompleteComponent
           } else {
             this.inputDirective.restoreInputTextValueToPreviousState();
           }
-          this.resetSearch();
+
+          this.closeDropdown();
           break;
 
         case 'escape':
@@ -524,7 +530,12 @@ export class SkyAutocompleteComponent
   public onResultMouseDown(id: string, event: MouseEvent): void {
     this.selectSearchResultById(id);
 
-    this.resetSearch();
+    if (!this.showActionsArea) {
+      this.closeDropdown();
+    } else {
+      this.resetSearch();
+    }
+
     event.preventDefault();
     event.stopPropagation();
   }
@@ -554,8 +565,12 @@ export class SkyAutocompleteComponent
         });
       }
 
-      this.searchText = '';
-      this.closeDropdown();
+      if (!this.showActionsArea) {
+        this.closeDropdown();
+      } else {
+        this.resetSearch();
+      }
+
       return;
     }
 
@@ -672,6 +687,8 @@ export class SkyAutocompleteComponent
     this._highlightText = '';
     this.activeElementIndex = -1;
     this.removeActiveDescendant();
+    this.initOverlayFocusableElements();
+    this.changeDetector.markForCheck();
   }
 
   private addInputEventListeners(): void {
