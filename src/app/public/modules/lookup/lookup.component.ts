@@ -305,7 +305,7 @@ export class SkyLookupComponent
       this.inputBoxHostSvc.populate(
         {
           inputTemplate: this.inputTemplateRef,
-          buttonsInsetTemplate: this.enableShowMore ? this.showMoreButtonTemplateRef : undefined,
+          buttonsTemplate: this.enableShowMore ? this.showMoreButtonTemplateRef : undefined,
           iconsInsetTemplate: this.enableShowMore ? undefined : this.searchIconTemplateRef
         }
       );
