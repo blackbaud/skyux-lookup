@@ -70,6 +70,9 @@ let uniqueId = 0;
   selector: 'sky-autocomplete',
   templateUrl: './autocomplete.component.html',
   styleUrls: ['./autocomplete.component.scss'],
+  providers: [
+    SkyAutocompleteAdapterService
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SkyAutocompleteComponent
