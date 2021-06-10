@@ -58,16 +58,24 @@ import {
 } from '@skyux/theme';
 
 import {
+  SkyAutocompleteMessage
+} from '../autocomplete/types/autocomplete-message';
+
+import {
+  SkyAutocompleteMessageType
+} from '../autocomplete/types/autocomplete-message-type';
+
+import {
+  SkyAutocompleteSelectionChange
+} from '../autocomplete/types/autocomplete-selection-change';
+
+import {
   SkyAutocompleteShowMoreArgs
 } from '../autocomplete/types/autocomplete-show-more-args';
 
 import {
   SkyAutocompleteInputDirective
 } from '../autocomplete/autocomplete-input.directive';
-
-import {
-  SkyAutocompleteSelectionChange
-} from '../autocomplete/types/autocomplete-selection-change';
 
 import {
   SkyLookupAutocompleteAdapter
@@ -233,6 +241,7 @@ export class SkyLookupComponent
     this.onTouched();
   }
 
+  public autocompleteController = new Subject<SkyAutocompleteMessage>();
   public isInputFocused = false;
   public tokensController = new Subject<SkyTokensMessage>();
 
@@ -249,6 +258,12 @@ export class SkyLookupComponent
     return this._autocompleteInputDirective;
   }
 
+  @ViewChild('showMoreButtonTemplateRef', {
+    read: TemplateRef,
+    static: true
+  })
+  private showMoreButtonTemplateRef: TemplateRef<any>;
+
   @ViewChild('inputTemplateRef', {
     read: TemplateRef,
     static: true
@@ -259,6 +274,12 @@ export class SkyLookupComponent
     read: ElementRef
   })
   private lookupWrapperRef: ElementRef;
+
+  @ViewChild('searchIconTemplateRef', {
+    read: TemplateRef,
+    static: true
+  })
+  private searchIconTemplateRef: TemplateRef<any>;
 
   private ngUnsubscribe = new Subject();
   private idle = new Subject();
@@ -288,7 +309,9 @@ export class SkyLookupComponent
     if (this.inputBoxHostSvc) {
       this.inputBoxHostSvc.populate(
         {
-          inputTemplate: this.inputTemplateRef
+          inputTemplate: this.inputTemplateRef,
+          buttonsTemplate: this.enableShowMore ? this.showMoreButtonTemplateRef : undefined,
+          iconsInsetTemplate: this.enableShowMore ? undefined : this.searchIconTemplateRef
         }
       );
     }
@@ -477,11 +500,20 @@ export class SkyLookupComponent
     }
   }
 
-  public showMoreButtonClicked(event: SkyAutocompleteShowMoreArgs): void {
+  public onSearchButtonClick(): void {
+    this.sendAutocompleteMessage(SkyAutocompleteMessageType.CloseDropdown);
+    this.openPicker(this.autocompleteInputDirective.inputTextValue);
+  }
+
+  public onShowMoreClick(event: SkyAutocompleteShowMoreArgs): void {
+    this.openPicker(event?.inputValue);
+  }
+
+  public openPicker(initialSearch: string): void {
     if (this.showMoreConfig?.customPicker) {
       this.showMoreConfig.customPicker.open({
         items: this.data,
-        initialSearch: event?.inputValue,
+        initialSearch: initialSearch,
         initialValue: this.value
       });
     } else {
@@ -489,13 +521,12 @@ export class SkyLookupComponent
       if (!modalConfig.itemTemplate) {
         modalConfig.itemTemplate = this.searchResultTemplate;
       }
-
       const modalInstance = this.modalService.open(SkyLookupShowMoreModalComponent, {
         providers: [{
           provide: SkyLookupShowMoreNativePickerContext, useValue: {
             items: this.data,
             descriptorProperty: this.descriptorProperty,
-            initialSearch: event?.inputValue,
+            initialSearch: initialSearch,
             initialValue: this.value,
             selectMode: this.selectMode,
             showAddButton: this.showAddButton,
@@ -612,6 +643,10 @@ export class SkyLookupComponent
         value: item
       };
     });
+  }
+
+  private sendAutocompleteMessage(type: SkyAutocompleteMessageType): void {
+    this.autocompleteController.next({ type });
   }
 
   private sendTokensMessage(type: SkyTokensMessageType): void {
