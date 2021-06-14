@@ -596,7 +596,7 @@ export class SkyLookupComponent
   }
 
   private focusInputOnHostClick(): void {
-    const hostElement = !this.inputBoxHostSvc ? this.elementRef.nativeElement : this.lookupWrapperRef.nativeElement;
+    let hostElement = !this.inputBoxHostSvc ? this.elementRef.nativeElement : this.lookupWrapperRef.nativeElement;
     const documentObj = this.windowRef.nativeWindow.document;
 
     // Handles focusing the input when the host is clicked.
@@ -606,14 +606,18 @@ export class SkyLookupComponent
     observableFromEvent(documentObj, 'mousedown')
       .pipe(takeUntil(this.idle))
       .subscribe((event: MouseEvent) => {
+        hostElement = !this.inputBoxHostSvc ? this.elementRef.nativeElement : this.lookupWrapperRef.nativeElement;
         this.isInputFocused = hostElement.contains(event.target);
+
         this.changeDetector.markForCheck();
       });
 
     observableFromEvent(documentObj, 'focusin')
       .pipe(takeUntil(this.idle))
       .subscribe((event: KeyboardEvent) => {
+        hostElement = !this.inputBoxHostSvc ? this.elementRef.nativeElement : this.lookupWrapperRef.nativeElement;
         this.isInputFocused = hostElement.contains(event.target);
+
         this.changeDetector.markForCheck();
       });
 
