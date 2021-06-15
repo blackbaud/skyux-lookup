@@ -809,10 +809,6 @@ export class SkyAutocompleteComponent
     setTimeout(() => {
       if (this.overlay) {
         this.overlayFocusableElements = this.adapterService.getOverlayFocusableElements(this.overlay);
-        if (this.overlayFocusableElements.length === 1 && this.overlayFocusableElements[0].tagName.toLowerCase() === 'button') {
-          // tslint:disable-next-line: no-debugger
-          debugger;
-        }
         this.overlayFocusableElements.forEach(el => {
           this.adapterService.setTabIndex(el, -1);
         });
