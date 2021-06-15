@@ -1,8 +1,8 @@
 # 4.15.0 (2020-06-15)
 
-- Updated the lookup component to include a button which triggers the show more picker from the input box. [#183](https://github.com/blackbaud/skyux-lookup/pull/183)
-- Updated the lookup component's dropdown keyboard interactions. [#176](https://github.com/blackbaud/skyux-lookup/pull/176)
-- Fixed the lookup component to refocus the input box after closing the show more picker. [#193](https://github.com/blackbaud/skyux-lookup/pull/193)
+- Updated the lookup component to include a search button in the input field that opens the show more picker. [#183](https://github.com/blackbaud/skyux-lookup/pull/183)
+- Updated the keyboard interactions for the lookup component's dropdown menu. [#176](https://github.com/blackbaud/skyux-lookup/pull/176)
+- Fixed the lookup component to focus on the input field after the show more picker closes. [#193](https://github.com/blackbaud/skyux-lookup/pull/193)
 
 # 4.14.1 (2020-06-04)
 
