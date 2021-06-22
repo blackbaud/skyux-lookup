@@ -1256,6 +1256,7 @@ describe('Lookup component', function () {
               expect(getRepeaterItemCount()).toBe(10);
 
               let modalContent = document.querySelector('.sky-modal-content');
+              modalContent.scrollTop = modalContent.scrollHeight;
               SkyAppTestUtility.fireDomEvent(modalContent, 'scroll');
               fixture.detectChanges();
               tick();
