@@ -690,7 +690,10 @@ export class SkyLookupComponent
   }
 
   private onAddButtonComplete(newItem: any, newData?: any[]) {
-    this.data = newData;
+    if (newData) {
+      this.data = newData;
+    }
+
     if (this.data.findIndex(item => this.lookupService.isEquivalent(item, newItem)) >= 0) {
       if (this.openNativePicker) {
         (<SkyLookupShowMoreModalComponent>this.openNativePicker.componentInstance)

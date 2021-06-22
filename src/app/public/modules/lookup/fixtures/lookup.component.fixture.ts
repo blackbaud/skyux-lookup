@@ -128,9 +128,8 @@ export class SkyLookupTestComponent implements OnInit {
   }
 
   public addButtonClicked(addButtonClickArgs: SkyLookupAddMoreClickedEvent): void {
-    const newItems = this.ignoreAddDataUpdate ?
-      this.data : [{ name: 'New item' }].concat(this.data);
-    addButtonClickArgs.itemAdded({ name: 'New item' }, newItems);
+    const newItems = [{ name: 'New item' }].concat(this.data);
+    addButtonClickArgs.itemAdded({ name: 'New item' }, this.ignoreAddDataUpdate ? undefined : newItems);
   }
 
   public enableCustomPicker(): void {
