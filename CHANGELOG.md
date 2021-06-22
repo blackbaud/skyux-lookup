@@ -1,3 +1,13 @@
+# 4.15.0 (2020-06-15)
+
+- Updated the lookup component to include a search button in the input field that opens the show more picker. [#183](https://github.com/blackbaud/skyux-lookup/pull/183)
+- Updated the keyboard interactions for the lookup component's dropdown menu. [#176](https://github.com/blackbaud/skyux-lookup/pull/176)
+- Fixed the lookup component to focus on the input field after the show more picker closes. [#193](https://github.com/blackbaud/skyux-lookup/pull/193)
+
+# 4.14.1 (2020-06-04)
+
+- Fixed the search component to display the correct "collapse" icon when expanded on a small screen. [#191](https://github.com/blackbaud/skyux-lookup/pull/191)
+
 # 4.14.0 (2021-05-26)
 
 - Updated the lookup component to collapse tokens if users select more than 5 items when the lookup menu includes the 'Show all/matches' button. [#186](https://github.com/blackbaud/skyux-lookup/pull/186)
