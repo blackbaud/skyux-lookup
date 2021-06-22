@@ -17,6 +17,10 @@ import {
 } from '../lookup.component';
 
 import {
+  SkyLookupAddMoreClickedEvent
+} from '../types/lookup-add-click-event';
+
+import {
   SkyLookupSelectMode
 } from '../types/lookup-select-mode';
 
@@ -59,6 +63,7 @@ export class SkyLookupTestComponent implements OnInit {
   public enableShowMore: boolean = false;
   public form: FormGroup;
   public idProperty: string;
+  public ignoreAddDataUpdate: boolean = false;
   public placeholderText: string;
   public selectMode: SkyLookupSelectMode;
   public showAddButton: boolean = false;
@@ -122,8 +127,10 @@ export class SkyLookupTestComponent implements OnInit {
     this.createForm();
   }
 
-  public addButtonClicked(): void {
-    return;
+  public addButtonClicked(addButtonClickArgs: SkyLookupAddMoreClickedEvent): void {
+    const newItems = this.ignoreAddDataUpdate ?
+      this.data : [{ name: 'New item' }].concat(this.data);
+    addButtonClickArgs.itemAdded({ name: 'New item' }, newItems);
   }
 
   public enableCustomPicker(): void {

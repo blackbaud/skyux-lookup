@@ -25,6 +25,10 @@ import {
 } from '@skyux/modals';
 
 import {
+  SkyLookupAddMoreClickedEvent
+} from '../../public/public_api';
+
+import {
   SkyLookupDocsDemoModalComponent
 } from './lookup-docs-demo-modal.component';
 
@@ -81,24 +85,20 @@ export class LookupDocsComponent implements OnInit {
     this.createForm();
   }
 
-  public addButtonClicked(): void {
+  public addButtonClicked(addButtonClickArgs: SkyLookupAddMoreClickedEvent): void {
     console.log('clicked');
 
     const modalInstance = this.modalService.open(SkyLookupDocsDemoModalComponent);
     modalInstance.closed.subscribe((modalCloseArgs: SkyModalCloseArgs) => {
       if (modalCloseArgs.reason === 'save') {
-        const formControl: FormControl = this.myForm.get('names') as FormControl;
-        let newValue: any[] = formControl.value.concat([{ name: modalCloseArgs.data }]);
+        let newItem: any = { name: modalCloseArgs.data };
 
         this.people.push({ name: modalCloseArgs.data });
         this.people = this.people.sort((a, b) => {
           return a.name.localeCompare(b.name);
-       });
+       }).slice();
 
-       newValue = newValue.sort((a, b) => {
-         return this.people.indexOf(a) < this.people.indexOf(b) ? 1 : -1;
-       });
-       formControl.setValue(newValue);
+       addButtonClickArgs.itemAdded(newItem, this.people);
       }
     });
   }
