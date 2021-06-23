@@ -1643,16 +1643,5 @@ describe('Country Field Component', () => {
       nativeElement = fixture.nativeElement as HTMLElement;
     });
 
-    it('should render in the expected input box containers', fakeAsync(() => {
-      fixture.detectChanges();
-
-      const inputBoxEl = nativeElement.querySelector('sky-input-box');
-
-      const inputGroupEl = inputBoxEl.querySelector('.sky-input-box-input-group-inner');
-      const containerEl = inputGroupEl.children.item(0);
-
-      expect(containerEl).toHaveCssClass('sky-country-field-container');
-    }));
-
   });
 });
