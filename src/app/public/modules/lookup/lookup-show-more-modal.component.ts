@@ -15,10 +15,6 @@ import {
 } from 'rxjs';
 
 import {
-  SkyLookupService
-} from './lookup.service';
-
-import {
   SkyLookupSelectMode
 } from './types/lookup-select-mode';
 
@@ -75,8 +71,7 @@ export class SkyLookupShowMoreModalComponent implements AfterViewInit, OnDestroy
   constructor(
     public modalInstance: SkyModalInstance,
     public context: SkyLookupShowMoreNativePickerContext,
-    private changeDetector: ChangeDetectorRef,
-    private lookupService: SkyLookupService
+    private changeDetector: ChangeDetectorRef
   ) { }
 
   public ngAfterViewInit(): void {
@@ -104,14 +99,14 @@ export class SkyLookupShowMoreModalComponent implements AfterViewInit, OnDestroy
       });
 
       this.items.forEach(item => {
-        const isInitialValue: boolean = this.lookupService.isEquivalent(this.context.initialValue, item.value);
+        const isInitialValue: boolean = this.context.initialValue === item.value;
 
         const initialIsArray: boolean = Array.isArray(this.context.initialValue);
         let initialValueContainsItem: boolean;
 
         if (initialIsArray) {
           initialValueContainsItem = this.context.initialValue
-            .findIndex((initialItem: any) => this.lookupService.isEquivalent(initialItem, item.value)) >= 0;
+            .findIndex((initialItem: any) => initialItem === item.value) >= 0;
         }
 
         if (isInitialValue || (initialIsArray && initialValueContainsItem)) {
@@ -170,12 +165,12 @@ export class SkyLookupShowMoreModalComponent implements AfterViewInit, OnDestroy
             item.selected = false;
           }
         });
-        const itemIndex = this.items.findIndex(item => this.lookupService.isEquivalent(item.value, itemToSelect.value));
+        const itemIndex = this.items.findIndex(item => item.value === itemToSelect.value);
         this.selectedItems = [{ index: itemIndex, itemData: this.items[itemIndex].value }];
       }
     } else {
       let selectedItems: { index: number, itemData: any }[] = this.selectedItems || [];
-      const allItemsIndex = this.items.findIndex(item => this.lookupService.isEquivalent(item.value, itemToSelect.value));
+      const allItemsIndex = this.items.findIndex(item => item.value === itemToSelect.value);
       let selectedItemsIndex = selectedItems.findIndex(selectedItem => selectedItem.index === allItemsIndex);
 
       if (newSelectState && selectedItemsIndex === -1) {
@@ -271,7 +266,7 @@ export class SkyLookupShowMoreModalComponent implements AfterViewInit, OnDestroy
     this.itemIndex = 10;
     this.selectedItems.forEach(selectedItem => {
       this.context.items.forEach((item: any, index: number) => {
-        if (this.lookupService.isEquivalent(selectedItem.itemData, item)) {
+        if (selectedItem.itemData === item) {
           selectedItem.index = index;
         }
       });

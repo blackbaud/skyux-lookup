@@ -10,8 +10,12 @@ import {
 } from '../lookup.component';
 
 import {
-  SkyLookupAddMoreClickedEvent
-} from '../types/lookup-add-click-event';
+  SkyLookupAddCallbackArgs
+} from '../types/lookup-add-click-callback-args';
+
+import {
+  SkyLookupAddClickEventArgs
+} from '../types/lookup-add-click-event-args';
 
 import {
   SkyLookupSelectMode
@@ -98,9 +102,14 @@ export class SkyLookupTemplateTestComponent implements OnInit {
     ];
   }
 
-  public addButtonClicked(addButtonClickArgs: SkyLookupAddMoreClickedEvent): void {
-    const newItems = [{ name: 'New item' }].concat(this.data);
-    addButtonClickArgs.itemAdded({ name: 'New item' }, this.ignoreAddDataUpdate ? undefined : newItems);
+  public addButtonClicked(addButtonClickArgs: SkyLookupAddClickEventArgs): void {
+    const newItem = { name: 'New item' };
+    const newItems = [newItem].concat(this.data);
+    const callbackArgs: SkyLookupAddCallbackArgs = {
+      item: newItem,
+      data: this.ignoreAddDataUpdate ? undefined : newItems
+    };
+    addButtonClickArgs.itemAdded(callbackArgs);
   }
 
   public enableLookup(): void {

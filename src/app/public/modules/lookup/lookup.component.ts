@@ -87,12 +87,12 @@ import {
 } from './lookup-adapter.service';
 
 import {
-  SkyLookupService
-} from './lookup.service';
+  SkyLookupAddCallbackArgs
+} from './types/lookup-add-click-callback-args';
 
 import {
-  SkyLookupAddMoreClickedEvent
-} from './types/lookup-add-click-event';
+  SkyLookupAddClickEventArgs
+} from './types/lookup-add-click-event-args';
 
 import {
   SkyLookupShowMoreModalComponent
@@ -115,8 +115,7 @@ import {
   templateUrl: './lookup.component.html',
   styleUrls: ['./lookup.component.scss'],
   providers: [
-    SkyLookupAdapterService,
-    SkyLookupService
+    SkyLookupAdapterService
   ],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -160,7 +159,7 @@ export class SkyLookupComponent
     this._data = value;
 
     if (this.openNativePicker) {
-      this.openNativePicker.componentInstance.updateItemData(value.slice());
+      this.openNativePicker.componentInstance.updateItemData(value);
     }
   }
 
@@ -234,7 +233,7 @@ export class SkyLookupComponent
    * Fires when users select the button to add options to the list.
    */
   @Output()
-  public addClick: EventEmitter<SkyLookupAddMoreClickedEvent> = new EventEmitter();
+  public addClick: EventEmitter<SkyLookupAddClickEventArgs> = new EventEmitter();
 
   public get tokens(): SkyToken[] {
     return this._tokens;
@@ -334,7 +333,6 @@ export class SkyLookupComponent
     private adapter: SkyLookupAdapterService,
     private modalService: SkyModalService,
     private resourcesService: SkyLibResourcesService,
-    private lookupService: SkyLookupService,
     @Optional() public inputBoxHostSvc?: SkyInputBoxHostService,
     @Optional() public themeSvc?: SkyThemeService
   ) {
@@ -381,7 +379,7 @@ export class SkyLookupComponent
   }
 
   public addButtonClicked(): void {
-    this.addClick.emit({ itemAdded: (item: any, data: any[]) => this.onAddButtonComplete(item, data) });
+    this.addClick.emit({ itemAdded: (args: SkyLookupAddCallbackArgs) => this.onAddButtonComplete(args) });
   }
 
   public onAutocompleteSelectionChange(change: SkyAutocompleteSelectionChange): void {
@@ -448,8 +446,7 @@ export class SkyLookupComponent
 
   public writeValue(value: any[]): void {
     if (!this.disabled) {
-      const copy = value ? this.cloneItems(value) : [];
-      this.value = copy;
+      this.value = value ? value : [];
       this.updateForSelectMode();
     }
   }
@@ -561,7 +558,7 @@ export class SkyLookupComponent
       }
 
       let context: SkyLookupShowMoreNativePickerContext = {
-        items: this.data.slice(),
+        items: this.data,
         descriptorProperty: this.descriptorProperty,
         initialSearch: initialSearch,
         initialValue: initialValue,
@@ -574,9 +571,6 @@ export class SkyLookupComponent
         providers: [
           {
             provide: SkyLookupShowMoreNativePickerContext, useValue: context
-          },
-          {
-            provide: SkyLookupService, useValue: this.lookupService
           }
         ]
       });
@@ -683,27 +677,21 @@ export class SkyLookupComponent
     this.adapter.focusInput(this.lookupWrapperRef);
   }
 
-  private cloneItems(items: any[]): any[] {
-    return items.map(item => {
-      return { ...item };
-    });
-  }
-
-  private onAddButtonComplete(newItem: any, newData?: any[]) {
-    if (newData) {
-      this.data = newData;
+  private onAddButtonComplete(args: SkyLookupAddCallbackArgs) {
+    if (args.data) {
+      this.data = args.data;
     }
 
-    if (this.data.findIndex(item => this.lookupService.isEquivalent(item, newItem)) >= 0) {
+    if (this.data.indexOf(args.item) >= 0) {
       if (this.openNativePicker) {
         (<SkyLookupShowMoreModalComponent>this.openNativePicker.componentInstance)
-          .onItemSelect(true, { value: newItem, selected: false });
+          .onItemSelect(true, { value: args.item, selected: false });
       } else {
         let newValue = this.value;
         if (this.selectMode === SkyLookupSelectMode.multiple) {
-          newValue = this.value.concat(newItem);
+          newValue = this.value.concat(args.item);
         } else {
-          newValue = [newItem];
+          newValue = [args.item];
         }
         this.writeValue(newValue);
       }

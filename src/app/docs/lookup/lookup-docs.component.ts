@@ -25,7 +25,8 @@ import {
 } from '@skyux/modals';
 
 import {
-  SkyLookupAddMoreClickedEvent
+  SkyLookupAddCallbackArgs,
+  SkyLookupAddClickEventArgs
 } from '../../public/public_api';
 
 import {
@@ -85,7 +86,7 @@ export class LookupDocsComponent implements OnInit {
     this.createForm();
   }
 
-  public addButtonClicked(addButtonClickArgs: SkyLookupAddMoreClickedEvent): void {
+  public addButtonClicked(addButtonClickArgs: SkyLookupAddClickEventArgs): void {
     console.log('clicked');
 
     const modalInstance = this.modalService.open(SkyLookupDocsDemoModalComponent);
@@ -98,7 +99,11 @@ export class LookupDocsComponent implements OnInit {
           return a.name.localeCompare(b.name);
        }).slice();
 
-       addButtonClickArgs.itemAdded(newItem, this.people);
+       const callbackArgs: SkyLookupAddCallbackArgs = {
+         item: newItem,
+         data: this.people
+       };
+       addButtonClickArgs.itemAdded(callbackArgs);
       }
     });
   }
