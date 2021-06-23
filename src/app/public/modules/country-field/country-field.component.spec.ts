@@ -12,19 +12,7 @@ import {
 } from '@angular/forms';
 
 import {
-  BehaviorSubject
-} from 'rxjs';
-
-import {
-  SkyInputBoxModule
-} from '@skyux/forms';
-
-import {
-  SkyTheme,
-  SkyThemeMode,
-  SkyThemeService,
-  SkyThemeSettings,
-  SkyThemeSettingsChange
+  SkyThemeService
 } from '@skyux/theme';
 
 import {
@@ -35,10 +23,6 @@ import {
 import {
   SkyCountryFieldModule
 } from './country-field.module';
-
-import {
-  CountryFieldInputBoxTestComponent
-} from './fixtures/country-field-input-box.component.fixture';
 
 import {
   CountryFieldNoFormTestComponent
@@ -1600,47 +1584,6 @@ describe('Country Field Component', () => {
         });
       }));
 
-    });
-
-  });
-
-  describe('inside input box', () => {
-    let fixture: ComponentFixture<CountryFieldInputBoxTestComponent>;
-    let nativeElement: HTMLElement;
-    let mockThemeSvc: any;
-
-    beforeEach(() => {
-      mockThemeSvc = {
-        settingsChange: new BehaviorSubject<SkyThemeSettingsChange>(
-          {
-            currentSettings: new SkyThemeSettings(
-              SkyTheme.presets.default,
-              SkyThemeMode.presets.light
-            ),
-            previousSettings: undefined
-          }
-        )
-      };
-
-      TestBed.configureTestingModule({
-        declarations: [
-          CountryFieldInputBoxTestComponent
-        ],
-        imports: [
-          FormsModule,
-          SkyCountryFieldModule,
-          SkyInputBoxModule
-        ],
-        providers: [
-          {
-            provide: SkyThemeService,
-            useValue: mockThemeSvc
-          }
-        ]
-      });
-
-      fixture = TestBed.createComponent(CountryFieldInputBoxTestComponent);
-      nativeElement = fixture.nativeElement as HTMLElement;
     });
 
   });
