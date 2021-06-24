@@ -1536,10 +1536,10 @@ describe('Lookup component', function () {
             })
           );
 
-          /** NOTE: The timeout is extended here to help with an IE issue. */
           it('should add items when scrolling ends',
             async () => {
               component.enableShowMore = true;
+              component.data = component.data.slice(0, component.data.length - 2);
               fixture.detectChanges();
 
               triggerInputFocus(fixture);
@@ -1559,21 +1559,10 @@ describe('Lookup component', function () {
               await fixture.whenStable();
               fixture.detectChanges();
 
-              expect(getRepeaterItemCount()).toBe(20);
-
-              modalContent = document.querySelector('.sky-modal-content');
-              modalContent.scrollTop = modalContent.scrollHeight;
-              SkyAppTestUtility.fireDomEvent(modalContent, 'scroll');
-              fixture.detectChanges();
-              await fixture.whenStable();
-              fixture.detectChanges();
-
-              expect(getRepeaterItemCount()).toBe(21);
+              expect(getRepeaterItemCount()).toBe(19);
 
               (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-close'))?.click();
-            },
-            10000);
-
+            });
         });
 
         it('should trickle down the add button click event when triggered from the show all modal',
