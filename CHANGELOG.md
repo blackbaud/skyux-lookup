@@ -1,6 +1,6 @@
 # 4.16.0 (2021-06-28)
 
-- Added a callback to the `addClick` to notify the component when a new item has been added to the data source. [#195](https://github.com/blackbaud/skyux-lookup/pull/195)
+- Added a callback to `addClick` to notify the component when a new item is added to the data source. [#195](https://github.com/blackbaud/skyux-lookup/pull/195)
 
 # 4.15.0 (2021-06-15)
 
