@@ -1537,28 +1537,34 @@ describe('Lookup component', function () {
           );
 
           it('should add items when scrolling ends',
-            fakeAsync(() => {
+            async(() => {
               component.enableShowMore = true;
               component.data = component.data.slice(0, component.data.length - 2);
               fixture.detectChanges();
 
               triggerInputFocus(fixture);
               fixture.detectChanges();
-              tick();
+              fixture.whenStable().then(() => {
+                // Not using `clickShowMore` due to it being for `fakeAsync`
+                getShowMoreButton().click();
+                fixture.detectChanges();
+                fixture.whenStable().then(() => {
 
-              clickShowMore(fixture);
-              expect(getRepeaterItemCount()).toBe(10);
+                  expect(getRepeaterItemCount()).toBe(10);
 
-              let modalContent = document.querySelector('.sky-modal-content');
-              modalContent.scrollTop = modalContent.scrollHeight;
-              SkyAppTestUtility.fireDomEvent(modalContent, 'scroll');
-              fixture.detectChanges();
-              tick();
-              fixture.detectChanges();
+                  let modalContent = document.querySelector('.sky-modal-content');
+                  modalContent.scrollTop = modalContent.scrollHeight;
+                  SkyAppTestUtility.fireDomEvent(modalContent, 'scroll');
+                  fixture.detectChanges();
+                  fixture.whenStable().then(() => {
+                    fixture.detectChanges();
 
-              expect(getRepeaterItemCount()).toBe(19);
+                    expect(getRepeaterItemCount()).toBe(19);
 
-              closeModal(fixture);
+                    (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-close'))?.click();
+                  });
+                });
+              });
             }));
         });
 
