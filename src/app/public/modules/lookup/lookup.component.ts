@@ -376,6 +376,7 @@ export class SkyLookupComponent
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
     this.tokensController.complete();
+    this.openNativePicker?.close();
   }
 
   public addButtonClicked(): void {
@@ -579,27 +580,29 @@ export class SkyLookupComponent
         this.addButtonClicked();
       });
 
-      this.openNativePicker.closed.subscribe(closeArgs => {
-        this.openNativePicker = undefined;
-        if (closeArgs.reason === 'save') {
-          let selectedItems: any[] = [];
+      this.openNativePicker.closed
+        .pipe(takeUntil(this.ngUnsubscribe))
+        .subscribe(closeArgs => {
+          this.openNativePicker = undefined;
+          if (closeArgs.reason === 'save') {
+            let selectedItems: any[] = [];
 
-          this.data.forEach((item: any, dataIndex: number) => {
-            if (closeArgs.data.some((savedItem: any) => {
-              return savedItem.index === dataIndex;
-            })) {
-              selectedItems.push(item);
-            }
-          });
+            this.data.forEach((item: any, dataIndex: number) => {
+              if (closeArgs.data.some((savedItem: any) => {
+                return savedItem.index === dataIndex;
+              })) {
+                selectedItems.push(item);
+              }
+            });
 
-          this.writeValue(selectedItems);
-        } else {
-          this.writeValue(initialValue);
-        }
+            this.writeValue(selectedItems);
+          } else {
+            this.writeValue(initialValue);
+          }
 
-        this.focusInput();
-        this.changeDetector.markForCheck();
-      });
+          this.focusInput();
+          this.changeDetector.markForCheck();
+        });
     }
   }
 
