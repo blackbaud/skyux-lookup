@@ -1,3 +1,7 @@
+# 4.16.0 (2020-06-28)
+
+- Added a callback to the `addClick` to notify the component when a new item has been added to the data source. [#195](https://github.com/blackbaud/skyux-lookup/pull/195)
+
 # 4.15.0 (2020-06-15)
 
 - Updated the lookup component to include a search button in the input field that opens the show more picker. [#183](https://github.com/blackbaud/skyux-lookup/pull/183)
