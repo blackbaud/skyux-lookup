@@ -1536,7 +1536,6 @@ describe('Lookup component', function () {
             })
           );
 
-          /** NOTE: The timeout is extended here to help with an IE issue. */
           it('should add items when scrolling ends',
             async () => {
               component.enableShowMore = true;
@@ -1571,8 +1570,8 @@ describe('Lookup component', function () {
               expect(getRepeaterItemCount()).toBe(21);
 
               (<HTMLElement>document.querySelector('.sky-lookup-show-more-modal-close'))?.click();
-            },
-            10000);
+            }
+          );
 
         });
 
