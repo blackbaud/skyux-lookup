@@ -2,7 +2,7 @@
 
 - Added a search icon to the country field. [#189](https://github.com/blackbaud/skyux-lookup/pull/189)
 - Updated the country field to no longer show a placeholder when in modern theme. [#189](https://github.com/blackbaud/skyux-lookup/pull/189)
-- Fixed the search bar in modern theme to no longer wrap the search bar to the next line. [#189](https://github.com/blackbaud/skyux-lookup/pull/189)
+- Fixed the search bar in modern theme to no longer wrap the search icon to the next line. [#189](https://github.com/blackbaud/skyux-lookup/pull/189)
 
 # 4.16.0 (2021-06-28)
 
