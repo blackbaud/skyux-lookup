@@ -1,6 +1,6 @@
 {
   "name": "@skyux/lookup",
-  "version": "5.0.0-alpha.0",
+  "version": "5.0.0-beta.0",
   "description": "SKY UX Lookup",
   "scripts": {
     "build": "skyux build-public-library",
@@ -22,17 +22,17 @@
   },
   "homepage": "https://github.com/blackbaud/skyux-lookup#readme",
   "peerDependencies": {
-    "@angular/common": "^9.1.6 | ^12",
-    "@angular/core": "^9.1.6 | ^12",
-    "@angular/router": "^9.1.6 | ^12",
-    "@skyux/core": "^4.0.0",
-    "@skyux/modals": "^4.0.0",
-    "@skyux/forms": "^4.13.3",
-    "@skyux/i18n": "^4.0.0",
-    "@skyux/indicators": "^5.0.0-alpha.0",
-    "@skyux/layout": "^4.0.0",
-    "@skyux/lists": "^4.0.0",
-    "@skyux/theme": "^5.0.0-alpha.0"
+    "@angular/common": "^9.1.6 || ^12",
+    "@angular/core": "^9.1.6 || ^12",
+    "@angular/router": "^9.1.6 || ^12",
+    "@skyux/core": "^5.0.0-beta.0",
+    "@skyux/modals": "^5.0.0-beta.0",
+    "@skyux/forms": "^5.0.0-beta.0",
+    "@skyux/i18n": "^5.0.0-beta.0",
+    "@skyux/indicators": "^5.0.0-beta.0",
+    "@skyux/layout": "^5.0.0-beta.0",
+    "@skyux/lists": "^5.0.0-beta.0",
+    "@skyux/theme": "^5.0.0-beta.0"
   },
   "dependencies": {
     "intl-tel-input": "14.1.0"
@@ -49,7 +49,7 @@
     "@angular/router": "9.1.13",
     "@blackbaud/auth-client": "2.48.0",
     "@blackbaud/skyux-lib-clipboard": "4.0.0",
-    "@blackbaud/skyux-lib-code-block": "4.0.2",
+    "@blackbaud/skyux-lib-code-block": "4.0.3",
     "@blackbaud/skyux-lib-media": "4.0.0",
     "@blackbaud/skyux-lib-restricted-view": "4.2.1",
     "@blackbaud/skyux-lib-stache": "4.2.2",
@@ -60,7 +60,7 @@
     "@skyux/animations": "4.0.1",
     "@skyux/assets": "4.0.1",
     "@skyux/config": "4.4.0",
-    "@skyux/core": "4.6.0",
+    "@skyux/core": "4.6.1",
     "@skyux/docs-tools": "4.9.1",
     "@skyux/forms": "4.20.0",
     "@skyux/http": "4.2.0",

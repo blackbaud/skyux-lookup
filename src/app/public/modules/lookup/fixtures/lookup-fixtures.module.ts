@@ -36,6 +36,10 @@ import {
 } from '@skyux/theme';
 
 import {
+  SkyLookupForRootCompatModule
+} from '../../shared/lookup-for-root-compat.module';
+
+import {
   SkyLookupModule
 } from '../lookup.module';
 
@@ -77,6 +81,7 @@ export function themeServiceFactory(): any {
     ReactiveFormsModule,
     RouterTestingModule,
     SkyInputBoxModule,
+    SkyLookupForRootCompatModule,
     SkyLookupModule,
     NoopAnimationsModule
   ],
