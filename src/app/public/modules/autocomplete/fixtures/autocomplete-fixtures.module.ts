@@ -12,10 +12,6 @@ import {
 } from '@angular/forms';
 
 import {
-  SkyThemeService
-} from '@skyux/theme';
-
-import {
   SkyAutocompleteModule
 } from '../autocomplete.module';
 
@@ -37,9 +33,6 @@ import {
     FormsModule,
     ReactiveFormsModule,
     SkyAutocompleteModule
-  ],
-  providers: [
-    SkyThemeService
   ],
   exports: [
     SkyAutocompleteFixtureComponent,

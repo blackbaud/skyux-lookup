@@ -11,7 +11,6 @@ import {
 } from '@angular/forms';
 
 import {
-  SkyAppWindowRef,
   SkyViewkeeperModule
 } from '@skyux/core';
 
@@ -92,9 +91,6 @@ import {
   ],
   exports: [
     SkyLookupComponent
-  ],
-  providers: [
-    SkyAppWindowRef
   ]
 })
 export class SkyLookupModule { }

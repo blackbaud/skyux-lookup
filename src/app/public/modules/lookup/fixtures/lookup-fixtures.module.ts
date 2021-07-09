@@ -50,6 +50,7 @@ import {
 import {
   SkyLookupTemplateTestComponent
 } from './lookup-template.component.fixture';
+import { SkyLookupForRootCompatModule } from '../../shared/lookup-for-root-compat.module';
 
 export function themeServiceFactory(): any {
   return {
@@ -77,6 +78,7 @@ export function themeServiceFactory(): any {
     ReactiveFormsModule,
     RouterTestingModule,
     SkyInputBoxModule,
+    SkyLookupForRootCompatModule,
     SkyLookupModule,
     NoopAnimationsModule
   ],

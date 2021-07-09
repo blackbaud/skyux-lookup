@@ -41,6 +41,10 @@ import {
 } from '@skyux/theme';
 
 import {
+  SkyLookupForRootCompatModule
+} from './public/modules/shared/lookup-for-root-compat.module';
+
+import {
   SkyLookupDocsDemoModalComponent
 } from './docs/lookup/lookup-docs-demo-modal.component';
 
@@ -59,6 +63,7 @@ import {
   imports: [
     SkyAutocompleteModule,
     SkyCountryFieldModule,
+    SkyLookupForRootCompatModule,
     SkyLookupModule,
     SkySearchModule
   ],

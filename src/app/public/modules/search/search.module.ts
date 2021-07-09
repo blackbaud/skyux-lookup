@@ -11,8 +11,7 @@ import {
 } from '@angular/forms';
 
 import {
-  SkyIdModule,
-  SkyMediaQueryModule
+  SkyIdModule
 } from '@skyux/core';
 
 import {
@@ -43,7 +42,6 @@ import {
     CommonModule,
     SkyInputBoxModule,
     SkyLookupResourcesModule,
-    SkyMediaQueryModule,
     FormsModule,
     SkyIconModule,
     SkyThemeModule,
