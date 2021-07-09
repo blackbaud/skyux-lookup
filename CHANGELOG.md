@@ -1,3 +1,8 @@
+# 5.0.0-beta.0 (2021-07-09)
+
+- Initial beta release.
+- Added support for `5.0.0-beta.*` versions of SKY UX component libraries. [#199](https://github.com/blackbaud/skyux-lookup/pull/199)
+
 # 4.17.0 (2021-07-09)
 
 - Added a search icon to the country field. [#189](https://github.com/blackbaud/skyux-lookup/pull/189)
@@ -24,6 +29,7 @@
 
 # 5.0.0-alpha.0 (2021-05-21)
 
+- Added support for `@angular/core@^12`. [#185](https://github.com/blackbaud/skyux-lookup/pull/185)
 - Removed `BrowserAnimationsModule` from the `imports` section of `SkySearchModule` to support lazy-loading. Consumers of `SkySearchModule` must now import `BrowserAnimationsModule` into their application's root module. [#185](https://github.com/blackbaud/skyux-lookup/pull/185)
 
 # 4.13.1 (2021-05-19)

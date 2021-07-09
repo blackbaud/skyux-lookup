@@ -36,6 +36,10 @@ import {
 } from '@skyux/theme';
 
 import {
+  SkyLookupForRootCompatModule
+} from '../../shared/lookup-for-root-compat.module';
+
+import {
   SkyLookupModule
 } from '../lookup.module';
 
@@ -50,7 +54,6 @@ import {
 import {
   SkyLookupTemplateTestComponent
 } from './lookup-template.component.fixture';
-import { SkyLookupForRootCompatModule } from '../../shared/lookup-for-root-compat.module';
 
 export function themeServiceFactory(): any {
   return {
