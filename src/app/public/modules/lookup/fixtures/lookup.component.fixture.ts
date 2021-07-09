@@ -17,6 +17,14 @@ import {
 } from '../lookup.component';
 
 import {
+  SkyLookupAddCallbackArgs
+} from '../types/lookup-add-click-callback-args';
+
+import {
+  SkyLookupAddClickEventArgs
+} from '../types/lookup-add-click-event-args';
+
+import {
   SkyLookupSelectMode
 } from '../types/lookup-select-mode';
 
@@ -57,13 +65,27 @@ export class SkyLookupTestComponent implements OnInit {
   public descriptorProperty: string;
   public enabledSearchResultTemplate: TemplateRef<any>;
   public enableShowMore: boolean = false;
-  public friends: any[];
   public form: FormGroup;
   public idProperty: string;
+  public ignoreAddDataUpdate: boolean = false;
   public placeholderText: string;
   public selectMode: SkyLookupSelectMode;
   public showAddButton: boolean = false;
   public showMoreConfig: SkyLookupShowMoreConfig = {};
+
+  public get friends(): any[] {
+    return this._friends;
+  }
+
+  public set friends(value: any[]) {
+    this._friends = value;
+
+    if (this.form?.controls.friends) {
+      this.form.controls.friends.setValue(value);
+    }
+  }
+
+  private _friends: any[];
 
   constructor(
     private formBuilder: FormBuilder
@@ -109,8 +131,14 @@ export class SkyLookupTestComponent implements OnInit {
     this.createForm();
   }
 
-  public addButtonClicked(): void {
-    return;
+  public addButtonClicked(addButtonClickArgs: SkyLookupAddClickEventArgs): void {
+    const newItem = { name: 'New item' };
+    const newItems = [newItem].concat(this.data);
+    const callbackArgs: SkyLookupAddCallbackArgs = {
+      item: newItem,
+      data: this.ignoreAddDataUpdate ? undefined : newItems
+    };
+    addButtonClickArgs.itemAdded(callbackArgs);
   }
 
   public enableCustomPicker(): void {

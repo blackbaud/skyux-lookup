@@ -12,6 +12,10 @@ import {
 } from '@skyux-sdk/testing';
 
 import {
+  SkyInputBoxHostService
+} from '@skyux/forms';
+
+import {
   SkyAutocompleteComponent
 } from './autocomplete.component';
 
@@ -40,7 +44,7 @@ describe('Autocomplete component', () => {
   //#region helpers
 
   function getAddButton(): HTMLElement {
-    return document.querySelector('.sky-autocomplete-add') as HTMLElement;
+    return document.querySelector('.sky-autocomplete-action-add') as HTMLElement;
   }
 
   function getActionsContainer(): HTMLElement {
@@ -68,13 +72,14 @@ describe('Autocomplete component', () => {
   }
 
   function getShowMoreButton(): HTMLElement {
-    return document.querySelector('.sky-autocomplete-more') as HTMLElement;
+    return document.querySelector('.sky-autocomplete-action-more') as HTMLElement;
   }
 
   function enterSearch(newValue: string, fixture: ComponentFixture<any>): void {
     const inputElement = getInputElement();
     inputElement.value = newValue;
 
+    inputElement.focus();
     SkyAppTestUtility.fireDomEvent(inputElement, 'input');
     fixture.detectChanges();
     tick();
@@ -119,10 +124,38 @@ describe('Autocomplete component', () => {
     tick();
   }
 
+  function sendEnter(element: HTMLElement, fixture: ComponentFixture<any>): void {
+    SkyAppTestUtility.fireDomEvent(element, 'keydown', {
+      keyboardEventInit: { key: 'Enter' }
+    });
+    fixture.detectChanges();
+    tick();
+  }
+
+  function sendMouseMove(element: HTMLElement, fixture: ComponentFixture<any>): void {
+    SkyAppTestUtility.fireDomEvent(element, 'mousemove');
+    fixture.detectChanges();
+    tick();
+  }
+
   function sendTab(element: HTMLElement, fixture: ComponentFixture<any>, shiftKey?: boolean): void {
     SkyAppTestUtility.fireDomEvent(element, 'keydown', {
       keyboardEventInit: { key: 'Tab', shiftKey: shiftKey }
     });
+    fixture.detectChanges();
+    tick();
+  }
+
+  function sendEscape(element: HTMLElement, fixture: ComponentFixture<any>): void {
+    SkyAppTestUtility.fireDomEvent(element, 'keydown', {
+      keyboardEventInit: { key: 'Escape' }
+    });
+    fixture.detectChanges();
+    tick();
+  }
+
+  function updateNgModel(fixture: ComponentFixture<any>, selectedValue: any) {
+    fixture.componentInstance.model.favoriteColor = selectedValue;
     fixture.detectChanges();
     tick();
   }
@@ -327,12 +360,13 @@ describe('Autocomplete component', () => {
       expect(customElement).not.toBeNull();
     }));
 
-    it('should focus the first search result after being opened', fakeAsync(() => {
+    it('should keep focus on the input element but show add focus class to the first search result after being opened', fakeAsync(() => {
       fixture.detectChanges();
 
       enterSearch('r', fixture);
 
-      expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
+      expect(getSearchResultItems().item(0)).toHaveCssClass('sky-autocomplete-descendant-focus');
+      expect(document.activeElement).toEqual(getInputElement());
     }));
 
     it('should limit search results', fakeAsync(() => {
@@ -464,7 +498,11 @@ describe('Autocomplete component', () => {
 
       enterSearch('r', fixture);
 
-      expect(adapterSpy).toHaveBeenCalledWith(autocomplete['elementRef'], autocomplete['resultsRef']);
+      expect(adapterSpy).toHaveBeenCalledWith(
+        autocomplete['elementRef'],
+        autocomplete['resultsRef'],
+        false
+      );
 
       const dropdownElement = getSearchResultsContainer();
       const autocompleteElement = getAutocompleteElement();
@@ -486,7 +524,11 @@ describe('Autocomplete component', () => {
       fixture.detectChanges();
       tick();
 
-      expect(adapterSpy).toHaveBeenCalledWith(autocomplete['elementRef'], autocomplete['resultsRef']);
+      expect(adapterSpy).toHaveBeenCalledWith(
+        autocomplete['elementRef'],
+        autocomplete['resultsRef'],
+        false
+      );
 
       const dropdownElement = getSearchResultsContainer();
       const autocompleteElement = getAutocompleteElement();
@@ -540,19 +582,6 @@ describe('Autocomplete component', () => {
       expect(dropdownElement).not.toBeNull();
     }));
 
-    it('should not show the dropdown when tab is pressed on the form control', fakeAsync(() => {
-      fixture.detectChanges();
-
-      const inputElement: HTMLInputElement = getInputElement();
-
-      // Type 'r' to activate the autocomplete dropdown.
-      inputElement.value = 'r';
-
-      const dropdownElement = getSearchResultsContainer();
-
-      expect(dropdownElement).toBeNull();
-    }));
-
     it('should emit an undefined value when text input is cleared',
       fakeAsync(() => {
         fixture.detectChanges();
@@ -592,6 +621,7 @@ describe('Autocomplete component', () => {
 
         addButton.click();
         fixture.detectChanges();
+        tick();
 
         expect(addButtonSpy).toHaveBeenCalled();
       })
@@ -646,10 +676,10 @@ describe('Autocomplete component', () => {
       })
     );
 
-    it('should emit an event correctly when the add button is enabled and clicked',
+    it('should emit an event correctly when the show more button is enabled and clicked',
       fakeAsync(() => {
         component.enableShowMore = true;
-        const showMoreButtonSpy = spyOn(component, 'showMoreButtonClicked').and.callThrough();
+        const showMoreButtonSpy = spyOn(component, 'onShowMoreClick').and.callThrough();
         fixture.detectChanges();
 
         // Type 'r' to activate the autocomplete dropdown, then click the first result.
@@ -661,6 +691,7 @@ describe('Autocomplete component', () => {
 
         showMoreButton.click();
         fixture.detectChanges();
+        tick();
 
         expect(showMoreButtonSpy).toHaveBeenCalled();
       })
@@ -669,7 +700,7 @@ describe('Autocomplete component', () => {
     it('should not show the show more button unless the component input asks for it',
       fakeAsync(() => {
         component.enableShowMore = false;
-        const showMoreButtonSpy = spyOn(component, 'showMoreButtonClicked').and.callThrough();
+        const showMoreButtonSpy = spyOn(component, 'onShowMoreClick').and.callThrough();
         fixture.detectChanges();
 
         // Type 'r' to activate the autocomplete dropdown, then click the first result.
@@ -800,409 +831,99 @@ describe('Autocomplete component', () => {
     });
 
     describe('keyboard interactions', () => {
-      it('should notify selection when enter key pressed', fakeAsync(() => {
+      it('should not show the dropdown when user tabs through input', fakeAsync(() => {
         fixture.detectChanges();
-
-        const input: SkyAutocompleteInputDirective = component.autocompleteInput;
         const inputElement: HTMLInputElement = getInputElement();
-
-        inputElement.value = 'r';
-        SkyAppTestUtility.fireDomEvent(inputElement, 'input', {
-          keyboardEventInit: { key: 'R' }
-        });
-        tick();
-
-        const notifySpy = spyOn(autocomplete.selectionChange, 'emit')
-          .and.callThrough();
-
-        SkyAppTestUtility.fireDomEvent(inputElement, 'keydown', {
-          keyboardEventInit: { key: 'Enter' }
-        });
-        tick();
-
-        expect(input.value.name).toEqual('Red');
-        expect(notifySpy).toHaveBeenCalledWith({
-          selectedItem: input.value
-        });
-      }));
-
-      it('should notify selection when tab key pressed', fakeAsync(() => {
-        fixture.detectChanges();
-
-        const input: SkyAutocompleteInputDirective = component.autocompleteInput;
-        const inputElement: HTMLInputElement = getInputElement();
-
-        enterSearch('r', fixture);
-
-        const notifySpy = spyOn(autocomplete.selectionChange, 'emit')
-          .and.callThrough();
 
         sendTab(inputElement, fixture);
 
-        expect(input.value.name).toEqual('Red');
-        expect(notifySpy).toHaveBeenCalledWith({
-          selectedItem: input.value
-        });
+        const dropdownElement = getSearchResultsContainer();
+        expect(dropdownElement).toBeNull();
       }));
 
-      it('should not stop default behavior when shift tab is pressed',
+      it('should not stop default behavior when tab is pressed', fakeAsync(() => {
+        fixture.detectChanges();
+        spyOn(KeyboardEvent.prototype, 'stopPropagation').and.callThrough();
+        spyOn(KeyboardEvent.prototype, 'preventDefault').and.callThrough();
+        const inputElement: HTMLInputElement = getInputElement();
+
+        sendTab(inputElement, fixture);
+
+        expect(KeyboardEvent.prototype.stopPropagation).not.toHaveBeenCalled();
+        expect(KeyboardEvent.prototype.preventDefault).not.toHaveBeenCalled();
+      }));
+
+      it('should not stop default behavior when shift tab is pressed', fakeAsync(() => {
+        fixture.detectChanges();
+        spyOn(KeyboardEvent.prototype, 'stopPropagation').and.callThrough();
+        spyOn(KeyboardEvent.prototype, 'preventDefault').and.callThrough();
+        const inputElement: HTMLInputElement = getInputElement();
+
+        sendTab(inputElement, fixture, true);
+
+        expect(KeyboardEvent.prototype.stopPropagation).not.toHaveBeenCalled();
+        expect(KeyboardEvent.prototype.preventDefault).not.toHaveBeenCalled();
+      }));
+
+      it('should change value and emit when search result is focused and tab is pressed',
         fakeAsync(() => {
           fixture.detectChanges();
+          const input: SkyAutocompleteInputDirective = component.autocompleteInput;
+          const inputElement: HTMLInputElement = getInputElement();
+          const notifySpy = spyOn(autocomplete.selectionChange, 'emit').and.callThrough();
+
+          enterSearch('r', fixture);
+          sendTab(inputElement, fixture);
+
+          expect(inputElement.value).toEqual('Red');
+          expect(input.value.name).toEqual('Red');
+          expect(notifySpy).toHaveBeenCalledWith({
+            selectedItem: input.value
+          });
+        })
+      );
+
+      it('should reset the value when tab key is pressed while add button is focused',
+        fakeAsync(() => {
+          component.showAddButton = true;
+          fixture.detectChanges();
+          const input: SkyAutocompleteInputDirective = component.autocompleteInput;
+          const inputElement: HTMLInputElement = getInputElement();
+          const selectedValue = { name: 'Red' };
+
+          updateNgModel(fixture, selectedValue);
+          enterSearch('r', fixture);
+
+          // Cycle up and around to the add button at bottom.
+          sendArrowUp(inputElement, fixture);
+
+          const addButton = getAddButton();
+          expect(addButton).toHaveCssClass('sky-autocomplete-descendant-focus');
+
+          sendTab(inputElement, fixture);
+          blurInput(inputElement, fixture);
+
+          expect(component.myForm.value.favoriteColor).toEqual(selectedValue);
+          expect(input.value).toEqual(selectedValue);
+          expect(inputElement.value).toEqual(selectedValue.name);
+        })
+      );
+
+      it('should not stop default behavior when tab is pressed on the input when actions exist',
+        fakeAsync(() => {
+          component.showAddButton = true;
+          fixture.detectChanges();
+          const inputElement: HTMLInputElement = getInputElement();
+
+          enterSearch('r', fixture);
 
           spyOn(KeyboardEvent.prototype, 'stopPropagation').and.callThrough();
           spyOn(KeyboardEvent.prototype, 'preventDefault').and.callThrough();
 
-          const inputElement: HTMLInputElement = getInputElement();
-
-          sendTab(inputElement, fixture, true);
-          fixture.detectChanges();
-          tick();
+          sendTab(inputElement, fixture);
 
           expect(KeyboardEvent.prototype.stopPropagation).not.toHaveBeenCalled();
           expect(KeyboardEvent.prototype.preventDefault).not.toHaveBeenCalled();
-        })
-      );
-
-      it('should navigate items with arrow keys', fakeAsync(() => {
-        fixture.detectChanges();
-
-        const inputElement: HTMLInputElement = getInputElement();
-
-        enterSearch('r', fixture);
-        expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
-
-        sendArrowDown(inputElement, fixture);
-
-        expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
-
-        sendArrowUp(inputElement, fixture);
-
-        expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
-
-        // Move up again to loop back to the bottom of the list.
-        SkyAppTestUtility.fireDomEvent(inputElement, 'keydown', {
-          keyboardEventInit: { key: 'Up' }
-        });
-        fixture.detectChanges();
-        tick();
-
-        expect(getSearchResultItems().item(5)).toHaveCssClass('selected');
-
-        // Move down to loop back to the top.
-        SkyAppTestUtility.fireDomEvent(inputElement, 'keydown', {
-          keyboardEventInit: { key: 'Down' }
-        });
-        fixture.detectChanges();
-        tick();
-
-        expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
-
-      }));
-
-      it('should close the menu when escape key pressed', fakeAsync(() => {
-        fixture.detectChanges();
-
-        const inputElement: HTMLInputElement = getInputElement();
-
-        enterSearch('r', fixture);
-
-        SkyAppTestUtility.fireDomEvent(inputElement, 'keydown', {
-          keyboardEventInit: { key: 'Escape' }
-        });
-        fixture.detectChanges();
-        tick();
-
-        expect(autocomplete.searchResults.length).toEqual(0);
-        expect(getSearchResultsContainer()).toBeNull();
-      }));
-
-      it('should reset input text value to descriptor value on blur',
-        fakeAsync(() => {
-          fixture.detectChanges();
-
-          const input: SkyAutocompleteInputDirective = component.autocompleteInput;
-          const inputElement: HTMLInputElement = getInputElement();
-
-          const selectedValue = { name: 'Red' };
-          component.model.favoriteColor = selectedValue;
-
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
-
-          input.inputTextValue = 're';
-
-          expect(inputElement.value).toEqual('re');
-
-          SkyAppTestUtility.fireDomEvent(inputElement, 'blur');
-          tick();
-
-          expect(component.myForm.value.favoriteColor).toEqual(selectedValue);
-          expect(input.value).toEqual(selectedValue);
-          expect(inputElement.value).toEqual(selectedValue.name);
-          expect(getSearchResultsContainer()).toBeNull();
-        })
-      );
-
-      it('should not reset the input text value when a blur is for the dropdown being focused',
-        fakeAsync(() => {
-          component.showAddButton = true;
-          fixture.detectChanges();
-
-          const input: SkyAutocompleteInputDirective = component.autocompleteInput;
-          const inputElement: HTMLInputElement = getInputElement();
-
-          const selectedValue = { name: 'Red' };
-          component.model.favoriteColor = selectedValue;
-
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
-
-          enterSearch('re', fixture);
-          inputElement.focus();
-
-          expect(inputElement.value).toEqual('re');
-
-          getAddButton().focus();
-          blurInput(inputElement, fixture);
-          fixture.detectChanges();
-          tick();
-
-          expect(component.myForm.value.favoriteColor).toEqual(selectedValue);
-          expect(input.value).toEqual(selectedValue);
-          expect(inputElement.value).toEqual('re');
-          expect(getSearchResultsContainer()).not.toBeNull();
-        })
-      );
-
-      it('should not reset the input text value when a blur is for the dropdown being blurred and returning to the input',
-        fakeAsync(() => {
-          component.showAddButton = true;
-          fixture.detectChanges();
-
-          const input: SkyAutocompleteInputDirective = component.autocompleteInput;
-          const inputElement: HTMLInputElement = getInputElement();
-
-          const selectedValue = { name: 'Red' };
-          component.model.favoriteColor = selectedValue;
-
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
-
-          enterSearch('re', fixture);
-          getAddButton().focus();
-
-          expect(inputElement.value).toEqual('re');
-
-          inputElement.focus();
-          SkyAppTestUtility.fireDomEvent(getAddButton(), 'focusout', { customEventInit: { relatedTarget: inputElement } });
-          fixture.detectChanges();
-          tick();
-
-          expect(component.myForm.value.favoriteColor).toEqual(selectedValue);
-          expect(input.value).toEqual(selectedValue);
-          expect(inputElement.value).toEqual('re');
-          expect(getSearchResultsContainer()).not.toBeNull();
-        })
-      );
-
-      it('should not reset input text value if unchanged', fakeAsync(() => {
-        fixture.detectChanges();
-
-        const input: SkyAutocompleteInputDirective = component.autocompleteInput;
-        const inputElement: HTMLInputElement = getInputElement();
-
-        const selectedValue = { name: 'Red' };
-        component.model.favoriteColor = selectedValue;
-
-        fixture.detectChanges();
-        tick();
-        fixture.detectChanges();
-
-        input.inputTextValue = 'Red';
-
-        const spy = spyOnProperty(input, 'inputTextValue', 'set').and.callThrough();
-
-        expect(inputElement.value).toEqual('Red');
-
-        SkyAppTestUtility.fireDomEvent(inputElement, 'blur');
-        tick();
-
-        expect(spy).not.toHaveBeenCalled();
-      }));
-
-      it('should clear the input selected value if text value empty on blur',
-        fakeAsync(() => {
-          fixture.detectChanges();
-
-          const input: SkyAutocompleteInputDirective = component.autocompleteInput;
-          const inputElement: HTMLInputElement = getInputElement();
-
-          const selectedValue = { name: 'Red' };
-          component.model.favoriteColor = selectedValue;
-
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
-
-          enterSearch('', fixture);
-
-          expect(inputElement.value).toEqual('');
-
-          SkyAppTestUtility.fireDomEvent(inputElement, 'blur');
-          fixture.detectChanges();
-          tick();
-
-          expect(component.myForm.value.favoriteColor).toBeUndefined();
-          expect(input.value).toBeUndefined();
-          expect(inputElement.value).toEqual('');
-        })
-      );
-
-      it('should clear the input selected value if the search field is empty',
-        fakeAsync(() => {
-          fixture.detectChanges();
-
-          const input: SkyAutocompleteInputDirective = component.autocompleteInput;
-          const inputElement: HTMLInputElement = getInputElement();
-
-          const selectedValue: { name: string } = undefined;
-          component.model.favoriteColor = selectedValue;
-
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
-
-          SkyAppTestUtility.fireDomEvent(inputElement, 'blur');
-          tick();
-
-          expect(component.myForm.value.favoriteColor).toBeUndefined();
-          expect(input.value).toBeUndefined();
-          expect(inputElement.value).toEqual('');
-        })
-      );
-
-      it('should tab to the actions area when an action exists',
-        fakeAsync(() => {
-          component.showAddButton = true;
-          fixture.detectChanges();
-
-          enterSearch('r', fixture);
-
-          const inputElement: HTMLInputElement = getInputElement();
-
-          sendTab(inputElement, fixture);
-
-          expect(document.activeElement).toBe(getAddButton());
-        })
-      );
-
-      it('should tab to the second action when multiple actions exists',
-        fakeAsync(() => {
-          component.showAddButton = true;
-          component.enableShowMore = true;
-          fixture.detectChanges();
-
-          enterSearch('r', fixture);
-
-          const inputElement: HTMLInputElement = getInputElement();
-
-          sendTab(inputElement, fixture);
-
-          expect(document.activeElement).toBe(getShowMoreButton());
-
-          sendTab(inputElement, fixture);
-
-          expect(document.activeElement).toBe(getAddButton());
-        })
-      );
-
-      it('should reset the value when tabbing out of the actions area',
-        fakeAsync(() => {
-          component.showAddButton = true;
-          fixture.detectChanges();
-
-          const selectedValue = { name: 'Red' };
-          component.model.favoriteColor = selectedValue;
-
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
-
-          enterSearch('r', fixture);
-
-          const input: SkyAutocompleteInputDirective = component.autocompleteInput;
-          const inputElement: HTMLInputElement = getInputElement();
-
-          sendTab(inputElement, fixture);
-
-          expect(document.activeElement).toBe(getAddButton());
-
-          sendTab(inputElement, fixture);
-
-          expect(component.myForm.value.favoriteColor).toEqual(selectedValue);
-          expect(input.value).toEqual(selectedValue);
-          expect(inputElement.value).toEqual(selectedValue.name);
-        })
-      );
-
-      it('should reset the value and emit the add event if enter is clicked on add button',
-        fakeAsync(() => {
-          component.showAddButton = true;
-          fixture.detectChanges();
-
-          const selectedValue = { name: 'Red' };
-          component.model.favoriteColor = selectedValue;
-
-          fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
-
-          enterSearch('r', fixture);
-
-          const input: SkyAutocompleteInputDirective = component.autocompleteInput;
-          const inputElement: HTMLInputElement = getInputElement();
-
-          // Select an item other than "Red"
-          sendArrowDown(inputElement, fixture);
-
-          sendTab(inputElement, fixture);
-
-          const addButton = getAddButton();
-          expect(document.activeElement).toBe(addButton);
-
-          // In the wild this is done by the user clicking "Enter", but in testing we must send both.
-          SkyAppTestUtility.fireDomEvent(addButton, 'keydown', {
-            keyboardEventInit: { key: 'Enter' }
-          });
-          SkyAppTestUtility.fireDomEvent(addButton, 'click');
-          fixture.detectChanges();
-          tick();
-
-          expect(component.myForm.value.favoriteColor).toEqual(selectedValue);
-          expect(input.value).toEqual(selectedValue);
-          expect(inputElement.value).toEqual(selectedValue.name);
-        })
-      );
-
-      it('should return focus back to the input when Shift-Tab is pressed on the first action',
-        fakeAsync(() => {
-          component.showAddButton = true;
-          fixture.detectChanges();
-
-          enterSearch('r', fixture);
-
-          const inputElement: HTMLInputElement = getInputElement();
-
-          sendTab(inputElement, fixture);
-
-          expect(document.activeElement).toBe(getAddButton());
-
-          sendTab(inputElement, fixture, true);
-
-          expect(document.activeElement).toBe(getInputElement());
         })
       );
 
@@ -1210,15 +931,12 @@ describe('Autocomplete component', () => {
         fakeAsync(() => {
           component.showAddButton = true;
           fixture.detectChanges();
-          tick();
-          fixture.detectChanges();
+          const inputElement: HTMLInputElement = getInputElement();
 
           enterSearch('r', fixture);
 
           spyOn(KeyboardEvent.prototype, 'stopPropagation').and.callThrough();
           spyOn(KeyboardEvent.prototype, 'preventDefault').and.callThrough();
-
-          const inputElement: HTMLInputElement = getInputElement();
 
           sendTab(inputElement, fixture, true);
 
@@ -1227,105 +945,284 @@ describe('Autocomplete component', () => {
         })
       );
 
-      it('should not change the selected item index when arrow down is used on an action item',
+      it('should change value and emit when search result is focused and enter is pressed',
         fakeAsync(() => {
-          component.showAddButton = true;
           fixture.detectChanges();
-
+          const input: SkyAutocompleteInputDirective = component.autocompleteInput;
           const inputElement: HTMLInputElement = getInputElement();
+          const notifySpy = spyOn(autocomplete.selectionChange, 'emit').and.callThrough();
 
           enterSearch('r', fixture);
-          expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
+          expect(getSearchResultsContainer()).not.toBeNull();
+          sendEnter(inputElement, fixture);
 
-          sendArrowDown(inputElement, fixture);
-
-          expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
-
-          sendTab(inputElement, fixture);
-
-          expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
-
-          sendArrowDown(inputElement, fixture);
-
-          expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
-
-          sendTab(inputElement, fixture, true);
-
-          expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
-
-          sendArrowDown(inputElement, fixture);
-
-          expect(getSearchResultItems().item(2)).toHaveCssClass('selected');
+          expect(inputElement.value).toEqual('Red');
+          expect(input.value.name).toEqual('Red');
+          expect(notifySpy).toHaveBeenCalledWith({
+            selectedItem: input.value
+          });
+          expect(getSearchResultsContainer()).toBeNull();
         })
       );
 
-      it('should not change the selected item index when arrow up is used on an action item',
+      it('should not close the dropdown when enter is pressed on an item with the add button enabled',
         fakeAsync(() => {
           component.showAddButton = true;
           fixture.detectChanges();
-
           const inputElement: HTMLInputElement = getInputElement();
 
           enterSearch('r', fixture);
-          expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
+          expect(getSearchResultsContainer()).not.toBeNull();
+          sendEnter(inputElement, fixture);
 
-          sendArrowDown(inputElement, fixture);
+          expect(getSearchResultsContainer()).not.toBeNull();
+        })
+      );
 
-          expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
+      it('should not close the dropdown when enter is pressed on an item with show more enabled',
+        fakeAsync(() => {
+          component.enableShowMore = true;
+          fixture.detectChanges();
+          const inputElement: HTMLInputElement = getInputElement();
 
-          sendTab(inputElement, fixture);
+          enterSearch('r', fixture);
+          expect(getSearchResultsContainer()).not.toBeNull();
+          sendEnter(inputElement, fixture);
 
-          expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
+          expect(getSearchResultsContainer()).not.toBeNull();
+        })
+      );
 
+      it('should navigate items with arrow keys', fakeAsync(() => {
+        fixture.detectChanges();
+        const inputElement: HTMLInputElement = getInputElement();
+
+        enterSearch('r', fixture);
+
+        expect(getSearchResultItems().item(0)).toHaveCssClass('sky-autocomplete-descendant-focus');
+
+        sendArrowDown(inputElement, fixture);
+
+        expect(getSearchResultItems().item(1)).toHaveCssClass('sky-autocomplete-descendant-focus');
+
+        sendArrowUp(inputElement, fixture);
+
+        expect(getSearchResultItems().item(0)).toHaveCssClass('sky-autocomplete-descendant-focus');
+
+        // Move up again to loop back to the bottom of the list.
+        sendArrowUp(inputElement, fixture);
+
+        expect(getSearchResultItems().item(5)).toHaveCssClass('sky-autocomplete-descendant-focus');
+
+        // Move down to loop back to the top.
+        sendArrowDown(inputElement, fixture);
+
+        expect(getSearchResultItems().item(0)).toHaveCssClass('sky-autocomplete-descendant-focus');
+      }));
+
+      it('should close the menu without changes when escape key pressed', fakeAsync(() => {
+        fixture.detectChanges();
+        const inputElement: HTMLInputElement = getInputElement();
+
+        enterSearch('r', fixture);
+        sendEscape(inputElement, fixture);
+
+        expect(autocomplete.searchResults.length).toEqual(0);
+        expect(getSearchResultsContainer()).toBeNull();
+      }));
+
+      it('should reset input text value when user clicks the overlay backdrop', fakeAsync(() => {
+        fixture.detectChanges();
+        const input: SkyAutocompleteInputDirective = component.autocompleteInput;
+        const inputElement: HTMLInputElement = getInputElement();
+        const selectedValue = { name: 'Red' };
+        const btn = document.getElementById('previousButton');
+
+        updateNgModel(fixture, selectedValue);
+        enterSearch('re', fixture);
+
+        expect(inputElement.value).toEqual('re');
+
+        // Firing the click event in a test won't move focus, so we move focus manually here.
+        btn.focus();
+        const overlay = document.querySelector('.sky-overlay') as any;
+        SkyAppTestUtility.fireDomEvent(overlay, 'click');
+        tick();
+
+        expect(component.myForm.value.favoriteColor).toEqual(selectedValue);
+        expect(input.value).toEqual(selectedValue);
+        expect(inputElement.value).toEqual(selectedValue.name);
+        expect(getSearchResultsContainer()).toBeNull();
+      }));
+
+      it('should not reset input text value if unchanged', fakeAsync(() => {
+        fixture.detectChanges();
+        const input: SkyAutocompleteInputDirective = component.autocompleteInput;
+        const inputElement: HTMLInputElement = getInputElement();
+        const selectedValue = { name: 'Red' };
+        const spy = spyOnProperty(input, 'inputTextValue', 'set').and.callThrough();
+
+        updateNgModel(fixture, selectedValue);
+        input.inputTextValue = 'Red';
+        spy.calls.reset();
+
+        expect(inputElement.value).toEqual('Red');
+
+        blurInput(inputElement, fixture);
+
+        expect(spy).not.toHaveBeenCalled();
+      }));
+
+      it('should clear the input selected value if text value empty on blur',
+        fakeAsync(() => {
+          fixture.detectChanges();
+          const input: SkyAutocompleteInputDirective = component.autocompleteInput;
+          const inputElement: HTMLInputElement = getInputElement();
+          const selectedValue = { name: 'Red' };
+
+          updateNgModel(fixture, selectedValue);
+          enterSearch('', fixture);
+
+          expect(inputElement.value).toEqual('');
+
+          blurInput(inputElement, fixture);
+
+          expect(component.myForm.value.favoriteColor).toBeUndefined();
+          expect(input.value).toBeUndefined();
+          expect(inputElement.value).toEqual('');
+        })
+      );
+
+      it('should close the dropdown if text value becomes empty',
+        fakeAsync(() => {
+          fixture.detectChanges();
+          const inputElement: HTMLInputElement = getInputElement();
+          const selectedValue = { name: 'Red' };
+
+          updateNgModel(fixture, selectedValue);
+
+          enterSearch('re', fixture);
+
+          expect(getSearchResultsContainer()).not.toBeNull();
+
+          enterSearch('', fixture);
+
+          expect(getSearchResultsContainer()).toBeNull();
+          expect(inputElement.value).toEqual('');
+        })
+      );
+
+      it('should not close the dropdown if text value becomes empty with the add button enabled',
+        fakeAsync(() => {
+          component.showAddButton = true;
+          fixture.detectChanges();
+          const inputElement: HTMLInputElement = getInputElement();
+          const selectedValue = { name: 'Red' };
+
+          updateNgModel(fixture, selectedValue);
+
+          enterSearch('re', fixture);
+
+          expect(getSearchResultsContainer()).not.toBeNull();
+
+          enterSearch('', fixture);
+
+          expect(getSearchResultsContainer()).not.toBeNull();
+          expect(inputElement.value).toEqual('');
+        })
+      );
+
+      it('should not close the dropdown if text value becomes empty with show more enabled',
+        fakeAsync(() => {
+          component.enableShowMore = true;
+          fixture.detectChanges();
+          const inputElement: HTMLInputElement = getInputElement();
+          const selectedValue = { name: 'Red' };
+
+          updateNgModel(fixture, selectedValue);
+
+          enterSearch('re', fixture);
+
+          expect(getSearchResultsContainer()).not.toBeNull();
+
+          enterSearch('', fixture);
+
+          expect(getSearchResultsContainer()).not.toBeNull();
+          expect(inputElement.value).toEqual('');
+        })
+      );
+
+      it('should clear the input selected value if the search field is empty',
+        fakeAsync(() => {
+          fixture.detectChanges();
+          const input: SkyAutocompleteInputDirective = component.autocompleteInput;
+          const inputElement: HTMLInputElement = getInputElement();
+          const selectedValue: { name: string } = undefined;
+
+          updateNgModel(fixture, selectedValue);
+          blurInput(inputElement, fixture);
+
+          expect(component.myForm.value.favoriteColor).toBeUndefined();
+          expect(input.value).toBeUndefined();
+          expect(inputElement.value).toEqual('');
+        })
+      );
+
+      it('should reset the value and emit the add event if enter is pressed when the add button is focused',
+        fakeAsync(() => {
+          component.showAddButton = true;
+          fixture.detectChanges();
+          const input: SkyAutocompleteInputDirective = component.autocompleteInput;
+          const inputElement: HTMLInputElement = getInputElement();
+          const selectedValue = { name: 'Red' };
+          const addButtonSpy = spyOn(component, 'addButtonClicked').and.callThrough();
+
+          updateNgModel(fixture, selectedValue);
+          enterSearch('r', fixture);
+
+          // Cycle up and around to the add button.
           sendArrowUp(inputElement, fixture);
 
-          expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
+          const addButton = getAddButton();
+          expect(addButton).toHaveCssClass('sky-autocomplete-descendant-focus');
+          expect(getSearchResultsContainer()).not.toBeNull();
 
-          sendTab(inputElement, fixture, true);
+          sendEnter(inputElement, fixture);
 
-          expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
-
-          sendArrowUp(inputElement, fixture);
-
-          expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
+          expect(component.myForm.value.favoriteColor).toEqual(selectedValue);
+          expect(input.value).toEqual(selectedValue);
+          expect(inputElement.value).toEqual(selectedValue.name);
+          expect(addButtonSpy).toHaveBeenCalled();
+          expect(getSearchResultsContainer()).toBeNull();
         })
       );
 
       it('should navigate items with arrow keys with search results limits', fakeAsync(() => {
         component.searchResultsLimit = 4;
         fixture.detectChanges();
-
         const inputElement: HTMLInputElement = getInputElement();
 
         enterSearch('r', fixture);
-        expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
+
+        expect(getSearchResultItems().item(0)).toHaveCssClass('sky-autocomplete-descendant-focus');
 
         sendArrowDown(inputElement, fixture);
 
-        expect(getSearchResultItems().item(1)).toHaveCssClass('selected');
+        expect(getSearchResultItems().item(1)).toHaveCssClass('sky-autocomplete-descendant-focus');
 
         sendArrowUp(inputElement, fixture);
 
-        expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
+        expect(getSearchResultItems().item(0)).toHaveCssClass('sky-autocomplete-descendant-focus');
 
         // Move up again to loop back to the bottom of the list.
-        SkyAppTestUtility.fireDomEvent(inputElement, 'keydown', {
-          keyboardEventInit: { key: 'Up' }
-        });
-        fixture.detectChanges();
-        tick();
+        sendArrowUp(inputElement, fixture);
 
-        expect(getSearchResultItems().item(3)).toHaveCssClass('selected');
+        expect(getSearchResultItems().item(3)).toHaveCssClass('sky-autocomplete-descendant-focus');
 
         // Move down to loop back to the top.
-        SkyAppTestUtility.fireDomEvent(inputElement, 'keydown', {
-          keyboardEventInit: { key: 'Down' }
-        });
-        fixture.detectChanges();
-        tick();
+        sendArrowDown(inputElement, fixture);
 
-        expect(getSearchResultItems().item(0)).toHaveCssClass('selected');
-
+        expect(getSearchResultItems().item(0)).toHaveCssClass('sky-autocomplete-descendant-focus');
       }));
     });
 
@@ -1336,6 +1233,7 @@ describe('Autocomplete component', () => {
         const input: SkyAutocompleteInputDirective = component.autocompleteInput;
 
         enterSearch('r', fixture);
+        expect(getSearchResultsContainer()).not.toBeNull();
 
         const notifySpy = spyOn(autocomplete.selectionChange, 'emit')
           .and.callThrough();
@@ -1344,10 +1242,72 @@ describe('Autocomplete component', () => {
         SkyAppTestUtility.fireDomEvent(firstItem, 'mousedown');
         tick();
 
+        expect(getSearchResultsContainer()).toBeNull();
         expect(input.value.name).toEqual('Red');
         expect(notifySpy).toHaveBeenCalledWith({
           selectedItem: input.value
         });
+      }));
+
+      it('should not close the dropdown on item click with the add button enabled', fakeAsync(() => {
+        component.showAddButton = true;
+        fixture.detectChanges();
+
+        enterSearch('r', fixture);
+        expect(getSearchResultsContainer()).not.toBeNull();
+        const firstItem = getSearchResultItems().item(0);
+
+        SkyAppTestUtility.fireDomEvent(firstItem, 'mousedown');
+        tick();
+
+        expect(getSearchResultsContainer()).not.toBeNull();
+      }));
+
+      it('should not close the dropdown on item click with show more enabled', fakeAsync(() => {
+        component.enableShowMore = true;
+        fixture.detectChanges();
+
+        enterSearch('r', fixture);
+        expect(getSearchResultsContainer()).not.toBeNull();
+        const firstItem = getSearchResultItems().item(0);
+
+        SkyAppTestUtility.fireDomEvent(firstItem, 'mousedown');
+        tick();
+
+        expect(getSearchResultsContainer()).not.toBeNull();
+      }));
+
+      it('should navigate items with mousemove event', fakeAsync(() => {
+        fixture.detectChanges();
+
+        enterSearch('r', fixture);
+
+        const results: NodeListOf<Element> = getSearchResultItems();
+
+        expect(results.item(0)).toHaveCssClass('sky-autocomplete-descendant-focus');
+
+        sendMouseMove(results.item(1) as HTMLElement, fixture);
+
+        expect(results.item(0)).not.toHaveCssClass('sky-autocomplete-descendant-focus');
+        expect(results.item(1)).toHaveCssClass('sky-autocomplete-descendant-focus');
+      }));
+
+      it('should navigate items with both mousemove event and key events', fakeAsync(() => {
+        fixture.detectChanges();
+        const inputElement: HTMLInputElement = getInputElement();
+
+        enterSearch('r', fixture);
+
+        const results: NodeListOf<Element> = getSearchResultItems();
+
+        expect(results.item(0)).toHaveCssClass('sky-autocomplete-descendant-focus');
+
+        sendMouseMove(results.item(1) as HTMLElement, fixture);
+        sendArrowDown(inputElement, fixture);
+
+        expect(results.item(0)).not.toHaveCssClass('sky-autocomplete-descendant-focus');
+        expect(results.item(1)).not.toHaveCssClass('sky-autocomplete-descendant-focus');
+        expect(results.item(2)).toHaveCssClass('sky-autocomplete-descendant-focus');
       }));
     });
 
@@ -1581,6 +1541,7 @@ describe('Autocomplete component', () => {
 
         addButton.click();
         fixture.detectChanges();
+        tick();
 
         expect(addButtonSpy).toHaveBeenCalled();
       })
@@ -1631,10 +1592,10 @@ describe('Autocomplete component', () => {
       })
     );
 
-    it('should emit an event correctly when the add button is enabled and clicked',
+    it('should emit an event correctly when the show more button is enabled and clicked',
       fakeAsync(() => {
         component.enableShowMore = true;
-        const showMoreButtonSpy = spyOn(component, 'showMoreButtonClicked').and.callThrough();
+        const showMoreButtonSpy = spyOn(component, 'onShowMoreClick').and.callThrough();
         fixture.detectChanges();
 
         // Type 'r' to activate the autocomplete dropdown, then click the first result.
@@ -1646,6 +1607,7 @@ describe('Autocomplete component', () => {
 
         showMoreButton.click();
         fixture.detectChanges();
+        tick();
 
         expect(showMoreButtonSpy).toHaveBeenCalled();
       })
@@ -1654,7 +1616,7 @@ describe('Autocomplete component', () => {
     it('should not show the show more button unless the component input asks for it',
       fakeAsync(() => {
         component.enableShowMore = false;
-        const showMoreButtonSpy = spyOn(component, 'showMoreButtonClicked').and.callThrough();
+        const showMoreButtonSpy = spyOn(component, 'onShowMoreClick').and.callThrough();
         fixture.detectChanges();
 
         // Type 'r' to activate the autocomplete dropdown, then click the first result.
@@ -1695,6 +1657,47 @@ describe('Autocomplete component', () => {
         expect(getShowMoreButton()).toBeNull();
       })
     );
+
+  });
+
+  describe('within an input box', () => {
+    let fixture: ComponentFixture<SkyAutocompleteFixtureComponent>;
+    let component: SkyAutocompleteFixtureComponent;
+    let autocomplete: SkyAutocompleteComponent;
+
+    beforeEach(() => {
+      TestBed.configureTestingModule({
+        imports: [
+          SkyAutocompleteFixturesModule
+        ],
+        providers: [
+          SkyInputBoxHostService
+        ]
+      });
+
+      fixture = TestBed.createComponent(SkyAutocompleteFixtureComponent);
+      component = fixture.componentInstance;
+      autocomplete = component.autocomplete;
+    });
+
+    afterEach(() => {
+      fixture.destroy();
+    });
+
+    it('should call the setDropdownWidth with the proper parameters', fakeAsync(() => {
+      const adapterSpy = spyOn(autocomplete['adapterService'], 'setDropdownWidth').and.callThrough();
+
+      fixture.detectChanges();
+      tick();
+
+      enterSearch('r', fixture);
+
+      expect(adapterSpy).toHaveBeenCalledWith(
+        autocomplete['elementRef'],
+        autocomplete['resultsRef'],
+        true
+      );
+    }));
 
   });
 });
