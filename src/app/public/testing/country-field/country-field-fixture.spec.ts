@@ -16,6 +16,10 @@ import {
 } from '@skyux/lookup';
 
 import {
+  SkyThemeService
+} from '@skyux/theme';
+
+import {
   SkyCountryFieldTestingModule
 } from './country-field-testing.module';
 
@@ -65,6 +69,9 @@ describe('Country field fixture', () => {
       ],
       imports: [
         SkyCountryFieldTestingModule
+      ],
+      providers: [
+        SkyThemeService
       ]
     });
 

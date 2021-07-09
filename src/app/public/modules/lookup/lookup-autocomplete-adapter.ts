@@ -17,15 +17,6 @@ import {
 export class SkyLookupAutocompleteAdapter {
 
   /**
-   * Specifies a data source for the lookup component to search when users
-   * enter text. You can specify static data such as an array of objects, or
-   * you can pull data from a database.
-   * @default []
-   */
-  @Input()
-  public data: any[];
-
-  /**
    * Specifies how many milliseconds to wait before searching while users
    * enter text in the lookup field.
    * @default 0
@@ -64,9 +55,9 @@ export class SkyLookupAutocompleteAdapter {
   public search: SkyAutocompleteSearchFunction;
 
   /**
-   * Specifies a template to format each search result in the dropdown list.
-   * The lookup component injects search result values into the template as
-   * `item` variables that reference all of the object properties of the search results.
+   * Specifies a template to format each option in the dropdown list. The lookup component
+   * injects values into the template as `item` variables that reference all the object
+   * properties of the options.
    */
   @Input()
   public searchResultTemplate: TemplateRef<any>;

@@ -1,3 +1,27 @@
+# 4.17.0 (2021-07-09)
+
+- Added a search icon to the country field. [#189](https://github.com/blackbaud/skyux-lookup/pull/189)
+- Updated the country field to no longer show a placeholder when in modern theme. [#189](https://github.com/blackbaud/skyux-lookup/pull/189)
+- Fixed the search bar in modern theme to no longer wrap the search icon to the next line. [#189](https://github.com/blackbaud/skyux-lookup/pull/189)
+
+# 4.16.0 (2021-06-28)
+
+- Added a callback to `addClick` to notify the component when a new item is added to the data source. [#195](https://github.com/blackbaud/skyux-lookup/pull/195)
+
+# 4.15.0 (2021-06-15)
+
+- Updated the lookup component to include a search button in the input field that opens the show more picker. [#183](https://github.com/blackbaud/skyux-lookup/pull/183)
+- Updated the keyboard interactions for the lookup component's dropdown menu. [#176](https://github.com/blackbaud/skyux-lookup/pull/176)
+- Fixed the lookup component to focus on the input field after the show more picker closes. [#193](https://github.com/blackbaud/skyux-lookup/pull/193)
+
+# 4.14.1 (2021-06-04)
+
+- Fixed the search component to display the correct "collapse" icon when expanded on a small screen. [#191](https://github.com/blackbaud/skyux-lookup/pull/191)
+
+# 4.14.0 (2021-05-26)
+
+- Updated the lookup component to collapse tokens if users select more than 5 items when the lookup menu includes the 'Show all/matches' button. [#186](https://github.com/blackbaud/skyux-lookup/pull/186)
+
 # 5.0.0-alpha.0 (2021-05-21)
 
 - Removed `BrowserAnimationsModule` from the `imports` section of `SkySearchModule` to support lazy-loading. Consumers of `SkySearchModule` must now import `BrowserAnimationsModule` into their application's root module. [#185](https://github.com/blackbaud/skyux-lookup/pull/185)
