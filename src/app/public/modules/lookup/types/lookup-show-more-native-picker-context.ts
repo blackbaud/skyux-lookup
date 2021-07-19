@@ -1,6 +1,6 @@
 import {
-  SkyLookupSelectMode
-} from './lookup-select-mode';
+  SkyLookupSelectModeType
+} from './lookup-select-mode-type';
 
 import {
   SkyLookupShowMoreNativePickerConfig
@@ -15,7 +15,7 @@ import {
   public descriptorProperty: string;
   public initialSearch: string;
   public initialValue: any;
-  public selectMode: SkyLookupSelectMode;
+  public selectMode: SkyLookupSelectModeType;
   public showAddButton: boolean;
   public userConfig: SkyLookupShowMoreNativePickerConfig;
 }

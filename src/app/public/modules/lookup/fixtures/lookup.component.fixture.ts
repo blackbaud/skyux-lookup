@@ -25,8 +25,8 @@ import {
 } from '../types/lookup-add-click-event-args';
 
 import {
-  SkyLookupSelectMode
-} from '../types/lookup-select-mode';
+  SkyLookupSelectModeType
+} from '../types/lookup-select-mode-type';
 
 import {
   SkyLookupShowMoreConfig
@@ -69,7 +69,7 @@ export class SkyLookupTestComponent implements OnInit {
   public idProperty: string;
   public ignoreAddDataUpdate: boolean = false;
   public placeholderText: string;
-  public selectMode: SkyLookupSelectMode;
+  public selectMode: SkyLookupSelectModeType;
   public showAddButton: boolean = false;
   public showMoreConfig: SkyLookupShowMoreConfig = {};
 
@@ -166,7 +166,7 @@ export class SkyLookupTestComponent implements OnInit {
   }
 
   public setMultiSelect(): void {
-    this.selectMode = SkyLookupSelectMode.multiple;
+    this.selectMode = 'multiple';
   }
 
   public setRequired(): void {
@@ -178,7 +178,7 @@ export class SkyLookupTestComponent implements OnInit {
   }
 
   public setSingleSelect(): void {
-    this.selectMode = SkyLookupSelectMode.single;
+    this.selectMode = 'single';
   }
 
   public setValue(index: number): void {

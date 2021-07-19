@@ -1,3 +1,7 @@
+/**
+ * @deprecated Use `SkyLookupSelectModeType` instead.
+ * @internal
+ */
 export enum SkyLookupSelectMode {
 
   /**

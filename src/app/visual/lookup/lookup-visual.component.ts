@@ -27,7 +27,7 @@ import {
 } from './lookup-visual-custom-picker.component';
 
 import {
-  SkyLookupSelectMode,
+  SkyLookupSelectModeType,
   SkyLookupShowMoreCustomPickerContext,
   SkyLookupShowMoreConfig
 } from '../../public/public_api';
@@ -80,7 +80,7 @@ export class LookupVisualComponent implements OnInit {
     { id: 16, name: 'Susan' }
   ];
 
-  public bestFriendSelectMode: SkyLookupSelectMode = SkyLookupSelectMode.single;
+  public bestFriendSelectMode: SkyLookupSelectModeType = 'single';
 
   @ViewChild('itemTemplate2')
   public set modalItemTemplate(itemTemplate: TemplateRef<any>) {
@@ -146,8 +146,8 @@ export class LookupVisualComponent implements OnInit {
   }
 
   public toggleSelectMode(): void {
-    this.bestFriendSelectMode = this.bestFriendSelectMode === SkyLookupSelectMode.single ?
-      SkyLookupSelectMode.multiple : SkyLookupSelectMode.single;
+    this.bestFriendSelectMode = this.bestFriendSelectMode === 'single' ?
+      'multiple' : 'single';
   }
 
   public themeSettingsChange(themeSettings: SkyThemeSettings): void {

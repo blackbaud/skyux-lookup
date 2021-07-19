@@ -95,12 +95,12 @@ import {
 } from './types/lookup-add-click-event-args';
 
 import {
-  SkyLookupShowMoreModalComponent
-} from './lookup-show-more-modal.component';
+  SkyLookupSelectModeType
+} from './types/lookup-select-mode-type';
 
 import {
-  SkyLookupSelectMode
-} from './types/lookup-select-mode';
+  SkyLookupShowMoreModalComponent
+} from './lookup-show-more-modal.component';
 
 import {
   SkyLookupShowMoreConfig
@@ -208,8 +208,8 @@ export class SkyLookupComponent
    * @default "mulitple"
    */
   @Input()
-  public set selectMode(value: SkyLookupSelectMode) {
-    let multipleToSingle: boolean = value === SkyLookupSelectMode.single && this.selectMode === SkyLookupSelectMode.multiple;
+  public set selectMode(value: SkyLookupSelectModeType) {
+    let multipleToSingle: boolean = value === 'single' && this.selectMode === 'multiple';
 
     this._selectMode = value;
     this.updateForSelectMode();
@@ -225,8 +225,8 @@ export class SkyLookupComponent
     }
   }
 
-  public get selectMode(): SkyLookupSelectMode {
-    return this._selectMode || SkyLookupSelectMode.multiple;
+  public get selectMode(): SkyLookupSelectModeType {
+    return this._selectMode || 'multiple';
   }
 
   /**
@@ -321,7 +321,7 @@ export class SkyLookupComponent
 
   private _autocompleteInputDirective: SkyAutocompleteInputDirective;
   private _data: any[];
-  private _selectMode: SkyLookupSelectMode;
+  private _selectMode: SkyLookupSelectModeType;
   private _tokens: SkyToken[];
   private _value: any[];
 
@@ -386,7 +386,7 @@ export class SkyLookupComponent
     /* istanbul ignore else */
     if (change.selectedItem) {
       this.addToSelected(change.selectedItem);
-    } else if (this.selectMode === SkyLookupSelectMode.single) {
+    } else if (this.selectMode === 'single') {
       this.writeValue([]);
     }
   }
@@ -688,7 +688,7 @@ export class SkyLookupComponent
           .onItemSelect(true, { value: args.item, selected: false });
       } else {
         let newValue = this.value;
-        if (this.selectMode === SkyLookupSelectMode.multiple) {
+        if (this.selectMode === 'multiple') {
           newValue = this.value.concat(args.item);
         } else {
           newValue = [args.item];

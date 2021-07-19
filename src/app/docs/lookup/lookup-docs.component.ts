@@ -15,8 +15,7 @@ import {
 } from '@skyux/docs-tools';
 
 import {
-  SkyAutocompleteSearchFunctionFilter,
-  SkyLookupSelectMode
+  SkyAutocompleteSearchFunctionFilter
 } from '@skyux/lookup';
 
 import {
@@ -26,7 +25,8 @@ import {
 
 import {
   SkyLookupAddCallbackArgs,
-  SkyLookupAddClickEventArgs
+  SkyLookupAddClickEventArgs,
+  SkyLookupSelectModeType
 } from '../../public/public_api';
 
 import {
@@ -68,11 +68,11 @@ export class LookupDocsComponent implements OnInit {
     { name: 'Vicki' }
   ];
 
-  public selectMode: SkyLookupSelectMode = SkyLookupSelectMode.multiple;
+  public selectMode: SkyLookupSelectModeType = 'multiple';
 
   public selectModeChoices: SkyDocsDemoControlPanelRadioChoice[] = [
-    { value: SkyLookupSelectMode.multiple, label: 'Multiple' },
-    { value: SkyLookupSelectMode.single, label: 'Single' }
+    { value: 'multiple', label: 'Multiple' },
+    { value: 'single', label: 'Single' }
   ];
 
   public showAddButton: boolean = true;
