@@ -18,8 +18,9 @@ import {
 } from '../types/lookup-add-click-event-args';
 
 import {
-  SkyLookupSelectMode
-} from '../types/lookup-select-mode';
+  SkyLookupSelectModeType
+} from '../types/lookup-select-mode-type';
+
 import {
   SkyLookupShowMoreConfig
 } from '../types/lookup-show-more-config';
@@ -60,7 +61,7 @@ export class SkyLookupTemplateTestComponent implements OnInit {
   public placeholderText: string;
   public required: boolean = false;
   public selectedFriends: any;
-  public selectMode: SkyLookupSelectMode;
+  public selectMode: SkyLookupSelectModeType;
   public showAddButton: boolean = false;
   public showMoreConfig: SkyLookupShowMoreConfig = {};
 
@@ -141,7 +142,7 @@ export class SkyLookupTemplateTestComponent implements OnInit {
   }
 
   public setMultiSelect(): void {
-    this.selectMode = SkyLookupSelectMode.multiple;
+    this.selectMode = 'multiple';
   }
 
   public setShowMoreNativePickerConfig(config: SkyLookupShowMoreNativePickerConfig): void {
@@ -149,6 +150,6 @@ export class SkyLookupTemplateTestComponent implements OnInit {
   }
 
   public setSingleSelect(): void {
-    this.selectMode = SkyLookupSelectMode.single;
+    this.selectMode = 'single';
   }
 }

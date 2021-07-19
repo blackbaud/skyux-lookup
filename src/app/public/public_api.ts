@@ -13,6 +13,7 @@ export * from './modules/lookup/lookup.module';
 export * from './modules/lookup/types/lookup-add-click-callback-args';
 export * from './modules/lookup/types/lookup-add-click-event-args';
 export * from './modules/lookup/types/lookup-select-mode';
+export * from './modules/lookup/types/lookup-select-mode-type';
 export * from './modules/lookup/types/lookup-show-more-config';
 export * from './modules/lookup/types/lookup-show-more-custom-picker';
 export * from './modules/lookup/types/lookup-show-more-custom-picker-context';

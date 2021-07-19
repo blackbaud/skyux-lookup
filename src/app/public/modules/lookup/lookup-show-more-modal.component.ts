@@ -15,10 +15,6 @@ import {
 } from 'rxjs';
 
 import {
-  SkyLookupSelectMode
-} from './types/lookup-select-mode';
-
-import {
   SkyLookupShowMoreNativePickerContext
 } from './types/lookup-show-more-native-picker-context';
 
@@ -146,13 +142,13 @@ export class SkyLookupShowMoreModalComponent implements AfterViewInit, OnDestroy
   }
 
   public itemClick(selectedItem: any): void {
-    if (this.context.selectMode === SkyLookupSelectMode.single) {
+    if (this.context.selectMode === 'single') {
       this.onItemSelect(!selectedItem.selected, selectedItem);
     }
   }
 
   public onItemSelect(newSelectState: boolean, itemToSelect: any): void {
-    if (this.context.selectMode === SkyLookupSelectMode.single) {
+    if (this.context.selectMode === 'single') {
       if (newSelectState) {
         itemToSelect.selected = true;
         this.items.forEach(item => {
