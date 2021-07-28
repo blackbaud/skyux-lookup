@@ -45,11 +45,19 @@ import {
 } from './public/modules/shared/lookup-for-root-compat.module';
 
 import {
+  SkyLookupDocsDemoModalComponent
+} from './docs/lookup/lookup-docs-demo-modal.component';
+
+import {
   SkyAutocompleteModule,
   SkyCountryFieldModule,
   SkyLookupModule,
   SkySearchModule
 } from './public/public_api';
+
+import {
+  SkyLookupVisualCustomPickerComponent
+} from './visual/lookup/lookup-visual-custom-picker.component';
 
 @NgModule({
   imports: [
@@ -83,6 +91,10 @@ import {
         packageName: '@skyux/lookup'
       }
     }
+  ],
+  entryComponents: [
+    SkyLookupDocsDemoModalComponent,
+    SkyLookupVisualCustomPickerComponent
   ]
 })
 export class AppExtrasModule { }
