@@ -1,3 +1,7 @@
+# 5.0.0-beta.1 (2021-07-29)
+
+- Deprecated the `SkyLookupSelectMode` enum in favor of a string union type to support specifying string literals in Angular templates. [#203](https://github.com/blackbaud/skyux-lookup/pull/203)
+
 # 5.0.0-beta.0 (2021-07-12)
 
 - Initial beta release.
