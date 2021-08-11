@@ -69,7 +69,7 @@
     "@skyux/inline-form": "4.1.1",
     "@skyux/layout": "4.7.2",
     "@skyux/lists": "4.9.2",
-    "@skyux/lookup": "4.17.2",
+    "@skyux/lookup": "4.16.0",
     "@skyux/modals": "4.5.5",
     "@skyux/omnibar-interop": "4.0.1",
     "@skyux/popovers": "4.6.0",
