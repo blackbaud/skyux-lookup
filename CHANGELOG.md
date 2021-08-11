@@ -1,6 +1,6 @@
 # 4.17.3 (2021-08-11)
 
-- Fixed the lookup styles in Firefox and Safari.
+- Fixed the lookup styles in Firefox and Safari. [#211](https://github.com/blackbaud/skyux-lookup/pull/211)
 
 # 4.17.2 (2021-08-05)
 
