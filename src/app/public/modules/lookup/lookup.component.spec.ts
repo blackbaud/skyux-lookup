@@ -1630,6 +1630,23 @@ if (!isIE) {
               }
             );
 
+            it('should not populate search bar with current input value when the search button is clicked but the input value is the current selected value',
+            fakeAsync(() => {
+              component.enableShowMore = true;
+              fixture.detectChanges();
+
+              performSearch('s', fixture);
+              selectSearchResult(1, fixture);
+
+              expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
+
+              clickSearchButton(fixture);
+
+              expect(getModalSearchInputValue()).toEqual('');
+
+              closeModal(fixture);
+            }));
+
           });
 
           it('should trickle down the add button click event when triggered from the show all modal',
@@ -2713,6 +2730,52 @@ if (!isIE) {
             })
           );
 
+          it('should open the modal when the search button is clicked',
+            fakeAsync(() => {
+              component.enableShowMore = true;
+              fixture.detectChanges();
+
+              spyOn(modalService, 'open').and.callThrough();
+
+              clickSearchButton(fixture);
+
+              expect(modalService.open).toHaveBeenCalled();
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should close the dropdown when the search button is clicked',
+            fakeAsync(() => {
+              component.enableShowMore = true;
+              fixture.detectChanges();
+
+              performSearch('r', fixture);
+              expect(getDropdown()).not.toBeNull();
+
+              clickSearchButton(fixture);
+
+              expect(getDropdown()).toBeNull();
+
+              closeModal(fixture);
+            })
+          );
+
+          it('should populate search bar with current input value when the search button is clicked',
+            fakeAsync(() => {
+              component.enableShowMore = true;
+              fixture.detectChanges();
+
+              performSearch('foo', fixture);
+
+              clickSearchButton(fixture);
+
+              expect(getModalSearchInputValue()).toEqual('foo');
+
+              closeModal(fixture);
+            })
+          );
+
           it('should respect the `propertiesToSearch` input in the show more modal',
             fakeAsync(() => {
               component.enableShowMore = true;
@@ -3274,6 +3337,23 @@ if (!isIE) {
                 closeModal(fixture);
               })
             );
+
+            it('should not populate search bar with current input value when the search button is clicked but the input value is the current selected value',
+            fakeAsync(() => {
+              component.enableShowMore = true;
+              fixture.detectChanges();
+
+              performSearch('s', fixture);
+              selectSearchResult(1, fixture);
+
+              expect(lookupComponent.value).toEqual([{ name: 'Lindsey' }]);
+
+              clickSearchButton(fixture);
+
+              expect(getModalSearchInputValue()).toEqual('');
+
+              closeModal(fixture);
+            }));
 
           });
 

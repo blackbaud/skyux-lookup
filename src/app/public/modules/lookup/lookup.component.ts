@@ -536,7 +536,10 @@ export class SkyLookupComponent
 
   public onSearchButtonClick(): void {
     this.sendAutocompleteMessage(SkyAutocompleteMessageType.CloseDropdown);
-    this.openPicker(this.autocompleteInputDirective.inputTextValue);
+
+    const isValueInTextBox = this.autocompleteInputDirective.inputTextValue === this.autocompleteInputDirective.value;
+
+    this.openPicker(isValueInTextBox ? undefined : this.autocompleteInputDirective.inputTextValue);
   }
 
   public onShowMoreClick(event: SkyAutocompleteShowMoreArgs): void {
