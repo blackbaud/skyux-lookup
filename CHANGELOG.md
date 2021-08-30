@@ -1,6 +1,6 @@
 # 4.17.4 (2021-08-30)
 
-- Updated screenshots to reflect theme updates.
+- Updated screenshots to reflect theme updates. [#214](https://github.com/blackbaud/skyux-lookup/pull/214)
 
 # 4.17.3 (2021-08-11)
 
