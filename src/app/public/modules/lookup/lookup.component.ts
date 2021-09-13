@@ -87,6 +87,10 @@ import {
 } from './lookup-adapter.service';
 
 import {
+  SkyLookupShowMoreModalComponent
+} from './lookup-show-more-modal.component';
+
+import {
   SkyLookupAddCallbackArgs
 } from './types/lookup-add-click-callback-args';
 
@@ -97,10 +101,6 @@ import {
 import {
   SkyLookupSelectModeType
 } from './types/lookup-select-mode-type';
-
-import {
-  SkyLookupShowMoreModalComponent
-} from './lookup-show-more-modal.component';
 
 import {
   SkyLookupShowMoreConfig
@@ -355,7 +355,7 @@ export class SkyLookupComponent
     if (this.themeSvc) {
       // This is required for the autocomplete directive to be set after elements
       // are rearranged when switching themes.
-      this.themeSvc.settingsChange
+      this.themeSvc?.settingsChange
         .pipe(
           takeUntil(this.ngUnsubscribe)
         )
@@ -562,6 +562,7 @@ export class SkyLookupComponent
         descriptorProperty: this.descriptorProperty,
         initialSearch: initialSearch,
         initialValue: initialValue,
+        search: this.search,
         selectMode: this.selectMode,
         showAddButton: this.showAddButton,
         userConfig: modalConfig
