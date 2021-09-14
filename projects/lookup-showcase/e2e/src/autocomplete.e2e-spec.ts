@@ -19,7 +19,7 @@ describe('Autocomplete', () => {
   async function activateDropdown(): Promise<void> {
     const input = element(by.css('#favorite-color-reactive'));
     input.value = 'r';
-    input.click();
+    await input.click();
     await browser.actions().sendKeys('r').perform();
 
     return browser.wait(
