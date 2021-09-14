@@ -1,3 +1,7 @@
+# 5.0.0-beta.2 (2021-09-14)
+
+- Adopt Angular CLI. [#218](https://github.com/blackbaud/skyux-lookup/pull/218)
+
 # 4.17.4 (2021-08-30)
 
 - Updated screenshots to reflect theme updates. [#214](https://github.com/blackbaud/skyux-lookup/pull/214)
