@@ -542,7 +542,7 @@ export class SkyLookupComponent
       isValueInTextBox = this.autocompleteInputDirective.inputTextValue === this.autocompleteInputDirective.value[this.descriptorProperty];
     }
 
-    this.openPicker(isValueInTextBox ? undefined : this.autocompleteInputDirective.inputTextValue);
+    this.openPicker(isValueInTextBox ? '' : this.autocompleteInputDirective.inputTextValue);
     this.autocompleteInputDirective.restoreInputTextValueToPreviousState();
   }
 
