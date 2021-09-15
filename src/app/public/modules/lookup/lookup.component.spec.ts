@@ -1452,9 +1452,12 @@ if (!isIE) {
 
           describe('single-select', () => {
 
+            beforeEach(() => {
+              component.selectMode = SkyLookupSelectMode.single;
+            });
+
             it('should populate the correct selected item and save that when no changes are made',
               fakeAsync(() => {
-                component.selectMode = SkyLookupSelectMode.single;
                 component.enableShowMore = true;
                 fixture.detectChanges();
                 expect(lookupComponent.value).toEqual([]);
@@ -1480,7 +1483,6 @@ if (!isIE) {
 
             it('should select the correct item when changed from the show all modal',
               fakeAsync(() => {
-                component.selectMode = SkyLookupSelectMode.single;
                 component.enableShowMore = true;
                 fixture.detectChanges();
                 expect(lookupComponent.value).toEqual([]);
@@ -1505,7 +1507,6 @@ if (!isIE) {
 
             it('should not make any changes when the show all modal is cancelled',
               fakeAsync(() => {
-                component.selectMode = SkyLookupSelectMode.single;
                 component.enableShowMore = true;
                 fixture.detectChanges();
                 expect(lookupComponent.value).toEqual([]);
@@ -1530,7 +1531,6 @@ if (!isIE) {
 
             it('the default modal title should be correct',
               fakeAsync(() => {
-                component.selectMode = SkyLookupSelectMode.single;
                 component.enableShowMore = true;
                 fixture.detectChanges();
                 expect(lookupComponent.value).toEqual([]);
@@ -1546,7 +1546,6 @@ if (!isIE) {
 
             it('should respect a custom modal title',
               fakeAsync(() => {
-                component.selectMode = SkyLookupSelectMode.single;
                 component.enableShowMore = true;
                 component.setShowMoreNativePickerConfig({
                   title: 'Custom title'
@@ -3197,9 +3196,12 @@ if (!isIE) {
 
           describe('single-select', () => {
 
+            beforeEach(() => {
+              component.selectMode = SkyLookupSelectMode.single;
+            });
+
             it('should populate the correct selected item and save that when no changes are made',
               fakeAsync(() => {
-                component.selectMode = SkyLookupSelectMode.single;
                 component.enableShowMore = true;
                 fixture.detectChanges();
                 expect(lookupComponent.value).toEqual([]);
@@ -3225,7 +3227,6 @@ if (!isIE) {
 
             it('should select the correct item when changed from the show all modal',
               fakeAsync(() => {
-                component.selectMode = SkyLookupSelectMode.single;
                 component.enableShowMore = true;
                 fixture.detectChanges();
                 expect(lookupComponent.value).toEqual([]);
@@ -3250,7 +3251,6 @@ if (!isIE) {
 
             it('should not make any changes when the show all modal is cancelled',
               fakeAsync(() => {
-                component.selectMode = SkyLookupSelectMode.single;
                 component.enableShowMore = true;
                 fixture.detectChanges();
                 expect(lookupComponent.value).toEqual([]);
@@ -3275,7 +3275,6 @@ if (!isIE) {
 
             it('the default modal title should be correct',
               fakeAsync(() => {
-                component.selectMode = SkyLookupSelectMode.single;
                 component.enableShowMore = true;
                 fixture.detectChanges();
                 expect(lookupComponent.value).toEqual([]);
@@ -3291,7 +3290,6 @@ if (!isIE) {
 
             it('should respect a custom modal title',
               fakeAsync(() => {
-                component.selectMode = SkyLookupSelectMode.single;
                 component.enableShowMore = true;
                 component.setShowMoreNativePickerConfig({
                   title: 'Custom title'
