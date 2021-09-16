@@ -1,3 +1,11 @@
+# 5.0.0-beta.3 (2021-09-16)
+
+- Merge master and update peer dependencies. [#221](https://github.com/blackbaud/skyux-lookup/pull/221)
+
+# 4.17.5 (2021-09-15)
+
+- Fixed the lookup component to only send search text to the show more picker when a search is being executed. [#213](https://github.com/blackbaud/skyux-lookup/pull/213)
+
 # 5.0.0-beta.2 (2021-09-14)
 
 - Adopt Angular CLI. [#218](https://github.com/blackbaud/skyux-lookup/pull/218)
