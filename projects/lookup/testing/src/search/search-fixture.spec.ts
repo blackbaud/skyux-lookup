@@ -14,6 +14,10 @@ import {
   SkySearchFixture
 } from './search-fixture';
 
+import {
+  NoopAnimationsModule
+} from '@angular/platform-browser/animations';
+
 //#region Test component
 @Component({
   selector: 'search-test',
@@ -47,6 +51,7 @@ describe('Search fixture', () => {
         TestComponent
       ],
       imports: [
+        NoopAnimationsModule,
         SkySearchTestingModule
       ]
     });
