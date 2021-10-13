@@ -1,3 +1,7 @@
+# 4.17.6 (2021-10-13)
+
+- Fixed lookup component to allow for setting the value programatically when the component is disabled. [#226](https://github.com/blackbaud/skyux-lookup/pull/226) (Thanks [@ThomasOrtiz](https://github.com/ThomasOrtiz)!)
+
 # 4.17.5 (2021-09-15)
 
 - Fixed the lookup component to only send search text to the show more picker when a search is being executed. [#213](https://github.com/blackbaud/skyux-lookup/pull/213)
