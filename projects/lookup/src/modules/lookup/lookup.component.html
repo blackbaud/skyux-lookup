@@ -104,6 +104,7 @@
   >
     <button
       class="sky-btn sky-btn-default"
+      [ngClass]="{'sky-btn-disabled': disabled}"
       type="button"
       [attr.aria-label]="'skyux_lookup_search_button_show_more' | skyLibResources"
       (click)="onSearchButtonClick()"
@@ -124,6 +125,7 @@
 >
   <div
     class="sky-input-group-icon sky-input-box-icon-inset"
+    [ngClass]="{'sky-lookup-disabled': disabled}"
   >
     <sky-icon *skyThemeIf="'default'"
       icon="search"
