@@ -1509,6 +1509,18 @@ if (!isIE) {
               })
             );
 
+            it('should not open the show more modal when disabled', fakeAsync(() => {
+              const showMoreSpy = spyOn(component.lookupComponent, 'openPicker').and.stub();
+
+              component.enableShowMore = true;
+              component.lookupComponent.disabled = true;
+              fixture.detectChanges();
+
+              fixture.nativeElement.querySelector('button[aria-label="Show all search results"]').click();
+
+              expect(showMoreSpy).not.toHaveBeenCalled();
+            }));
+
           });
 
           describe('single-select', () => {

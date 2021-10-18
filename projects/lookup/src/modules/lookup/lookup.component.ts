@@ -540,9 +540,6 @@ export class SkyLookupComponent
   }
 
   public onSearchButtonClick(): void {
-    if (this.disabled) {
-      return;
-    }
     this.sendAutocompleteMessage(SkyAutocompleteMessageType.CloseDropdown);
     let isValueInTextBox = false;
     if (this.selectMode === 'single') {

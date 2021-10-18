@@ -105,6 +105,7 @@
   >
     <button
       class="sky-btn sky-btn-default"
+      [disabled]="disabled"
       [ngClass]="{'sky-btn-disabled': disabled}"
       type="button"
       [attr.aria-label]="'skyux_lookup_search_button_show_more' | skyLibResources"
