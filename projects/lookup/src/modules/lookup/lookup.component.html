@@ -38,7 +38,7 @@
         <div
           class="sky-lookup-search"
           [ngClass]="{
-            'sky-field-status-active': isInputFocused
+            'sky-field-status-active': isInputFocused && !disabled
           }"
         >
           <sky-tokens *ngIf="selectMode === 'multiple'"
