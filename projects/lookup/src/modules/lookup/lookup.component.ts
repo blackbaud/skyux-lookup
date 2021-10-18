@@ -231,6 +231,12 @@ export class SkyLookupComponent
   }
 
   /**
+   * @internal
+   */
+  @Input()
+  public wrapperClass?: string;
+
+  /**
    * Fires when users select the button to add options to the list.
    */
   @Output()
@@ -585,7 +591,8 @@ export class SkyLookupComponent
           {
             provide: SkyLookupShowMoreNativePickerContext, useValue: context
           }
-        ]
+        ],
+        wrapperClass: this.wrapperClass
       });
 
       this.openNativePicker.componentInstance.addClick.subscribe(() => {
