@@ -29,6 +29,7 @@
           idProperty="id"
           placeholderText="Type a person's name..."
           [data]="people"
+          [disabled]="disabled"
           [enableShowMore]="true"
           [debounceTime]="1000"
           [showAddButton]="true"
@@ -39,6 +40,7 @@
       <p>
         <button
           class="sky-btn sky-btn-default"
+          [ngClass]="{'sky-btn-disabled': disabled}"
           id="btn-disable-lookup"
           type="button"
           (click)="disableLookup()"
@@ -48,6 +50,7 @@
       </p>
 
       <sky-input-box
+        [disabled]="disabled"
         class="sky-margin-stacked-lg"
       >
         <label
@@ -64,6 +67,7 @@
           [ariaLabelledBy]="friendsInputBoxLabel.id"
           [data]="people"
           [debounceTime]="1000"
+          [disabled]="disabled"
         >
         </sky-lookup>
       </sky-input-box>
@@ -99,6 +103,7 @@
   >
     <button
       class="sky-btn sky-btn-default"
+      [ngClass]="{'sky-btn-disabled': disabled}"
       id="btn-toggle-select-mode"
       type="button"
       (click)="toggleSelectMode()"
@@ -107,11 +112,20 @@
     </button>
     <button
       class="sky-btn sky-btn-default"
+      [ngClass]="{'sky-btn-disabled': disabled}"
       id="btn-reset-value"
       type="button"
       (click)="onResetValueClick()"
     >
       Reset value
+    </button>
+    <button
+      class="sky-btn sky-btn-default"
+      id="btn-toggle-disabled"
+      type="button"
+      (click)="disabled = !disabled"
+    >
+      {{ disabled ? 'Enable' : 'Disable' }}
     </button>
     <sky-checkbox
       (change)="toggleCustomPicker()"
@@ -131,6 +145,7 @@
       [formGroup]="bestFriendsForm"
     >
       <sky-input-box
+        [disabled]="disabled"
         class="sky-margin-stacked-lg"
       >
         <label
@@ -144,6 +159,7 @@
           placeholderText="Type a person's name..."
           [selectMode]="bestFriendSelectMode"
           [data]="people"
+          [disabled]="disabled"
           [debounceTime]="1000"
           [enableShowMore]="true"
           [searchResultTemplate]="itemTemplate"

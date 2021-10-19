@@ -539,6 +539,10 @@ export class SkyLookupComponent
   }
 
   public onSearchButtonClick(): void {
+    /*istanbul ignore next*/
+    if (this.disabled) {
+      return;
+    }
     this.sendAutocompleteMessage(SkyAutocompleteMessageType.CloseDropdown);
 
     let isValueInTextBox = false;

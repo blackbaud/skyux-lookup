@@ -41,6 +41,7 @@ export class LookupVisualComponent implements OnInit {
   public friendsForm: FormGroup;
   public bestFriendsForm: FormGroup;
   public showMoreConfig: SkyLookupShowMoreConfig = {};
+  public disabled = false;
 
   public people: any[] = [
     { id: 1, name: 'Andy' },
