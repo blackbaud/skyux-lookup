@@ -1,3 +1,7 @@
+# 4.17.7 (2021-11-01)
+
+- Added support for wrapping lookup in a CSS class. [#230](https://github.com/blackbaud/skyux-lookup/pull/230)
+
 # 4.17.6 (2021-10-13)
 
 - Fixed lookup component to allow for setting the value programatically when the component is disabled. [#226](https://github.com/blackbaud/skyux-lookup/pull/226) (Thanks [@ThomasOrtiz](https://github.com/ThomasOrtiz)!)
