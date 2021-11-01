@@ -1,6 +1,6 @@
 # 4.17.7 (2021-11-01)
 
-- Added support for wrapping lookup in a CSS class. [#230](https://github.com/blackbaud/skyux-lookup/pull/230)
+- Added bug fixes and features from the `master` branch. [#231](https://github.com/blackbaud/skyux-lookup/pull/231)
 
 # 4.17.6 (2021-10-13)
 
