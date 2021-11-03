@@ -62,8 +62,7 @@ describe('Lookup component', () => {
     const input = element(by.css('#lookup-visual textarea'));
     input.value = 'r';
     await input.click();
-
-    await browser.actions().sendKeys('r').perform();
+    await input.sendKeys('r');
 
     await browser.wait(
       ExpectedConditions.presenceOf(element(by.css('.sky-autocomplete-results'))),
@@ -72,7 +71,7 @@ describe('Lookup component', () => {
     );
 
     const showMoreButton = element(by.css('.sky-autocomplete-action-more'));
-    showMoreButton.click();
+    await showMoreButton.click();
 
     await browser.wait(
       ExpectedConditions.presenceOf(element(by.css('sky-modal'))),
@@ -119,8 +118,7 @@ describe('Lookup component', () => {
     input.value = 'r';
     await resetValueBtn.click();
     await input.click();
-
-    await browser.actions().sendKeys('r').perform();
+    await input.sendKeys('r');
 
     await browser.wait(
       ExpectedConditions.presenceOf(element(by.css('.sky-autocomplete-results'))),
@@ -164,8 +162,10 @@ describe('Lookup component', () => {
         await validateScreenshot(done, 'lookup-disabled');
       });
 
-      it('should match previous lookup show more modal screenshot', async (done) => {
-        await validateShowMoreModalScreenshot(done, 'lookup-show-more');
+      it('should match previous lookup show more modal screenshot', async () => {
+        return new Promise((done: DoneFn) => {
+          validateShowMoreModalScreenshot(done, 'lookup-show-more');
+        });
       });
 
       it('should match previous lookup single mode screenshot', async (done) => {
@@ -176,8 +176,10 @@ describe('Lookup component', () => {
         await validateSingleModeScreenshotWithMenu(done, 'lookup-single-mode-w-menu');
       });
 
-      it('should match previous lookup single mode show more modal screenshot', async (done) => {
-        await validateSingleModeShowMoreModalScreenshot(done, 'lookup-single-mode-show-more');
+      it('should match previous lookup single mode show more modal screenshot', async () => {
+        return new Promise((done: DoneFn) => {
+          validateSingleModeShowMoreModalScreenshot(done, 'lookup-single-mode-show-more');
+        });
       });
     });
 
@@ -194,8 +196,10 @@ describe('Lookup component', () => {
         await validateScreenshotWithMenu(done, 'lookup-w-menu-xs');
       });
 
-      it('should match previous lookup show more modal screenshot', async (done) => {
-        await validateShowMoreModalScreenshot(done, 'lookup-show-more-xs');
+      it('should match previous lookup show more modal screenshot', async () => {
+        return new Promise((done: DoneFn) => {
+          validateShowMoreModalScreenshot(done, 'lookup-show-more-xs');
+        });
       });
 
       it('should match previous lookup single mode screenshot', async (done) => {
@@ -206,8 +210,10 @@ describe('Lookup component', () => {
         await validateSingleModeScreenshotWithMenu(done, 'lookup-single-mode-w-menu-xs');
       });
 
-      it('should match previous lookup show more modal screenshot', async (done) => {
-        await validateSingleModeShowMoreModalScreenshot(done, 'lookup-single-mode-show-more-xs');
+      it('should match previous lookup show more modal screenshot', async () => {
+        return new Promise((done: DoneFn) => {
+          validateSingleModeShowMoreModalScreenshot(done, 'lookup-single-mode-show-more-xs');
+        });
       });
     });
   }
