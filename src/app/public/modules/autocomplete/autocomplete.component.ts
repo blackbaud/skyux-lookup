@@ -167,6 +167,12 @@ export class SkyAutocompleteComponent
   }
 
   /**
+   * @internal
+   */
+  @Input()
+  public wrapperClass?: string;
+
+  /**
    * Specifies the object properties to search.
    * @default ['name']
    */
@@ -672,7 +678,8 @@ export class SkyAutocompleteComponent
     if (!this.overlay) {
       const overlay = this.overlayService.create({
         enableClose: false,
-        enablePointerEvents: true
+        enablePointerEvents: true,
+        wrapperClass: this.wrapperClass
       });
 
       overlay.attachTemplate(this.resultsTemplateRef);

@@ -147,6 +147,10 @@ if (!isIE) {
       return document.querySelectorAll('sky-modal sky-repeater-item').length;
     }
 
+    function isModalOpen(): boolean {
+      return document.querySelectorAll('sky-modal').length > 0;
+    }
+
     function getSearchButton(): HTMLElement {
       return document.querySelector('.sky-input-group-btn .sky-btn') as HTMLElement;
     }
@@ -163,6 +167,11 @@ if (!isIE) {
     function getShowMoreModalTitle(): string {
       return document.querySelector('sky-modal-header').textContent.trim();
     }
+
+    function getShowMoreNoResultsElement(): HTMLElement {
+      return document.querySelector('.sky-lookup-show-more-no-results');
+    }
+
     function getTokenElements(): NodeListOf<Element> {
       return document.querySelectorAll('.sky-token');
     }
@@ -1015,6 +1024,23 @@ if (!isIE) {
             })
           );
 
+          it('should open the modal when the show more button is clicked with no config',
+            fakeAsync(() => {
+              component.enableShowMore = true;
+              component.showMoreConfig = undefined;
+              fixture.detectChanges();
+
+              spyOn(modalService, 'open').and.callThrough();
+
+              performSearch('r', fixture);
+              clickShowMore(fixture);
+
+              expect(modalService.open).toHaveBeenCalled();
+
+              closeModal(fixture);
+            })
+          );
+
           it('should open the modal when the search button is clicked',
             fakeAsync(() => {
               component.enableShowMore = true;
@@ -1106,6 +1132,22 @@ if (!isIE) {
               clickSearchButton(fixture);
 
               expect(getRepeaterItemCount()).toBe(1);
+
+              closeModal(fixture);
+            }));
+
+          it('should handle not results being shown',
+            fakeAsync(() => {
+              component.enableShowMore = true;
+              component.data = undefined;
+              fixture.detectChanges();
+
+              performSearch('Mr', fixture);
+
+              clickSearchButton(fixture);
+
+              expect(getRepeaterItemCount()).toBe(0);
+              expect(getShowMoreNoResultsElement()).not.toBeNull();
 
               closeModal(fixture);
             }));
@@ -1471,6 +1513,18 @@ if (!isIE) {
                 expect(tokenElements.item(0).textContent.trim()).toBe('Isaac');
               })
             );
+
+            it('should not open the show more modal when disabled', fakeAsync(() => {
+              const showMoreSpy = spyOn(component.lookupComponent, 'openPicker').and.stub();
+
+              component.enableShowMore = true;
+              component.lookupComponent.disabled = true;
+              fixture.detectChanges();
+
+              fixture.nativeElement.querySelector('button[aria-label="Show all search results"]').click();
+
+              expect(showMoreSpy).not.toHaveBeenCalled();
+            }));
 
           });
 
@@ -2753,6 +2807,23 @@ if (!isIE) {
             })
           );
 
+          it('should open the modal when the show more button is clicked with no config',
+            fakeAsync(() => {
+              component.enableShowMore = true;
+              component.showMoreConfig = undefined;
+              fixture.detectChanges();
+
+              spyOn(modalService, 'open').and.callThrough();
+
+              performSearch('r', fixture);
+              clickShowMore(fixture);
+
+              expect(modalService.open).toHaveBeenCalled();
+
+              closeModal(fixture);
+            })
+          );
+
           it('should open the modal when the search button is clicked',
             fakeAsync(() => {
               component.enableShowMore = true;
@@ -2846,6 +2917,38 @@ if (!isIE) {
               expect(getRepeaterItemCount()).toBe(1);
 
               closeModal(fixture);
+            }));
+
+          it('should handle not results being shown',
+            fakeAsync(() => {
+              component.enableShowMore = true;
+              component.data = undefined;
+              fixture.detectChanges();
+
+              performSearch('Mr', fixture);
+
+              clickSearchButton(fixture);
+
+              expect(getRepeaterItemCount()).toBe(0);
+              expect(getShowMoreNoResultsElement()).not.toBeNull();
+
+              closeModal(fixture);
+            }));
+
+          it('should handle disabled',
+            fakeAsync(() => {
+              component.enableShowMore = true;
+              component.disabled = true;
+              component.customSearch = (_: string, data: any[]) => {
+                return Promise.resolve([data[0]]);
+              };
+              fixture.detectChanges();
+
+              performSearch('Mr', fixture);
+
+              clickSearchButton(fixture);
+
+              expect(isModalOpen()).toBe(false);
             }));
 
           describe('multi-select', () => {
