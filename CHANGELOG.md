@@ -1,4 +1,4 @@
-# 4.17.7 (2021-11-02)
+# 4.17.7 (2021-11-03)
 
 - Added bug fixes and features from the `master` branch. [#231](https://github.com/blackbaud/skyux-lookup/pull/231)
 

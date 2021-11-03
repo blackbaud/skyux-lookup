@@ -47,7 +47,7 @@ describe('Lookup component', () => {
     input.value = 'r';
     await input.click();
 
-    await browser.actions().sendKeys('r').perform();
+    await input.sendKeys('r');
 
     await browser.wait(
       ExpectedConditions.presenceOf(element(by.css('.sky-autocomplete-results'))),
@@ -101,7 +101,7 @@ describe('Lookup component', () => {
     await resetValueBtn.click();
     await input.click();
 
-    await browser.actions().sendKeys('r').perform();
+    await input.sendKeys('r');
 
     await browser.wait(
       ExpectedConditions.presenceOf(element(by.css('.sky-autocomplete-results'))),

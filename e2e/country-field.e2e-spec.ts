@@ -5,10 +5,12 @@ import {
 } from '@skyux-sdk/e2e';
 
 import {
+  $,
   browser,
   by,
   element,
-  protractor
+  ExpectedConditions,
+  Key
 } from 'protractor';
 
 describe('Country field', () => {
@@ -42,17 +44,13 @@ describe('Country field', () => {
 
   async function clearCountryField(): Promise<void> {
     await selectCountryField();
+    const input = $('#screenshot-country-field-populated textarea');
+    await browser.actions().doubleClick(input).perform();
+    await input.sendKeys(Key.BACK_SPACE);
 
-    await browser.actions().doubleClick().perform();
-    await browser.actions().sendKeys(protractor.Key.BACK_SPACE).perform();
+    await browser.wait(ExpectedConditions.presenceOf($('body')));
 
-    await browser.wait(() => {
-      return browser.isElementPresent(
-        element(by.css('body'))
-      );
-    });
-
-    await element(by.css('body')).click();
+    await $('body').click();
   }
 
   function runTests(): void {

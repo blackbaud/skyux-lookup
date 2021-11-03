@@ -16,13 +16,13 @@ describe('Autocomplete', () => {
     SkyHostBrowser.setWindowBreakpoint('lg');
   });
 
-  function activateDropdown(): void {
+  async function activateDropdown(): Promise<void> {
     const input = element(by.css('#favorite-color-reactive'));
     input.value = 'r';
-    input.click();
-    browser.actions().sendKeys('r').perform();
+    await input.click();
+    await input.sendKeys('r');
 
-    browser.wait(
+    await browser.wait(
       ExpectedConditions.presenceOf(element(by.css('.sky-autocomplete-results'))),
       1200,
       'Autocomplete results dropdown took too long to appear.'
@@ -42,18 +42,20 @@ describe('Autocomplete', () => {
     });
   });
 
-  it('should match previous screenshot with dropdown open', (done) => {
-    activateDropdown();
+  it('should match previous screenshot with dropdown open', async (done) => {
+    await activateDropdown();
     expect('#autocomplete-reactive').toMatchBaselineScreenshot(done, {
       screenshotName: 'autocomplete-with-dropdown'
     });
   });
 
-  it('should match previous screenshot with dropdown open (xs screen)', (done) => {
-    SkyHostBrowser.setWindowBreakpoint('xs');
-    activateDropdown();
+  it('should match previous screenshot with dropdown open (xs screen)', async () => {
+    await SkyHostBrowser.setWindowBreakpoint('xs');
+    await activateDropdown();
+    return new Promise((done) => {
     expect('#autocomplete-reactive').toMatchBaselineScreenshot(done, {
       screenshotName: 'autocomplete-with-dropdown-xs'
+    });
     });
   });
 
