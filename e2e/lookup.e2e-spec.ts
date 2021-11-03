@@ -212,8 +212,16 @@ describe('Lookup component', () => {
     });
   }
 
+  let originalTimeout: number;
+
   beforeEach(async () => {
+    originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
     await SkyHostBrowser.get('visual/lookup');
+  });
+
+  afterEach(() => {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
   });
 
   runTests();
