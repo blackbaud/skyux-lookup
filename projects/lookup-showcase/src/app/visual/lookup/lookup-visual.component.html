@@ -169,6 +169,42 @@
       </sky-input-box>
     </form>
   </div>
+
+  <div
+    class="app-screenshot"
+    id="lookup-single-async-visual"
+  >
+    <form
+      novalidate
+      [formGroup]="bestFriendsForm"
+    >
+      <sky-input-box
+        [disabled]="disabled"
+        class="sky-margin-stacked-lg"
+      >
+        <label
+          class="sky-control-label"
+        >
+          Who is your best friend?
+        </label>
+        <sky-lookup
+          formControlName="bestFriendAsync"
+          idProperty="id"
+          placeholderText="Type a person's name..."
+          [selectMode]="bestFriendSelectMode"
+          [disabled]="disabled"
+          [debounceTime]="1000"
+          [enableShowMore]="true"
+          [searchAsync]="bestFriendSearchFn"
+          [searchResultTemplate]="itemTemplate"
+          [showAddButton]="true"
+          [showMoreConfig]="showMoreConfig"
+          (addClick)="addButtonClicked()"
+        >
+        </sky-lookup>
+      </sky-input-box>
+    </form>
+  </div>
 </div>
 
 <ng-template

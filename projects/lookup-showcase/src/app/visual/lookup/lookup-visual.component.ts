@@ -24,10 +24,14 @@ import {
 import {
   SkyLookupSelectModeType,
   SkyLookupShowMoreCustomPickerContext,
-  SkyLookupShowMoreConfig
+  SkyLookupShowMoreConfig,
+  SkyAutocompleteSearchAsyncFunction
 } from 'projects/lookup/src/public-api';
+import { of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'lookup-visual',
   templateUrl: './lookup-visual.component.html',
   styleUrls: ['./lookup-visual.component.scss']
@@ -78,6 +82,8 @@ export class LookupVisualComponent implements OnInit {
 
   public bestFriendSelectMode: SkyLookupSelectModeType = 'single';
 
+  public bestFriendSearchFn: SkyAutocompleteSearchAsyncFunction;
+
   @ViewChild('itemTemplate2')
   public set modalItemTemplate(itemTemplate: TemplateRef<any>) {
     this.showMoreConfig.nativePickerConfig = {
@@ -89,7 +95,17 @@ export class LookupVisualComponent implements OnInit {
     private formBuilder: FormBuilder,
     private modalService: SkyModalService,
     private changeDetector: ChangeDetectorRef
-  ) { }
+  ) {
+    this.bestFriendSearchFn = (args) => {
+      const searchText = (args.searchText || '').toLowerCase();
+
+      const filteredData = this.people.filter(
+        item => item.name.toLowerCase().indexOf(searchText) >= 0
+      );
+
+      return of(filteredData).pipe(delay(1000));
+    }
+  }
 
   public ngOnInit(): void {
     this.createForms();
@@ -152,7 +168,8 @@ export class LookupVisualComponent implements OnInit {
     });
 
     this.bestFriendsForm = this.formBuilder.group({
-      bestFriend: new FormControl(this.bestFriend)
+      bestFriend: new FormControl(this.bestFriend),
+      bestFriendAsync: undefined
     });
   }
 }

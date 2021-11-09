@@ -582,6 +582,7 @@ export class SkyLookupComponent
         initialSearch: initialSearch,
         initialValue: initialValue,
         search: this.search,
+        searchAsync: this.searchAsync,
         selectMode: this.selectMode,
         showAddButton: this.showAddButton,
         userConfig: modalConfig

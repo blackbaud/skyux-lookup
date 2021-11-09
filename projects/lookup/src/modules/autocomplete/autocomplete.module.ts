@@ -13,6 +13,7 @@ import {
 import {
   SkyAffixModule,
   SkyIdModule,
+  SkyNumericModule,
   SkyOverlayModule
 } from '@skyux/core';
 
@@ -50,6 +51,7 @@ import {
     SkyIconModule,
     SkyIdModule,
     SkyLookupResourcesModule,
+    SkyNumericModule,
     SkyOverlayModule,
     SkyThemeModule
   ],

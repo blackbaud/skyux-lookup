@@ -9,10 +9,14 @@ import {
 } from '@angular/forms';
 
 import {
+  SkyAutocompleteSearchAsyncFunction,
   SkyAutocompleteSelectionChange
 } from 'projects/lookup/src/public-api';
+import { of } from 'rxjs';
+import { delay } from 'rxjs/operators';
 
 @Component({
+  // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'autocomplete-visual',
   templateUrl: './autocomplete-visual.component.html'
 })
@@ -37,15 +41,28 @@ export class AutocompleteVisualComponent implements OnInit {
 
   public templateDisabledState: boolean = false;
 
+  public favoriteColorSearchFn: SkyAutocompleteSearchAsyncFunction;
+
   private reactiveDisabledState: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder
-  ) {}
+  ) {
+    this.favoriteColorSearchFn = (args) => {
+      const searchText = (args.searchText || '').toLowerCase();
+
+      const filteredData = this.data.filter(
+        item => item.name.toLowerCase().indexOf(searchText) >= 0
+      );
+
+      return of(filteredData).pipe(delay(1000));
+    }
+  }
 
   public ngOnInit(): void {
     this.reactiveForm = this.formBuilder.group({
-      favoriteColor: undefined
+      favoriteColor: undefined,
+      favoriteColorAsync: undefined
     });
   }
 

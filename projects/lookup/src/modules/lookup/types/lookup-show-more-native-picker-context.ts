@@ -1,3 +1,4 @@
+import { SkyAutocompleteSearchAsyncFunction } from '@skyux/lookup';
 import {
   SkyAutocompleteSearchFunction
 } from '../../autocomplete/types/autocomplete-search-function';
@@ -20,6 +21,7 @@ import {
   public initialSearch: string;
   public initialValue: any[];
   public search: SkyAutocompleteSearchFunction;
+  public searchAsync: SkyAutocompleteSearchAsyncFunction;
   public selectMode: SkyLookupSelectModeType;
   public showAddButton: boolean;
   public userConfig: SkyLookupShowMoreNativePickerConfig;

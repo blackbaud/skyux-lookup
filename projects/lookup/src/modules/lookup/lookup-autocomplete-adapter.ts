@@ -3,6 +3,7 @@ import {
   Input,
   TemplateRef
 } from '@angular/core';
+import { SkyAutocompleteSearchAsyncFunction } from '@skyux/lookup';
 
 import {
   skyAutocompleteDefaultSearchFunction
@@ -74,6 +75,9 @@ export class SkyLookupAutocompleteAdapter {
        searchFilters: this.searchFilters
      });
    }
+
+   @Input()
+  public searchAsync: SkyAutocompleteSearchAsyncFunction;
 
   /**
    * Specifies a template to format each option in the dropdown list. The lookup component

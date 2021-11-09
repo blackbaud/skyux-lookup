@@ -28,7 +28,10 @@ import {
 } from '@skyux/forms';
 
 import {
+  from,
   fromEvent as observableFromEvent,
+  Observable,
+  of,
   Subject,
   Subscription
 } from 'rxjs';
@@ -73,6 +76,7 @@ import {
 import {
   SkyAutocompleteInputDirective
 } from './autocomplete-input.directive';
+import { SkyAutocompleteSearchAsyncFunction } from './types/autocomplete-search-async-function';
 
 /**
  * @internal
@@ -205,6 +209,9 @@ export class SkyAutocompleteComponent
       searchFilters: this.searchFilters
     });
   }
+
+  @Input()
+  public searchAsync: SkyAutocompleteSearchAsyncFunction;
 
   /**
    * Specifies a template to format each search result in the dropdown list.
@@ -425,6 +432,8 @@ export class SkyAutocompleteComponent
    */
   private overlayFocusableElements: HTMLElement[] = [];
 
+  private currentSearchSub: Subscription;
+
   private _data: any[];
   private _debounceTime: number;
   private _descriptorProperty: string;
@@ -621,49 +630,67 @@ export class SkyAutocompleteComponent
     this.searchText = searchText.trim();
 
     if (isLongEnough && isDifferent) {
-      this.performSearch().then((results: any[]) => {
-        this._searchResults = results.map((r, i) => {
-          const result: SkyAutocompleteSearchResult = {
-            elementId: `${this.resultsListId}-item-${i}`,
-            data: r
-          };
-          return result;
-        });
+      if (this.currentSearchSub) {
+        this.cancelCurrentSearch();
+      }
 
-        this._highlightText = this.searchText;
-        this.removeFocusedClass();
-        this.removeActiveDescendant();
-        if (this.searchResults.length > 0) {
-          this.activeElementIndex = 0;
-        } else {
-          this.activeElementIndex = -1;
-        }
-
-        this.changeDetector.markForCheck();
-
-        if (this.isOpen) {
-          // Let the results populate in the DOM before recalculating placement.
-          setTimeout(() => {
-            this.affixer.reaffix();
-            this.changeDetector.detectChanges();
-            this.initOverlayFocusableElements();
+      this.currentSearchSub = this.performSearch().subscribe(
+        (results: any[]) => {
+          this._searchResults = results.map((r, i) => {
+            const result: SkyAutocompleteSearchResult = {
+              elementId: `${this.resultsListId}-item-${i}`,
+              data: r
+            };
+            return result;
           });
-        } else {
-          this.openDropdown();
+
+          this._highlightText = this.searchText;
+          this.removeFocusedClass();
+          this.removeActiveDescendant();
+          if (this.searchResults.length > 0) {
+            this.activeElementIndex = 0;
+          } else {
+            this.activeElementIndex = -1;
+          }
+
           this.changeDetector.markForCheck();
+
+          if (this.isOpen) {
+            // Let the results populate in the DOM before recalculating placement.
+            setTimeout(() => {
+              this.affixer.reaffix();
+              this.changeDetector.detectChanges();
+              this.initOverlayFocusableElements();
+            });
+          } else {
+            this.openDropdown();
+            this.changeDetector.markForCheck();
+          }
         }
-      });
+      );
     }
   }
 
-  private performSearch(): Promise<any> {
+  private performSearch(): Observable<unknown> {
+    if (this.searchAsync) {
+      return this.searchAsync({
+        searchText: this.searchText,
+        showAll: false
+      });
+    }
+
     const result = this.search(this.searchText, this.data);
 
     if (result instanceof Array) {
-      return Promise.resolve(result);
+      return of(result);
     }
 
-    return result;
+    return from(result);
+  }
+
+  private cancelCurrentSearch(): void {
+    this.currentSearchSub.unsubscribe();
+    this.currentSearchSub = undefined;
   }
 
   private selectSearchResultById(id: string): void {

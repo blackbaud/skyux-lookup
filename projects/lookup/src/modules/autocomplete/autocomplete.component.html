@@ -56,16 +56,19 @@
     <div *ngIf="showActionsArea"
       class="sky-autocomplete-actions"
     >
-      <button *ngIf="enableShowMore && (!searchText || searchResults.length > 0)"
+      <button *ngIf="enableShowMore && (!searchText || searchResults.length > 0 || searchAsync)"
         class="sky-autocomplete-action sky-autocomplete-action-more sky-btn sky-btn-link"
         type="button"
         (click)="moreButtonClicked()"
       >
-        <ng-container *ngIf="!searchText">
-          Show all {{data.length}}
+        <ng-container *ngIf="searchAsync">
+          {{ 'skyux_autocomplete_show_all' | skyLibResources }}
         </ng-container>
-        <ng-container *ngIf="searchText">
-          Show matches ({{searchResults.length}})
+        <ng-container *ngIf="!searchAsync && !searchText">
+          {{ 'skyux_autocomplete_show_all_count' | skyLibResources:(data.length | skyNumeric:{truncate: false}) }}
+        </ng-container>
+        <ng-container *ngIf="!searchAsync && searchText">
+          {{ 'skyux_autocomplete_show_matches_count' | skyLibResources:(data.length | skyNumeric:{truncate: false}) }}
         </ng-container>
       </button>
       <div *ngIf="searchText && searchResults.length === 0"
