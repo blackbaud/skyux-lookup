@@ -39,10 +39,6 @@ describe('Country field', () => {
     await browser.actions().doubleClick().perform();
     await browser.actions().sendKeys(protractor.Key.BACK_SPACE).perform();
 
-    await browser.wait(() => {
-      return browser.isElementPresent(element(by.css('body')));
-    });
-
     await element(by.css('body')).click();
   }
 
