@@ -1,15 +1,6 @@
-import {
-  browser,
-  by,
-  element,
-  ExpectedConditions
-} from 'protractor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 
-import {
-  expect,
-  SkyHostBrowser,
-  SkyVisualThemeSelector
-} from '@skyux-sdk/e2e';
+import { expect, SkyHostBrowser, SkyVisualThemeSelector } from '@skyux-sdk/e2e';
 
 describe('Lookup component', () => {
   let currentTheme: string;
@@ -34,14 +25,20 @@ describe('Lookup component', () => {
     return name;
   }
 
-  async function validateScreenshot(done: DoneFn, screenshotName: string): Promise<void> {
+  async function validateScreenshot(
+    done: DoneFn,
+    screenshotName: string
+  ): Promise<void> {
     await SkyHostBrowser.scrollTo('#lookup-visual');
     expect('#lookup-visual').toMatchBaselineScreenshot(done, {
-      screenshotName: getScreenshotName(screenshotName)
+      screenshotName: getScreenshotName(screenshotName),
     });
   }
 
-  async function validateScreenshotWithMenu(done: DoneFn, screenshotName: string): Promise<void> {
+  async function validateScreenshotWithMenu(
+    done: DoneFn,
+    screenshotName: string
+  ): Promise<void> {
     SkyHostBrowser.scrollTo('#lookup-visual');
     const input = element(by.css('#lookup-visual textarea'));
     input.value = 'r';
@@ -50,7 +47,9 @@ describe('Lookup component', () => {
     await browser.actions().sendKeys('r').perform();
 
     await browser.wait(
-      ExpectedConditions.presenceOf(element(by.css('.sky-autocomplete-results'))),
+      ExpectedConditions.presenceOf(
+        element(by.css('.sky-autocomplete-results'))
+      ),
       1200,
       'Autocomplete results dropdown took too long to appear.'
     );
@@ -58,7 +57,10 @@ describe('Lookup component', () => {
     validateScreenshot(done, screenshotName);
   }
 
-  async function validateShowMoreModalScreenshot(done: DoneFn, screenshotName: string): Promise<void> {
+  async function validateShowMoreModalScreenshot(
+    done: DoneFn,
+    screenshotName: string
+  ): Promise<void> {
     const input = element(by.css('#lookup-visual textarea'));
     input.value = 'r';
     await input.click();
@@ -66,7 +68,9 @@ describe('Lookup component', () => {
     await browser.actions().sendKeys('r').perform();
 
     await browser.wait(
-      ExpectedConditions.presenceOf(element(by.css('.sky-autocomplete-results'))),
+      ExpectedConditions.presenceOf(
+        element(by.css('.sky-autocomplete-results'))
+      ),
       1200,
       'Autocomplete results dropdown took too long to appear.'
     );
@@ -82,18 +86,24 @@ describe('Lookup component', () => {
 
     await SkyHostBrowser.scrollTo('#show-more-modal-screenshot');
     expect('#show-more-modal-screenshot').toMatchBaselineScreenshot(done, {
-      screenshotName: getScreenshotName(screenshotName)
+      screenshotName: getScreenshotName(screenshotName),
     });
   }
 
-  function validateSingleModeScreenshot(done: DoneFn, screenshotName: string): void {
+  function validateSingleModeScreenshot(
+    done: DoneFn,
+    screenshotName: string
+  ): void {
     SkyHostBrowser.scrollTo('#single-mode-info');
     expect('#lookup-single-visual').toMatchBaselineScreenshot(done, {
-      screenshotName: getScreenshotName(screenshotName)
+      screenshotName: getScreenshotName(screenshotName),
     });
   }
 
-  async function validateSingleModeScreenshotWithMenu(done: DoneFn, screenshotName: string): Promise<void> {
+  async function validateSingleModeScreenshotWithMenu(
+    done: DoneFn,
+    screenshotName: string
+  ): Promise<void> {
     await SkyHostBrowser.scrollTo('#single-mode-info');
     const input = element(by.css('#lookup-single-visual textarea'));
     const resetValueBtn = element(by.css('#btn-reset-value'));
@@ -104,7 +114,9 @@ describe('Lookup component', () => {
     await browser.actions().sendKeys('r').perform();
 
     await browser.wait(
-      ExpectedConditions.presenceOf(element(by.css('.sky-autocomplete-results'))),
+      ExpectedConditions.presenceOf(
+        element(by.css('.sky-autocomplete-results'))
+      ),
       1200,
       'Autocomplete results dropdown took too long to appear.'
     );
@@ -112,7 +124,10 @@ describe('Lookup component', () => {
     validateSingleModeScreenshot(done, screenshotName);
   }
 
-  async function validateSingleModeShowMoreModalScreenshot(done: DoneFn, screenshotName: string): Promise<void> {
+  async function validateSingleModeShowMoreModalScreenshot(
+    done: DoneFn,
+    screenshotName: string
+  ): Promise<void> {
     await SkyHostBrowser.scrollTo('#single-mode-info');
     const input = element(by.css('#lookup-single-visual textarea'));
     const resetValueBtn = element(by.css('#btn-reset-value'));
@@ -123,7 +138,9 @@ describe('Lookup component', () => {
     await browser.actions().sendKeys('r').perform();
 
     await browser.wait(
-      ExpectedConditions.presenceOf(element(by.css('.sky-autocomplete-results'))),
+      ExpectedConditions.presenceOf(
+        element(by.css('.sky-autocomplete-results'))
+      ),
       1200,
       'Autocomplete results dropdown took too long to appear.'
     );
@@ -139,7 +156,7 @@ describe('Lookup component', () => {
 
     await SkyHostBrowser.scrollTo('#show-more-modal-screenshot');
     expect('#show-more-modal-screenshot').toMatchBaselineScreenshot(done, {
-      screenshotName: getScreenshotName(screenshotName)
+      screenshotName: getScreenshotName(screenshotName),
     });
   }
 
@@ -177,7 +194,10 @@ describe('Lookup component', () => {
       });
 
       it('should match previous lookup single mode show more modal screenshot', async (done) => {
-        validateSingleModeShowMoreModalScreenshot(done, 'lookup-single-mode-show-more');
+        validateSingleModeShowMoreModalScreenshot(
+          done,
+          'lookup-single-mode-show-more'
+        );
       });
     });
 
@@ -203,11 +223,17 @@ describe('Lookup component', () => {
       });
 
       it('should match previous lookup single mode w/ menu screenshot', (done) => {
-        validateSingleModeScreenshotWithMenu(done, 'lookup-single-mode-w-menu-xs');
+        validateSingleModeScreenshotWithMenu(
+          done,
+          'lookup-single-mode-w-menu-xs'
+        );
       });
 
       it('should match previous lookup show more modal screenshot', async (done) => {
-        validateSingleModeShowMoreModalScreenshot(done, 'lookup-single-mode-show-more-xs');
+        validateSingleModeShowMoreModalScreenshot(
+          done,
+          'lookup-single-mode-show-more-xs'
+        );
       });
     });
   }
@@ -233,5 +259,4 @@ describe('Lookup component', () => {
 
     runTests();
   });
-
 });

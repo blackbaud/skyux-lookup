@@ -1,19 +1,9 @@
 <sky-e2e-theme-selector></sky-e2e-theme-selector>
 
-<div
-  class="sky-country-field-visual"
->
-  <h2
-    class="sky-section-heading"
-  >
-    Standard country field
-  </h2>
+<div class="sky-country-field-visual">
+  <h2 class="sky-section-heading">Standard country field</h2>
 
-
-  <div
-    class="screenshot-country-field"
-    id="screenshot-country-field-empty"
-  >
+  <div class="screenshot-country-field" id="screenshot-country-field-empty">
     <form>
       <sky-country-field
         name="countryField"
@@ -25,17 +15,11 @@
     </form>
   </div>
 
-  <p *ngIf="countryData">
-    Selected Country is {{ countryData.name }}
-  </p>
+  <p *ngIf="countryData">Selected Country is {{ countryData.name }}</p>
 </div>
 
-<div
-  class="sky-country-field-visual"
->
-  <h2
-    class="sky-section-heading"
-  >
+<div class="sky-country-field-visual">
+  <h2 class="sky-section-heading">
     Reactive country field with default country
   </h2>
 
@@ -44,10 +28,7 @@
     id="screenshot-country-field-populated"
     [formGroup]="countryForm"
   >
-    <sky-country-field
-      formControlName="countryControl"
-      [defaultCountry]="'AU'"
-    >
+    <sky-country-field formControlName="countryControl" [defaultCountry]="'AU'">
     </sky-country-field>
   </form>
 
@@ -63,36 +44,21 @@
     Toggle Disabled States
   </button>
 
-  <button
-    class="sky-btn sky-btn-primary"
-    (click)="toggleGermany()"
-  >
+  <button class="sky-btn sky-btn-primary" (click)="toggleGermany()">
     Set Germany
   </button>
 </div>
 
-<div
-  class="sky-country-field-visual"
->
-  <h2
-    class="sky-section-heading"
-  >
-    Input box
-  </h2>
+<div class="sky-country-field-visual">
+  <h2 class="sky-section-heading">Input box</h2>
 
   <div
     class="screenshot-country-field"
     id="screenshot-country-field-empty-input-box"
   >
     <form>
-      <sky-input-box
-        [disabled]="disableFields"
-      >
-        <label
-          class="sky-control-label"
-        >
-          Country
-        </label>
+      <sky-input-box [disabled]="disableFields">
+        <label class="sky-control-label"> Country </label>
         <sky-country-field
           name="countryField"
           required
@@ -103,32 +69,18 @@
     </form>
   </div>
 
-  <p *ngIf="countryData">
-    Selected Country is {{ countryData.name }}
-  </p>
+  <p *ngIf="countryData">Selected Country is {{ countryData.name }}</p>
 </div>
 
-<div
-  class="sky-country-field-visual"
->
-  <h2
-    class="sky-section-heading"
-  >
-    Input box with default country
-  </h2>
+<div class="sky-country-field-visual">
+  <h2 class="sky-section-heading">Input box with default country</h2>
 
   <form
     class="screenshot-country-field"
     id="screenshot-country-field-populated-input-box"
   >
-    <sky-input-box
-      [disabled]="disableFields"
-    >
-      <label
-        class="sky-control-label"
-      >
-        Country
-      </label>
+    <sky-input-box [disabled]="disableFields">
+      <label class="sky-control-label"> Country </label>
       <sky-country-field
         name="countryFieldInputBox"
         [defaultCountry]="'AU'"
@@ -140,12 +92,8 @@
   </form>
 </div>
 
-<div
-  class="sky-country-field-visual"
->
-  <h2
-    class="sky-section-heading"
-  >
+<div class="sky-country-field-visual">
+  <h2 class="sky-section-heading">
     Input box with default country and no label
   </h2>
 
@@ -153,9 +101,7 @@
     class="screenshot-country-field"
     id="screenshot-country-field-populated-input-box-no-label"
   >
-    <sky-input-box
-      [disabled]="disableFields"
-    >
+    <sky-input-box [disabled]="disableFields">
       <sky-country-field
         name="countryFieldInputBoxNoLabel"
         [defaultCountry]="'AU'"

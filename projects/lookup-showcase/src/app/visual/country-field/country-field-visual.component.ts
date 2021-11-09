@@ -1,25 +1,15 @@
-import {
-  Component,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  FormControl,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
-import {
-  SkyCountryFieldCountry
-} from 'projects/lookup/src/public-api';
+import { SkyCountryFieldCountry } from 'projects/lookup/src/public-api';
 
 @Component({
   selector: 'country-field-visual',
   templateUrl: './country-field-visual.component.html',
-  styleUrls: ['./country-field-visual.component.scss']
+  styleUrls: ['./country-field-visual.component.scss'],
 })
 export class CountryFieldVisualComponent implements OnInit {
-
   public countryData: SkyCountryFieldCountry;
 
   public countryDataInputBox: SkyCountryFieldCountry;
@@ -34,20 +24,20 @@ export class CountryFieldVisualComponent implements OnInit {
     this.countryControl = new FormControl();
     this.countryControl.setValue({
       name: 'Australia',
-      iso2: 'au'
+      iso2: 'au',
     });
     this.countryForm = new FormGroup({
-      'countryControl': this.countryControl
+      countryControl: this.countryControl,
     });
 
     this.countryDataInputBox = {
       name: 'Australia',
-      iso2: 'AU'
+      iso2: 'AU',
     };
 
     this.countryControl.setValidators([Validators.required]);
 
-    this.countryControl.valueChanges.subscribe(value => console.log(value));
+    this.countryControl.valueChanges.subscribe((value) => console.log(value));
   }
 
   public toggleDisabledStates(): void {

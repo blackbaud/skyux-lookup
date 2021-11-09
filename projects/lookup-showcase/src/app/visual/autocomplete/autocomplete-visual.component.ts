@@ -1,20 +1,12 @@
-import {
-  Component,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  FormBuilder,
-  FormGroup
-} from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
-import {
-  SkyAutocompleteSelectionChange
-} from 'projects/lookup/src/public-api';
+import { SkyAutocompleteSelectionChange } from 'projects/lookup/src/public-api';
 
 @Component({
   selector: 'autocomplete-visual',
-  templateUrl: './autocomplete-visual.component.html'
+  templateUrl: './autocomplete-visual.component.html',
 })
 export class AutocompleteVisualComponent implements OnInit {
   public reactiveForm: FormGroup;
@@ -32,20 +24,18 @@ export class AutocompleteVisualComponent implements OnInit {
     { name: 'Brown' },
     { name: 'Turquoise' },
     { name: 'White' },
-    { name: 'Black' }
+    { name: 'Black' },
   ];
 
   public templateDisabledState: boolean = false;
 
   private reactiveDisabledState: boolean = false;
 
-  constructor(
-    private formBuilder: FormBuilder
-  ) {}
+  constructor(private formBuilder: FormBuilder) {}
 
   public ngOnInit(): void {
     this.reactiveForm = this.formBuilder.group({
-      favoriteColor: undefined
+      favoriteColor: undefined,
     });
   }
 
@@ -66,5 +56,4 @@ export class AutocompleteVisualComponent implements OnInit {
   public onSelectionChange(event: SkyAutocompleteSelectionChange): void {
     console.log(event);
   }
-
 }
