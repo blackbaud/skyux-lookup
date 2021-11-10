@@ -37,7 +37,7 @@ describe('Country field', () => {
     await selectCountryField();
 
     await browser.actions().doubleClick().perform();
-    // await browser.actions().sendKeys(protractor.Key.BACK_SPACE).perform();
+    await browser.actions().sendKeys(protractor.Key.BACK_SPACE).perform();
 
     await element(by.css('body')).click();
   }
