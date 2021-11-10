@@ -3,34 +3,25 @@ import {
   Component,
   OnInit,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import {
-  SkyModalCloseArgs,
-  SkyModalService
-} from '@skyux/modals';
+import { SkyModalCloseArgs, SkyModalService } from '@skyux/modals';
 
-import {
-  LookupVisualCustomPickerComponent
-} from './lookup-visual-custom-picker.component';
+import { LookupVisualCustomPickerComponent } from './lookup-visual-custom-picker.component';
 
 import {
   SkyLookupSelectModeType,
   SkyLookupShowMoreCustomPickerContext,
-  SkyLookupShowMoreConfig
+  SkyLookupShowMoreConfig,
 } from 'projects/lookup/src/public-api';
 
 @Component({
   selector: 'lookup-visual',
   templateUrl: './lookup-visual.component.html',
-  styleUrls: ['./lookup-visual.component.scss']
+  styleUrls: ['./lookup-visual.component.scss'],
 })
 export class LookupVisualComponent implements OnInit {
   public friendsForm: FormGroup;
@@ -59,29 +50,21 @@ export class LookupVisualComponent implements OnInit {
     { id: 18, name: 'Winston' },
     { id: 19, name: 'Xavier' },
     { id: 20, name: 'Yolanda' },
-    { id: 21, name: 'Zack' }
+    { id: 21, name: 'Zack' },
   ];
 
-  public friends: any[] = [
-    this.people[15],
-    this.people[20]
-  ];
+  public friends: any[] = [this.people[15], this.people[20]];
 
-  public friends2: any[] = [
-    this.people[15],
-    this.people[20]
-  ];
+  public friends2: any[] = [this.people[15], this.people[20]];
 
-  public bestFriend: any[] = [
-    this.people[15]
-  ];
+  public bestFriend: any[] = [this.people[15]];
 
   public bestFriendSelectMode: SkyLookupSelectModeType = 'single';
 
   @ViewChild('itemTemplate2')
   public set modalItemTemplate(itemTemplate: TemplateRef<any>) {
     this.showMoreConfig.nativePickerConfig = {
-      itemTemplate: itemTemplate
+      itemTemplate: itemTemplate,
     };
   }
 
@@ -89,7 +72,7 @@ export class LookupVisualComponent implements OnInit {
     private formBuilder: FormBuilder,
     private modalService: SkyModalService,
     private changeDetector: ChangeDetectorRef
-  ) { }
+  ) {}
 
   public ngOnInit(): void {
     this.createForms();
@@ -117,42 +100,46 @@ export class LookupVisualComponent implements OnInit {
     } else {
       this.showMoreConfig.customPicker = {
         open: (context: SkyLookupShowMoreCustomPickerContext) => {
-          const instance = this.modalService.open(LookupVisualCustomPickerComponent, {
-            providers: [
-              {
-                provide: SkyLookupShowMoreCustomPickerContext,
-                useValue: context
-              }
-            ]
-          });
+          const instance = this.modalService.open(
+            LookupVisualCustomPickerComponent,
+            {
+              providers: [
+                {
+                  provide: SkyLookupShowMoreCustomPickerContext,
+                  useValue: context,
+                },
+              ],
+            }
+          );
 
           instance.closed.subscribe((closeArgs: SkyModalCloseArgs) => {
             if (closeArgs.reason === 'save') {
               if (closeArgs.data) {
-                this.bestFriendsForm
-                  .setValue({ 'bestFriend': [this.people[this.people.length - 1]] });
+                this.bestFriendsForm.setValue({
+                  bestFriend: [this.people[this.people.length - 1]],
+                });
                 this.changeDetector.markForCheck();
               }
             }
           });
-        }
+        },
       };
     }
   }
 
   public toggleSelectMode(): void {
-    this.bestFriendSelectMode = this.bestFriendSelectMode === 'single' ?
-      'multiple' : 'single';
+    this.bestFriendSelectMode =
+      this.bestFriendSelectMode === 'single' ? 'multiple' : 'single';
   }
 
   private createForms(): void {
     this.friendsForm = this.formBuilder.group({
       friends: new FormControl(this.friends),
-      friends2: new FormControl(this.friends2)
+      friends2: new FormControl(this.friends2),
     });
 
     this.bestFriendsForm = this.formBuilder.group({
-      bestFriend: new FormControl(this.bestFriend)
+      bestFriend: new FormControl(this.bestFriend),
     });
   }
 }

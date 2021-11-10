@@ -1,11 +1,9 @@
-import {
-  Component
-} from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'search-visual',
   templateUrl: './search-visual.component.html',
-  styleUrls: ['./search-visual.component.scss']
+  styleUrls: ['./search-visual.component.scss'],
 })
 export class SearchVisualComponent {
   public displayedItems: any;
@@ -14,24 +12,24 @@ export class SearchVisualComponent {
   private items: Array<any> = [
     {
       title: 'Call Robert Hernandez',
-      note: 'Robert recently gave a very generous gift. We should call to thank him.'
+      note: 'Robert recently gave a very generous gift. We should call to thank him.',
     },
     {
       title: 'Send invitation to ball',
-      note: 'The Spring Ball is coming up soon. Let\'s get those invitations out!'
+      note: "The Spring Ball is coming up soon. Let's get those invitations out!",
     },
     {
       title: 'Clean up desk',
-      note: 'File and organize papers.'
+      note: 'File and organize papers.',
     },
     {
       title: 'Investigate leads',
-      note: 'Check out leads for important charity event funding.'
+      note: 'Check out leads for important charity event funding.',
     },
     {
       title: 'Send thank you note',
-      note: 'Send a thank you note to Timothy for his donation.'
-    }
+      note: 'Send a thank you note to Timothy for his donation.',
+    },
   ];
 
   constructor() {
@@ -43,17 +41,20 @@ export class SearchVisualComponent {
     this.searchText = searchText;
     if (searchText) {
       filteredItems = this.items.filter(function (item) {
-          let property: any;
-          for (property in item as any) {
-              if (item.hasOwnProperty(property) && (property === 'title' || property === 'note')) {
-                  /* tslint:disable */
-                  if (item[property].indexOf(searchText) > -1) {
-                      return true;
-                  }
-                  /* tslint:enable */
-              }
+        let property: any;
+        for (property in item as any) {
+          if (
+            item.hasOwnProperty(property) &&
+            (property === 'title' || property === 'note')
+          ) {
+            /* tslint:disable */
+            if (item[property].indexOf(searchText) > -1) {
+              return true;
+            }
+            /* tslint:enable */
           }
-          return false;
+        }
+        return false;
       });
     }
     this.displayedItems = filteredItems;
