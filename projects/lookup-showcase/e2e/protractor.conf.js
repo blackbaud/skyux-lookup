@@ -35,7 +35,7 @@ exports.config = {
   framework: 'jasmine',
   jasmineNodeOpts: {
     showColors: true,
-    defaultTimeoutInterval: 30000,
+    defaultTimeoutInterval: 3000000,
     print: function () {},
   },
   onPrepare() {
@@ -78,7 +78,7 @@ exports.config = {
     'browserstack.debug': 'true',
     'browserstack.console': 'verbose',
     'browserstack.networkLogs': 'true',
-    'browserstack.selenium_version': '2.53.1',
+    'browserstack.selenium_version': '3.6.0',
     'browserstack.use_w3c': 'false',
   },
   beforeLaunch: function () {
@@ -88,11 +88,7 @@ exports.config = {
       exports.bs_local.start(
         {
           key: exports.config['browserstackKey'],
-          onlyAutomate: true,
-          forceLocal: true,
-          force: true,
           localIdentifier: id,
-          verbose: true,
         },
         function (error) {
           if (error) return reject(error);
