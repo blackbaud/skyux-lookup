@@ -19,7 +19,8 @@ import {
 
 import {
   SkyIconModule,
-  SkyTextHighlightModule
+  SkyTextHighlightModule,
+  SkyWaitModule
 } from '@skyux/indicators';
 
 import {
@@ -53,7 +54,8 @@ import {
     SkyLookupResourcesModule,
     SkyNumericModule,
     SkyOverlayModule,
-    SkyThemeModule
+    SkyThemeModule,
+    SkyWaitModule
   ],
   exports: [
     SkyAutocompleteComponent,

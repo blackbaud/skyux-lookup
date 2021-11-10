@@ -38,6 +38,8 @@ import {
 
 import {
   debounceTime,
+  switchMap,
+  take,
   takeUntil
 } from 'rxjs/operators';
 
@@ -330,6 +332,8 @@ export class SkyAutocompleteComponent
     return this.showAddButton || this.enableShowMore;
   }
 
+  public isSearchingAsync = false;
+
   //#endregion
 
   @ViewChild('defaultSearchResultTemplate', {
@@ -360,7 +364,10 @@ export class SkyAutocompleteComponent
       this._inputDirective.textChanges
         .pipe(
           takeUntil(this.inputDirectiveUnsubscribe),
-          debounceTime(this.debounceTime)
+          switchMap((change) => {
+            this.isSearchingAsync = true;
+            return of(change).pipe(debounceTime(this.debounceTime));
+          })
         )
         .subscribe((change) => {
           this.searchTextChanged(change.value);
@@ -621,6 +628,9 @@ export class SkyAutocompleteComponent
         this.resetSearch();
       }
 
+      this.isSearchingAsync = false;
+      this.changeDetector.markForCheck();
+
       return;
     }
 
@@ -634,8 +644,10 @@ export class SkyAutocompleteComponent
         this.cancelCurrentSearch();
       }
 
-      this.currentSearchSub = this.performSearch().subscribe(
+      this.currentSearchSub = this.performSearch().pipe(take(1)).subscribe(
         (results: any[]) => {
+          this.isSearchingAsync = false;
+
           this._searchResults = results.map((r, i) => {
             const result: SkyAutocompleteSearchResult = {
               elementId: `${this.resultsListId}-item-${i}`,
@@ -668,6 +680,9 @@ export class SkyAutocompleteComponent
           }
         }
       );
+    } else {
+      this.isSearchingAsync = false;
+      this.changeDetector.markForCheck();
     }
   }
 
