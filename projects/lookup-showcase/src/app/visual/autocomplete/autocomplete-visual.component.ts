@@ -1,16 +1,10 @@
-import {
-  Component,
-  OnInit
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import {
-  FormBuilder,
-  FormGroup
-} from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 import {
   SkyAutocompleteSearchAsyncFunction,
-  SkyAutocompleteSelectionChange
+  SkyAutocompleteSelectionChange,
 } from 'projects/lookup/src/public-api';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -18,7 +12,7 @@ import { delay } from 'rxjs/operators';
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'autocomplete-visual',
-  templateUrl: './autocomplete-visual.component.html'
+  templateUrl: './autocomplete-visual.component.html',
 })
 export class AutocompleteVisualComponent implements OnInit {
   public reactiveForm: FormGroup;
@@ -36,7 +30,7 @@ export class AutocompleteVisualComponent implements OnInit {
     { name: 'Brown' },
     { name: 'Turquoise' },
     { name: 'White' },
-    { name: 'Black' }
+    { name: 'Black' },
   ];
 
   public templateDisabledState: boolean = false;
@@ -45,24 +39,22 @@ export class AutocompleteVisualComponent implements OnInit {
 
   private reactiveDisabledState: boolean = false;
 
-  constructor(
-    private formBuilder: FormBuilder
-  ) {
+  constructor(private formBuilder: FormBuilder) {
     this.favoriteColorSearchFn = (args) => {
       const searchText = (args.searchText || '').toLowerCase();
 
       const filteredData = this.data.filter(
-        item => item.name.toLowerCase().indexOf(searchText) >= 0
+        (item) => item.name.toLowerCase().indexOf(searchText) >= 0
       );
 
       return of(filteredData).pipe(delay(1000));
-    }
+    };
   }
 
   public ngOnInit(): void {
     this.reactiveForm = this.formBuilder.group({
       favoriteColor: undefined,
-      favoriteColorAsync: undefined
+      favoriteColorAsync: undefined,
     });
   }
 
@@ -83,5 +75,4 @@ export class AutocompleteVisualComponent implements OnInit {
   public onSelectionChange(event: SkyAutocompleteSelectionChange): void {
     console.log(event);
   }
-
 }

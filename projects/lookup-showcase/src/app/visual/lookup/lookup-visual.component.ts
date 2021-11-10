@@ -3,29 +3,20 @@ import {
   Component,
   OnInit,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup
-} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import {
-  SkyModalCloseArgs,
-  SkyModalService
-} from '@skyux/modals';
+import { SkyModalCloseArgs, SkyModalService } from '@skyux/modals';
 
-import {
-  LookupVisualCustomPickerComponent
-} from './lookup-visual-custom-picker.component';
+import { LookupVisualCustomPickerComponent } from './lookup-visual-custom-picker.component';
 
 import {
   SkyLookupSelectModeType,
   SkyLookupShowMoreCustomPickerContext,
   SkyLookupShowMoreConfig,
-  SkyAutocompleteSearchAsyncFunction
+  SkyAutocompleteSearchAsyncFunction,
 } from 'projects/lookup/src/public-api';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -34,7 +25,7 @@ import { delay } from 'rxjs/operators';
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'lookup-visual',
   templateUrl: './lookup-visual.component.html',
-  styleUrls: ['./lookup-visual.component.scss']
+  styleUrls: ['./lookup-visual.component.scss'],
 })
 export class LookupVisualComponent implements OnInit {
   public friendsForm: FormGroup;
@@ -63,22 +54,14 @@ export class LookupVisualComponent implements OnInit {
     { id: 18, name: 'Winston' },
     { id: 19, name: 'Xavier' },
     { id: 20, name: 'Yolanda' },
-    { id: 21, name: 'Zack' }
+    { id: 21, name: 'Zack' },
   ];
 
-  public friends: any[] = [
-    this.people[15],
-    this.people[20]
-  ];
+  public friends: any[] = [this.people[15], this.people[20]];
 
-  public friends2: any[] = [
-    this.people[15],
-    this.people[20]
-  ];
+  public friends2: any[] = [this.people[15], this.people[20]];
 
-  public bestFriend: any[] = [
-    this.people[15]
-  ];
+  public bestFriend: any[] = [this.people[15]];
 
   public bestFriendSelectMode: SkyLookupSelectModeType = 'single';
 
@@ -87,7 +70,7 @@ export class LookupVisualComponent implements OnInit {
   @ViewChild('itemTemplate2')
   public set modalItemTemplate(itemTemplate: TemplateRef<any>) {
     this.showMoreConfig.nativePickerConfig = {
-      itemTemplate: itemTemplate
+      itemTemplate: itemTemplate,
     };
   }
 
@@ -100,11 +83,11 @@ export class LookupVisualComponent implements OnInit {
       const searchText = (args.searchText || '').toLowerCase();
 
       const filteredData = this.people.filter(
-        item => item.name.toLowerCase().indexOf(searchText) >= 0
+        (item) => item.name.toLowerCase().indexOf(searchText) >= 0
       );
 
       return of(filteredData).pipe(delay(1000));
-    }
+    };
   }
 
   public ngOnInit(): void {
@@ -133,43 +116,47 @@ export class LookupVisualComponent implements OnInit {
     } else {
       this.showMoreConfig.customPicker = {
         open: (context: SkyLookupShowMoreCustomPickerContext) => {
-          const instance = this.modalService.open(LookupVisualCustomPickerComponent, {
-            providers: [
-              {
-                provide: SkyLookupShowMoreCustomPickerContext,
-                useValue: context
-              }
-            ]
-          });
+          const instance = this.modalService.open(
+            LookupVisualCustomPickerComponent,
+            {
+              providers: [
+                {
+                  provide: SkyLookupShowMoreCustomPickerContext,
+                  useValue: context,
+                },
+              ],
+            }
+          );
 
           instance.closed.subscribe((closeArgs: SkyModalCloseArgs) => {
             if (closeArgs.reason === 'save') {
               if (closeArgs.data) {
-                this.bestFriendsForm
-                  .setValue({ 'bestFriend': [this.people[this.people.length - 1]] });
+                this.bestFriendsForm.setValue({
+                  bestFriend: [this.people[this.people.length - 1]],
+                });
                 this.changeDetector.markForCheck();
               }
             }
           });
-        }
+        },
       };
     }
   }
 
   public toggleSelectMode(): void {
-    this.bestFriendSelectMode = this.bestFriendSelectMode === 'single' ?
-      'multiple' : 'single';
+    this.bestFriendSelectMode =
+      this.bestFriendSelectMode === 'single' ? 'multiple' : 'single';
   }
 
   private createForms(): void {
     this.friendsForm = this.formBuilder.group({
       friends: new FormControl(this.friends),
-      friends2: new FormControl(this.friends2)
+      friends2: new FormControl(this.friends2),
     });
 
     this.bestFriendsForm = this.formBuilder.group({
       bestFriend: new FormControl(this.bestFriend),
-      bestFriendAsync: undefined
+      bestFriendAsync: undefined,
     });
   }
 }

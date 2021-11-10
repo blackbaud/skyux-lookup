@@ -5,21 +5,18 @@
   role="combobox"
   [attr.aria-expanded]="isOpen && searchText"
   [attr.aria-labelledby]="ariaLabelledBy"
-  [attr.aria-owns]="(isOpen) ? resultsListId : null"
+  [attr.aria-owns]="isOpen ? resultsListId : null"
   [attr.id]="resultsWrapperId"
 >
-  <ng-content>
-  </ng-content>
+  <ng-content> </ng-content>
 </div>
 
-<ng-template
-  #resultsTemplateRef
->
+<ng-template #resultsTemplateRef>
   <div
     class="sky-autocomplete-results-container"
     [skyThemeClass]="{
-      'sky-shadow' : 'default',
-      'sky-elevation-4' : 'modern'
+      'sky-shadow': 'default',
+      'sky-elevation-4': 'modern'
     }"
     (keydown)="handleKeydown($event)"
     #resultsRef
@@ -31,14 +28,16 @@
       <sky-wait [isWaiting]="true"></sky-wait>
     </div>
     <ng-template #autocompleteResultsTemplateRef>
-      <div *ngIf="searchText && (!showActionsArea || searchResults.length > 0)"
+      <div
+        *ngIf="searchText && (!showActionsArea || searchResults.length > 0)"
         class="sky-autocomplete-results"
         role="listbox"
         [attr.aria-labelledby]="ariaLabelledBy"
         [attr.id]="resultsListId"
       >
         <ng-container *ngFor="let result of searchResults; let i = index">
-          <div *ngIf="!searchResultsLimit || i < searchResultsLimit"
+          <div
+            *ngIf="!searchResultsLimit || i < searchResultsLimit"
             class="sky-autocomplete-result"
             role="option"
             tabindex="0"
@@ -50,21 +49,36 @@
             #searchResultEl
           >
             <ng-container
-              *ngTemplateOutlet="searchResultTemplate; context: { item: result.data }">
+              *ngTemplateOutlet="
+                searchResultTemplate;
+                context: { item: result.data }
+              "
+            >
             </ng-container>
           </div>
         </ng-container>
-        <div *ngIf="searchResults.length === 0"
+        <div
+          *ngIf="searchResults.length === 0"
           class="sky-deemphasized sky-padding-squish-default"
         >
-          {{ noResultsFoundText || ('skyux_autocomplete_no_results' | skyLibResources) }}
+          {{
+            noResultsFoundText ||
+              ('skyux_autocomplete_no_results' | skyLibResources)
+          }}
         </div>
       </div>
-      <div *ngIf="showActionsArea"
-        class="sky-autocomplete-actions"
-      >
-        <button *ngIf="enableShowMore && (!searchText || searchResults.length > 0 || searchAsync)"
-          class="sky-autocomplete-action sky-autocomplete-action-more sky-btn sky-btn-link"
+      <div *ngIf="showActionsArea" class="sky-autocomplete-actions">
+        <button
+          *ngIf="
+            enableShowMore &&
+            (!searchText || searchResults.length > 0 || searchAsync)
+          "
+          class="
+            sky-autocomplete-action
+            sky-autocomplete-action-more
+            sky-btn
+            sky-btn-link
+          "
           type="button"
           (click)="moreButtonClicked()"
         >
@@ -72,19 +86,37 @@
             {{ 'skyux_autocomplete_show_all' | skyLibResources }}
           </ng-container>
           <ng-container *ngIf="!searchAsync && !searchText">
-            {{ 'skyux_autocomplete_show_all_count' | skyLibResources:(data.length | skyNumeric:{truncate: false}) }}
+            {{
+              'skyux_autocomplete_show_all_count'
+                | skyLibResources
+                  : (data.length | skyNumeric: { truncate: false })
+            }}
           </ng-container>
           <ng-container *ngIf="!searchAsync && searchText">
-            {{ 'skyux_autocomplete_show_matches_count' | skyLibResources:(data.length | skyNumeric:{truncate: false}) }}
+            {{
+              'skyux_autocomplete_show_matches_count'
+                | skyLibResources
+                  : (data.length | skyNumeric: { truncate: false })
+            }}
           </ng-container>
         </button>
-        <div *ngIf="searchText && searchResults.length === 0"
+        <div
+          *ngIf="searchText && searchResults.length === 0"
           class="sky-font-deemphasized sky-autocomplete-actions-no-results"
         >
-          {{ noResultsFoundText || ('skyux_autocomplete_no_results' | skyLibResources) }}
+          {{
+            noResultsFoundText ||
+              ('skyux_autocomplete_no_results' | skyLibResources)
+          }}
         </div>
-        <button *ngIf="showAddButton"
-          class="sky-autocomplete-action sky-autocomplete-action-add sky-btn sky-btn-link"
+        <button
+          *ngIf="showAddButton"
+          class="
+            sky-autocomplete-action
+            sky-autocomplete-action-add
+            sky-btn
+            sky-btn-link
+          "
           tabindex="0"
           type="button"
           skyId
@@ -92,23 +124,19 @@
           (click)="addButtonClicked()"
           #addButtonEl
         >
-          <sky-icon *skyThemeIf="'modern'"
+          <sky-icon
+            *skyThemeIf="'modern'"
             icon="add"
             iconType="skyux"
           ></sky-icon>
-          <sky-icon *skyThemeIf="'default'"
-            icon="plus-circle"
-          ></sky-icon>
-          {{'skyux_autocomplete_add' | skyLibResources}}
+          <sky-icon *skyThemeIf="'default'" icon="plus-circle"></sky-icon>
+          {{ 'skyux_autocomplete_add' | skyLibResources }}
         </button>
       </div>
     </ng-template>
   </div>
 </ng-template>
 
-<ng-template
-  let-item="item"
-  #defaultSearchResultTemplate
->
+<ng-template let-item="item" #defaultSearchResultTemplate>
   {{ item[descriptorProperty] }}
 </ng-template>

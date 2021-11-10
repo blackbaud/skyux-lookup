@@ -89,22 +89,10 @@
     Toggle template autocomplete disabled
   </button>
 
-
-  <h2>
-    Autocomplete (async)
-  </h2>
-  <div
-    id="autocomplete-reactive"
-  >
-    <form
-      novalidate
-      [formGroup]="reactiveForm"
-    >
-      <label
-        for="favorite-color-reactive"
-      >
-        Favorite color
-      </label>
+  <h2>Autocomplete (async)</h2>
+  <div id="autocomplete-reactive">
+    <form novalidate [formGroup]="reactiveForm">
+      <label for="favorite-color-reactive"> Favorite color </label>
       <sky-autocomplete
         [searchAsync]="favoriteColorSearchFn"
         (selectionChange)="onSelectionChange($event)"
@@ -135,8 +123,6 @@
           <td>{{ reactiveForm.value.favoriteColor?.name }}</td>
         </tr>
       </table>
-
     </form>
   </div>
-
 </div>
