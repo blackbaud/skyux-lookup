@@ -4,7 +4,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SkyE2eThemeSelectorModule } from '@skyux/e2e-client';
 import { SkyCheckboxModule, SkyInputBoxModule } from '@skyux/forms';
-import { SkyAutocompleteModule, SkyCountryFieldModule, SkyLookupModule, SkySearchModule } from 'projects/lookup/src/public-api';
+import {
+  SkyAutocompleteModule,
+  SkyCountryFieldModule,
+  SkyLookupModule,
+  SkySearchModule,
+} from 'projects/lookup/src/public-api';
 import { VisualComponent } from './visual.component';
 import { AutocompleteVisualComponent } from './autocomplete/autocomplete-visual.component';
 import { CountryFieldVisualComponent } from './country-field/country-field-visual.component';
@@ -14,8 +19,6 @@ import { SkyModalModule } from '@skyux/modals';
 import { SkyIdModule } from '@skyux/core';
 import { SearchVisualComponent } from './search/search-visual.component';
 
-
-
 @NgModule({
   declarations: [
     AutocompleteVisualComponent,
@@ -23,7 +26,7 @@ import { SearchVisualComponent } from './search/search-visual.component';
     LookupVisualCustomPickerComponent,
     LookupVisualComponent,
     SearchVisualComponent,
-    VisualComponent
+    VisualComponent,
   ],
   imports: [
     CommonModule,
@@ -38,7 +41,7 @@ import { SearchVisualComponent } from './search/search-visual.component';
     SkyInputBoxModule,
     SkyLookupModule,
     SkyModalModule,
-    SkySearchModule
-  ]
+    SkySearchModule,
+  ],
 })
-export class VisualModule { }
+export class VisualModule {}

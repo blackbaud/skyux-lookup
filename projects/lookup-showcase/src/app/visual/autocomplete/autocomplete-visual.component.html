@@ -1,22 +1,8 @@
-<div
-  class="app-screenshot"
-  id="autocomplete-visual"
->
-  <h2>
-    Autocomplete (reactive)
-  </h2>
-  <div
-    id="autocomplete-reactive"
-  >
-    <form
-      novalidate
-      [formGroup]="reactiveForm"
-    >
-      <label
-        for="favorite-color-reactive"
-      >
-        Favorite color
-      </label>
+<div class="app-screenshot" id="autocomplete-visual">
+  <h2>Autocomplete (reactive)</h2>
+  <div id="autocomplete-reactive">
+    <form novalidate [formGroup]="reactiveForm">
+      <label for="favorite-color-reactive"> Favorite color </label>
       <sky-autocomplete
         [data]="data"
         (selectionChange)="onSelectionChange($event)"
@@ -47,7 +33,6 @@
           <td>{{ reactiveForm.value.favoriteColor?.name }}</td>
         </tr>
       </table>
-
     </form>
   </div>
 
@@ -59,18 +44,9 @@
     Toggle reactive autocomplete disabled
   </button>
 
-  <h2>
-    Autocomplete (template-driven)
-  </h2>
-  <div
-    id="autocomplete-template-driven"
-  >
-
-    <label
-      for="favorite-color-template"
-    >
-      Favorite color
-    </label>
+  <h2>Autocomplete (template-driven)</h2>
+  <div id="autocomplete-template-driven">
+    <label for="favorite-color-template"> Favorite color </label>
     <sky-autocomplete
       [data]="data"
       (selectionChange)="onSelectionChange($event)"
@@ -84,7 +60,6 @@
         #model="ngModel"
       />
     </sky-autocomplete>
-
 
     <table>
       <tr>
@@ -110,10 +85,7 @@
     </table>
   </div>
 
-  <button
-    class="sky-btn sky-btn-primary"
-    (click)="toggleTemplateDisabled()"
-  >
+  <button class="sky-btn sky-btn-primary" (click)="toggleTemplateDisabled()">
     Toggle template autocomplete disabled
   </button>
 

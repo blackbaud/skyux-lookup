@@ -1,14 +1,6 @@
-import {
-  expect,
-  SkyHostBrowser
-} from '@skyux-sdk/e2e';
+import { expect, SkyHostBrowser } from '@skyux-sdk/e2e';
 
-import {
-  browser,
-  by,
-  element,
-  ExpectedConditions
-} from 'protractor';
+import { browser, by, element, ExpectedConditions } from 'protractor';
 
 describe('Autocomplete', () => {
   beforeEach(async () => {
@@ -23,7 +15,9 @@ describe('Autocomplete', () => {
     await browser.actions().sendKeys('r').perform();
 
     return browser.wait(
-      ExpectedConditions.presenceOf(element(by.css('.sky-autocomplete-results'))),
+      ExpectedConditions.presenceOf(
+        element(by.css('.sky-autocomplete-results'))
+      ),
       1200,
       'Autocomplete results dropdown took too long to appear.'
     );
@@ -31,21 +25,21 @@ describe('Autocomplete', () => {
 
   it('should match previous screenshot with no dropdown', (done) => {
     expect('#autocomplete-reactive').toMatchBaselineScreenshot(done, {
-      screenshotName: 'autocomplete-no-dropdown'
+      screenshotName: 'autocomplete-no-dropdown',
     });
   });
 
   it('should match previous screenshot with no dropdown (xs screen)', async (done) => {
     await SkyHostBrowser.setWindowBreakpoint('xs');
     expect('#autocomplete-reactive').toMatchBaselineScreenshot(done, {
-      screenshotName: 'autocomplete-no-dropdown-xs'
+      screenshotName: 'autocomplete-no-dropdown-xs',
     });
   });
 
   it('should match previous screenshot with dropdown open', async (done) => {
     await activateDropdown();
     expect('#autocomplete-reactive').toMatchBaselineScreenshot(done, {
-      screenshotName: 'autocomplete-with-dropdown'
+      screenshotName: 'autocomplete-with-dropdown',
     });
   });
 
@@ -53,14 +47,14 @@ describe('Autocomplete', () => {
     await SkyHostBrowser.setWindowBreakpoint('xs');
     await activateDropdown();
     expect('#autocomplete-reactive').toMatchBaselineScreenshot(done, {
-      screenshotName: 'autocomplete-with-dropdown-xs'
+      screenshotName: 'autocomplete-with-dropdown-xs',
     });
   });
 
   it('should match previous screenshot while disabled', async (done) => {
     await element(by.css('#autocomplete-reactive-disable-button')).click();
     expect('#autocomplete-reactive').toMatchBaselineScreenshot(done, {
-      screenshotName: 'autocomplete-disabled'
+      screenshotName: 'autocomplete-disabled',
     });
   });
 
@@ -68,7 +62,7 @@ describe('Autocomplete', () => {
     await SkyHostBrowser.setWindowBreakpoint('xs');
     await element(by.css('#autocomplete-reactive-disable-button')).click();
     expect('#autocomplete-reactive').toMatchBaselineScreenshot(done, {
-      screenshotName: 'autocomplete-disabled-xs'
+      screenshotName: 'autocomplete-disabled-xs',
     });
   });
 });

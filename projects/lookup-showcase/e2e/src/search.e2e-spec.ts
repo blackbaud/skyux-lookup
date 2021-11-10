@@ -1,14 +1,6 @@
-import {
-  by,
-  element,
-  Key
-} from 'protractor';
+import { by, element, Key } from 'protractor';
 
-import {
-  expect,
-  SkyHostBrowser,
-  SkyVisualThemeSelector
-} from '@skyux-sdk/e2e';
+import { expect, SkyHostBrowser, SkyVisualThemeSelector } from '@skyux-sdk/e2e';
 
 describe('search component', () => {
   let currentTheme: string;
@@ -35,7 +27,7 @@ describe('search component', () => {
 
   function validateScreenshot(done: DoneFn, screenshotName: string) {
     expect('#search-visual').toMatchBaselineScreenshot(done, {
-      screenshotName: getScreenshotName(screenshotName)
+      screenshotName: getScreenshotName(screenshotName),
     });
   }
 
@@ -83,32 +75,25 @@ describe('search component', () => {
         validateScreenshot(done, 'search-xs');
       });
 
-      it(
-        'should match the baseline search screenshot on small screens when dismissible input is shown',
-        async (done) => {
-          await openSearch();
+      it('should match the baseline search screenshot on small screens when dismissible input is shown', async (done) => {
+        await openSearch();
 
-          validateScreenshot(done, 'search-dismissible-xs');
-        }
-      );
+        validateScreenshot(done, 'search-dismissible-xs');
+      });
 
-      it(
-        'should match the baseline search screenshot on small screens when search is applied',
-        async (done) => {
-          await openSearch();
-          await applySearchText();
+      it('should match the baseline search screenshot on small screens when search is applied', async (done) => {
+        await openSearch();
+        await applySearchText();
 
-          validateScreenshot(done, 'search-applied-xs');
-        }
-      );
+        validateScreenshot(done, 'search-applied-xs');
+      });
 
-      it('should match the baseline screenshot on small screens when search is applied and dismissed',
-        async (done) => {
-          await openSearch();
-          await applySearchText();
-          await dismissSearch();
+      it('should match the baseline screenshot on small screens when search is applied and dismissed', async (done) => {
+        await openSearch();
+        await applySearchText();
+        await dismissSearch();
 
-          validateScreenshot(done, 'search-applied-dismissed-xs');
+        validateScreenshot(done, 'search-applied-dismissed-xs');
       });
     });
   }
@@ -137,5 +122,4 @@ describe('search component', () => {
 
     runTests();
   });
-
 });
