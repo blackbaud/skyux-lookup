@@ -1,6 +1,6 @@
 # 5.0.4 (2021-11-19)
 
-- Updated the builder to support StackBlitz. []()
+- Updated the builder to support StackBlitz. [#240](https://github.com/blackbaud/skyux-lookup/pull/240)
 
 # 5.0.3 (2021-10-19)
 
