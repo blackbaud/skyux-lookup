@@ -34,26 +34,20 @@ import {
   Subscription,
 } from 'rxjs';
 
-import { debounceTime, switchMap, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, map, switchMap, take, takeUntil } from 'rxjs/operators';
 
 import { SkyAutocompleteMessage } from './types/autocomplete-message';
-
 import { SkyAutocompleteMessageType } from './types/autocomplete-message-type';
-
 import { SkyAutocompleteSearchFunction } from './types/autocomplete-search-function';
-
 import { SkyAutocompleteSearchFunctionFilter } from './types/autocomplete-search-function-filter';
-
 import { SkyAutocompleteSelectionChange } from './types/autocomplete-selection-change';
-
 import { SkyAutocompleteShowMoreArgs } from './types/autocomplete-show-more-args';
-
 import { SkyAutocompleteAdapterService } from './autocomplete-adapter.service';
-
 import { skyAutocompleteDefaultSearchFunction } from './autocomplete-default-search-function';
-
 import { SkyAutocompleteInputDirective } from './autocomplete-input.directive';
 import { SkyAutocompleteSearchAsyncFunction } from './types/autocomplete-search-async-function';
+import { SkyAutocompleteSearchAsyncResult } from './types/autocomplete-search-async-result';
+import { SkyAutocompleteSearchAsyncArgs } from '@skyux/lookup';
 
 /**
  * @internal
@@ -188,9 +182,6 @@ export class SkyAutocompleteComponent
     );
   }
 
-  @Input()
-  public searchAsync: SkyAutocompleteSearchAsyncFunction;
-
   /**
    * Specifies a template to format each search result in the dropdown list.
    * The autocomplete component injects search result values into the template
@@ -265,6 +256,14 @@ export class SkyAutocompleteComponent
 
   /**
    * @internal
+   * Allows async search to be disabled even when a listener is specified for
+   * the `searchAsync` output.
+   */
+  @Input()
+  public searchAsyncDisabled = false;
+
+  /**
+   * @internal
    * Fires when users select the button to add options to the data source.
    */
   @Output()
@@ -284,6 +283,9 @@ export class SkyAutocompleteComponent
   public get selectionChange(): EventEmitter<SkyAutocompleteSelectionChange> {
     return this._selectionChange;
   }
+
+  @Output()
+  public searchAsync = new EventEmitter<SkyAutocompleteSearchAsyncArgs>();
 
   //#endregion
 
@@ -310,6 +312,8 @@ export class SkyAutocompleteComponent
   }
 
   public isSearchingAsync = false;
+
+  public searchResultsCount: number | undefined;
 
   //#endregion
 
@@ -460,6 +464,7 @@ export class SkyAutocompleteComponent
   }
 
   public ngOnDestroy(): void {
+    this.cancelCurrentSearch();
     this.inputDirectiveUnsubscribe.next();
     this.inputDirectiveUnsubscribe.complete();
     this.ngUnsubscribe.next();
@@ -618,22 +623,24 @@ export class SkyAutocompleteComponent
     this.searchText = searchText.trim();
 
     if (isLongEnough && isDifferent) {
-      if (this.currentSearchSub) {
-        this.cancelCurrentSearch();
-      }
+      this.cancelCurrentSearch();
 
       this.currentSearchSub = this.performSearch()
         .pipe(take(1))
-        .subscribe((results: any[]) => {
+        .subscribe((result) => {
+          const items = result.items;
+
           this.isSearchingAsync = false;
 
-          this._searchResults = results.map((r, i) => {
+          this._searchResults = items.map((r, i) => {
             const result: SkyAutocompleteSearchResult = {
               elementId: `${this.resultsListId}-item-${i}`,
               data: r,
             };
             return result;
           });
+
+          this.searchResultsCount = result.totalCount;
 
           this._highlightText = this.searchText;
           this.removeFocusedClass();
@@ -664,26 +671,43 @@ export class SkyAutocompleteComponent
     }
   }
 
-  private performSearch(): Observable<unknown> {
-    if (this.searchAsync) {
-      return this.searchAsync({
+  private performSearch(): Observable<SkyAutocompleteSearchAsyncResult> {
+    if (!this.searchAsyncDisabled && this.searchAsync.observers.length > 0) {
+      const searchAsyncArgs: SkyAutocompleteSearchAsyncArgs = {
+        displayType: 'popover',
+        offset: 0,
         searchText: this.searchText,
-        showAll: false,
-      });
+      };
+
+      this.searchAsync.emit(searchAsyncArgs);
+
+      return searchAsyncArgs.result;
     }
 
     const result = this.search(this.searchText, this.data);
 
     if (result instanceof Array) {
-      return of(result);
+      return of({
+        items: result,
+        totalCount: result.length,
+      });
     }
 
-    return from(result);
+    return from(result).pipe(
+      map((items) => {
+        return {
+          items,
+          totalCount: items.length,
+        };
+      })
+    );
   }
 
   private cancelCurrentSearch(): void {
-    this.currentSearchSub.unsubscribe();
-    this.currentSearchSub = undefined;
+    if (this.currentSearchSub) {
+      this.currentSearchSub.unsubscribe();
+      this.currentSearchSub = undefined;
+    }
   }
 
   private selectSearchResultById(id: string): void {
@@ -755,6 +779,7 @@ export class SkyAutocompleteComponent
     this.searchText = '';
     this._highlightText = '';
     this.activeElementIndex = -1;
+    this.searchResultsCount = undefined;
     this.removeActiveDescendant();
     this.initOverlayFocusableElements();
     this.changeDetector.markForCheck();

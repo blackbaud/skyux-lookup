@@ -21,7 +21,7 @@
       [messageStream]="autocompleteController"
       [propertiesToSearch]="propertiesToSearch"
       [search]="search"
-      [searchAsync]="searchAsync"
+      [searchAsyncDisabled]="searchAsync.observers.length === 0"
       [searchFilters]="searchFilters"
       [searchResultsLimit]="searchResultsLimit"
       [searchResultTemplate]="searchResultTemplate"
@@ -29,6 +29,7 @@
       [showAddButton]="showAddButton"
       [wrapperClass]="wrapperClass"
       (addClick)="addButtonClicked()"
+      (searchAsync)="onSearchAsync($event)"
       (selectionChange)="onAutocompleteSelectionChange($event)"
       (showMoreClick)="onShowMoreClick($event)"
     >

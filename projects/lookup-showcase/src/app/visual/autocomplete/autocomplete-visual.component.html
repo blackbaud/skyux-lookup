@@ -94,7 +94,7 @@
     <form novalidate [formGroup]="reactiveForm">
       <label for="favorite-color-reactive"> Favorite color </label>
       <sky-autocomplete
-        [searchAsync]="favoriteColorSearchFn"
+        (searchAsync)="favoriteColorSearch($event)"
         (selectionChange)="onSelectionChange($event)"
       >
         <input

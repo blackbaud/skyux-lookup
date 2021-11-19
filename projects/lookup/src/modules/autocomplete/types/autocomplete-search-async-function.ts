@@ -1,6 +1,7 @@
-import { SkyAutocompleteSearchAsyncFunctionArgs } from './autocomplete-search-async-function-args';
-import { SkyAutocompleteSearchAsyncFunctionResponse } from './autocomplete-search-async-function-response';
+import { Observable } from 'rxjs';
+import { SkyAutocompleteSearchAsyncArgs } from './autocomplete-search-async-args';
+import { SkyAutocompleteSearchAsyncResult } from './autocomplete-search-async-result';
 
 export type SkyAutocompleteSearchAsyncFunction = (
-  args: SkyAutocompleteSearchAsyncFunctionArgs
-) => SkyAutocompleteSearchAsyncFunctionResponse;
+  args: SkyAutocompleteSearchAsyncArgs
+) => Observable<SkyAutocompleteSearchAsyncResult>;

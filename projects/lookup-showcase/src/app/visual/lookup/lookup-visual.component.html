@@ -145,10 +145,10 @@
           [disabled]="disabled"
           [debounceTime]="1000"
           [enableShowMore]="true"
-          [searchAsync]="bestFriendSearchFn"
           [searchResultTemplate]="itemTemplate"
           [showAddButton]="true"
           [showMoreConfig]="showMoreConfig"
+          (searchAsync)="bestFriendSearch($event)"
           (addClick)="addButtonClicked()"
         >
         </sky-lookup>
@@ -184,6 +184,16 @@
     <th>Value</th>
     <td>
       <ng-container *ngFor="let friend of bestFriendsForm.value.bestFriend">
+        {{ friend.name }}
+      </ng-container>
+    </td>
+  </tr>
+  <tr>
+    <th>Value async</th>
+    <td>
+      <ng-container
+        *ngFor="let friend of bestFriendsForm.value.bestFriendAsync"
+      >
         {{ friend.name }}
       </ng-container>
     </td>

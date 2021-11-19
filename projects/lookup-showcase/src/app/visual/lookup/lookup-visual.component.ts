@@ -16,7 +16,7 @@ import {
   SkyLookupSelectModeType,
   SkyLookupShowMoreCustomPickerContext,
   SkyLookupShowMoreConfig,
-  SkyAutocompleteSearchAsyncFunction,
+  SkyAutocompleteSearchAsyncArgs,
 } from 'projects/lookup/src/public-api';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
@@ -65,8 +65,6 @@ export class LookupVisualComponent implements OnInit {
 
   public bestFriendSelectMode: SkyLookupSelectModeType = 'single';
 
-  public bestFriendSearchFn: SkyAutocompleteSearchAsyncFunction;
-
   @ViewChild('itemTemplate2')
   public set modalItemTemplate(itemTemplate: TemplateRef<any>) {
     this.showMoreConfig.nativePickerConfig = {
@@ -78,17 +76,7 @@ export class LookupVisualComponent implements OnInit {
     private formBuilder: FormBuilder,
     private modalService: SkyModalService,
     private changeDetector: ChangeDetectorRef
-  ) {
-    this.bestFriendSearchFn = (args) => {
-      const searchText = (args.searchText || '').toLowerCase();
-
-      const filteredData = this.people.filter(
-        (item) => item.name.toLowerCase().indexOf(searchText) >= 0
-      );
-
-      return of(filteredData).pipe(delay(1000));
-    };
-  }
+  ) {}
 
   public ngOnInit(): void {
     this.createForms();
@@ -146,6 +134,30 @@ export class LookupVisualComponent implements OnInit {
   public toggleSelectMode(): void {
     this.bestFriendSelectMode =
       this.bestFriendSelectMode === 'single' ? 'multiple' : 'single';
+  }
+
+  public bestFriendSearch(args: SkyAutocompleteSearchAsyncArgs) {
+    const searchText = (args.searchText || '').toLowerCase();
+
+    let items = this.people.filter(
+      (item) => item.name.toLowerCase().indexOf(searchText) >= 0
+    );
+
+    const totalCount = items.length;
+    let hasMore = false;
+    let itemCountToReturn = args.displayType === 'popover' ? 5 : 10;
+
+    items = items.slice(args.offset, args.offset + itemCountToReturn);
+    hasMore = args.offset + itemCountToReturn < totalCount;
+
+    // Simulate new object instances being returned by a web service call.
+    items = items.map((item) => Object.assign({}, item));
+
+    args.result = of({
+      hasMore,
+      items,
+      totalCount,
+    }).pipe(delay(1000));
   }
 
   private createForms(): void {

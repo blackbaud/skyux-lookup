@@ -24,9 +24,14 @@ import { SkyLookupResourcesModule } from '../shared/sky-lookup-resources.module'
 import { SkyAutocompleteComponent } from './autocomplete.component';
 
 import { SkyAutocompleteInputDirective } from './autocomplete-input.directive';
+import { SkyAutcompleteSearchAsyncDisabledPipe } from './autocomplete-search-async-disabled.pipe';
 
 @NgModule({
-  declarations: [SkyAutocompleteComponent, SkyAutocompleteInputDirective],
+  declarations: [
+    SkyAutocompleteComponent,
+    SkyAutocompleteInputDirective,
+    SkyAutcompleteSearchAsyncDisabledPipe,
+  ],
   imports: [
     CommonModule,
     FormsModule,

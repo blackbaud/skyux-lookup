@@ -1,7 +1,13 @@
-import { Directive, Input, TemplateRef } from '@angular/core';
-import { SkyAutocompleteSearchAsyncFunction } from '@skyux/lookup';
+import {
+  Directive,
+  EventEmitter,
+  Input,
+  Output,
+  TemplateRef,
+} from '@angular/core';
 
 import { skyAutocompleteDefaultSearchFunction } from '../autocomplete/autocomplete-default-search-function';
+import { SkyAutocompleteSearchAsyncArgs } from '../autocomplete/types/autocomplete-search-async-args';
 
 import { SkyAutocompleteSearchFunction } from '../autocomplete/types/autocomplete-search-function';
 
@@ -68,9 +74,6 @@ export class SkyLookupAutocompleteAdapter {
     );
   }
 
-  @Input()
-  public searchAsync: SkyAutocompleteSearchAsyncFunction;
-
   /**
    * Specifies a template to format each option in the dropdown list. The lookup component
    * injects values into the template as `item` variables that reference all the object
@@ -104,6 +107,9 @@ export class SkyLookupAutocompleteAdapter {
    */
   @Input()
   public searchResultsLimit: number;
+
+  @Output()
+  public searchAsync = new EventEmitter<SkyAutocompleteSearchAsyncArgs>();
 
   private _descriptorProperty: string;
   private _propertiesToSearch: string[];

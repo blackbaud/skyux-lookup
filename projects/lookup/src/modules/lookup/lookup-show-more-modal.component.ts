@@ -5,11 +5,10 @@ import {
   Component,
   OnDestroy,
 } from '@angular/core';
-import { SkyAutocompleteSearchAsyncFunctionResponse } from '@skyux/lookup';
 
 import { SkyModalInstance } from '@skyux/modals';
 
-import { from, Observable, of, Subject, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { SkyLookupShowMoreNativePickerContext } from './types/lookup-show-more-native-picker-context';
 
@@ -60,7 +59,6 @@ export class SkyLookupShowMoreModalComponent
 
   private itemIndex: number = 0;
   private ngUnsubscribe = new Subject<void>();
-  private currentSearchSub: Subscription | undefined;
 
   constructor(
     public modalInstance: SkyModalInstance,
@@ -126,7 +124,7 @@ export class SkyLookupShowMoreModalComponent
     }
 
     this.itemIndex = this.itemIndex + 10;
-    this.searchItems(this.items).subscribe((searchedItems) => {
+    this.searchItems(this.items).then((searchedItems) => {
       this.displayedItems = searchedItems.slice(0, this.itemIndex);
 
       if (this.itemIndex > searchedItems.length) {
@@ -212,6 +210,35 @@ export class SkyLookupShowMoreModalComponent
     this.updateDataState();
   }
 
+  public searchItems(items: any[]): Promise<any[]> {
+    let searchText = this.searchText;
+
+    if (searchText) {
+      const resultValues = this.context.search(
+        searchText,
+        items.map((item) => {
+          return item.value;
+        })
+      );
+
+      if (resultValues instanceof Array) {
+        const result = items.filter(
+          (item) => resultValues.indexOf(item.value) >= 0
+        );
+        return Promise.resolve(result);
+      } else {
+        return resultValues.then((values) => {
+          const result = items.filter(
+            (item) => values.indexOf(item.value) >= 0
+          );
+          return Promise.resolve(result);
+        });
+      }
+    } else {
+      return Promise.resolve(items);
+    }
+  }
+
   public selectAll(): void {
     let selectedItems: { index: number; itemData: any }[] = this.selectedItems;
 
@@ -250,7 +277,7 @@ export class SkyLookupShowMoreModalComponent
         ) !== -1;
     });
 
-    this.searchItems(this.items).subscribe((searchedItems) => {
+    this.searchItems(this.items).then((searchedItems) => {
       if (this.onlyShowSelected) {
         searchedItems = searchedItems.filter((item) => item.selected);
       }
@@ -281,51 +308,5 @@ export class SkyLookupShowMoreModalComponent
     this.addItems();
 
     this.changeDetector.markForCheck();
-  }
-
-  private searchItems(
-    items: any[]
-  ): SkyAutocompleteSearchAsyncFunctionResponse {
-    if (this.currentSearchSub) {
-      this.currentSearchSub.unsubscribe();
-      this.currentSearchSub = undefined;
-    }
-
-    let searchText = this.searchText;
-
-    if (searchText) {
-      if (this.context.searchAsync) {
-        return this.context.searchAsync({
-          searchText,
-          showAll: false,
-        });
-      }
-
-      const resultValues = this.context.search(
-        searchText,
-        items.map((item) => {
-          return item.value;
-        })
-      );
-
-      if (resultValues instanceof Array) {
-        const result = items.filter(
-          (item) => resultValues.indexOf(item.value) >= 0
-        );
-        return of(result);
-      } else if (resultValues instanceof Observable) {
-      } else {
-        return from(
-          resultValues.then((values) => {
-            const result = items.filter(
-              (item) => values.indexOf(item.value) >= 0
-            );
-            return Promise.resolve(result);
-          })
-        );
-      }
-    } else {
-      return of(items);
-    }
   }
 }

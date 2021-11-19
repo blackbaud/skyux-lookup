@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 
 import { FormBuilder, FormGroup } from '@angular/forms';
 
-import {
-  SkyAutocompleteSearchAsyncFunction,
-  SkyAutocompleteSelectionChange,
-} from 'projects/lookup/src/public-api';
 import { of } from 'rxjs';
 import { delay } from 'rxjs/operators';
+
+import {
+  SkyAutocompleteSearchAsyncArgs,
+  SkyAutocompleteSelectionChange,
+} from 'projects/lookup/src/public-api';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
@@ -35,21 +36,9 @@ export class AutocompleteVisualComponent implements OnInit {
 
   public templateDisabledState: boolean = false;
 
-  public favoriteColorSearchFn: SkyAutocompleteSearchAsyncFunction;
-
   private reactiveDisabledState: boolean = false;
 
-  constructor(private formBuilder: FormBuilder) {
-    this.favoriteColorSearchFn = (args) => {
-      const searchText = (args.searchText || '').toLowerCase();
-
-      const filteredData = this.data.filter(
-        (item) => item.name.toLowerCase().indexOf(searchText) >= 0
-      );
-
-      return of(filteredData).pipe(delay(1000));
-    };
-  }
+  constructor(private formBuilder: FormBuilder) {}
 
   public ngOnInit(): void {
     this.reactiveForm = this.formBuilder.group({
@@ -74,5 +63,18 @@ export class AutocompleteVisualComponent implements OnInit {
 
   public onSelectionChange(event: SkyAutocompleteSelectionChange): void {
     console.log(event);
+  }
+
+  public favoriteColorSearch(args: SkyAutocompleteSearchAsyncArgs): void {
+    const searchText = (args.searchText || '').toLowerCase();
+
+    const filteredData = this.data.filter(
+      (item) => item.name.toLowerCase().indexOf(searchText) >= 0
+    );
+
+    args.result = of({
+      items: filteredData,
+      totalCount: filteredData.length,
+    }).pipe(delay(1000));
   }
 }
