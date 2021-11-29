@@ -96,30 +96,28 @@
       {{ 'skyux_lookup_show_more_no_results' | skyLibResources }}
     </div>
     <sky-repeater class="sky-lookup-show-more-repeater" expandMode="none">
-      <ng-container>
-        <sky-repeater-item
-          *ngFor="let item of displayedItems"
-          [selectable]="context.selectMode === 'multiple'"
-          [isSelected]="
-            item[context.idProperty] | skyLookupItemSelected: selectedIdMap
-          "
-          (click)="itemClick(item)"
-          (keyup.enter)="itemClick(item)"
-          (isSelectedChange)="onItemSelect($event, item)"
-        >
-          <sky-repeater-item-content>
-            <ng-container
-              *ngTemplateOutlet="
-                context.userConfig?.itemTemplate
-                  ? context.userConfig?.itemTemplate
-                  : defaultItemTemplate;
-                context: { item: item }
-              "
-            >
-            </ng-container>
-          </sky-repeater-item-content>
-        </sky-repeater-item>
-      </ng-container>
+      <sky-repeater-item
+        *ngFor="let item of displayedItems"
+        [selectable]="context.selectMode === 'multiple'"
+        [isSelected]="
+          item[context.idProperty] | skyLookupItemSelected: selectedIdMap
+        "
+        (click)="itemClick(item)"
+        (keyup.enter)="itemClick(item)"
+        (isSelectedChange)="onItemSelect($event, item)"
+      >
+        <sky-repeater-item-content>
+          <ng-container
+            *ngTemplateOutlet="
+              context.userConfig?.itemTemplate
+                ? context.userConfig?.itemTemplate
+                : defaultItemTemplate;
+              context: { item: item }
+            "
+          >
+          </ng-container>
+        </sky-repeater-item-content>
+      </sky-repeater-item>
     </sky-repeater>
     <sky-infinite-scroll
       [enabled]="hasMoreItems"
