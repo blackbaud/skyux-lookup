@@ -46,6 +46,7 @@ import { SkyAutocompleteAdapterService } from './autocomplete-adapter.service';
 import { skyAutocompleteDefaultSearchFunction } from './autocomplete-default-search-function';
 
 import { SkyAutocompleteInputDirective } from './autocomplete-input.directive';
+import { SkyLookupStringUtilService } from '../shared/sky-lookup-string-util-service';
 
 /**
  * @internal
@@ -282,8 +283,12 @@ export class SkyAutocompleteComponent
     return this._searchResults || [];
   }
 
-  public get highlightText(): string {
-    return this._highlightText || '';
+  public set highlightText(value: string[]) {
+    this._highlightText = value;
+  }
+
+  public get highlightText(): string[] {
+    return this._highlightText || [];
   }
 
   public isOpen: boolean = false;
@@ -400,7 +405,7 @@ export class SkyAutocompleteComponent
   private _data: any[];
   private _debounceTime: number;
   private _descriptorProperty: string;
-  private _highlightText: string;
+  private _highlightText: string[];
   private _inputDirective: SkyAutocompleteInputDirective;
   private _messageStream: Subject<SkyAutocompleteMessage>;
   private _propertiesToSearch: string[];
@@ -606,7 +611,8 @@ export class SkyAutocompleteComponent
           return result;
         });
 
-        this._highlightText = this.searchText;
+        this.highlightText = this.getHighlightText(this.searchText);
+
         this.removeFocusedClass();
         this.removeActiveDescendant();
         if (this.searchResults.length > 0) {
@@ -630,6 +636,41 @@ export class SkyAutocompleteComponent
         }
       });
     }
+  }
+
+  /**
+   * Returns the text to highlight based on exact matches, case-insensitive matches, and matches for corresponding diacritical characters (a will match à).
+   */
+  private getHighlightText(searchText: string): string[] {
+    const normalizedSearchText = SkyLookupStringUtilService.normalizeDiacritics(
+      this.searchText
+    ).toUpperCase();
+
+    let matchesToHighlight: string[] = [];
+    for (let i = 0, n = this._searchResults.length; i < n; i++) {
+      const value = this._searchResults[i].data[this.descriptorProperty]
+        .toString()
+        .toUpperCase() as string;
+      const normalizedDataValue =
+        SkyLookupStringUtilService.normalizeDiacritics(value);
+
+      let regexMatch: RegExpExecArray;
+      const regex = new RegExp(normalizedSearchText, 'g');
+      while ((regexMatch = regex.exec(normalizedDataValue)) !== null) {
+        /**
+         * Use the regex index to pull out the location of the match from the original string.
+         * This ensures we capture diactricial and non-diacritical character matches.
+         */
+        const matchedString = value.slice(
+          regexMatch.index,
+          regexMatch.index + searchText.length
+        );
+        matchesToHighlight = matchesToHighlight.concat(matchedString);
+      }
+    }
+
+    // Remove any duplicates from the array.
+    return [...new Set(matchesToHighlight)];
   }
 
   private performSearch(): Promise<any> {
@@ -709,7 +750,7 @@ export class SkyAutocompleteComponent
   private resetSearch(): void {
     this._searchResults = [];
     this.searchText = '';
-    this._highlightText = '';
+    this._highlightText = [];
     this.activeElementIndex = -1;
     this.removeActiveDescendant();
     this.initOverlayFocusableElements();

@@ -5,6 +5,7 @@ import { SkyAutocompleteSearchFunctionFilter } from './types/autocomplete-search
 import { SkyAutocompleteSearchFunctionResponse } from './types/autocomplete-search-function-response';
 
 import { SkyAutocompleteDefaultSearchFunctionOptions } from './types/autocomplete-default-search-function-options';
+import { SkyLookupStringUtilService } from '../shared/sky-lookup-string-util-service';
 
 export function skyAutocompleteDefaultSearchFunction(
   options: SkyAutocompleteDefaultSearchFunctionOptions
@@ -26,20 +27,6 @@ export function skyAutocompleteDefaultSearchFunction(
     });
   };
 
-  const normalizeDiacritics = function (value: string): string {
-    return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  };
-
-  const normalizeSearchText = function (value: string): string {
-    return normalizeDiacritics(value).toUpperCase();
-  };
-
-  const normalizeData = function (value: string): string {
-    return normalizeDiacritics(value || '')
-      .toString()
-      .toUpperCase();
-  };
-
   const search = function (
     searchText: string,
     data: any[]
@@ -52,14 +39,18 @@ export function skyAutocompleteDefaultSearchFunction(
       return results;
     }
 
-    const normalizedSearchText = normalizeSearchText(searchText);
+    const searchTextNormalized =
+      SkyLookupStringUtilService.normalizeDiacritics(searchText).toUpperCase();
+
     const filteredData = filterData(searchText, data);
 
     for (let i = 0, n = filteredData.length; i < n; i++) {
       const result = filteredData[i];
       const isMatch = options.propertiesToSearch.find((property: string) => {
-        const value = normalizeData(result[property]);
-        return value.indexOf(normalizedSearchText) > -1;
+        let value = (result[property] || '').toString();
+        value =
+          SkyLookupStringUtilService.normalizeDiacritics(value).toUpperCase();
+        return value.indexOf(searchTextNormalized) > -1;
       });
 
       if (isMatch) {
