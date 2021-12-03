@@ -22,6 +22,8 @@ import { SkyLookupTestComponent } from './fixtures/lookup.component.fixture';
 import { SkyLookupTemplateTestComponent } from './fixtures/lookup-template.component.fixture';
 
 import { SkyLookupInputBoxTestComponent } from './fixtures/lookup-input-box.component.fixture';
+import { SkyAffixService } from '@skyux/core';
+import { SkyAutocompleteComponent } from '../autocomplete/autocomplete.component';
 
 const isIE = window.navigator.userAgent.indexOf('rv:11.0') >= 0;
 
@@ -1109,6 +1111,21 @@ if (!isIE) {
             expect(getDropdown()).toBeNull();
 
             closeModal(fixture);
+          }));
+
+          fit('should call for the dropdown to be repositioned when tokens change', fakeAsync(() => {
+            fixture.detectChanges();
+            const autocompleteComponent = fixture.debugElement.query(
+              By(SkyAutocompleteComponent)
+            );
+            const spy = spyOn(affixService).and.callThrough();
+
+            performSearch('s', fixture);
+            selectSearchResult(0, fixture);
+
+            const selectedItems = lookupComponent.value;
+            expect(selectedItems.length).toEqual(1);
+            expect(selectedItems[0].name).toEqual('Isaac');
           }));
 
           it('should populate search bar with current input value when the search button is clicked', fakeAsync(() => {

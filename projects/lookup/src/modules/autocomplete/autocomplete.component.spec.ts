@@ -847,6 +847,28 @@ describe('Autocomplete component', () => {
       expect(dropdownElement).toBeNull();
     }));
 
+    it('should reposition dropdown via the message stream', fakeAsync(() => {
+      component.messageStream = new Subject();
+      fixture.detectChanges();
+
+      // Type 'r' to activate the autocomplete dropdown.
+      enterSearch('r', fixture);
+      let dropdownElement = getSearchResultsContainer();
+
+      expect(dropdownElement).not.toBeNull();
+
+      component.messageStream.next({
+        type: SkyAutocompleteMessageType.RepositionDropdown,
+      });
+
+      fixture.detectChanges();
+      tick();
+
+      dropdownElement = getSearchResultsContainer();
+
+      expect(dropdownElement).toBeNull();
+    }));
+
     it('should be accessible', async () => {
       const axeConfig = {
         rules: {

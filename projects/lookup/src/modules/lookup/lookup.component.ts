@@ -361,6 +361,7 @@ export class SkyLookupComponent
   }
 
   public onTokensChange(change: SkyToken[]): void {
+    console.log('tokens chate');
     if (!change) {
       return;
     }
@@ -377,6 +378,9 @@ export class SkyLookupComponent
       });
       this.tokens = change;
 
+      this.sendAutocompleteMessage(
+        SkyAutocompleteMessageType.RepositionDropdown
+      );
       this.onChange(this._value);
       this.onTouched();
     }
