@@ -580,7 +580,7 @@ if (!isIE) {
           expect(lookupComponent.value).toEqual([{ name: 'Rachel' }]);
         }));
 
-        fit('should call for the dropdown to be repositioned when tokens change', fakeAsync(() => {
+        it('should call for the dropdown to be repositioned when tokens change', fakeAsync(() => {
           const spy = spyOn(
             lookupComponent.autocompleteController,
             'next'
