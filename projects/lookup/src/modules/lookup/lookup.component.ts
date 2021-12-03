@@ -361,7 +361,6 @@ export class SkyLookupComponent
   }
 
   public onTokensChange(change: SkyToken[]): void {
-    console.log('tokens chate');
     if (!change) {
       return;
     }

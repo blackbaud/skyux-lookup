@@ -795,7 +795,10 @@ export class SkyAutocompleteComponent
             case SkyAutocompleteMessageType.RepositionDropdown:
               // Settimeout waits for changes in DOM (e.g., tokens being removed)
               setTimeout(() => {
-                this.affixer.reaffix();
+                /* istanbul ignore else */
+                if (this.affixer) {
+                  this.affixer.reaffix();
+                }
               });
               break;
           }

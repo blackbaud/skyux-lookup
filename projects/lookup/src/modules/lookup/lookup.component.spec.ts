@@ -24,6 +24,7 @@ import { SkyLookupTemplateTestComponent } from './fixtures/lookup-template.compo
 import { SkyLookupInputBoxTestComponent } from './fixtures/lookup-input-box.component.fixture';
 import { SkyAffixService } from '@skyux/core';
 import { SkyAutocompleteComponent } from '../autocomplete/autocomplete.component';
+import { SkyAutocompleteMessageType } from '../autocomplete/types/autocomplete-message-type';
 
 const isIE = window.navigator.userAgent.indexOf('rv:11.0') >= 0;
 
@@ -579,6 +580,34 @@ if (!isIE) {
           expect(lookupComponent.value).toEqual([{ name: 'Rachel' }]);
         }));
 
+        fit('should call for the dropdown to be repositioned when tokens change', fakeAsync(() => {
+          const spy = spyOn(
+            lookupComponent.autocompleteController,
+            'next'
+          ).and.stub();
+          fixture.detectChanges();
+
+          // Add one token
+          performSearch('r', fixture);
+          selectSearchResult(0, fixture);
+
+          // Activate search to show dropdown
+          performSearch('r', fixture);
+
+          // Remove a token with the dropdown still open
+          const closeTokenButton = fixture.nativeElement.querySelector(
+            '.sky-token-btn-close'
+          );
+          closeTokenButton.click();
+          fixture.detectChanges();
+          tick();
+
+          // Should send message to dropdown to reposition.
+          expect(spy).toHaveBeenCalledWith({
+            type: SkyAutocompleteMessageType.RepositionDropdown,
+          });
+        }));
+
         describe('form control interactions', function () {
           it('should properly reset a form', fakeAsync(function () {
             fixture.detectChanges();
@@ -1111,21 +1140,6 @@ if (!isIE) {
             expect(getDropdown()).toBeNull();
 
             closeModal(fixture);
-          }));
-
-          fit('should call for the dropdown to be repositioned when tokens change', fakeAsync(() => {
-            fixture.detectChanges();
-            const autocompleteComponent = fixture.debugElement.query(
-              By(SkyAutocompleteComponent)
-            );
-            const spy = spyOn(affixService).and.callThrough();
-
-            performSearch('s', fixture);
-            selectSearchResult(0, fixture);
-
-            const selectedItems = lookupComponent.value;
-            expect(selectedItems.length).toEqual(1);
-            expect(selectedItems[0].name).toEqual('Isaac');
           }));
 
           it('should populate search bar with current input value when the search button is clicked', fakeAsync(() => {
