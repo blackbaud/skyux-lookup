@@ -46,7 +46,7 @@ import { SkyAutocompleteAdapterService } from './autocomplete-adapter.service';
 import { skyAutocompleteDefaultSearchFunction } from './autocomplete-default-search-function';
 
 import { SkyAutocompleteInputDirective } from './autocomplete-input.directive';
-import { SkyLookupStringUtilService } from '../shared/sky-lookup-string-util-service';
+import { normalizeDiacritics } from '../shared/sky-lookup-string-utils';
 
 /**
  * @internal
@@ -642,24 +642,23 @@ export class SkyAutocompleteComponent
    * Returns the text to highlight based on exact matches, case-insensitive matches, and matches for corresponding diacritical characters (a will match à).
    */
   private getHighlightText(searchText: string): string[] {
-    const normalizedSearchText = SkyLookupStringUtilService.normalizeDiacritics(
+    const normalizedSearchText = normalizeDiacritics(
       this.searchText
-    ).toUpperCase();
+    ).toLocaleUpperCase();
 
     let matchesToHighlight: string[] = [];
     for (let i = 0, n = this._searchResults.length; i < n; i++) {
       const value = this._searchResults[i].data[this.descriptorProperty]
         .toString()
-        .toUpperCase() as string;
-      const normalizedDataValue =
-        SkyLookupStringUtilService.normalizeDiacritics(value);
+        .toLocaleUpperCase() as string;
+      const normalizedDataValue = normalizeDiacritics(value);
 
       let regexMatch: RegExpExecArray;
       const regex = new RegExp(normalizedSearchText, 'g');
       while ((regexMatch = regex.exec(normalizedDataValue)) !== null) {
         /**
          * Use the regex index to pull out the location of the match from the original string.
-         * This ensures we capture diactricial and non-diacritical character matches.
+         * This ensures we capture diacritical and non-diacritical character matches.
          */
         const matchedString = value.slice(
           regexMatch.index,
