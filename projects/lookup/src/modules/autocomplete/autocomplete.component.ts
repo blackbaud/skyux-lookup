@@ -67,8 +67,7 @@ let uniqueId = 0;
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SkyAutocompleteComponent
-  implements OnDestroy, AfterContentInit, AfterViewInit
-{
+  implements OnDestroy, AfterContentInit, AfterViewInit {
   //#region public_api
 
   /**
@@ -530,7 +529,7 @@ export class SkyAutocompleteComponent
           this.removeFocusedClass();
           if (
             this.activeElementIndex ===
-              this.overlayFocusableElements.length - 1 ||
+            this.overlayFocusableElements.length - 1 ||
             this.activeElementIndex === -1
           ) {
             this.activeElementIndex = 0;

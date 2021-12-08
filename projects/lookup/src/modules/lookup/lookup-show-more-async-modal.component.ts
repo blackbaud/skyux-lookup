@@ -41,6 +41,7 @@ export class SkyLookupShowMoreAsyncModalComponent implements OnInit, OnDestroy {
   public isLoadingMore = false;
   public selectedIdMap: Map<unknown, unknown>;
 
+  private continuationData: unknown;
   private offset: number = 0;
   private ngUnsubscribe = new Subject<void>();
   private currentSearchSub: Subscription | undefined;
@@ -49,7 +50,7 @@ export class SkyLookupShowMoreAsyncModalComponent implements OnInit, OnDestroy {
     public modalInstance: SkyModalInstance,
     public context: SkyLookupShowMoreNativePickerAsyncContext,
     private changeDetector: ChangeDetectorRef
-  ) {}
+  ) { }
 
   public ngOnInit(): void {
     this.searchText = this.context.initialSearch;
@@ -133,9 +134,10 @@ export class SkyLookupShowMoreAsyncModalComponent implements OnInit, OnDestroy {
   public infiniteScrollEnd(): void {
     this.cancelCurrentSearch();
 
-    this.isLoadingMore = true;
-
+    /* Sanity check - else case would only happen if this was called directly */
     if (this.hasMoreItems) {
+      this.isLoadingMore = true;
+
       this.performSearch((result) => {
         this.items = this.items.concat(result.items);
 
@@ -186,11 +188,13 @@ export class SkyLookupShowMoreAsyncModalComponent implements OnInit, OnDestroy {
         displayType: 'modal',
         offset: this.offset,
         searchText: this.searchText || '',
+        continuationData: this.continuationData
       })
       .pipe(take(1))
       .subscribe((result) => {
         processResults(result);
 
+        this.continuationData = result.continuationData;
         this.hasMoreItems = result.hasMore;
         this.offset = this.items.length;
 
