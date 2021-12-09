@@ -5,7 +5,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { SkyAutocompleteSearchAsyncResult } from '@skyux/lookup';
+import { SkyAutocompleteSearchAsyncResult } from '../autocomplete/types/autocomplete-search-async-result';
 
 import { SkyModalInstance } from '@skyux/modals';
 

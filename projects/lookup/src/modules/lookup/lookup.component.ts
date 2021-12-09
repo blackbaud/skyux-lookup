@@ -47,7 +47,7 @@ import { SkyLookupShowMoreConfig } from './types/lookup-show-more-config';
 import { SkyLookupShowMoreNativePickerContext } from './types/lookup-show-more-native-picker-context';
 import { SkyLookupShowMoreAsyncModalComponent } from './lookup-show-more-async-modal.component';
 import { SkyLookupShowMoreNativePickerAsyncContext } from './types/lookup-show-more-native-picker-async-context';
-import { SkyAutocompleteSearchAsyncArgs } from '@skyux/lookup';
+import { SkyAutocompleteSearchAsyncArgs } from '../autocomplete/types/autocomplete-search-async-args';
 
 @Component({
   selector: 'sky-lookup',
@@ -59,8 +59,7 @@ import { SkyAutocompleteSearchAsyncArgs } from '@skyux/lookup';
 })
 export class SkyLookupComponent
   extends SkyLookupAutocompleteAdapter
-  implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor
-{
+  implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor {
   /**
    * Specifies an ARIA label for the typeahead search input
    * [to support accessibility](https://developer.blackbaud.com/skyux/learn/accessibility).
@@ -403,9 +402,9 @@ export class SkyLookupComponent
 
   // Angular automatically constructs these methods.
   /* istanbul ignore next */
-  public onChange = (value: any[]) => {};
+  public onChange = (value: any[]) => { };
   /* istanbul ignore next */
-  public onTouched = () => {};
+  public onTouched = () => { };
 
   public registerOnChange(fn: (value: any) => void) {
     this.onChange = fn;

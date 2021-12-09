@@ -1,4 +1,4 @@
-import { SkyAutocompleteSearchAsyncResult } from '@skyux/lookup';
+import { SkyAutocompleteSearchAsyncResult } from './autocomplete-search-async-result';
 import { Observable } from 'rxjs';
 import { AutocompleteSearchAsyncResultDisplayType } from './autocomplete-search-async-result-display-type';
 

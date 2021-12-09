@@ -531,9 +531,8 @@ describe('Autocomplete component', () => {
 
       const dropdownElement = getSearchResultsContainer();
       const autocompleteElement = getAutocompleteElement();
-      const formattedWidth = `${
-        autocompleteElement.getBoundingClientRect().width
-      }px`;
+      const formattedWidth = `${autocompleteElement.getBoundingClientRect().width
+        }px`;
 
       expect(rendererSpy).toHaveBeenCalledWith(
         dropdownElement,
@@ -569,9 +568,8 @@ describe('Autocomplete component', () => {
 
       const dropdownElement = getSearchResultsContainer();
       const autocompleteElement = getAutocompleteElement();
-      const formattedWidth = `${
-        autocompleteElement.getBoundingClientRect().width
-      }px`;
+      const formattedWidth = `${autocompleteElement.getBoundingClientRect().width
+        }px`;
 
       expect(rendererSpy).toHaveBeenCalledWith(
         dropdownElement,

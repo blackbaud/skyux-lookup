@@ -45,9 +45,8 @@ import { SkyAutocompleteShowMoreArgs } from './types/autocomplete-show-more-args
 import { SkyAutocompleteAdapterService } from './autocomplete-adapter.service';
 import { skyAutocompleteDefaultSearchFunction } from './autocomplete-default-search-function';
 import { SkyAutocompleteInputDirective } from './autocomplete-input.directive';
-import { SkyAutocompleteSearchAsyncFunction } from './types/autocomplete-search-async-function';
 import { SkyAutocompleteSearchAsyncResult } from './types/autocomplete-search-async-result';
-import { SkyAutocompleteSearchAsyncArgs } from '@skyux/lookup';
+import { SkyAutocompleteSearchAsyncArgs } from './types/autocomplete-search-async-args';
 
 /**
  * @internal
@@ -345,9 +344,10 @@ export class SkyAutocompleteComponent
       this._inputDirective.textChanges
         .pipe(
           takeUntil(this.inputDirectiveUnsubscribe),
+          debounceTime(this.debounceTime),
           switchMap((change) => {
             this.isSearchingAsync = true;
-            return of(change).pipe(debounceTime(this.debounceTime));
+            return of(change);
           })
         )
         .subscribe((change) => {
