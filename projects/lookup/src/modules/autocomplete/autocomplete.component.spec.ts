@@ -209,7 +209,7 @@ describe('Autocomplete component', () => {
       expect(inputElement).toHaveCssClass('sky-form-control');
       expect(autocomplete.debounceTime).toEqual(0);
       expect(autocomplete.descriptorProperty).toEqual('name');
-      expect(autocomplete.highlightText).toEqual('');
+      expect(autocomplete.highlightText).toEqual([]);
       expect(autocomplete.propertiesToSearch).toEqual(['name']);
       expect(autocomplete.search).toBeDefined();
       expect(autocomplete.searchFilters).toBeUndefined();
@@ -845,6 +845,36 @@ describe('Autocomplete component', () => {
       expect(dropdownElement).toBeNull();
     }));
 
+    it('should find matches when data contains diacritical characters', fakeAsync(() => {
+      component.data = [
+        { name: 'Åland Islands', objectid: '1' },
+        { name: 'All the above', objectid: '2' },
+        { name: 'Should not be found', objectid: '3' },
+      ];
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+
+      enterSearch('al', fixture);
+
+      expect(autocomplete.searchResults.length).toEqual(2);
+    }));
+
+    it('should find matches when using a search term with diacritical characters', fakeAsync(() => {
+      component.data = [
+        { name: 'Åland Islands', objectid: '1' },
+        { name: 'All the above', objectid: '2' },
+        { name: 'Should not be found', objectid: '3' },
+      ];
+      fixture.detectChanges();
+      tick();
+      fixture.detectChanges();
+
+      enterSearch('Ål', fixture);
+
+      expect(autocomplete.searchResults.length).toEqual(2);
+    }));
+
     it('should be accessible', async () => {
       const axeConfig = {
         rules: {
@@ -943,6 +973,29 @@ describe('Autocomplete component', () => {
             .innerHTML.trim()
             .toLowerCase()
         ).toBe('bl');
+        expect(
+          getSearchResultsContainer().querySelectorAll('mark').length
+        ).toBe(2);
+      }));
+
+      it('should highlight matches when data contains diacritical characters', fakeAsync(() => {
+        component.data = [
+          { name: 'Åland Islands', objectid: '1' },
+          { name: 'All the above', objectid: '2' },
+          { name: 'Should not be found', objectid: '3' },
+        ];
+        fixture.detectChanges();
+        tick();
+        fixture.detectChanges();
+
+        enterSearch('al', fixture);
+
+        expect(['al', 'ål']).toContain(
+          getSearchResultsContainer()
+            .querySelector('mark')
+            .innerHTML.trim()
+            .toLowerCase()
+        );
         expect(
           getSearchResultsContainer().querySelectorAll('mark').length
         ).toBe(2);
