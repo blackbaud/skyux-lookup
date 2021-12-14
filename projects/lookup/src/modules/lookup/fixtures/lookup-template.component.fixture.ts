@@ -1,4 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { of } from 'rxjs';
+import { delay } from 'rxjs/operators';
+import { SkyAutocompleteSearchAsyncArgs } from '../../autocomplete/types/autocomplete-search-async-args';
 
 import { SkyAutocompleteSearchFunction } from '../../autocomplete/types/autocomplete-search-function';
 
@@ -21,7 +24,12 @@ import { SkyLookupShowMoreNativePickerConfig } from '../types/lookup-show-more-n
   templateUrl: './lookup-template.component.fixture.html',
 })
 export class SkyLookupTemplateTestComponent implements OnInit {
-  @ViewChild(SkyLookupComponent, {
+  @ViewChild('asyncLookup', {
+    static: true,
+  })
+  public asyncLookupComponent: SkyLookupComponent;
+
+  @ViewChild('standardLookup', {
     static: true,
   })
   public lookupComponent: SkyLookupComponent;
@@ -45,6 +53,7 @@ export class SkyLookupTemplateTestComponent implements OnInit {
   public propertiesToSearch: string[];
   public required: boolean = false;
   public selectedFriends: any;
+  public selectedFriendsAsync: any;
   public selectMode: SkyLookupSelectModeType;
   public showAddButton: boolean = false;
   public showMoreConfig: SkyLookupShowMoreConfig = {};
@@ -125,6 +134,19 @@ export class SkyLookupTemplateTestComponent implements OnInit {
 
   public removeRequired(): void {
     this.required = false;
+  }
+
+  public searchAsync(args: SkyAutocompleteSearchAsyncArgs): void {
+    const searchText = (args.searchText || '').toLowerCase();
+
+    const filteredData = this.data ? this.data.filter(
+      (item) => item.name.toLowerCase().indexOf(searchText) >= 0
+    ) : [];
+
+    args.result = of({
+      items: filteredData,
+      totalCount: filteredData.length,
+    }).pipe(delay(150));
   }
 
   public setMultiSelect(): void {

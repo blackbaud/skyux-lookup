@@ -294,10 +294,6 @@ export class SkyAutocompleteComponent
     return this._searchResults || [];
   }
 
-  public set highlightText(value: string[]) {
-    this._highlightText = value;
-  }
-
   public get highlightText(): string[] {
     return this._highlightText || [];
   }

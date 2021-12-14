@@ -56,10 +56,11 @@ if (!isIE) {
       tick();
     }
 
-    function clickSearchButton(fixture: ComponentFixture<any>): void {
-      getSearchButton().click();
+    function clickSearchButton(fixture: ComponentFixture<any>, async: boolean = false): void {
+      getSearchButton(async).click();
       fixture.detectChanges();
-      tick();
+      tick(200);
+      fixture.detectChanges();
     }
 
     function clickShowMoreAddButton(fixture: ComponentFixture<any>): void {
@@ -158,10 +159,16 @@ if (!isIE) {
       return document.querySelectorAll('sky-modal').length > 0;
     }
 
-    function getSearchButton(): HTMLElement {
-      return document.querySelector(
-        '.sky-input-group-btn .sky-btn'
-      ) as HTMLElement;
+    function getSearchButton(async: boolean = false): HTMLElement {
+      if (async) {
+        return document.querySelector(
+          '#my-async-lookup .sky-input-group-btn .sky-btn'
+        ) as HTMLElement;
+      } else {
+        return document.querySelector(
+          '#my-lookup .sky-input-group-btn .sky-btn'
+        ) as HTMLElement;
+      }
     }
 
     function getShowMoreButton(): HTMLElement {
@@ -185,19 +192,29 @@ if (!isIE) {
     }
 
     function getTokenElements(): NodeListOf<Element> {
-      return document.querySelectorAll('.sky-token');
+      return document.querySelectorAll('#my-lookup .sky-token');
     }
 
     function performSearch(
       searchText: string,
-      fixture: ComponentFixture<any>
+      fixture: ComponentFixture<any>,
+      async: boolean = false
     ): void {
-      const inputElement = getInputElement(
-        fixture.componentInstance.lookupComponent
-      );
+      let inputElement: HTMLInputElement;
+      if (async) {
+        inputElement = getInputElement(
+          fixture.componentInstance.asyncLookupComponent
+        );
+      } else {
+        inputElement = getInputElement(
+          fixture.componentInstance.lookupComponent
+        );
+      }
       inputElement.value = searchText;
       SkyAppTestUtility.fireDomEvent(inputElement, 'input');
       tick();
+      fixture.detectChanges();
+      tick(200);
       fixture.detectChanges();
       tick();
     }
@@ -318,12 +335,14 @@ if (!isIE) {
     describe('reactive form', () => {
       let fixture: ComponentFixture<SkyLookupTestComponent>;
       let component: SkyLookupTestComponent;
+      let asyncLookupComponent: SkyLookupComponent;
       let lookupComponent: SkyLookupComponent;
 
       beforeEach(() => {
         fixture = TestBed.createComponent(SkyLookupTestComponent);
         component = fixture.componentInstance;
         lookupComponent = component.lookupComponent;
+        asyncLookupComponent = component.asyncLookupComponent;
       });
 
       describe('basic setup', function () {
@@ -608,6 +627,19 @@ if (!isIE) {
           });
         }));
 
+        it('should search for values correctly when using an async search function', fakeAsync(function () {
+          fixture.detectChanges();
+          expect(asyncLookupComponent.value).toEqual([]);
+
+          performSearch('s', fixture, true);
+          selectSearchResult(0, fixture);
+
+          performSearch('s', fixture, true);
+          selectSearchResult(1, fixture);
+
+          expect(asyncLookupComponent.value.length).toEqual(2);
+        }));
+
         describe('form control interactions', function () {
           it('should properly reset a form', fakeAsync(function () {
             fixture.detectChanges();
@@ -741,6 +773,20 @@ if (!isIE) {
           getInputElement(lookupComponent).blur();
 
           expect(lookupComponent.value).toEqual([]);
+        }));
+
+        it('should search for values correctly when using an async search function', fakeAsync(function () {
+          fixture.detectChanges();
+          expect(asyncLookupComponent.value).toEqual([]);
+
+          performSearch('s', fixture, true);
+          selectSearchResult(0, fixture);
+
+          expect(asyncLookupComponent.value).toEqual([{ name: 'Isaac' }]);
+
+          performSearch('', fixture, true);
+
+          expect(asyncLookupComponent.value).toEqual([]);
         }));
 
         describe('form control interactions', function () {
@@ -1086,135 +1132,227 @@ if (!isIE) {
             fixture.detectChanges();
           }));
 
-          it('should open the modal when the show more button is clicked', fakeAsync(() => {
-            component.enableShowMore = true;
-            fixture.detectChanges();
+          describe('non-async', () => {
 
-            spyOn(modalService, 'open').and.callThrough();
+            it('should open the modal when the show more button is clicked', fakeAsync(() => {
+              component.enableShowMore = true;
+              fixture.detectChanges();
 
-            performSearch('r', fixture);
-            clickShowMore(fixture);
+              spyOn(modalService, 'open').and.callThrough();
 
-            expect(modalService.open).toHaveBeenCalled();
+              performSearch('r', fixture);
+              clickShowMore(fixture);
 
-            closeModal(fixture);
-          }));
+              expect(modalService.open).toHaveBeenCalled();
 
-          it('should open the modal when the show more button is clicked with no config', fakeAsync(() => {
-            component.enableShowMore = true;
-            component.showMoreConfig = undefined;
-            fixture.detectChanges();
+              closeModal(fixture);
+            }));
 
-            spyOn(modalService, 'open').and.callThrough();
+            it('should open the modal when the show more button is clicked with no config', fakeAsync(() => {
+              component.enableShowMore = true;
+              component.showMoreConfig = undefined;
+              fixture.detectChanges();
 
-            performSearch('r', fixture);
-            clickShowMore(fixture);
+              spyOn(modalService, 'open').and.callThrough();
 
-            expect(modalService.open).toHaveBeenCalled();
+              performSearch('r', fixture);
+              clickShowMore(fixture);
 
-            closeModal(fixture);
-          }));
+              expect(modalService.open).toHaveBeenCalled();
 
-          it('should open the modal when the search button is clicked', fakeAsync(() => {
-            component.enableShowMore = true;
-            fixture.detectChanges();
+              closeModal(fixture);
+            }));
 
-            spyOn(modalService, 'open').and.callThrough();
+            it('should open the modal when the search button is clicked', fakeAsync(() => {
+              component.enableShowMore = true;
+              fixture.detectChanges();
 
-            clickSearchButton(fixture);
+              spyOn(modalService, 'open').and.callThrough();
 
-            expect(modalService.open).toHaveBeenCalled();
+              clickSearchButton(fixture);
 
-            closeModal(fixture);
-          }));
+              expect(modalService.open).toHaveBeenCalled();
 
-          it('should close the dropdown when the search button is clicked', fakeAsync(() => {
-            component.enableShowMore = true;
-            fixture.detectChanges();
+              closeModal(fixture);
+            }));
 
-            performSearch('r', fixture);
-            expect(getDropdown()).not.toBeNull();
+            it('should close the dropdown when the search button is clicked', fakeAsync(() => {
+              component.enableShowMore = true;
+              fixture.detectChanges();
 
-            clickSearchButton(fixture);
+              performSearch('r', fixture);
+              expect(getDropdown()).not.toBeNull();
 
-            expect(getDropdown()).toBeNull();
+              clickSearchButton(fixture);
 
-            closeModal(fixture);
-          }));
+              expect(getDropdown()).toBeNull();
 
-          it('should populate search bar with current input value when the search button is clicked', fakeAsync(() => {
-            component.enableShowMore = true;
-            fixture.detectChanges();
+              closeModal(fixture);
+            }));
 
-            performSearch('foo', fixture);
+            it('should populate search bar with current input value when the search button is clicked', fakeAsync(() => {
+              component.enableShowMore = true;
+              fixture.detectChanges();
 
-            clickSearchButton(fixture);
+              performSearch('foo', fixture);
 
-            expect(getModalSearchInputValue()).toEqual('foo');
+              clickSearchButton(fixture);
 
-            closeModal(fixture);
-          }));
+              expect(getModalSearchInputValue()).toEqual('foo');
 
-          it('should respect the `propertiesToSearch` input in the show more modal', fakeAsync(() => {
-            component.enableShowMore = true;
-            component.propertiesToSearch = ['description'];
-            fixture.detectChanges();
+              closeModal(fixture);
+            }));
 
-            performSearch('Mr', fixture);
+            it('should respect the `propertiesToSearch` input in the show more modal', fakeAsync(() => {
+              component.enableShowMore = true;
+              component.propertiesToSearch = ['description'];
+              fixture.detectChanges();
 
-            clickSearchButton(fixture);
+              performSearch('Mr', fixture);
 
-            expect(getRepeaterItemCount()).toBe(2);
+              clickSearchButton(fixture);
 
-            closeModal(fixture);
-          }));
+              expect(getRepeaterItemCount()).toBe(2);
 
-          it('should respect the `search` input in the show more modal', fakeAsync(() => {
-            component.enableShowMore = true;
-            component.customSearch = (_: string, data: any[]) => {
-              return [data[0]];
-            };
-            fixture.detectChanges();
+              closeModal(fixture);
+            }));
 
-            performSearch('Mr', fixture);
+            it('should respect the `search` input in the show more modal', fakeAsync(() => {
+              component.enableShowMore = true;
+              component.customSearch = (_: string, data: any[]) => {
+                return [data[0]];
+              };
+              fixture.detectChanges();
 
-            clickSearchButton(fixture);
+              performSearch('Mr', fixture);
 
-            expect(getRepeaterItemCount()).toBe(1);
+              clickSearchButton(fixture);
 
-            closeModal(fixture);
-          }));
+              expect(getRepeaterItemCount()).toBe(1);
 
-          it('should respect the `search` input in the show more modal when the function returns a promise', fakeAsync(() => {
-            component.enableShowMore = true;
-            component.customSearch = (_: string, data: any[]) => {
-              return Promise.resolve([data[0]]);
-            };
-            fixture.detectChanges();
+              closeModal(fixture);
+            }));
 
-            performSearch('Mr', fixture);
+            it('should respect the `search` input in the show more modal when the function returns a promise', fakeAsync(() => {
+              component.enableShowMore = true;
+              component.customSearch = (_: string, data: any[]) => {
+                return Promise.resolve([data[0]]);
+              };
+              fixture.detectChanges();
 
-            clickSearchButton(fixture);
+              performSearch('Mr', fixture);
 
-            expect(getRepeaterItemCount()).toBe(1);
+              clickSearchButton(fixture);
 
-            closeModal(fixture);
-          }));
+              expect(getRepeaterItemCount()).toBe(1);
 
-          it('should handle not results being shown', fakeAsync(() => {
-            component.enableShowMore = true;
-            component.data = undefined;
-            fixture.detectChanges();
+              closeModal(fixture);
+            }));
 
-            performSearch('Mr', fixture);
+            it('should handle not results being shown', fakeAsync(() => {
+              component.enableShowMore = true;
+              component.data = undefined;
+              fixture.detectChanges();
 
-            clickSearchButton(fixture);
+              performSearch('Mr', fixture);
 
-            expect(getRepeaterItemCount()).toBe(0);
-            expect(getShowMoreNoResultsElement()).not.toBeNull();
+              clickSearchButton(fixture);
 
-            closeModal(fixture);
-          }));
+              expect(getRepeaterItemCount()).toBe(0);
+              expect(getShowMoreNoResultsElement()).not.toBeNull();
+
+              closeModal(fixture);
+            }));
+
+          });
+
+          describe('async', () => {
+
+            it('should open the modal when the show more button is clicked', fakeAsync(() => {
+              component.enableShowMore = true;
+              fixture.detectChanges();
+
+              spyOn(modalService, 'open').and.callThrough();
+
+              performSearch('r', fixture, true);
+              clickShowMore(fixture);
+
+              expect(modalService.open).toHaveBeenCalled();
+
+              closeModal(fixture);
+            }));
+
+            it('should open the modal when the show more button is clicked with no config', fakeAsync(() => {
+              component.enableShowMore = true;
+              component.showMoreConfig = undefined;
+              fixture.detectChanges();
+
+              spyOn(modalService, 'open').and.callThrough();
+
+              performSearch('r', fixture, true);
+              clickShowMore(fixture);
+
+              expect(modalService.open).toHaveBeenCalled();
+
+              closeModal(fixture);
+            }));
+
+            it('should open the modal when the search button is clicked', fakeAsync(() => {
+              component.enableShowMore = true;
+              fixture.detectChanges();
+
+              spyOn(modalService, 'open').and.callThrough();
+
+              clickSearchButton(fixture, true);
+
+              expect(modalService.open).toHaveBeenCalled();
+
+              closeModal(fixture);
+            }));
+
+            it('should close the dropdown when the search button is clicked', fakeAsync(() => {
+              component.enableShowMore = true;
+              fixture.detectChanges();
+
+              performSearch('r', fixture, true);
+              expect(getDropdown()).not.toBeNull();
+
+              clickSearchButton(fixture, true);
+
+              expect(getDropdown()).toBeNull();
+
+              closeModal(fixture);
+            }));
+
+            it('should populate search bar with current input value when the search button is clicked', fakeAsync(() => {
+              component.enableShowMore = true;
+              fixture.detectChanges();
+
+              performSearch('foo', fixture, true);
+
+              clickSearchButton(fixture, true);
+
+              expect(getModalSearchInputValue()).toEqual('foo');
+
+              closeModal(fixture);
+            }));
+
+            it('should handle not results being shown', fakeAsync(() => {
+              component.enableShowMore = true;
+              component.data = undefined;
+              fixture.detectChanges();
+
+              performSearch('Mr', fixture, true);
+
+              clickSearchButton(fixture, true);
+
+              expect(getRepeaterItemCount()).toBe(0);
+              expect(getShowMoreNoResultsElement()).not.toBeNull();
+
+              closeModal(fixture);
+            }));
+
+          });
 
           describe('multi-select', () => {
             it('should populate the correct selected item and save that when no changes are made', fakeAsync(() => {
@@ -2069,7 +2207,7 @@ if (!isIE) {
 
           it('should remove tokens when backpsace or delete is pressed', fakeAsync(function () {
             function validate(key: string, expectedCount: number): void {
-              const tokensHostElement = document.querySelector('sky-tokens');
+              const tokensHostElement = document.querySelector('#my-lookup sky-tokens');
               SkyAppTestUtility.fireDomEvent(tokensHostElement, 'keyup', {
                 keyboardEventInit: { key },
               });
@@ -2077,7 +2215,7 @@ if (!isIE) {
               fixture.detectChanges();
               tick();
 
-              tokenHostElements = document.querySelectorAll('sky-token');
+              tokenHostElements = document.querySelectorAll('#my-lookup sky-token');
               expect(tokenHostElements.length).toEqual(expectedCount);
               expect(
                 tokenHostElements.item(0).contains(document.activeElement)
@@ -2093,7 +2231,7 @@ if (!isIE) {
 
             fixture.detectChanges();
 
-            let tokenHostElements = document.querySelectorAll('sky-token');
+            let tokenHostElements = document.querySelectorAll('#my-lookup sky-token');
             expect(tokenHostElements.length).toEqual(4);
 
             validate('Backspace', 3);
@@ -2278,11 +2416,13 @@ if (!isIE) {
     describe('template form', () => {
       let fixture: ComponentFixture<SkyLookupTemplateTestComponent>;
       let component: SkyLookupTemplateTestComponent;
+      let asyncLookupComponent: SkyLookupComponent;
       let lookupComponent: SkyLookupComponent;
 
       beforeEach(() => {
         fixture = TestBed.createComponent(SkyLookupTemplateTestComponent);
         component = fixture.componentInstance;
+        asyncLookupComponent = component.asyncLookupComponent;
         lookupComponent = component.lookupComponent;
       });
 
@@ -2456,6 +2596,20 @@ if (!isIE) {
 
             expect(lookupComponent.value).toEqual([{ name: 'Rachel' }]);
           }));
+
+          it('should search for values correctly when using an async search function', fakeAsync(function () {
+            fixture.detectChanges();
+            expect(asyncLookupComponent.value).toEqual([]);
+
+            performSearch('s', fixture, true);
+            selectSearchResult(0, fixture);
+
+            performSearch('s', fixture, true);
+            selectSearchResult(1, fixture);
+
+            expect(asyncLookupComponent.value.length).toEqual(2);
+          }));
+
         });
 
         describe('single select', () => {
@@ -2524,6 +2678,20 @@ if (!isIE) {
             getInputElement(lookupComponent).blur();
 
             expect(lookupComponent.value).toEqual([]);
+          }));
+
+          it('should search for values correctly when using an async search function', fakeAsync(function () {
+            fixture.detectChanges();
+            expect(asyncLookupComponent.value).toEqual([]);
+
+            performSearch('s', fixture, true);
+            selectSearchResult(0, fixture);
+
+            expect(asyncLookupComponent.value).toEqual([{ name: 'Isaac' }]);
+
+            performSearch('', fixture, true);
+
+            expect(asyncLookupComponent.value).toEqual([]);
           }));
         });
       });
@@ -2832,149 +3000,243 @@ if (!isIE) {
             fixture.detectChanges();
           }));
 
-          it('should open the modal when the show more button is clicked', fakeAsync(() => {
-            component.enableShowMore = true;
-            fixture.detectChanges();
+          describe('non-async', () => {
 
-            spyOn(modalService, 'open').and.callThrough();
+            it('should open the modal when the show more button is clicked', fakeAsync(() => {
+              component.enableShowMore = true;
+              fixture.detectChanges();
 
-            performSearch('r', fixture);
-            clickShowMore(fixture);
-            expect(modalService.open).toHaveBeenCalled();
+              spyOn(modalService, 'open').and.callThrough();
 
-            closeModal(fixture);
-          }));
+              performSearch('r', fixture);
+              clickShowMore(fixture);
+              expect(modalService.open).toHaveBeenCalled();
 
-          it('should open the modal when the show more button is clicked with no config', fakeAsync(() => {
-            component.enableShowMore = true;
-            component.showMoreConfig = undefined;
-            fixture.detectChanges();
+              closeModal(fixture);
+            }));
 
-            spyOn(modalService, 'open').and.callThrough();
+            it('should open the modal when the show more button is clicked with no config', fakeAsync(() => {
+              component.enableShowMore = true;
+              component.showMoreConfig = undefined;
+              fixture.detectChanges();
 
-            performSearch('r', fixture);
-            clickShowMore(fixture);
+              spyOn(modalService, 'open').and.callThrough();
 
-            expect(modalService.open).toHaveBeenCalled();
+              performSearch('r', fixture);
+              clickShowMore(fixture);
 
-            closeModal(fixture);
-          }));
+              expect(modalService.open).toHaveBeenCalled();
 
-          it('should open the modal when the search button is clicked', fakeAsync(() => {
-            component.enableShowMore = true;
-            fixture.detectChanges();
+              closeModal(fixture);
+            }));
 
-            spyOn(modalService, 'open').and.callThrough();
+            it('should open the modal when the search button is clicked', fakeAsync(() => {
+              component.enableShowMore = true;
+              fixture.detectChanges();
 
-            clickSearchButton(fixture);
+              spyOn(modalService, 'open').and.callThrough();
 
-            expect(modalService.open).toHaveBeenCalled();
+              clickSearchButton(fixture);
 
-            closeModal(fixture);
-          }));
+              expect(modalService.open).toHaveBeenCalled();
 
-          it('should close the dropdown when the search button is clicked', fakeAsync(() => {
-            component.enableShowMore = true;
-            fixture.detectChanges();
+              closeModal(fixture);
+            }));
 
-            performSearch('r', fixture);
-            expect(getDropdown()).not.toBeNull();
+            it('should close the dropdown when the search button is clicked', fakeAsync(() => {
+              component.enableShowMore = true;
+              fixture.detectChanges();
 
-            clickSearchButton(fixture);
+              performSearch('r', fixture);
+              expect(getDropdown()).not.toBeNull();
 
-            expect(getDropdown()).toBeNull();
+              clickSearchButton(fixture);
 
-            closeModal(fixture);
-          }));
+              expect(getDropdown()).toBeNull();
 
-          it('should populate search bar with current input value when the search button is clicked', fakeAsync(() => {
-            component.enableShowMore = true;
-            fixture.detectChanges();
+              closeModal(fixture);
+            }));
 
-            performSearch('foo', fixture);
+            it('should populate search bar with current input value when the search button is clicked', fakeAsync(() => {
+              component.enableShowMore = true;
+              fixture.detectChanges();
 
-            clickSearchButton(fixture);
+              performSearch('foo', fixture);
 
-            expect(getModalSearchInputValue()).toEqual('foo');
+              clickSearchButton(fixture);
 
-            closeModal(fixture);
-          }));
+              expect(getModalSearchInputValue()).toEqual('foo');
 
-          it('should respect the `propertiesToSearch` input in the show more modal', fakeAsync(() => {
-            component.enableShowMore = true;
-            component.propertiesToSearch = ['description'];
-            fixture.detectChanges();
+              closeModal(fixture);
+            }));
 
-            performSearch('Mr', fixture);
+            it('should respect the `propertiesToSearch` input in the show more modal', fakeAsync(() => {
+              component.enableShowMore = true;
+              component.propertiesToSearch = ['description'];
+              fixture.detectChanges();
 
-            clickSearchButton(fixture);
+              performSearch('Mr', fixture);
 
-            expect(getRepeaterItemCount()).toBe(2);
+              clickSearchButton(fixture);
 
-            closeModal(fixture);
-          }));
+              expect(getRepeaterItemCount()).toBe(2);
 
-          it('should respect the `search` input in the show more modal when the function returns an array', fakeAsync(() => {
-            component.enableShowMore = true;
-            component.customSearch = (_: string, data: any[]) => {
-              return [data[0]];
-            };
-            fixture.detectChanges();
+              closeModal(fixture);
+            }));
 
-            performSearch('Mr', fixture);
+            it('should respect the `search` input in the show more modal when the function returns an array', fakeAsync(() => {
+              component.enableShowMore = true;
+              component.customSearch = (_: string, data: any[]) => {
+                return [data[0]];
+              };
+              fixture.detectChanges();
 
-            clickSearchButton(fixture);
+              performSearch('Mr', fixture);
 
-            expect(getRepeaterItemCount()).toBe(1);
+              clickSearchButton(fixture);
 
-            closeModal(fixture);
-          }));
+              expect(getRepeaterItemCount()).toBe(1);
 
-          it('should respect the `search` input in the show more modal when the function returns a promise', fakeAsync(() => {
-            component.enableShowMore = true;
-            component.customSearch = (_: string, data: any[]) => {
-              return Promise.resolve([data[0]]);
-            };
-            fixture.detectChanges();
+              closeModal(fixture);
+            }));
 
-            performSearch('Mr', fixture);
+            it('should respect the `search` input in the show more modal when the function returns a promise', fakeAsync(() => {
+              component.enableShowMore = true;
+              component.customSearch = (_: string, data: any[]) => {
+                return Promise.resolve([data[0]]);
+              };
+              fixture.detectChanges();
 
-            clickSearchButton(fixture);
+              performSearch('Mr', fixture);
 
-            expect(getRepeaterItemCount()).toBe(1);
+              clickSearchButton(fixture);
 
-            closeModal(fixture);
-          }));
+              expect(getRepeaterItemCount()).toBe(1);
 
-          it('should handle not results being shown', fakeAsync(() => {
-            component.enableShowMore = true;
-            component.data = undefined;
-            fixture.detectChanges();
+              closeModal(fixture);
+            }));
 
-            performSearch('Mr', fixture);
+            it('should handle not results being shown', fakeAsync(() => {
+              component.enableShowMore = true;
+              component.data = undefined;
+              fixture.detectChanges();
 
-            clickSearchButton(fixture);
+              performSearch('Mr', fixture);
 
-            expect(getRepeaterItemCount()).toBe(0);
-            expect(getShowMoreNoResultsElement()).not.toBeNull();
+              clickSearchButton(fixture);
 
-            closeModal(fixture);
-          }));
+              expect(getRepeaterItemCount()).toBe(0);
+              expect(getShowMoreNoResultsElement()).not.toBeNull();
 
-          it('should handle disabled', fakeAsync(() => {
-            component.enableShowMore = true;
-            component.disabled = true;
-            component.customSearch = (_: string, data: any[]) => {
-              return Promise.resolve([data[0]]);
-            };
-            fixture.detectChanges();
+              closeModal(fixture);
+            }));
 
-            performSearch('Mr', fixture);
+            it('should handle disabled', fakeAsync(() => {
+              component.enableShowMore = true;
+              component.disabled = true;
+              component.customSearch = (_: string, data: any[]) => {
+                return Promise.resolve([data[0]]);
+              };
+              fixture.detectChanges();
 
-            clickSearchButton(fixture);
+              performSearch('Mr', fixture);
 
-            expect(isModalOpen()).toBe(false);
-          }));
+              clickSearchButton(fixture);
+
+              expect(isModalOpen()).toBe(false);
+            }));
+
+          });
+
+          describe('async', () => {
+            describe('async', () => {
+
+              it('should open the modal when the show more button is clicked', fakeAsync(() => {
+                component.enableShowMore = true;
+                fixture.detectChanges();
+
+                spyOn(modalService, 'open').and.callThrough();
+
+                performSearch('r', fixture, true);
+                clickShowMore(fixture);
+
+                expect(modalService.open).toHaveBeenCalled();
+
+                closeModal(fixture);
+              }));
+
+              it('should open the modal when the show more button is clicked with no config', fakeAsync(() => {
+                component.enableShowMore = true;
+                component.showMoreConfig = undefined;
+                fixture.detectChanges();
+
+                spyOn(modalService, 'open').and.callThrough();
+
+                performSearch('r', fixture, true);
+                clickShowMore(fixture);
+
+                expect(modalService.open).toHaveBeenCalled();
+
+                closeModal(fixture);
+              }));
+
+              it('should open the modal when the search button is clicked', fakeAsync(() => {
+                component.enableShowMore = true;
+                fixture.detectChanges();
+
+                spyOn(modalService, 'open').and.callThrough();
+
+                clickSearchButton(fixture, true);
+
+                expect(modalService.open).toHaveBeenCalled();
+
+                closeModal(fixture);
+              }));
+
+              it('should close the dropdown when the search button is clicked', fakeAsync(() => {
+                component.enableShowMore = true;
+                fixture.detectChanges();
+
+                performSearch('r', fixture, true);
+                expect(getDropdown()).not.toBeNull();
+
+                clickSearchButton(fixture, true);
+
+                expect(getDropdown()).toBeNull();
+
+                closeModal(fixture);
+              }));
+
+              it('should populate search bar with current input value when the search button is clicked', fakeAsync(() => {
+                component.enableShowMore = true;
+                fixture.detectChanges();
+
+                performSearch('foo', fixture, true);
+
+                clickSearchButton(fixture, true);
+
+                expect(getModalSearchInputValue()).toEqual('foo');
+
+                closeModal(fixture);
+              }));
+
+              it('should handle not results being shown', fakeAsync(() => {
+                component.enableShowMore = true;
+                component.data = undefined;
+                fixture.detectChanges();
+
+                performSearch('Mr', fixture, true);
+
+                clickSearchButton(fixture, true);
+
+                expect(getRepeaterItemCount()).toBe(0);
+                expect(getShowMoreNoResultsElement()).not.toBeNull();
+
+                closeModal(fixture);
+              }));
+
+            });
+          })
 
           describe('multi-select', () => {
             it('should populate the correct selected item and save that when no changes are made', fakeAsync(() => {
