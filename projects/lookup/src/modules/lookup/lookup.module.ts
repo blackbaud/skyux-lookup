@@ -21,13 +21,11 @@ import { SkySearchModule } from '../search/search.module';
 import { SkyLookupResourcesModule } from '../shared/sky-lookup-resources.module';
 import { SkyLookupShowMoreAsyncModalComponent } from './lookup-show-more-async-modal.component';
 import { SkyLookupItemSelectedPipe } from './lookup-item-selected.pipe';
-import { SkyLookupItemsForDisplayPipe } from './lookup-items-for-display.pipe';
 
 @NgModule({
   declarations: [
     SkyLookupComponent,
     SkyLookupItemSelectedPipe,
-    SkyLookupItemsForDisplayPipe,
     SkyLookupShowMoreAsyncModalComponent,
     SkyLookupShowMoreModalComponent,
   ],
@@ -55,4 +53,4 @@ import { SkyLookupItemsForDisplayPipe } from './lookup-items-for-display.pipe';
   ],
   exports: [SkyLookupComponent],
 })
-export class SkyLookupModule {}
+export class SkyLookupModule { }

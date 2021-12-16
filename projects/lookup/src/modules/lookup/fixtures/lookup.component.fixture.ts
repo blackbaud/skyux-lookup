@@ -168,13 +168,24 @@ export class SkyLookupTestComponent implements OnInit {
   public searchAsync(args: SkyAutocompleteSearchAsyncArgs): void {
     const searchText = (args.searchText || '').toLowerCase();
 
-    const filteredData = this.data ? this.data.filter(
+    let items = this.data ? this.data.filter(
       (item) => item.name.toLowerCase().indexOf(searchText) >= 0
     ) : [];
 
+    const totalCount = items.length;
+    let hasMore = false;
+    let itemCountToReturn = args.displayType === 'popover' ? 5 : 10;
+
+    items = items.slice(args.offset, args.offset + itemCountToReturn);
+    hasMore = args.offset + itemCountToReturn < totalCount;
+
+    // Simulate new object instances being returned by a web service call.
+    items = items.map((item) => Object.assign({}, item));
+
     args.result = of({
-      items: filteredData,
-      totalCount: filteredData.length,
+      hasMore,
+      items,
+      totalCount,
     }).pipe(delay(150));
   }
 

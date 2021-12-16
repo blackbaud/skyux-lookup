@@ -98,9 +98,8 @@ export class SkyLookupShowMoreAsyncModalComponent implements OnInit, OnDestroy {
     this.selectedIdMap = new Map(this.selectedIdMap);
 
     if (this.context.selectMode === 'single') {
-      this.selectedIdMap.clear();
-
       if (newSelectState) {
+        this.selectedIdMap.clear();
         this.selectedIdMap.set(itemId, itemToSelect);
       }
     } else {
@@ -135,6 +134,7 @@ export class SkyLookupShowMoreAsyncModalComponent implements OnInit, OnDestroy {
     this.cancelCurrentSearch();
 
     /* Sanity check - else case would only happen if this was called directly */
+    /* istanbul ignore else */
     if (this.hasMoreItems) {
       this.isLoadingMore = true;
 
@@ -155,7 +155,7 @@ export class SkyLookupShowMoreAsyncModalComponent implements OnInit, OnDestroy {
         index,
         itemData,
       })
-    );
+    ).sort((a, b) => { return this.items.indexOf(a.itemData) < this.items.indexOf(b.itemData) ? -1 : 1; });
 
     this.modalInstance.save(selectedItems);
   }
