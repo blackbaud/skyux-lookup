@@ -336,6 +336,11 @@ export class SkyLookupComponent
     this.ngUnsubscribe.next();
     this.ngUnsubscribe.complete();
     this.tokensController.complete();
+
+    if (this.openNativePicker) {
+      this.openNativePicker.close();
+      this.openNativePicker = undefined;
+    }
   }
 
   public addButtonClicked(): void {
