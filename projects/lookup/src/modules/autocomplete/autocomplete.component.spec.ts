@@ -43,9 +43,13 @@ describe('Autocomplete component', () => {
 
   function getInputElement(async: boolean = false): HTMLInputElement {
     if (async) {
-      return document.getElementById('my-async-autocomplete-input') as HTMLInputElement;
+      return document.getElementById(
+        'my-async-autocomplete-input'
+      ) as HTMLInputElement;
     } else {
-      return document.getElementById('my-autocomplete-input') as HTMLInputElement;
+      return document.getElementById(
+        'my-autocomplete-input'
+      ) as HTMLInputElement;
     }
   }
 
@@ -67,7 +71,11 @@ describe('Autocomplete component', () => {
     ) as HTMLElement;
   }
 
-  function enterSearch(newValue: string, fixture: ComponentFixture<any>, async: boolean = false): void {
+  function enterSearch(
+    newValue: string,
+    fixture: ComponentFixture<any>,
+    async: boolean = false
+  ): void {
     const inputElement = getInputElement(async);
     inputElement.value = newValue;
 
@@ -262,7 +270,10 @@ describe('Autocomplete component', () => {
 
     it('should search async', fakeAsync(() => {
       fixture.detectChanges();
-      const spy = spyOn(asyncAutocomplete.searchAsync, 'emit').and.callThrough();
+      const spy = spyOn(
+        asyncAutocomplete.searchAsync,
+        'emit'
+      ).and.callThrough();
 
       enterSearch('r', fixture, true);
 
@@ -270,7 +281,7 @@ describe('Autocomplete component', () => {
         displayType: 'popover',
         offset: 0,
         searchText: 'r',
-        result: jasmine.any(Observable)
+        result: jasmine.any(Observable),
       });
 
       tick(200);
@@ -558,8 +569,9 @@ describe('Autocomplete component', () => {
 
       const dropdownElement = getSearchResultsContainer();
       const autocompleteElement = getAutocompleteElement();
-      const formattedWidth = `${autocompleteElement.getBoundingClientRect().width
-        }px`;
+      const formattedWidth = `${
+        autocompleteElement.getBoundingClientRect().width
+      }px`;
 
       expect(rendererSpy).toHaveBeenCalledWith(
         dropdownElement,
@@ -595,8 +607,9 @@ describe('Autocomplete component', () => {
 
       const dropdownElement = getSearchResultsContainer();
       const autocompleteElement = getAutocompleteElement();
-      const formattedWidth = `${autocompleteElement.getBoundingClientRect().width
-        }px`;
+      const formattedWidth = `${
+        autocompleteElement.getBoundingClientRect().width
+      }px`;
 
       expect(rendererSpy).toHaveBeenCalledWith(
         dropdownElement,

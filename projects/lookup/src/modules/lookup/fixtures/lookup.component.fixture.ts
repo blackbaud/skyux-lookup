@@ -84,7 +84,7 @@ export class SkyLookupTestComponent implements OnInit {
 
   private _friends: any[];
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder) {}
 
   public ngOnInit(): void {
     this.data = [
@@ -168,9 +168,11 @@ export class SkyLookupTestComponent implements OnInit {
   public searchAsync(args: SkyAutocompleteSearchAsyncArgs): void {
     const searchText = (args.searchText || '').toLowerCase();
 
-    let items = this.data ? this.data.filter(
-      (item) => item.name.toLowerCase().indexOf(searchText) >= 0
-    ) : [];
+    let items = this.data
+      ? this.data.filter(
+          (item) => item.name.toLowerCase().indexOf(searchText) >= 0
+        )
+      : [];
 
     const totalCount = items.length;
     let hasMore = false;

@@ -59,7 +59,8 @@ import { SkyAutocompleteSearchAsyncArgs } from '../autocomplete/types/autocomple
 })
 export class SkyLookupComponent
   extends SkyLookupAutocompleteAdapter
-  implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor {
+  implements OnInit, AfterViewInit, OnDestroy, ControlValueAccessor
+{
   /**
    * Specifies an ARIA label for the typeahead search input
    * [to support accessibility](https://developer.blackbaud.com/skyux/learn/accessibility).
@@ -405,9 +406,9 @@ export class SkyLookupComponent
 
   // Angular automatically constructs these methods.
   /* istanbul ignore next */
-  public onChange = (value: any[]) => { };
+  public onChange = (value: any[]) => {};
   /* istanbul ignore next */
-  public onTouched = () => { };
+  public onTouched = () => {};
 
   public registerOnChange(fn: (value: any) => void) {
     this.onChange = fn;

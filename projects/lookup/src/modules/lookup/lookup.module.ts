@@ -53,4 +53,4 @@ import { SkyLookupItemSelectedPipe } from './lookup-item-selected.pipe';
   ],
   exports: [SkyLookupComponent],
 })
-export class SkyLookupModule { }
+export class SkyLookupModule {}

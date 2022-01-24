@@ -7,7 +7,6 @@ import { AutocompleteSearchAsyncResultDisplayType } from './autocomplete-search-
  * autocomplete or lookup component.
  */
 export interface SkyAutocompleteSearchAsyncArgs {
-
   /**
    * The search text entered by the user.
    */
@@ -25,7 +24,6 @@ export interface SkyAutocompleteSearchAsyncArgs {
    * to the number of items already displayed.
    */
   offset: number;
-
 
   /**
    * A continuation token which can be set and then will be passed back with any future searches.

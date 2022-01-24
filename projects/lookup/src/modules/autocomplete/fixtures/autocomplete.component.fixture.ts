@@ -58,13 +58,13 @@ export class SkyAutocompleteFixtureComponent {
 
   @ViewChild('asyncAutocomplete', {
     read: SkyAutocompleteComponent,
-    static: true
+    static: true,
   })
   public asyncAutocomplete: SkyAutocompleteComponent;
 
   @ViewChild('standardAutocomplete', {
     read: SkyAutocompleteComponent,
-    static: true
+    static: true,
   })
   public autocomplete: SkyAutocompleteComponent;
 
