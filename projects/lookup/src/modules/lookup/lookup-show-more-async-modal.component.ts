@@ -9,7 +9,7 @@ import { SkyAutocompleteSearchAsyncResult } from '../autocomplete/types/autocomp
 
 import { SkyModalInstance } from '@skyux/modals';
 
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 import { SkyLookupShowMoreNativePickerAsyncContext } from './types/lookup-show-more-native-picker-async-context';
@@ -50,7 +50,7 @@ export class SkyLookupShowMoreAsyncModalComponent implements OnInit, OnDestroy {
     public modalInstance: SkyModalInstance,
     public context: SkyLookupShowMoreNativePickerAsyncContext,
     private changeDetector: ChangeDetectorRef
-  ) { }
+  ) {}
 
   public ngOnInit(): void {
     this.searchText = this.context.initialSearch;
@@ -155,7 +155,11 @@ export class SkyLookupShowMoreAsyncModalComponent implements OnInit, OnDestroy {
         index,
         itemData,
       })
-    ).sort((a, b) => { return this.items.indexOf(a.itemData) < this.items.indexOf(b.itemData) ? -1 : 1; });
+    ).sort((a, b) => {
+      return this.items.indexOf(a.itemData) < this.items.indexOf(b.itemData)
+        ? -1
+        : 1;
+    });
 
     this.modalInstance.save(selectedItems);
   }
@@ -188,7 +192,7 @@ export class SkyLookupShowMoreAsyncModalComponent implements OnInit, OnDestroy {
         displayType: 'modal',
         offset: this.offset,
         searchText: this.searchText || '',
-        continuationData: this.continuationData
+        continuationData: this.continuationData,
       })
       .pipe(take(1))
       .subscribe((result) => {

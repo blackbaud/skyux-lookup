@@ -136,7 +136,9 @@
   <div class="app-screenshot" id="lookup-single-async-visual">
     <form novalidate [formGroup]="bestFriendsForm">
       <sky-input-box [disabled]="disabled" class="sky-margin-stacked-lg">
-        <label class="sky-control-label"> Who is your best friend? </label>
+        <label class="sky-control-label">
+          Who is your best friend? (async)</label
+        >
         <sky-lookup
           formControlName="bestFriendAsync"
           idProperty="id"

@@ -136,7 +136,7 @@ export class LookupVisualComponent implements OnInit {
       this.bestFriendSelectMode === 'single' ? 'multiple' : 'single';
   }
 
-  public bestFriendSearch(args: SkyAutocompleteSearchAsyncArgs) {
+  public bestFriendSearch(args: SkyAutocompleteSearchAsyncArgs): void {
     const searchText = (args.searchText || '').toLowerCase();
 
     let items = this.people.filter(
