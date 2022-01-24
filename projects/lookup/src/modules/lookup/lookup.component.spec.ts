@@ -52,7 +52,10 @@ describe('Lookup component', function () {
     tick();
   }
 
-  function clickSearchButton(fixture: ComponentFixture<any>, async: boolean = false): void {
+  function clickSearchButton(
+    fixture: ComponentFixture<any>,
+    async: boolean = false
+  ): void {
     getSearchButton(async).click();
     fixture.detectChanges();
     tick(200);
@@ -80,14 +83,22 @@ describe('Lookup component', function () {
     fixture.detectChanges();
   }
 
-  function clickToken(index: number, fixture: ComponentFixture<any>, async: boolean = false): void {
+  function clickToken(
+    index: number,
+    fixture: ComponentFixture<any>,
+    async: boolean = false
+  ): void {
     if (async) {
       (<HTMLElement>(
-        document.querySelectorAll('#my-async-lookup .sky-lookup-tokens .sky-token')[index]
+        document.querySelectorAll(
+          '#my-async-lookup .sky-lookup-tokens .sky-token'
+        )[index]
       )).click();
     } else {
       (<HTMLElement>(
-        document.querySelectorAll('#my-lookup .sky-lookup-tokens .sky-token')[index]
+        document.querySelectorAll('#my-lookup .sky-lookup-tokens .sky-token')[
+          index
+        ]
       )).click();
     }
     fixture.detectChanges();
@@ -212,9 +223,7 @@ describe('Lookup component', function () {
         fixture.componentInstance.asyncLookupComponent
       );
     } else {
-      inputElement = getInputElement(
-        fixture.componentInstance.lookupComponent
-      );
+      inputElement = getInputElement(fixture.componentInstance.lookupComponent);
     }
     inputElement.value = searchText;
     SkyAppTestUtility.fireDomEvent(inputElement, 'input');
@@ -303,16 +312,17 @@ describe('Lookup component', function () {
     tick();
   }
 
-  function triggerInputFocus(fixture: ComponentFixture<any>, async: boolean = false): void {
+  function triggerInputFocus(
+    fixture: ComponentFixture<any>,
+    async: boolean = false
+  ): void {
     let inputElement: HTMLInputElement;
     if (async) {
       inputElement = getInputElement(
         fixture.componentInstance.asyncLookupComponent
       );
     } else {
-      inputElement = getInputElement(
-        fixture.componentInstance.lookupComponent
-      );
+      inputElement = getInputElement(fixture.componentInstance.lookupComponent);
     }
     SkyAppTestUtility.fireDomEvent(inputElement, 'focus');
   }
@@ -358,6 +368,10 @@ describe('Lookup component', function () {
       asyncLookupComponent = component.asyncLookupComponent;
     });
 
+    afterEach(() => {
+      fixture.destroy();
+    });
+
     describe('basic setup', function () {
       function validateItems(names: string[]): void {
         const selectedItems = lookupComponent.value;
@@ -399,9 +413,7 @@ describe('Lookup component', function () {
         expect(typeof lookupComponent.descriptorProperty).not.toBeUndefined();
         expect(typeof lookupComponent.propertiesToSearch).not.toBeUndefined();
         expect(typeof lookupComponent.search).not.toBeUndefined();
-        expect(
-          typeof lookupComponent.searchResultTemplate
-        ).not.toBeUndefined();
+        expect(typeof lookupComponent.searchResultTemplate).not.toBeUndefined();
         expect(
           typeof lookupComponent.searchTextMinimumCharacters
         ).not.toBeUndefined();
@@ -860,10 +872,10 @@ describe('Lookup component', function () {
           // injectors than the previous test.
           modalService.dispose();
           fixture.detectChanges();
+          fixture.destroy();
         }));
 
         describe('non-async', () => {
-
           it('should emit an event correctly when the add button is enabled and clicked', fakeAsync(() => {
             component.showAddButton = true;
             const addButtonSpy = spyOn(
@@ -928,11 +940,9 @@ describe('Lookup component', function () {
 
             expect(addButtonSpy).toHaveBeenCalled();
           }));
-
         });
 
         describe('async', () => {
-
           it('should emit an event correctly when the add button is enabled and clicked', fakeAsync(() => {
             component.showAddButton = true;
             const addButtonSpy = spyOn(
@@ -997,11 +1007,9 @@ describe('Lookup component', function () {
 
             expect(addButtonSpy).toHaveBeenCalled();
           }));
-
         });
 
         describe('multi select', () => {
-
           describe('non-async', () => {
             it('should add the item to the selected items when there is not a show more picker open', fakeAsync(() => {
               component.setMultiSelect();
@@ -1137,7 +1145,9 @@ describe('Lookup component', function () {
                 { name: 'Isaac' },
                 { name: 'New item' },
               ]);
-              expect(asyncLookupComponent.data[0]).toEqual({ name: 'New item' });
+              expect(asyncLookupComponent.data[0]).toEqual({
+                name: 'New item',
+              });
             }));
 
             xit(`should add the item to the modal's selected items when a show more picker is open`, fakeAsync(() => {
@@ -1168,7 +1178,9 @@ describe('Lookup component', function () {
                 { name: 'New item' },
                 { name: 'Isaac' },
               ]);
-              expect(asyncLookupComponent.data[0]).toEqual({ name: 'New item' });
+              expect(asyncLookupComponent.data[0]).toEqual({
+                name: 'New item',
+              });
             }));
 
             xit(`should add the item to the modal's selected items when a show more picker is open but should cancel back to the original selection`, fakeAsync(() => {
@@ -1196,7 +1208,9 @@ describe('Lookup component', function () {
               tick();
 
               expect(asyncLookupComponent.value).toEqual([{ name: 'Isaac' }]);
-              expect(asyncLookupComponent.data[0]).toEqual({ name: 'New item' });
+              expect(asyncLookupComponent.data[0]).toEqual({
+                name: 'New item',
+              });
             }));
 
             xit(`should not add the item to the modal's selected items when a show more picker is open but the underlying data is not updated`, fakeAsync(() => {
@@ -1227,14 +1241,15 @@ describe('Lookup component', function () {
               tick();
 
               expect(asyncLookupComponent.value).toEqual([{ name: 'Isaac' }]);
-              expect(asyncLookupComponent.data[0]).not.toEqual({ name: 'New item' });
+              expect(asyncLookupComponent.data[0]).not.toEqual({
+                name: 'New item',
+              });
               expect(asyncLookupComponent.data.length).toBe(originalDataLength);
             }));
           });
         });
 
         describe('single select', () => {
-
           describe('non-async', () => {
             it('should add the item to the selected items when there is not a show more picker open', fakeAsync(() => {
               component.setSingleSelect();
@@ -1360,8 +1375,12 @@ describe('Lookup component', function () {
               fixture.detectChanges();
               tick();
 
-              expect(asyncLookupComponent.value).toEqual([{ name: 'New item' }]);
-              expect(asyncLookupComponent.data[0]).toEqual({ name: 'New item' });
+              expect(asyncLookupComponent.value).toEqual([
+                { name: 'New item' },
+              ]);
+              expect(asyncLookupComponent.data[0]).toEqual({
+                name: 'New item',
+              });
             }));
 
             xit(`should add the item to the modal's selected items when a show more picker is open`, fakeAsync(() => {
@@ -1388,8 +1407,12 @@ describe('Lookup component', function () {
               fixture.detectChanges();
               tick();
 
-              expect(asyncLookupComponent.value).toEqual([{ name: 'New item' }]);
-              expect(asyncLookupComponent.data[0]).toEqual({ name: 'New item' });
+              expect(asyncLookupComponent.value).toEqual([
+                { name: 'New item' },
+              ]);
+              expect(asyncLookupComponent.data[0]).toEqual({
+                name: 'New item',
+              });
             }));
 
             xit(`should add the item to the modal's selected items when a show more picker is open but should cancel back to the original selection`, fakeAsync(() => {
@@ -1417,7 +1440,9 @@ describe('Lookup component', function () {
               tick();
 
               expect(asyncLookupComponent.value).toEqual([{ name: 'Isaac' }]);
-              expect(asyncLookupComponent.data[0]).toEqual({ name: 'New item' });
+              expect(asyncLookupComponent.data[0]).toEqual({
+                name: 'New item',
+              });
             }));
 
             xit(`should not add the item to the modal's selected items when a show more picker is open but the underlying data is not updated`, fakeAsync(() => {
@@ -1448,7 +1473,9 @@ describe('Lookup component', function () {
               tick();
 
               expect(asyncLookupComponent.value).toEqual([{ name: 'Isaac' }]);
-              expect(asyncLookupComponent.data[0]).not.toEqual({ name: 'New item' });
+              expect(asyncLookupComponent.data[0]).not.toEqual({
+                name: 'New item',
+              });
               expect(asyncLookupComponent.data.length).toBe(originalDataLength);
             }));
           });
@@ -1476,7 +1503,6 @@ describe('Lookup component', function () {
         }));
 
         describe('non-async', () => {
-
           it('should open the modal when the show more button is clicked', fakeAsync(() => {
             component.enableShowMore = true;
             fixture.detectChanges();
@@ -1606,11 +1632,9 @@ describe('Lookup component', function () {
 
             closeModal(fixture);
           }));
-
         });
 
         describe('async', () => {
-
           it('should open the modal when the show more button is clicked', fakeAsync(() => {
             component.enableShowMore = true;
             fixture.detectChanges();
@@ -1694,7 +1718,6 @@ describe('Lookup component', function () {
 
             closeModal(fixture);
           }));
-
         });
 
         describe('multi-select', () => {
@@ -2074,7 +2097,6 @@ describe('Lookup component', function () {
           });
 
           describe('async', () => {
-
             beforeEach(() => {
               component.idProperty = 'name';
             });
@@ -2339,7 +2361,9 @@ describe('Lookup component', function () {
               fixture.detectChanges();
 
               expect(asyncLookupComponent.tokens.length).toBe(5);
-              expect(asyncLookupComponent.tokens[0].value).toEqual({ name: 'Fred' });
+              expect(asyncLookupComponent.tokens[0].value).toEqual({
+                name: 'Fred',
+              });
               expect(asyncLookupComponent.value).toEqual([
                 { name: 'Fred' },
                 { name: 'Isaac' },
@@ -2446,7 +2470,9 @@ describe('Lookup component', function () {
               fixture.detectChanges();
 
               fixture.nativeElement
-                .querySelector('#my-async-lookup button[aria-label="Show all search results"]')
+                .querySelector(
+                  '#my-async-lookup button[aria-label="Show all search results"]'
+                )
                 .click();
 
               expect(showMoreSpy).not.toHaveBeenCalled();
@@ -2460,7 +2486,6 @@ describe('Lookup component', function () {
           });
 
           describe('non-async', () => {
-
             it('should populate the correct selected item and save that when no changes are made', fakeAsync(() => {
               component.enableShowMore = true;
               fixture.detectChanges();
@@ -2635,11 +2660,9 @@ describe('Lookup component', function () {
 
               closeModal(fixture);
             }));
-
           });
 
           describe('async', () => {
-
             beforeEach(() => {
               component.idProperty = 'name';
             });
@@ -2820,7 +2843,6 @@ describe('Lookup component', function () {
 
               closeModal(fixture);
             }));
-
           });
         });
 
@@ -3061,13 +3083,9 @@ describe('Lookup component', function () {
           fixture.detectChanges();
 
           const tokenHostElements = document.querySelectorAll('sky-token');
-          SkyAppTestUtility.fireDomEvent(
-            tokenHostElements.item(0),
-            'keydown',
-            {
-              keyboardEventInit: { key: 'ArrowRight' },
-            }
-          );
+          SkyAppTestUtility.fireDomEvent(tokenHostElements.item(0), 'keydown', {
+            keyboardEventInit: { key: 'ArrowRight' },
+          });
           tick();
           fixture.detectChanges();
           tick();
@@ -3121,7 +3139,9 @@ describe('Lookup component', function () {
 
         it('should remove tokens when backpsace or delete is pressed', fakeAsync(function () {
           function validate(key: string, expectedCount: number): void {
-            const tokensHostElement = document.querySelector('#my-lookup sky-tokens');
+            const tokensHostElement = document.querySelector(
+              '#my-lookup sky-tokens'
+            );
             SkyAppTestUtility.fireDomEvent(tokensHostElement, 'keyup', {
               keyboardEventInit: { key },
             });
@@ -3129,7 +3149,9 @@ describe('Lookup component', function () {
             fixture.detectChanges();
             tick();
 
-            tokenHostElements = document.querySelectorAll('#my-lookup sky-token');
+            tokenHostElements = document.querySelectorAll(
+              '#my-lookup sky-token'
+            );
             expect(tokenHostElements.length).toEqual(expectedCount);
             expect(
               tokenHostElements.item(0).contains(document.activeElement)
@@ -3145,7 +3167,9 @@ describe('Lookup component', function () {
 
           fixture.detectChanges();
 
-          let tokenHostElements = document.querySelectorAll('#my-lookup sky-token');
+          let tokenHostElements = document.querySelectorAll(
+            '#my-lookup sky-token'
+          );
           expect(tokenHostElements.length).toEqual(4);
 
           validate('Backspace', 3);
@@ -3357,9 +3381,7 @@ describe('Lookup component', function () {
         expect(typeof lookupComponent.descriptorProperty).not.toBeUndefined();
         expect(typeof lookupComponent.propertiesToSearch).not.toBeUndefined();
         expect(typeof lookupComponent.search).not.toBeUndefined();
-        expect(
-          typeof lookupComponent.searchResultTemplate
-        ).not.toBeUndefined();
+        expect(typeof lookupComponent.searchResultTemplate).not.toBeUndefined();
         expect(
           typeof lookupComponent.searchTextMinimumCharacters
         ).not.toBeUndefined();
@@ -3523,7 +3545,6 @@ describe('Lookup component', function () {
 
           expect(asyncLookupComponent.value.length).toEqual(2);
         }));
-
       });
 
       describe('single select', () => {
@@ -3632,7 +3653,6 @@ describe('Lookup component', function () {
         }));
 
         describe('non-async', () => {
-
           it('should emit an event correctly when the add button is enabled and clicked', fakeAsync(() => {
             component.showAddButton = true;
             const addButtonSpy = spyOn(
@@ -3697,11 +3717,9 @@ describe('Lookup component', function () {
 
             expect(addButtonSpy).toHaveBeenCalled();
           }));
-
         });
 
         describe('async', () => {
-
           it('should emit an event correctly when the add button is enabled and clicked', fakeAsync(() => {
             component.showAddButton = true;
             const addButtonSpy = spyOn(
@@ -3766,11 +3784,9 @@ describe('Lookup component', function () {
 
             expect(addButtonSpy).toHaveBeenCalled();
           }));
-
         });
 
         describe('multi select', () => {
-
           describe('non-async', () => {
             it('should add the item to the selected items when there is not a show more picker open', fakeAsync(() => {
               component.setMultiSelect();
@@ -3906,7 +3922,9 @@ describe('Lookup component', function () {
                 { name: 'Isaac' },
                 { name: 'New item' },
               ]);
-              expect(asyncLookupComponent.data[0]).toEqual({ name: 'New item' });
+              expect(asyncLookupComponent.data[0]).toEqual({
+                name: 'New item',
+              });
             }));
 
             xit(`should add the item to the modal's selected items when a show more picker is open`, fakeAsync(() => {
@@ -3937,7 +3955,9 @@ describe('Lookup component', function () {
                 { name: 'New item' },
                 { name: 'Isaac' },
               ]);
-              expect(asyncLookupComponent.data[0]).toEqual({ name: 'New item' });
+              expect(asyncLookupComponent.data[0]).toEqual({
+                name: 'New item',
+              });
             }));
 
             xit(`should add the item to the modal's selected items when a show more picker is open but should cancel back to the original selection`, fakeAsync(() => {
@@ -3965,7 +3985,9 @@ describe('Lookup component', function () {
               tick();
 
               expect(asyncLookupComponent.value).toEqual([{ name: 'Isaac' }]);
-              expect(asyncLookupComponent.data[0]).toEqual({ name: 'New item' });
+              expect(asyncLookupComponent.data[0]).toEqual({
+                name: 'New item',
+              });
             }));
 
             xit(`should not add the item to the modal's selected items when a show more picker is open but the underlying data is not updated`, fakeAsync(() => {
@@ -3996,14 +4018,15 @@ describe('Lookup component', function () {
               tick();
 
               expect(asyncLookupComponent.value).toEqual([{ name: 'Isaac' }]);
-              expect(asyncLookupComponent.data[0]).not.toEqual({ name: 'New item' });
+              expect(asyncLookupComponent.data[0]).not.toEqual({
+                name: 'New item',
+              });
               expect(asyncLookupComponent.data.length).toBe(originalDataLength);
             }));
           });
         });
 
         describe('single select', () => {
-
           describe('non-async', () => {
             it('should add the item to the selected items when there is not a show more picker open', fakeAsync(() => {
               component.setSingleSelect();
@@ -4129,8 +4152,12 @@ describe('Lookup component', function () {
               fixture.detectChanges();
               tick();
 
-              expect(asyncLookupComponent.value).toEqual([{ name: 'New item' }]);
-              expect(asyncLookupComponent.data[0]).toEqual({ name: 'New item' });
+              expect(asyncLookupComponent.value).toEqual([
+                { name: 'New item' },
+              ]);
+              expect(asyncLookupComponent.data[0]).toEqual({
+                name: 'New item',
+              });
             }));
 
             xit(`should add the item to the modal's selected items when a show more picker is open`, fakeAsync(() => {
@@ -4157,8 +4184,12 @@ describe('Lookup component', function () {
               fixture.detectChanges();
               tick();
 
-              expect(asyncLookupComponent.value).toEqual([{ name: 'New item' }]);
-              expect(asyncLookupComponent.data[0]).toEqual({ name: 'New item' });
+              expect(asyncLookupComponent.value).toEqual([
+                { name: 'New item' },
+              ]);
+              expect(asyncLookupComponent.data[0]).toEqual({
+                name: 'New item',
+              });
             }));
 
             xit(`should add the item to the modal's selected items when a show more picker is open but should cancel back to the original selection`, fakeAsync(() => {
@@ -4186,7 +4217,9 @@ describe('Lookup component', function () {
               tick();
 
               expect(asyncLookupComponent.value).toEqual([{ name: 'Isaac' }]);
-              expect(asyncLookupComponent.data[0]).toEqual({ name: 'New item' });
+              expect(asyncLookupComponent.data[0]).toEqual({
+                name: 'New item',
+              });
             }));
 
             xit(`should not add the item to the modal's selected items when a show more picker is open but the underlying data is not updated`, fakeAsync(() => {
@@ -4217,7 +4250,9 @@ describe('Lookup component', function () {
               tick();
 
               expect(asyncLookupComponent.value).toEqual([{ name: 'Isaac' }]);
-              expect(asyncLookupComponent.data[0]).not.toEqual({ name: 'New item' });
+              expect(asyncLookupComponent.data[0]).not.toEqual({
+                name: 'New item',
+              });
               expect(asyncLookupComponent.data.length).toBe(originalDataLength);
             }));
           });
@@ -4245,7 +4280,6 @@ describe('Lookup component', function () {
         }));
 
         describe('non-async', () => {
-
           it('should open the modal when the show more button is clicked', fakeAsync(() => {
             component.enableShowMore = true;
             fixture.detectChanges();
@@ -4389,11 +4423,9 @@ describe('Lookup component', function () {
 
             expect(isModalOpen()).toBe(false);
           }));
-
         });
 
         describe('async', () => {
-
           it('should open the modal when the show more button is clicked', fakeAsync(() => {
             component.enableShowMore = true;
             fixture.detectChanges();
@@ -4477,11 +4509,9 @@ describe('Lookup component', function () {
 
             closeModal(fixture);
           }));
-
         });
 
         describe('multi-select', () => {
-
           describe('non-async', () => {
             it('should populate the correct selected item and save that when no changes are made', fakeAsync(() => {
               component.enableShowMore = true;
@@ -4846,7 +4876,6 @@ describe('Lookup component', function () {
             }));
           });
           describe('async', () => {
-
             beforeEach(() => {
               component.idProperty = 'name';
             });
@@ -5113,7 +5142,9 @@ describe('Lookup component', function () {
               fixture.detectChanges();
 
               expect(asyncLookupComponent.tokens.length).toBe(5);
-              expect(asyncLookupComponent.tokens[0].value).toEqual({ name: 'Fred' });
+              expect(asyncLookupComponent.tokens[0].value).toEqual({
+                name: 'Fred',
+              });
               expect(asyncLookupComponent.value).toEqual([
                 { name: 'Fred' },
                 { name: 'Isaac' },
@@ -5146,7 +5177,10 @@ describe('Lookup component', function () {
               ).and.stub();
 
               component.enableShowMore = true;
-              component.selectedFriendsAsync = [{ name: 'Fred' }, { name: 'Isaac' }];
+              component.selectedFriendsAsync = [
+                { name: 'Fred' },
+                { name: 'Isaac' },
+              ];
               fixture.detectChanges();
               tick();
               fixture.detectChanges();
@@ -5224,7 +5258,9 @@ describe('Lookup component', function () {
               fixture.detectChanges();
 
               fixture.nativeElement
-                .querySelector('#my-async-lookup button[aria-label="Show all search results"]')
+                .querySelector(
+                  '#my-async-lookup button[aria-label="Show all search results"]'
+                )
                 .click();
 
               expect(showMoreSpy).not.toHaveBeenCalled();
@@ -5238,7 +5274,6 @@ describe('Lookup component', function () {
           });
 
           describe('non-async', () => {
-
             it('should populate the correct selected item and save that when no changes are made', fakeAsync(() => {
               component.enableShowMore = true;
               fixture.detectChanges();
@@ -5379,7 +5414,6 @@ describe('Lookup component', function () {
           });
 
           describe('async', () => {
-
             beforeEach(() => {
               component.idProperty = 'name';
             });
@@ -5560,7 +5594,6 @@ describe('Lookup component', function () {
 
               closeModal(fixture);
             }));
-
           });
         });
 
@@ -5820,13 +5853,9 @@ describe('Lookup component', function () {
           fixture.detectChanges();
 
           const tokenHostElements = document.querySelectorAll('sky-token');
-          SkyAppTestUtility.fireDomEvent(
-            tokenHostElements.item(0),
-            'keydown',
-            {
-              keyboardEventInit: { key: 'ArrowRight' },
-            }
-          );
+          SkyAppTestUtility.fireDomEvent(tokenHostElements.item(0), 'keydown', {
+            keyboardEventInit: { key: 'ArrowRight' },
+          });
           tick();
           fixture.detectChanges();
           tick();
@@ -6072,6 +6101,10 @@ describe('Lookup component', function () {
       component = fixture.componentInstance;
       lookupComponent = component.lookupComponent;
       nativeElement = fixture.nativeElement as HTMLElement;
+    });
+
+    afterEach(() => {
+      fixture.destroy();
     });
 
     it('should render in the expected input box containers', fakeAsync(() => {
