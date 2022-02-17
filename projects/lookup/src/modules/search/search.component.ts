@@ -91,7 +91,7 @@ export class SkySearchComponent implements OnDestroy, OnInit, OnChanges {
    * include `responsive` to collapse the search input into a button on
    * mobile devices, `none` to *not* collapse the search input on mobile
    * devices, and `fit` to extend the search input to fit the width of its container.
-   * @default responsive
+   * @default "responsive"
    */
   @Input()
   public expandMode: string = EXPAND_MODE_RESPONSIVE;
@@ -117,7 +117,7 @@ export class SkySearchComponent implements OnDestroy, OnInit, OnChanges {
   /**
    * Specifies placeholder text to display in the search input until users
    * enter search criteria.
-   * @default Find in this list
+   * @default "Find in this list"
    */
   @Input()
   public placeholderText: string;
