@@ -3,7 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SkyAutocompleteSearchAsyncArgs } from 'lookup';
 
-import { SkyAutocompleteSearchAsyncResult, SkyAutocompleteSearchFunctionFilter } from 'projects/lookup/src/public-api';
+import {
+  SkyAutocompleteSearchAsyncResult,
+  SkyAutocompleteSearchFunctionFilter,
+} from 'projects/lookup/src/public-api';
 import { Subject } from 'rxjs';
 
 @Component({
@@ -71,11 +74,13 @@ export class LookupAsyncDemoComponent implements OnInit {
     $event.result = result;
     setTimeout(() => {
       const searchText = $event.searchText.toLowerCase();
-      const items = this.people.filter((person) => person.name.toLowerCase().includes(searchText));
+      const items = this.people.filter((person) => {
+        return person.name.toLowerCase().includes(searchText)
+      });
       result.next({
         hasMore: false,
         items,
-        totalCount: items.length
+        totalCount: items.length,
       });
     }, 800);
   }
