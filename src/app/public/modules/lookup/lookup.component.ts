@@ -126,7 +126,7 @@ export class SkyLookupComponent
 
   /**
    * Specifies an ARIA label for the typeahead search input
-   * [to support accessibility](https://developer.blackbaud.com/skyux/learn/accessibility).
+   * [to support accessibility](https://developer.blackbaud.com/skyux-v4/learn/accessibility).
    * If the input includes a visible label, use `ariaLabelledBy` instead.
    */
   @Input()
@@ -135,7 +135,7 @@ export class SkyLookupComponent
   /**
    * Specifies the HTML element ID (without the leading `#`) of the element that labels
    * the typeahead search input. This sets the input's `aria-labelledby` attribute
-   * [to support accessibility](https://developer.blackbaud.com/skyux/learn/accessibility).
+   * [to support accessibility](https://developer.blackbaud.com/skyux-v4/learn/accessibility).
    * If the input does not include a visible label, use `ariaLabel` instead.
    */
   @Input()
